@@ -1,90 +1,89 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
-import { ShieldCheck, Loader2, Fingerprint, Lock, Globe } from 'lucide-react';
+import { ShieldCheck, Loader2, Fingerprint, Lock, Globe, ArrowRight, Shield, Activity, Cpu } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Stars, Sphere, MeshDistortMaterial, Float } from '@react-three/drei';
+import { Stars, useTexture } from '@react-three/drei';
 import * as THREE from 'three';
 
-const preLoginSequence = [
-  { text: "Establishing Secure Connection...", icon: Globe },
-  { text: "Verifying Authentication Protocols...", icon: Fingerprint },
-  { text: "Initializing Encrypted Session...", icon: Lock }
-];
+// -------------------------------------------------------------
+// 3D Planetary Threat Intelligence Globe for Login Right Pane
+// -------------------------------------------------------------
+const LoginEarthSentinel = () => {
+  const earthRef = useRef<THREE.Mesh>(null);
+  const cloudsRef = useRef<THREE.Mesh>(null);
+  const ringRef = useRef<THREE.Mesh>(null);
 
-const LoginBackground = () => {
-  const globeRef = useRef<THREE.Mesh>(null);
-  
-  useFrame(({ clock }) => {
-    if (globeRef.current) {
-      globeRef.current.rotation.y = clock.getElapsedTime() * 0.1;
-      globeRef.current.rotation.x = clock.getElapsedTime() * 0.05;
+  const [colorMap, normalMap, cloudsMap] = useTexture([
+    '/textures/planets/earth_atmos_2048.jpg',
+    '/textures/planets/earth_normal_2048.jpg',
+    '/textures/planets/earth_clouds_2048.png',
+  ]);
+
+  useFrame(({ clock }, delta) => {
+    const t = clock.getElapsedTime();
+    if (earthRef.current) earthRef.current.rotation.y += delta * 0.12;
+    if (cloudsRef.current) cloudsRef.current.rotation.y += delta * 0.16;
+    if (ringRef.current) {
+      ringRef.current.rotation.x = Math.PI / 2.2 + Math.sin(t * 0.5) * 0.05;
+      ringRef.current.rotation.y = t * 0.2;
     }
   });
 
   return (
-    <>
-      <ambientLight intensity={0.5} />
-      <pointLight position={[10, 10, 10]} intensity={2} color="#00C6FF" />
-      <pointLight position={[-10, -10, -10]} intensity={1} color="#7A5CFF" />
-      <Stars radius={100} depth={50} count={3000} factor={4} saturation={0} fade speed={1} />
-      
-      <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
-        <mesh ref={globeRef} position={[0, 0, 0]}>
-          <sphereGeometry args={[2.5, 64, 64]} />
-          <meshStandardMaterial 
-            color="#071423" 
-            emissive="#00C6FF" 
-            emissiveIntensity={0.2} 
-            wireframe={true} 
-            transparent 
-            opacity={0.3} 
-          />
-        </mesh>
-        
-        {/* Inner solid core */}
-        <Sphere args={[2.4, 32, 32]}>
-          <MeshDistortMaterial color="#000" distort={0.2} speed={2} roughness={1} />
-        </Sphere>
-      </Float>
-    </>
+    <group rotation={[0, 0, 0.4]}>
+      {/* Terrestrial Surface */}
+      <mesh ref={earthRef} castShadow receiveShadow>
+        <sphereGeometry args={[2.2, 64, 64]} />
+        <meshStandardMaterial
+          map={colorMap}
+          normalMap={normalMap}
+          normalScale={new THREE.Vector2(0.8, 0.8)}
+          roughness={0.6}
+          metalness={0.15}
+        />
+      </mesh>
+
+      {/* Cloud Atmosphere */}
+      <mesh ref={cloudsRef}>
+        <sphereGeometry args={[2.22, 64, 64]} />
+        <meshStandardMaterial
+          map={cloudsMap}
+          transparent
+          opacity={0.8}
+          blending={THREE.NormalBlending}
+          depthWrite={false}
+        />
+      </mesh>
+
+      {/* High-Tech Orbital Security Coordinate Ring */}
+      <mesh ref={ringRef}>
+        <torusGeometry args={[3.2, 0.015, 16, 120]} />
+        <meshBasicMaterial color="#00E5FF" transparent opacity={0.35} />
+      </mesh>
+    </group>
   );
 };
 
-const Login = () => {
+export const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSignUp, setIsSignUp] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [sequenceStep, setSequenceStep] = useState(0);
-  const [showLogin, setShowLogin] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
-  const { login, register, isAuthenticated } = useAuthStore();
+  const { login, register, isAuthenticated, organization, role } = useAuthStore();
 
   useEffect(() => {
-    if (isAuthenticated) {
-      const from = (location.state as any)?.from?.pathname || '/landing';
+    // If already fully authenticated and configured, allow dashboard access
+    if (isAuthenticated && organization && role) {
+      const from = (location.state as any)?.from?.pathname || '/dashboard';
       navigate(from, { replace: true });
     }
-  }, [isAuthenticated, navigate, location]);
-
-  useEffect(() => {
-    if (sequenceStep < preLoginSequence.length) {
-      const timer = setTimeout(() => {
-        setSequenceStep(prev => prev + 1);
-      }, 1500);
-      return () => clearTimeout(timer);
-    } else {
-      const timer = setTimeout(() => {
-        setShowLogin(true);
-      }, 500);
-      return () => clearTimeout(timer);
-    }
-  }, [sequenceStep]);
+  }, [isAuthenticated, organization, role, navigate, location]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -96,225 +95,315 @@ const Login = () => {
       } else {
         await login(email, password);
       }
+      // Mandatory flow: proceed directly to Authentication Animation
       navigate('/authentication');
     } catch (err: any) {
-      setError(err.message || 'Authentication failed. Please try again.');
+      setError(err.message || 'Authentication failed. Please verify credentials.');
     } finally {
       setLoading(false);
     }
   };
 
+  const handleDemoFill = () => {
+    setEmail('demo@iprap.ai');
+    setPassword('enterprise2026');
+  };
+
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#071423', color: 'white', overflow: 'hidden' }}>
+    <div style={{
+      display: 'flex',
+      minHeight: '100vh',
+      backgroundColor: '#050D16',
+      color: 'white',
+      overflow: 'hidden',
+      fontFamily: 'var(--font-family, system-ui, sans-serif)',
+    }}>
       
-      {/* LEFT SIDE - Glass Login Form (40%) */}
-      <div style={{ 
-        flex: '0 0 45%', minWidth: '500px',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        position: 'relative', zIndex: 10,
-        backgroundColor: 'rgba(7, 20, 35, 0.85)',
-        backdropFilter: 'blur(20px)',
-        borderRight: '1px solid rgba(255,255,255,0.1)',
-        boxShadow: '20px 0 50px rgba(0,0,0,0.5)'
+      {/* LEFT SIDE - Ultra-Crisp Enterprise Login Console (42%) */}
+      <div style={{
+        flex: '0 0 45%',
+        minWidth: '480px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+        zIndex: 10,
+        backgroundColor: 'rgba(8, 21, 34, 0.95)',
+        backdropFilter: 'blur(30px)',
+        borderRight: '1px solid rgba(0, 229, 255, 0.15)',
+        boxShadow: '30px 0 70px rgba(0,0,0,0.7)',
+        padding: '3rem',
       }}>
-        
-        <AnimatePresence mode="wait">
-          {!showLogin ? (
+        <div style={{ width: '100%', maxWidth: '440px' }}>
+          
+          {/* Header Brand */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
+            <div style={{
+              width: 48,
+              height: 48,
+              borderRadius: '14px',
+              background: 'linear-gradient(135deg, #00E5FF 0%, #7B61FF 100%)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 0 25px rgba(0, 229, 255, 0.4)',
+            }}>
+              <ShieldCheck size={26} color="#050D16" strokeWidth={2.5} />
+            </div>
+            <div>
+              <div style={{ fontSize: '1.4rem', fontWeight: 900, letterSpacing: '2px', fontFamily: 'var(--font-heading)' }}>
+                IPRAP
+              </div>
+              <div style={{ fontSize: '0.7rem', color: '#00E5FF', letterSpacing: '1.5px', fontWeight: 700, textTransform: 'uppercase' }}>
+                ENTERPRISE RISK TERMINAL
+              </div>
+            </div>
+          </div>
+
+          <h1 style={{ fontSize: '2.4rem', fontWeight: 800, lineHeight: 1.15, marginBottom: '0.5rem', letterSpacing: '-0.5px' }}>
+            {isSignUp ? 'Provision Node' : 'Command Access'}
+          </h1>
+          <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.95rem', marginBottom: '2rem', lineHeight: 1.5 }}>
+            {isSignUp
+              ? 'Register institutional security credentials into the global network.'
+              : 'Enter cryptographically verified credentials to establish quantum session.'}
+          </p>
+
+          {error && (
             <motion.div
-              key="sequence"
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, y: -20 }}
-              style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2rem' }}
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              style={{
+                backgroundColor: 'rgba(255, 77, 109, 0.12)',
+                border: '1px solid rgba(255, 77, 109, 0.4)',
+                color: '#FF4D6D',
+                padding: '0.9rem 1.2rem',
+                borderRadius: '12px',
+                marginBottom: '1.5rem',
+                fontSize: '0.85rem',
+                fontWeight: 600,
+              }}
             >
-              {sequenceStep < preLoginSequence.length && (() => {
-                const CurrentIcon = preLoginSequence[sequenceStep].icon;
-                return (
-                  <motion.div
-                    key={sequenceStep}
-                    initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.1 }}
-                    transition={{ duration: 0.5 }}
-                    style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem' }}
-                  >
-                    <motion.div animate={{ rotate: 360 }} transition={{ duration: 4, repeat: Infinity, ease: "linear" }}>
-                      <div style={{ width: '80px', height: '80px', borderRadius: '50%', border: '2px dashed #00C6FF', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 20px rgba(0,198,255,0.2)' }}>
-                        <CurrentIcon size={32} color="#00C6FF" />
-                      </div>
-                    </motion.div>
-                    <h3 style={{ fontFamily: 'monospace', fontSize: '1.1rem', color: '#00C6FF', letterSpacing: '1px' }}>
-                      {preLoginSequence[sequenceStep].text}
-                    </h3>
-                  </motion.div>
-                );
-              })()}
-            </motion.div>
-          ) : (
-            <motion.div 
-              key="login"
-              initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}
-              style={{ width: '100%', maxWidth: '420px', padding: '2.5rem' }}
-            >
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', marginBottom: '2.5rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
-                  <div style={{ background: 'linear-gradient(135deg, #00C6FF 0%, #7A5CFF 100%)', borderRadius: '12px', padding: '12px', boxShadow: '0 0 20px rgba(0,198,255,0.4)' }}>
-                    <ShieldCheck size={28} color="white" />
-                  </div>
-                  <span style={{ fontSize: '1.75rem', fontWeight: '800', letterSpacing: '2px', fontFamily: 'var(--font-heading)' }}>IPRAP</span>
-                </div>
-                <h1 style={{ fontSize: '2.5rem', fontWeight: '700', marginBottom: '0.5rem', lineHeight: '1.2', fontFamily: 'var(--font-heading)' }}>
-                  {isSignUp ? 'Initialize Access' : 'Secure Authorization'}
-                </h1>
-                <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '1.1rem' }}>
-                  {isSignUp ? 'Register credentials to join the platform' : 'Enter your credentials to access the platform'}
-                </p>
-              </div>
-
-              {error && (
-                <div style={{ backgroundColor: 'rgba(255, 77, 109, 0.1)', border: '1px solid rgba(255, 77, 109, 0.3)', color: '#FF4D6D', padding: '1rem', borderRadius: '12px', marginBottom: '1.5rem', fontSize: '0.875rem' }}>
-                  {error}
-                </div>
-              )}
-
-              <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                <div>
-                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', color: 'rgba(255,255,255,0.7)', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Work Email</label>
-                  <input 
-                    type="email" placeholder="name@enterprise.com" 
-                    value={email} onChange={(e) => setEmail(e.target.value)} required 
-                    style={{
-                      width: '100%', padding: '1.25rem', borderRadius: '12px',
-                      background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)',
-                      color: 'white', fontSize: '1rem', outline: 'none', transition: 'all 0.2s',
-                      backdropFilter: 'blur(10px)'
-                    }}
-                    onFocus={(e) => { e.target.style.borderColor = '#00C6FF'; e.target.style.background = 'rgba(0,198,255,0.05)'; }}
-                    onBlur={(e) => { e.target.style.borderColor = 'rgba(255,255,255,0.1)'; e.target.style.background = 'rgba(255,255,255,0.03)'; }}
-                  />
-                </div>
-                <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                    <label style={{ fontSize: '0.875rem', fontWeight: '600', color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: '1px' }}>Decryption Key (Password)</label>
-                    {!isSignUp && <a href="#" style={{ fontSize: '0.875rem', color: '#00C6FF', textDecoration: 'none' }}>Forgot password?</a>}
-                  </div>
-                  <input 
-                    type="password" placeholder="••••••••" 
-                    value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6}
-                    style={{
-                      width: '100%', padding: '1.25rem', borderRadius: '12px',
-                      background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)',
-                      color: 'white', fontSize: '1rem', outline: 'none', transition: 'all 0.2s',
-                      backdropFilter: 'blur(10px)'
-                    }}
-                    onFocus={(e) => { e.target.style.borderColor = '#00C6FF'; e.target.style.background = 'rgba(0,198,255,0.05)'; }}
-                    onBlur={(e) => { e.target.style.borderColor = 'rgba(255,255,255,0.1)'; e.target.style.background = 'rgba(255,255,255,0.03)'; }}
-                  />
-                </div>
-
-                {!isSignUp && (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <input type="checkbox" id="remember" style={{ cursor: 'pointer', width: '16px', height: '16px', accentColor: '#00C6FF' }} />
-                    <label htmlFor="remember" style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.6)', cursor: 'pointer' }}>Maintain session for 30 days</label>
-                  </div>
-                )}
-
-                <motion.button 
-                  whileHover={{ scale: 1.02, boxShadow: '0 0 20px rgba(0,198,255,0.4)' }} whileTap={{ scale: 0.98 }}
-                  type="submit" disabled={loading} 
-                  style={{ 
-                    width: '100%', padding: '1.25rem', borderRadius: '12px', marginTop: '1rem',
-                    background: 'linear-gradient(135deg, #00C6FF 0%, #0077ff 100%)', color: 'white',
-                    border: 'none', fontSize: '1.1rem', fontWeight: '700', cursor: loading ? 'not-allowed' : 'pointer',
-                    display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem',
-                    transition: 'all 0.2s'
-                  }}
-                >
-                  {loading ? <Loader2 size={24} className="animate-spin" /> : (isSignUp ? 'Authorize Node' : 'Authenticate')}
-                </motion.button>
-              </form>
-
-              <div style={{ display: 'flex', alignItems: 'center', margin: '2.5rem 0' }}>
-                <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.1)' }}></div>
-                <span style={{ padding: '0 1rem', fontSize: '0.875rem', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '1px' }}>Or connect via SSO</span>
-                <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.1)' }}></div>
-              </div>
-
-              <div style={{ display: 'flex', gap: '1rem' }}>
-                <button style={{ 
-                  flex: 1, padding: '1rem', borderRadius: '12px', background: 'rgba(255,255,255,0.03)', 
-                  border: '1px solid rgba(255,255,255,0.1)', color: 'white', cursor: 'pointer', fontWeight: '600', transition: 'background 0.2s'
-                }} onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'} onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.03)'}>
-                  Google
-                </button>
-                <button style={{ 
-                  flex: 1, padding: '1rem', borderRadius: '12px', background: 'rgba(255,255,255,0.03)', 
-                  border: '1px solid rgba(255,255,255,0.1)', color: 'white', cursor: 'pointer', fontWeight: '600', transition: 'background 0.2s'
-                }} onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'} onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.03)'}>
-                  Microsoft
-                </button>
-              </div>
-
-              <p style={{ textAlign: 'center', marginTop: '2.5rem', fontSize: '0.875rem', color: 'rgba(255,255,255,0.6)' }}>
-                {isSignUp ? 'Already have an account?' : "Unregistered node?"}{' '}
-                <button 
-                  type="button"
-                  onClick={() => { setIsSignUp(!isSignUp); setError(''); }} 
-                  style={{ color: '#00C6FF', textDecoration: 'none', fontWeight: '700', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
-                >
-                  {isSignUp ? 'Sign in' : 'Request Access'}
-                </button>
-              </p>
+              {error}
             </motion.div>
           )}
-        </AnimatePresence>
+
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            <div>
+              <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: 'rgba(255,255,255,0.7)', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '1.5px' }}>
+                Institutional Email
+              </label>
+              <input
+                type="email"
+                placeholder="executive@institution.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                style={{
+                  width: '100%',
+                  padding: '1.1rem 1.25rem',
+                  borderRadius: '12px',
+                  background: 'rgba(255,255,255,0.04)',
+                  border: '1px solid rgba(255,255,255,0.15)',
+                  color: 'white',
+                  fontSize: '0.95rem',
+                  outline: 'none',
+                  transition: 'all 0.2s',
+                  boxSizing: 'border-box',
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#00E5FF';
+                  e.target.style.background = 'rgba(0,229,255,0.06)';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = 'rgba(255,255,255,0.15)';
+                  e.target.style.background = 'rgba(255,255,255,0.04)';
+                }}
+              />
+            </div>
+
+            <div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: '1.5px' }}>
+                  Decryption Password
+                </label>
+                {!isSignUp && (
+                  <button
+                    type="button"
+                    onClick={handleDemoFill}
+                    style={{ fontSize: '0.75rem', color: '#00E5FF', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600 }}
+                  >
+                    Quick Demo Autofill
+                  </button>
+                )}
+              </div>
+              <input
+                type="password"
+                placeholder="••••••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                minLength={6}
+                style={{
+                  width: '100%',
+                  padding: '1.1rem 1.25rem',
+                  borderRadius: '12px',
+                  background: 'rgba(255,255,255,0.04)',
+                  border: '1px solid rgba(255,255,255,0.15)',
+                  color: 'white',
+                  fontSize: '0.95rem',
+                  outline: 'none',
+                  transition: 'all 0.2s',
+                  boxSizing: 'border-box',
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#00E5FF';
+                  e.target.style.background = 'rgba(0,229,255,0.06)';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = 'rgba(255,255,255,0.15)';
+                  e.target.style.background = 'rgba(255,255,255,0.04)';
+                }}
+              />
+            </div>
+
+            <motion.button
+              whileHover={{ scale: 1.02, boxShadow: '0 0 30px rgba(0,229,255,0.5)' }}
+              whileTap={{ scale: 0.98 }}
+              type="submit"
+              disabled={loading}
+              style={{
+                width: '100%',
+                padding: '1.15rem',
+                borderRadius: '12px',
+                marginTop: '0.75rem',
+                background: 'linear-gradient(135deg, #00E5FF 0%, #4F8CFF 100%)',
+                color: '#050D16',
+                border: 'none',
+                fontSize: '1rem',
+                fontWeight: 800,
+                letterSpacing: '1px',
+                textTransform: 'uppercase',
+                cursor: loading ? 'not-allowed' : 'pointer',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: '0.5rem',
+                boxShadow: '0 10px 25px rgba(0,229,255,0.3)',
+              }}
+            >
+              {loading ? <Loader2 size={22} className="animate-spin" /> : (
+                <>
+                  {isSignUp ? 'Provision Secure Account' : 'Authenticate Session'}
+                  <ArrowRight size={18} />
+                </>
+              )}
+            </motion.button>
+          </form>
+
+          <div style={{ marginTop: '2rem', textAlign: 'center', fontSize: '0.85rem', color: 'rgba(255,255,255,0.6)' }}>
+            {isSignUp ? 'Already registered node?' : 'Unregistered institutional entity?'}{' '}
+            <button
+              type="button"
+              onClick={() => { setIsSignUp(!isSignUp); setError(''); }}
+              style={{ color: '#00E5FF', fontWeight: 700, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+            >
+              {isSignUp ? 'Sign in' : 'Provision Access'}
+            </button>
+          </div>
+
+        </div>
       </div>
 
-      {/* RIGHT SIDE - Cinematic Enterprise Visualization (55%) */}
+      {/* RIGHT SIDE - 3D Planetary Threat Radar & Live Intelligence (55%) */}
       <div style={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
         
-        {/* ThreeJS Background */}
+        {/* Three.js Globe Canvas */}
         <div style={{ position: 'absolute', inset: 0 }}>
-          <Canvas camera={{ position: [0, 0, 5] }}>
-            <LoginBackground />
+          <Canvas camera={{ position: [0, 0, 6.5], fov: 45 }}>
+            <ambientLight intensity={0.2} />
+            <directionalLight position={[10, 6, 8]} intensity={3.0} />
+            <directionalLight position={[-10, -5, -6]} intensity={0.35} color="#7B61FF" />
+            <Stars radius={100} depth={50} count={3000} factor={4} fade speed={0.8} />
+            <React.Suspense fallback={null}>
+              <LoginEarthSentinel />
+            </React.Suspense>
           </Canvas>
         </div>
 
-        {/* Floating UI Overlay */}
-        <div style={{ position: 'absolute', inset: 0, padding: '4rem', display: 'flex', flexDirection: 'column', justifyContent: 'center', pointerEvents: 'none' }}>
-          
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1, delay: 0.5 }}
-            style={{ width: '350px', background: 'rgba(7,20,35,0.6)', border: '1px solid rgba(0,198,255,0.3)', borderRadius: '16px', padding: '1.5rem', backdropFilter: 'blur(10px)', marginBottom: '2rem' }}
-          >
-            <div style={{ color: '#00C6FF', fontSize: '0.8rem', letterSpacing: '2px', marginBottom: '1rem' }}>SYSTEM STATUS</div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-              <span style={{ color: 'rgba(255,255,255,0.7)' }}>Nodes Online</span>
-              <span style={{ fontFamily: 'monospace', fontWeight: 700, color: '#00FFB2' }}>99.9%</span>
+        {/* HUD Overlay */}
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          padding: '4rem',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          pointerEvents: 'none',
+        }}>
+          {/* Top Live Badge */}
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <div style={{
+              background: 'rgba(8, 21, 34, 0.8)',
+              border: '1px solid rgba(0,229,255,0.3)',
+              borderRadius: '12px',
+              padding: '0.75rem 1.25rem',
+              backdropFilter: 'blur(15px)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+            }}>
+              <div style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#00FFB2', boxShadow: '0 0 10px #00FFB2' }} />
+              <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.8)', fontFamily: 'monospace', fontWeight: 700 }}>
+                GLOBAL RADAR: 42 NODES ONLINE
+              </span>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <span style={{ color: 'rgba(255,255,255,0.7)' }}>Threat Level</span>
-              <span style={{ fontFamily: 'monospace', fontWeight: 700, color: '#00C6FF' }}>NORMAL</span>
+          </div>
+
+          {/* Bottom Telemetry Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            style={{
+              maxWidth: '520px',
+              background: 'rgba(8, 21, 34, 0.85)',
+              border: '1px solid rgba(0, 229, 255, 0.3)',
+              borderRadius: '20px',
+              padding: '2rem',
+              backdropFilter: 'blur(20px)',
+              boxShadow: '0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(0,229,255,0.15)',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1rem' }}>
+              <Cpu size={20} color="#00E5FF" />
+              <span style={{ fontSize: '0.75rem', fontWeight: 800, letterSpacing: '2px', color: '#00E5FF', textTransform: 'uppercase' }}>
+                COGNITIVE RISK RADAR // V4.0
+              </span>
+            </div>
+
+            <h2 style={{ fontSize: '2rem', fontWeight: 800, lineHeight: 1.2, marginBottom: '0.75rem', color: 'white' }}>
+              Planetary Autonomous Defense
+            </h2>
+            <p style={{ fontSize: '0.95rem', color: 'rgba(255,255,255,0.65)', lineHeight: 1.6, marginBottom: '1.5rem' }}>
+              Continuous real-time neural surveillance predicting vulnerabilities across banking liquidity, sovereign power grids, and enterprise cloud networks.
+            </p>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '1rem' }}>
+              <div>
+                <div style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase' }}>Threat Interception</div>
+                <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#00FFB2', fontFamily: 'monospace' }}>99.98% Active</div>
+              </div>
+              <div>
+                <div style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase' }}>Response Latency</div>
+                <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#00E5FF', fontFamily: 'monospace' }}>&lt; 2.4 ms</div>
+              </div>
             </div>
           </motion.div>
-
-          <motion.h2 
-            initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1, delay: 1 }}
-            style={{ fontSize: '5rem', fontWeight: '800', fontFamily: 'var(--font-heading)', marginBottom: '1rem', maxWidth: '800px', lineHeight: 1.1, textShadow: '0 0 40px rgba(0,198,255,0.3)' }}
-          >
-            Global <br/>Risk Command.
-          </motion.h2>
-          
-          <motion.div 
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 1.5 }}
-            style={{ width: '80px', height: '4px', background: '#00C6FF', marginBottom: '2rem', boxShadow: '0 0 10px #00C6FF' }}
-          />
-
-          <motion.p 
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 2 }}
-            style={{ fontSize: '1.25rem', color: 'rgba(255,255,255,0.7)', maxWidth: '500px', fontWeight: 300, lineHeight: 1.6 }}
-          >
-            Secure, cognitive monitoring of cross-sector physical and digital assets in real-time.
-          </motion.p>
         </div>
 
       </div>
+
     </div>
   );
 };

@@ -1,101 +1,202 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShieldCheck, Fingerprint, Lock, CheckCircle2 } from 'lucide-react';
+import { ShieldCheck, Fingerprint, Lock, CheckCircle2, Cpu, KeyRound, Sparkles } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
 
 const verificationSteps = [
-  { text: 'Validating Credentials...', icon: Fingerprint },
-  { text: 'Identity Confirmed', icon: ShieldCheck },
-  { text: 'Encrypted Session Established', icon: Lock },
-  { text: 'Secure Authentication Verified', icon: CheckCircle2 }
+  { id: 1, text: 'Scanning Biometric Signature...', subtext: 'Capturing capacitive ridges & cryptographic seed', icon: Fingerprint, color: '#00E5FF' },
+  { id: 2, text: 'Executing Quantum Handshake...', subtext: 'Validating lattice-based key exchange protocol', icon: KeyRound, color: '#7B61FF' },
+  { id: 3, text: 'Neural Security Matrix Verification...', subtext: 'Analyzing session behavioral integrity', icon: Cpu, color: '#4F8CFF' },
+  { id: 4, text: 'Access Clearance Authorized', subtext: 'Provisioning institutional workspace sandbox', icon: ShieldCheck, color: '#00FFB2' },
 ];
 
 export const AuthVerification = () => {
-  const [step, setStep] = useState(0);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [isUnlocked, setIsUnlocked] = useState(false);
   const navigate = useNavigate();
   const { organization, role } = useAuthStore();
 
   useEffect(() => {
-    if (step < verificationSteps.length - 1) {
+    if (currentStep < verificationSteps.length - 1) {
       const timer = setTimeout(() => {
-        setStep(prev => prev + 1);
-      }, 800);
+        setCurrentStep(prev => prev + 1);
+      }, 950);
       return () => clearTimeout(timer);
     } else {
+      setIsUnlocked(true);
       const timer = setTimeout(() => {
-        // After animation completes, route based on state
+        // Proceed strictly to organization selection (or dashboard if already selected)
         if (organization && role) {
           navigate('/dashboard', { replace: true });
         } else {
           navigate('/organization', { replace: true });
         }
-      }, 1500);
+      }, 1600);
       return () => clearTimeout(timer);
     }
-  }, [step, navigate, organization, role]);
+  }, [currentStep, navigate, organization, role]);
 
-  const CurrentIcon = verificationSteps[step].icon;
+  const activeStep = verificationSteps[currentStep];
+  const CurrentIcon = activeStep.icon;
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#071423', color: 'white', alignItems: 'center', justifyContent: 'center' }}>
+    <div style={{
+      display: 'flex',
+      minHeight: '100vh',
+      backgroundColor: '#050D16',
+      color: 'white',
+      alignItems: 'center',
+      justifyContent: 'center',
+      position: 'relative',
+      overflow: 'hidden',
+      fontFamily: 'var(--font-family, system-ui, sans-serif)',
+    }}>
       
-      {/* Background */}
+      {/* Background Animated Atmosphere */}
       <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none' }}>
-        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at center, rgba(0,198,255,0.1) 0%, transparent 60%)' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 50% 50%, rgba(0,229,255,0.08) 0%, transparent 60%)' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 70% 30%, rgba(123,97,255,0.05) 0%, transparent 50%)' }} />
       </div>
 
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.9 }} 
-        animate={{ opacity: 1, scale: 1 }}
-        style={{ 
-          position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center',
-          background: 'rgba(7,20,35,0.8)', padding: '4rem', borderRadius: '24px',
-          border: '1px solid rgba(0,198,255,0.3)', backdropFilter: 'blur(20px)',
-          boxShadow: '0 0 40px rgba(0,198,255,0.1)'
+      {/* Main Terminal Vault Card */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.92 }}
+        animate={isUnlocked ? { scale: 1.05, opacity: 0, filter: 'blur(15px)' } : { opacity: 1, scale: 1, filter: 'blur(0px)' }}
+        transition={{ duration: 0.8 }}
+        style={{
+          position: 'relative',
+          zIndex: 10,
+          width: '100%',
+          maxWidth: '560px',
+          background: 'rgba(8, 21, 34, 0.9)',
+          border: `1px solid ${activeStep.color}40`,
+          borderRadius: '24px',
+          padding: '3.5rem 3rem',
+          backdropFilter: 'blur(25px)',
+          boxShadow: `0 30px 80px rgba(0,0,0,0.8), 0 0 40px ${activeStep.color}25`,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          textAlign: 'center',
         }}
       >
+        {/* Animated Scanner Ring */}
+        <div style={{ position: 'relative', width: '130px', height: '130px', marginBottom: '2.5rem' }}>
+          
+          {/* Rotating Dashed Outer Ring */}
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 6, repeat: Infinity, ease: 'linear' }}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              borderRadius: '50%',
+              border: `2px dashed ${activeStep.color}`,
+              boxShadow: `0 0 25px ${activeStep.color}40`,
+            }}
+          />
+
+          {/* Inner Glowing Scanner Core */}
+          <div style={{
+            position: 'absolute',
+            inset: '10px',
+            borderRadius: '50%',
+            background: `radial-gradient(circle, ${activeStep.color}25 0%, rgba(8,21,34,0.8) 80%)`,
+            border: `1px solid ${activeStep.color}60`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            overflow: 'hidden',
+          }}>
+            <CurrentIcon size={48} color={activeStep.color} />
+
+            {/* Laser Scan Line */}
+            {currentStep < 3 && (
+              <motion.div
+                animate={{ y: [-45, 45, -45] }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+                style={{
+                  position: 'absolute',
+                  left: 0,
+                  right: 0,
+                  height: '2px',
+                  background: '#00E5FF',
+                  boxShadow: '0 0 10px #00E5FF, 0 0 20px #00E5FF',
+                }}
+              />
+            )}
+          </div>
+        </div>
+
+        {/* Dynamic Verification Step Text */}
         <AnimatePresence mode="wait">
           <motion.div
-            key={step}
-            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-            style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2rem' }}
+            key={currentStep}
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.35 }}
+            style={{ marginBottom: '2.5rem' }}
           >
-            <div style={{ position: 'relative' }}>
-              <motion.div 
-                animate={step === verificationSteps.length - 1 ? {} : { rotate: 360 }} 
-                transition={{ duration: 2, repeat: step === verificationSteps.length - 1 ? 0 : Infinity, ease: "linear" }}
-                style={{ 
-                  width: '100px', height: '100px', borderRadius: '50%', 
-                  border: `2px ${step === verificationSteps.length - 1 ? 'solid' : 'dashed'} ${step === verificationSteps.length - 1 ? '#00FFB2' : '#00C6FF'}`, 
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  boxShadow: `0 0 20px ${step === verificationSteps.length - 1 ? 'rgba(0,255,178,0.4)' : 'rgba(0,198,255,0.2)'}`
-                }}
-              >
-                <CurrentIcon size={40} color={step === verificationSteps.length - 1 ? '#00FFB2' : '#00C6FF'} />
-              </motion.div>
-            </div>
-            
-            <h2 style={{ 
-              fontFamily: 'monospace', fontSize: '1.25rem', letterSpacing: '2px', 
-              color: step === verificationSteps.length - 1 ? '#00FFB2' : '#00C6FF',
-              textTransform: 'uppercase'
+            <div style={{
+              fontSize: '0.75rem',
+              fontWeight: 800,
+              letterSpacing: '2.5px',
+              color: activeStep.color,
+              textTransform: 'uppercase',
+              marginBottom: '0.6rem',
             }}>
-              {verificationSteps[step].text}
+              AUTHENTICATION PROTOCOL // 0{currentStep + 1}
+            </div>
+
+            <h2 style={{ fontSize: '1.75rem', fontWeight: 800, marginBottom: '0.5rem', letterSpacing: '-0.5px' }}>
+              {activeStep.text}
             </h2>
+
+            <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem', maxWidth: '380px', margin: '0 auto' }}>
+              {activeStep.subtext}
+            </p>
           </motion.div>
         </AnimatePresence>
 
-        {/* Progress Bar */}
-        <div style={{ width: '300px', height: '4px', background: 'rgba(255,255,255,0.1)', borderRadius: '2px', marginTop: '3rem', overflow: 'hidden' }}>
-          <motion.div 
-            initial={{ width: '0%' }}
-            animate={{ width: `${((step + 1) / verificationSteps.length) * 100}%` }}
-            transition={{ duration: 0.8 }}
-            style={{ height: '100%', background: step === verificationSteps.length - 1 ? '#00FFB2' : '#00C6FF', boxShadow: '0 0 10px currentColor' }}
-          />
+        {/* Step Progress Dots */}
+        <div style={{ display: 'flex', gap: '8px', marginBottom: '2.5rem' }}>
+          {verificationSteps.map((step, idx) => {
+            const isCompleted = idx <= currentStep;
+            return (
+              <div
+                key={step.id}
+                style={{
+                  width: idx === currentStep ? '32px' : '10px',
+                  height: '6px',
+                  borderRadius: '3px',
+                  background: isCompleted ? activeStep.color : 'rgba(255,255,255,0.15)',
+                  boxShadow: isCompleted ? `0 0 10px ${activeStep.color}` : 'none',
+                  transition: 'all 0.3s ease',
+                }}
+              />
+            );
+          })}
         </div>
+
+        {/* Bottom Status Feed */}
+        <div style={{
+          width: '100%',
+          background: 'rgba(5, 13, 22, 0.6)',
+          border: '1px solid rgba(255,255,255,0.08)',
+          borderRadius: '12px',
+          padding: '0.75rem 1.25rem',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          fontSize: '0.8rem',
+          fontFamily: 'monospace',
+        }}>
+          <span style={{ color: 'rgba(255,255,255,0.5)' }}>ENCRYPTION STATUS:</span>
+          <span style={{ color: '#00FFB2', fontWeight: 700 }}>256-BIT QUANTUM LATTICE</span>
+        </div>
+
       </motion.div>
 
     </div>
