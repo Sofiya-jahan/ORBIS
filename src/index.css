@@ -1,0 +1,349 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap');
+
+:root {
+  /* Core Foundation */
+  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Sans', monospace;
+  
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-full: 9999px;
+  
+  --spacing-1: 0.25rem;
+  --spacing-2: 0.5rem;
+  --spacing-3: 0.75rem;
+  --spacing-4: 1rem;
+  --spacing-5: 1.25rem;
+  --spacing-6: 1.5rem;
+  --spacing-8: 2rem;
+  --spacing-10: 2.5rem;
+  --spacing-12: 3rem;
+  --spacing-16: 4rem;
+
+  /* Premium Enterprise AI Palette V4 */
+  --bg-primary: #071B2F;
+  --bg-secondary: #0E2F44;
+  --bg-tertiary: #10263D;
+  
+  --text-primary: #FFFFFF;
+  --text-secondary: #AFC8DA;
+  --text-inverse: #071B2F;
+
+  --border-color: rgba(255, 255, 255, 0.08);
+  --glass-bg: rgba(16, 38, 61, 0.4);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  
+  --shadow-sm: 0 4px 6px -1px rgb(0 0 0 / 0.5);
+  --shadow-md: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+  --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.6);
+  --shadow-glow: 0 0 30px rgba(0, 200, 255, 0.2);
+
+  /* Accents */
+  --primary: #00C8FF;
+  --primary-rgb: 0, 200, 255;
+  --secondary: #6C63FF;
+  --accent: #00F5A0;
+  --primary-light: rgba(0, 200, 255, 0.15);
+  --primary-gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+
+  --success: #00F5A0;
+  --warning: #FFB000;
+  --danger: #FF5C7A;
+  --info: #00C8FF;
+
+  --page-bg-gradient: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+}
+
+/* ==========================================================================
+   Dark Theme
+   ========================================================================== */
+[data-theme="dark"] {
+  --bg-primary: #09090b;
+  --bg-secondary: #121214;
+  --bg-tertiary: #18181b;
+  
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-inverse: #0f172a;
+
+  --border-color: rgba(255, 255, 255, 0.1);
+  --glass-bg: rgba(20, 20, 25, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.08);
+
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.5);
+  --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.8);
+  
+  --page-bg-gradient: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+}
+
+/* ==========================================================================
+   Organization Themes
+   ========================================================================== */
+
+/* Hospital */
+[data-org="hospital"] {
+  --primary: #0B6EFD;
+  --primary-rgb: 11, 110, 253;
+  --secondary: #3EC6FF;
+  --accent: #00E0FF;
+  --primary-light: rgba(11, 110, 253, 0.1);
+  --primary-gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+  --page-bg-gradient: linear-gradient(180deg, var(--bg-primary) 0%, rgba(11, 110, 253, 0.05) 100%);
+}
+[data-org="hospital"][data-theme="dark"] {
+  --page-bg-gradient: linear-gradient(180deg, var(--bg-primary) 0%, rgba(11, 110, 253, 0.15) 100%);
+}
+
+/* Bank */
+[data-org="bank"] {
+  --primary: #0A2342;
+  --primary-rgb: 10, 35, 66;
+  --secondary: #0F52BA;
+  --accent: #FFD700;
+  --primary-light: rgba(10, 35, 66, 0.1);
+  --primary-gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+  --page-bg-gradient: linear-gradient(180deg, var(--bg-primary) 0%, rgba(10, 35, 66, 0.05) 100%);
+}
+[data-org="bank"][data-theme="dark"] {
+  --page-bg-gradient: linear-gradient(180deg, #020813 0%, #0A2342 100%);
+  --bg-primary: #020813;
+  --bg-secondary: #061124;
+}
+
+/* College */
+[data-org="college"] {
+  --primary: #5B3DF5;
+  --primary-rgb: 91, 61, 245;
+  --secondary: #7E57FF;
+  --accent: #C084FC;
+  --primary-light: rgba(91, 61, 245, 0.1);
+  --primary-gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+  --page-bg-gradient: linear-gradient(180deg, var(--bg-primary) 0%, rgba(91, 61, 245, 0.05) 100%);
+}
+[data-org="college"][data-theme="dark"] {
+  --page-bg-gradient: linear-gradient(180deg, var(--bg-primary) 0%, rgba(91, 61, 245, 0.15) 100%);
+}
+
+/* Company */
+[data-org="company"] {
+  --primary: #008060;
+  --primary-rgb: 0, 128, 96;
+  --secondary: #10B981;
+  --accent: #34D399;
+  --primary-light: rgba(0, 128, 96, 0.1);
+  --primary-gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+  --page-bg-gradient: linear-gradient(180deg, var(--bg-primary) 0%, rgba(0, 128, 96, 0.05) 100%);
+}
+[data-org="company"][data-theme="dark"] {
+  --page-bg-gradient: linear-gradient(180deg, var(--bg-primary) 0%, rgba(0, 128, 96, 0.15) 100%);
+}
+
+/* Government */
+[data-org="government"] {
+  --primary: #455A64;
+  --primary-rgb: 69, 90, 100;
+  --secondary: #607D8B;
+  --accent: #90A4AE;
+  --primary-light: rgba(69, 90, 100, 0.1);
+  --primary-gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+  --page-bg-gradient: linear-gradient(180deg, var(--bg-primary) 0%, rgba(69, 90, 100, 0.05) 100%);
+}
+[data-org="government"][data-theme="dark"] {
+  --page-bg-gradient: linear-gradient(180deg, var(--bg-primary) 0%, rgba(69, 90, 100, 0.15) 100%);
+}
+
+/* ==========================================================================
+   Reset & Base Styles
+   ========================================================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background: var(--page-bg-gradient);
+  background-attachment: fixed;
+  color: var(--text-primary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  transition: background 0.5s ease, color 0.3s ease;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+a:hover {
+  color: var(--secondary);
+}
+
+/* ==========================================================================
+   Glassmorphism & Utilities
+   ========================================================================== */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-lg);
+}
+
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+}
+.glass-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg), var(--shadow-glow);
+}
+
+.neo-card {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  position: relative;
+}
+
+.text-gradient {
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
+}
+
+/* ==========================================================================
+   Components
+   ========================================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  outline: none;
+}
+
+.btn-primary {
+  background: var(--primary-gradient);
+  color: white;
+  box-shadow: 0 4px 15px rgba(var(--primary-rgb), 0.3);
+}
+.btn-primary:hover {
+  box-shadow: 0 6px 20px rgba(var(--primary-rgb), 0.5);
+  transform: translateY(-2px);
+}
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+.btn-secondary:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--primary);
+}
+
+.input-field {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  outline: none;
+}
+.input-field:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+.label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+/* ==========================================================================
+   Animations
+   ========================================================================== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 0 0 rgba(var(--primary-rgb), 0.4); }
+  70% { box-shadow: 0 0 0 15px rgba(var(--primary-rgb), 0); }
+  100% { box-shadow: 0 0 0 0 rgba(var(--primary-rgb), 0); }
+}
+
+@keyframes panImage {
+  0% { transform: scale(1.05) translate(0, 0); }
+  50% { transform: scale(1.1) translate(-2%, -2%); }
+  100% { transform: scale(1.05) translate(0, 0); }
+}
+
+.animate-fade-in { animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.animate-fade-in-delayed { animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+.animate-float { animation: float 6s ease-in-out infinite; }
+.animate-pulse-glow { animation: pulseGlow 2s infinite; }
+
+/* Dashboard Specific Layout Helpers */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--radius-full);
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
