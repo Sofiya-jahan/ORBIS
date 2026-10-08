@@ -1,16 +1,27 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
-import { ShieldCheck, Loader2, Fingerprint, Lock, Globe, ArrowRight, Shield, Activity, Cpu } from 'lucide-react';
+import { ORGANIZATIONS } from '../config/platformConfig';
+import { 
+  ShieldCheck, Loader2, Fingerprint, Lock, Globe, 
+  ArrowRight, Shield, Activity, Cpu, ChevronLeft,
+  Sparkles, Landmark, Factory, GraduationCap, Building2,
+  HardHat, Zap, Truck, Scale, ShoppingBag, Flame
+} from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Stars, useTexture } from '@react-three/drei';
 import * as THREE from 'three';
 
+const iconMap: Record<string, React.ComponentType<{ size?: number; color?: string; className?: string; strokeWidth?: number }>> = {
+  Activity, Landmark, GraduationCap, Factory, Cpu, Building2,
+  ShieldCheck, ShoppingBag, HardHat, Zap, Truck, Scale, Flame
+};
+
 // -------------------------------------------------------------
 // 3D Planetary Threat Intelligence Globe for Login Right Pane
 // -------------------------------------------------------------
-const LoginEarthSentinel = () => {
+const LoginEarthSentinel = ({ ringColor = '#00E5FF' }: { ringColor?: string }) => {
   const earthRef = useRef<THREE.Mesh>(null);
   const cloudsRef = useRef<THREE.Mesh>(null);
   const ringRef = useRef<THREE.Mesh>(null);
@@ -60,7 +71,7 @@ const LoginEarthSentinel = () => {
       {/* High-Tech Orbital Security Coordinate Ring */}
       <mesh ref={ringRef}>
         <torusGeometry args={[3.2, 0.015, 16, 120]} />
-        <meshBasicMaterial color="#00E5FF" transparent opacity={0.35} />
+        <meshBasicMaterial color={ringColor} transparent opacity={0.4} />
       </mesh>
     </group>
   );
@@ -77,8 +88,12 @@ export const Login = () => {
   const location = useLocation();
   const { login, register, isAuthenticated, organization, role } = useAuthStore();
 
+  const currentOrg = organization && ORGANIZATIONS[organization] ? ORGANIZATIONS[organization] : ORGANIZATIONS.hospital;
+  const currentRole = currentOrg.roles.find(r => r.id === role) || currentOrg.roles[0];
+  const OrgIcon = iconMap[currentOrg.iconName] || Activity;
+
   useEffect(() => {
-    // If already fully authenticated and configured, allow dashboard access
+    // If already fully authenticated, proceed to dashboard
     if (isAuthenticated && organization && role) {
       const from = (location.state as any)?.from?.pathname || '/dashboard';
       navigate(from, { replace: true });
@@ -95,7 +110,7 @@ export const Login = () => {
       } else {
         await login(email, password);
       }
-      // Mandatory flow: proceed directly to Authentication Animation
+      // Proceed to authentication scanner animation then to dashboard
       navigate('/authentication');
     } catch (err: any) {
       setError(err.message || 'Authentication failed. Please verify credentials.');
@@ -105,7 +120,7 @@ export const Login = () => {
   };
 
   const handleDemoFill = () => {
-    setEmail('demo@iprap.ai');
+    setEmail(`executive@${currentOrg.id}.iprap.ai`);
     setPassword('enterprise2026');
   };
 
@@ -117,9 +132,10 @@ export const Login = () => {
       color: 'white',
       overflow: 'hidden',
       fontFamily: 'var(--font-family, system-ui, sans-serif)',
+      position: 'relative'
     }}>
       
-      {/* LEFT SIDE - Ultra-Crisp Enterprise Login Console (42%) */}
+      {/* LEFT SIDE - Ultra-Crisp Enterprise Login Console (45%) */}
       <div style={{
         flex: '0 0 45%',
         minWidth: '480px',
@@ -130,43 +146,86 @@ export const Login = () => {
         zIndex: 10,
         backgroundColor: 'rgba(8, 21, 34, 0.95)',
         backdropFilter: 'blur(30px)',
-        borderRight: '1px solid rgba(0, 229, 255, 0.15)',
+        borderRight: `1px solid ${currentOrg.themeColor}30`,
         boxShadow: '30px 0 70px rgba(0,0,0,0.7)',
         padding: '3rem',
       }}>
         <div style={{ width: '100%', maxWidth: '440px' }}>
           
-          {/* Header Brand */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
+          {/* Back Navigation Button to change role/org */}
+          <button
+            onClick={() => navigate('/role-selection')}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              background: 'none',
+              border: 'none',
+              color: 'var(--text-muted, #94A3B8)',
+              cursor: 'pointer',
+              fontSize: '0.8rem',
+              fontWeight: 600,
+              marginBottom: '1.75rem',
+              padding: 0
+            }}
+          >
+            <ChevronLeft size={16} /> Back to Role Selection
+          </button>
+
+          {/* Header Brand & Selected Organization Lockup */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.75rem' }}>
             <div style={{
-              width: 48,
-              height: 48,
+              width: 50,
+              height: 50,
               borderRadius: '14px',
-              background: 'linear-gradient(135deg, #00E5FF 0%, #7B61FF 100%)',
+              background: `linear-gradient(135deg, ${currentOrg.themeColor} 0%, ${currentOrg.secondaryColor} 100%)`,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 0 25px rgba(0, 229, 255, 0.4)',
+              boxShadow: `0 0 25px ${currentOrg.themeColor}50`,
+              color: '#FFFFFF'
             }}>
-              <ShieldCheck size={26} color="#050D16" strokeWidth={2.5} />
+              <OrgIcon size={26} strokeWidth={2.5} />
             </div>
             <div>
-              <div style={{ fontSize: '1.4rem', fontWeight: 900, letterSpacing: '2px', fontFamily: 'var(--font-heading)' }}>
-                IPRAP
+              <div style={{ fontSize: '1.35rem', fontWeight: 900, letterSpacing: '2px', fontFamily: 'var(--font-heading)' }}>
+                IPRAP <span style={{ color: currentOrg.themeColor, fontSize: '0.9rem' }}>// {currentOrg.name.split(' ')[0]}</span>
               </div>
-              <div style={{ fontSize: '0.7rem', color: '#00E5FF', letterSpacing: '1.5px', fontWeight: 700, textTransform: 'uppercase' }}>
-                ENTERPRISE RISK TERMINAL
+              <div style={{ fontSize: '0.7rem', color: currentOrg.themeColor, letterSpacing: '1.5px', fontWeight: 700, textTransform: 'uppercase' }}>
+                {currentOrg.sector}
               </div>
             </div>
           </div>
 
-          <h1 style={{ fontSize: '2.4rem', fontWeight: 800, lineHeight: 1.15, marginBottom: '0.5rem', letterSpacing: '-0.5px' }}>
+          {/* Active Role Clearance Pill */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.6rem',
+            padding: '0.6rem 1rem',
+            borderRadius: '12px',
+            background: 'rgba(255,255,255,0.04)',
+            border: `1px solid ${currentOrg.themeColor}40`,
+            marginBottom: '1.75rem'
+          }}>
+            <Lock size={16} color={currentOrg.themeColor} />
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <span style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                Authenticating Role Profile
+              </span>
+              <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#FFFFFF' }}>
+                {currentRole.title} <span style={{ color: currentOrg.themeColor, fontSize: '0.75rem' }}>({currentRole.accessLevel.split(' ')[0]} {currentRole.accessLevel.split(' ')[1]})</span>
+              </span>
+            </div>
+          </div>
+
+          <h1 style={{ fontSize: '2.2rem', fontWeight: 800, lineHeight: 1.15, marginBottom: '0.4rem', letterSpacing: '-0.5px' }}>
             {isSignUp ? 'Provision Node' : 'Command Access'}
           </h1>
-          <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.95rem', marginBottom: '2rem', lineHeight: 1.5 }}>
+          <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem', marginBottom: '1.75rem', lineHeight: 1.5 }}>
             {isSignUp
-              ? 'Register institutional security credentials into the global network.'
-              : 'Enter cryptographically verified credentials to establish quantum session.'}
+              ? `Register ${currentOrg.name} security credentials into the network.`
+              : `Enter authenticated institutional credentials to initialize the ${currentOrg.name} command portal.`}
           </p>
 
           {error && (
@@ -177,7 +236,7 @@ export const Login = () => {
                 backgroundColor: 'rgba(255, 77, 109, 0.12)',
                 border: '1px solid rgba(255, 77, 109, 0.4)',
                 color: '#FF4D6D',
-                padding: '0.9rem 1.2rem',
+                padding: '0.85rem 1.1rem',
                 borderRadius: '12px',
                 marginBottom: '1.5rem',
                 fontSize: '0.85rem',
@@ -195,13 +254,13 @@ export const Login = () => {
               </label>
               <input
                 type="email"
-                placeholder="executive@institution.com"
+                placeholder={`executive@${currentOrg.id}.institution.com`}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 style={{
                   width: '100%',
-                  padding: '1.1rem 1.25rem',
+                  padding: '1.05rem 1.25rem',
                   borderRadius: '12px',
                   background: 'rgba(255,255,255,0.04)',
                   border: '1px solid rgba(255,255,255,0.15)',
@@ -212,8 +271,8 @@ export const Login = () => {
                   boxSizing: 'border-box',
                 }}
                 onFocus={(e) => {
-                  e.target.style.borderColor = '#00E5FF';
-                  e.target.style.background = 'rgba(0,229,255,0.06)';
+                  e.target.style.borderColor = currentOrg.themeColor;
+                  e.target.style.background = `${currentOrg.themeColor}12`;
                 }}
                 onBlur={(e) => {
                   e.target.style.borderColor = 'rgba(255,255,255,0.15)';
@@ -231,9 +290,9 @@ export const Login = () => {
                   <button
                     type="button"
                     onClick={handleDemoFill}
-                    style={{ fontSize: '0.75rem', color: '#00E5FF', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600 }}
+                    style={{ fontSize: '0.75rem', color: currentOrg.themeColor, background: 'none', border: 'none', cursor: 'pointer', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.25rem' }}
                   >
-                    Quick Demo Autofill
+                    <Sparkles size={12} /> Autofill Demo
                   </button>
                 )}
               </div>
@@ -246,7 +305,7 @@ export const Login = () => {
                 minLength={6}
                 style={{
                   width: '100%',
-                  padding: '1.1rem 1.25rem',
+                  padding: '1.05rem 1.25rem',
                   borderRadius: '12px',
                   background: 'rgba(255,255,255,0.04)',
                   border: '1px solid rgba(255,255,255,0.15)',
@@ -257,8 +316,8 @@ export const Login = () => {
                   boxSizing: 'border-box',
                 }}
                 onFocus={(e) => {
-                  e.target.style.borderColor = '#00E5FF';
-                  e.target.style.background = 'rgba(0,229,255,0.06)';
+                  e.target.style.borderColor = currentOrg.themeColor;
+                  e.target.style.background = `${currentOrg.themeColor}12`;
                 }}
                 onBlur={(e) => {
                   e.target.style.borderColor = 'rgba(255,255,255,0.15)';
@@ -268,7 +327,7 @@ export const Login = () => {
             </div>
 
             <motion.button
-              whileHover={{ scale: 1.02, boxShadow: '0 0 30px rgba(0,229,255,0.5)' }}
+              whileHover={{ scale: 1.02, boxShadow: `0 0 30px ${currentOrg.themeColor}60` }}
               whileTap={{ scale: 0.98 }}
               type="submit"
               disabled={loading}
@@ -277,10 +336,10 @@ export const Login = () => {
                 padding: '1.15rem',
                 borderRadius: '12px',
                 marginTop: '0.75rem',
-                background: 'linear-gradient(135deg, #00E5FF 0%, #4F8CFF 100%)',
-                color: '#050D16',
+                background: `linear-gradient(135deg, ${currentOrg.themeColor} 0%, ${currentOrg.secondaryColor} 100%)`,
+                color: '#FFFFFF',
                 border: 'none',
-                fontSize: '1rem',
+                fontSize: '0.95rem',
                 fontWeight: 800,
                 letterSpacing: '1px',
                 textTransform: 'uppercase',
@@ -289,24 +348,24 @@ export const Login = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 gap: '0.5rem',
-                boxShadow: '0 10px 25px rgba(0,229,255,0.3)',
+                boxShadow: `0 10px 25px ${currentOrg.themeColor}40`,
               }}
             >
               {loading ? <Loader2 size={22} className="animate-spin" /> : (
                 <>
-                  {isSignUp ? 'Provision Secure Account' : 'Authenticate Session'}
+                  {isSignUp ? 'Provision Secure Account' : 'Authenticate & Launch'}
                   <ArrowRight size={18} />
                 </>
               )}
             </motion.button>
           </form>
 
-          <div style={{ marginTop: '2rem', textAlign: 'center', fontSize: '0.85rem', color: 'rgba(255,255,255,0.6)' }}>
+          <div style={{ marginTop: '1.75rem', textAlign: 'center', fontSize: '0.85rem', color: 'rgba(255,255,255,0.6)' }}>
             {isSignUp ? 'Already registered node?' : 'Unregistered institutional entity?'}{' '}
             <button
               type="button"
               onClick={() => { setIsSignUp(!isSignUp); setError(''); }}
-              style={{ color: '#00E5FF', fontWeight: 700, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+              style={{ color: currentOrg.themeColor, fontWeight: 700, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
             >
               {isSignUp ? 'Sign in' : 'Provision Access'}
             </button>
@@ -315,18 +374,29 @@ export const Login = () => {
         </div>
       </div>
 
-      {/* RIGHT SIDE - 3D Planetary Threat Radar & Live Intelligence (55%) */}
+      {/* RIGHT SIDE - 3D Planetary Threat Radar & Live Intelligence (55%) with dynamic Org visuals */}
       <div style={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
         
+        {/* Organization background image overlay with gentle ambient lighting */}
+        <div style={{
+          position: 'absolute', inset: -20,
+          backgroundImage: `url(${currentOrg.bgImage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          opacity: 0.18,
+          filter: 'blur(8px)',
+          zIndex: 0
+        }} />
+
         {/* Three.js Globe Canvas */}
-        <div style={{ position: 'absolute', inset: 0 }}>
+        <div style={{ position: 'absolute', inset: 0, zIndex: 1 }}>
           <Canvas camera={{ position: [0, 0, 6.5], fov: 45 }}>
             <ambientLight intensity={0.2} />
             <directionalLight position={[10, 6, 8]} intensity={3.0} />
-            <directionalLight position={[-10, -5, -6]} intensity={0.35} color="#7B61FF" />
+            <directionalLight position={[-10, -5, -6]} intensity={0.35} color={currentOrg.themeColor} />
             <Stars radius={100} depth={50} count={3000} factor={4} fade speed={0.8} />
             <React.Suspense fallback={null}>
-              <LoginEarthSentinel />
+              <LoginEarthSentinel ringColor={currentOrg.themeColor} />
             </React.Suspense>
           </Canvas>
         </div>
@@ -340,22 +410,24 @@ export const Login = () => {
           flexDirection: 'column',
           justifyContent: 'space-between',
           pointerEvents: 'none',
+          zIndex: 2
         }}>
           {/* Top Live Badge */}
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <div style={{
-              background: 'rgba(8, 21, 34, 0.8)',
-              border: '1px solid rgba(0,229,255,0.3)',
+              background: 'rgba(8, 21, 34, 0.85)',
+              border: `1px solid ${currentOrg.themeColor}50`,
               borderRadius: '12px',
               padding: '0.75rem 1.25rem',
               backdropFilter: 'blur(15px)',
               display: 'flex',
               alignItems: 'center',
               gap: '10px',
+              boxShadow: `0 0 20px ${currentOrg.themeColor}25`
             }}>
               <div style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#00FFB2', boxShadow: '0 0 10px #00FFB2' }} />
-              <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.8)', fontFamily: 'monospace', fontWeight: 700 }}>
-                GLOBAL RADAR: 42 NODES ONLINE
+              <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.9)', fontFamily: 'monospace', fontWeight: 700 }}>
+                {currentOrg.statLabel.toUpperCase()}: {currentOrg.statValue}
               </span>
             </div>
           </div>
@@ -367,36 +439,36 @@ export const Login = () => {
             transition={{ duration: 0.8, delay: 0.4 }}
             style={{
               maxWidth: '520px',
-              background: 'rgba(8, 21, 34, 0.85)',
-              border: '1px solid rgba(0, 229, 255, 0.3)',
+              background: 'rgba(8, 21, 34, 0.9)',
+              border: `1px solid ${currentOrg.themeColor}50`,
               borderRadius: '20px',
               padding: '2rem',
               backdropFilter: 'blur(20px)',
-              boxShadow: '0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(0,229,255,0.15)',
+              boxShadow: `0 20px 50px rgba(0,0,0,0.8), 0 0 30px ${currentOrg.themeColor}20`,
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1rem' }}>
-              <Cpu size={20} color="#00E5FF" />
-              <span style={{ fontSize: '0.75rem', fontWeight: 800, letterSpacing: '2px', color: '#00E5FF', textTransform: 'uppercase' }}>
-                COGNITIVE RISK RADAR // V4.0
+              <Cpu size={20} color={currentOrg.themeColor} />
+              <span style={{ fontSize: '0.75rem', fontWeight: 800, letterSpacing: '2px', color: currentOrg.themeColor, textTransform: 'uppercase' }}>
+                {currentOrg.name} // SECTOR SENTINEL
               </span>
             </div>
 
-            <h2 style={{ fontSize: '2rem', fontWeight: 800, lineHeight: 1.2, marginBottom: '0.75rem', color: 'white' }}>
-              Planetary Autonomous Defense
+            <h2 style={{ fontSize: '1.9rem', fontWeight: 800, lineHeight: 1.2, marginBottom: '0.75rem', color: 'white' }}>
+              Autonomous {currentOrg.sector.split('&')[0]} Surveillance
             </h2>
-            <p style={{ fontSize: '0.95rem', color: 'rgba(255,255,255,0.65)', lineHeight: 1.6, marginBottom: '1.5rem' }}>
-              Continuous real-time neural surveillance predicting vulnerabilities across banking liquidity, sovereign power grids, and enterprise cloud networks.
+            <p style={{ fontSize: '0.92rem', color: 'rgba(255,255,255,0.68)', lineHeight: 1.6, marginBottom: '1.5rem' }}>
+              {currentOrg.description}
             </p>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '1rem' }}>
               <div>
-                <div style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase' }}>Threat Interception</div>
-                <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#00FFB2', fontFamily: 'monospace' }}>99.98% Active</div>
+                <div style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase' }}>Tenant Health Score</div>
+                <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#00FFB2', fontFamily: 'monospace' }}>{currentOrg.healthScore}% Nominal</div>
               </div>
               <div>
-                <div style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase' }}>Response Latency</div>
-                <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#00E5FF', fontFamily: 'monospace' }}>&lt; 2.4 ms</div>
+                <div style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase' }}>Active Sector Modules</div>
+                <div style={{ fontSize: '1.2rem', fontWeight: 800, color: currentOrg.themeColor, fontFamily: 'monospace' }}>{currentOrg.industryModules.length} Modules Live</div>
               </div>
             </div>
           </motion.div>

@@ -1,169 +1,243 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
+import { ORGANIZATIONS } from '../config/platformConfig';
 import { 
-  Stethoscope, ShieldPlus, 
-  Briefcase, Landmark, 
-  GraduationCap, BookOpen,
-  Building2, Users,
-  Activity, ShieldCheck, Database, FileText
+  ShieldCheck, ArrowRight, Shield, Award, Users, Stethoscope, 
+  HeartPulse, Activity, ShieldAlert, Scale, Server, UserCheck,
+  Wrench, Factory, Cpu, Terminal, Landmark, TrendingUp,
+  Building2, GraduationCap, HardHat, Zap, Truck, FileText,
+  ShoppingBag, Flame, Lock, ChevronLeft
 } from 'lucide-react';
 
-const roleData: Record<string, any[]> = {
-  hospital: [
-    { id: 'doctor', title: 'Chief Medical Officer', icon: Stethoscope, access: 'Level 4 (High)', desc: 'Full access to patient predictive analytics and resource optimization.', perms: ['Patient Data', 'AI Diagnosis', 'Staff Allocation'] },
-    { id: 'nurse', title: 'Head Nurse', icon: ShieldPlus, access: 'Level 3 (Med)', desc: 'Access to ward analytics and real-time patient monitoring.', perms: ['Ward Data', 'Vitals AI', 'Shifts'] }
-  ],
-  bank: [
-    { id: 'manager', title: 'Risk Manager', icon: Briefcase, access: 'Level 4 (High)', desc: 'Comprehensive view of fraud detection and market risk models.', perms: ['Fraud AI', 'Market Risk', 'Compliance'] },
-    { id: 'cashier', title: 'Branch Lead', icon: Landmark, access: 'Level 2 (Low)', desc: 'Local branch analytics and daily transaction monitoring.', perms: ['Branch Data', 'Daily Auth', 'Reports'] }
-  ],
-  college: [
-    { id: 'principal', title: 'Dean / Principal', icon: GraduationCap, access: 'Level 4 (High)', desc: 'Campus-wide analytics, predictive student success, and faculty metrics.', perms: ['Campus AI', 'Student Risk', 'Budgets'] },
-    { id: 'teacher', title: 'Professor', icon: BookOpen, access: 'Level 2 (Low)', desc: 'Class-specific performance predictions and attendance analytics.', perms: ['Class Data', 'Grading AI', 'Schedules'] }
-  ],
-  company: [
-    { id: 'ceo', title: 'Chief Executive', icon: Building2, access: 'Level 5 (Max)', desc: 'Enterprise-wide operational risk intelligence and forecasting.', perms: ['Global AI', 'Revenue Risk', 'M&A'] },
-    { id: 'manager', title: 'Project Manager', icon: Users, access: 'Level 3 (Med)', desc: 'Departmental risk, resource allocation, and project analytics.', perms: ['Dept Data', 'Resource AI', 'Reports'] }
-  ],
-  government: [
-    { id: 'administrator', title: 'City Administrator', icon: Building2, access: 'Level 4 (High)', desc: 'Smart city analytics, public service risks, and security.', perms: ['City AI', 'Security', 'Budget'] },
-    { id: 'clerk', title: 'Public Officer', icon: FileText, access: 'Level 2 (Low)', desc: 'Citizen request analytics and local departmental reporting.', perms: ['Local Data', 'Requests', 'Reports'] }
-  ]
+const iconMap: Record<string, React.ComponentType<{ size?: number; color?: string; className?: string }>> = {
+  Award, Users, Stethoscope, HeartPulse, Activity, ShieldAlert, Scale,
+  Server, UserCheck, Wrench, Factory, Cpu, Terminal, Landmark,
+  TrendingUp, Building2, GraduationCap, HardHat, Zap, Truck,
+  FileText, ShoppingBag, Flame, ShieldCheck
 };
 
-const RoleSelect = () => {
+export const RoleSelect = () => {
   const { organization, setRole } = useAuthStore();
   const navigate = useNavigate();
   const [hoveredRole, setHoveredRole] = useState<string | null>(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
-  if (!organization) {
-    navigate('/org-select');
+  // If no organization selected, redirect back to organization selection
+  if (!organization || !ORGANIZATIONS[organization]) {
+    navigate('/organization');
     return null;
   }
 
-  const roles = roleData[organization] || [];
+  const currentOrg = ORGANIZATIONS[organization];
+  const roles = currentOrg.roles;
 
   const handleSelect = (roleId: string) => {
+    setIsTransitioning(true);
+    setRole(roleId);
     setTimeout(() => {
-      setRole(roleId);
-      navigate('/security-key');
-    }, 600);
+      navigate('/login');
+    }, 450);
   };
 
   return (
     <div style={{ 
       minHeight: '100vh', 
-      padding: '4rem 2rem',
-      display: 'flex', flexDirection: 'column', alignItems: 'center'
+      backgroundColor: 'var(--bg-primary)',
+      color: 'var(--text-primary)',
+      padding: '3rem 2rem 5rem 2rem',
+      display: 'flex', 
+      flexDirection: 'column', 
+      alignItems: 'center',
+      position: 'relative',
+      opacity: isTransitioning ? 0.4 : 1,
+      transform: isTransitioning ? 'scale(0.98)' : 'scale(1)',
+      transition: 'all 0.4s ease-in-out',
+      fontFamily: 'var(--font-family)'
     }}>
-      <div style={{ textAlign: 'center', marginBottom: '4rem' }} className="animate-fade-in">
+      
+      {/* Background glow tailored to organization */}
+      <div style={{
+        position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)',
+        width: '80vw', height: '400px',
+        background: `radial-gradient(ellipse at center, ${currentOrg.themeColor}18 0%, transparent 70%)`,
+        zIndex: 0, pointerEvents: 'none'
+      }} />
+
+      {/* Top Breadcrumb / Back Button */}
+      <div style={{ width: '100%', maxWidth: '1280px', marginBottom: '2rem', position: 'relative', zIndex: 2 }}>
+        <button
+          onClick={() => navigate('/organization')}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            background: 'var(--bg-secondary)',
+            border: '1px solid var(--border-color)',
+            borderRadius: '12px',
+            padding: '0.6rem 1.2rem',
+            color: 'var(--text-secondary)',
+            cursor: 'pointer',
+            fontSize: '0.85rem',
+            fontWeight: 600,
+            transition: 'all 0.2s ease'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.color = 'var(--primary)';
+            e.currentTarget.style.borderColor = 'var(--primary)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.color = 'var(--text-secondary)';
+            e.currentTarget.style.borderColor = 'var(--border-color)';
+          }}
+        >
+          <ChevronLeft size={16} /> Switch Organization ({currentOrg.name})
+        </button>
+      </div>
+
+      {/* Header */}
+      <div style={{ textAlign: 'center', marginBottom: '3.5rem', position: 'relative', zIndex: 1 }} className="animate-fade-in">
         <div style={{ 
           display: 'inline-flex', alignItems: 'center', gap: '0.5rem', 
-          padding: '0.5rem 1rem', borderRadius: '20px', 
-          backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-color)',
-          marginBottom: '1.5rem', color: 'var(--primary)', fontSize: '0.875rem', fontWeight: '600',
+          padding: '0.4rem 1.1rem', borderRadius: '100px', 
+          backgroundColor: `${currentOrg.themeColor}18`, 
+          border: `1px solid ${currentOrg.themeColor}40`,
+          marginBottom: '1.25rem', color: currentOrg.themeColor, 
+          fontSize: '0.85rem', fontWeight: '700',
           textTransform: 'uppercase', letterSpacing: '1px'
         }}>
-          Workspace: {organization}
+          <Lock size={14} /> PHASE 2: ROLE-BASED ACCESS CONTROL
         </div>
-        <h1 style={{ fontSize: '3rem', fontWeight: '800', marginBottom: '1rem', letterSpacing: '-1px', fontFamily: 'var(--font-heading)' }}>
-          Select Access Role
+
+        <h1 style={{ 
+          fontSize: '3rem', 
+          fontWeight: '800', 
+          marginBottom: '0.75rem', 
+          letterSpacing: '-1px', 
+          fontFamily: 'var(--font-heading)' 
+        }}>
+          Select Your Access Role
         </h1>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '1.25rem', maxWidth: '600px', margin: '0 auto' }}>
-          Your role determines the AI modules, data access levels, and analytical tools available in your dashboard.
+
+        <p style={{ color: 'var(--text-secondary)', fontSize: '1.15rem', maxWidth: '640px', margin: '0 auto', lineHeight: 1.6 }}>
+          Only roles authenticated for <span style={{ color: currentOrg.themeColor, fontWeight: 700 }}>{currentOrg.name}</span> are available. Permissions dynamically dictate your dashboard modules.
         </p>
       </div>
 
+      {/* Dynamic Roles Grid */}
       <div style={{ 
-        display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '2rem', maxWidth: '1000px', width: '100%'
+        display: 'grid', 
+        gridTemplateColumns: 'repeat(auto-fill, minmax(380px, 1fr))', 
+        gap: '1.75rem', 
+        maxWidth: '1280px', 
+        width: '100%',
+        position: 'relative',
+        zIndex: 1
       }}>
         {roles.map((role, index) => {
           const isHovered = hoveredRole === role.id;
+          const RoleIcon = iconMap[role.iconName] || Shield;
+
           return (
             <div 
               key={role.id}
               className="glass-card animate-fade-in-delayed"
               style={{ 
-                animationDelay: `${index * 0.15}s`,
-                width: '100%', maxWidth: '450px',
-                padding: '2.5rem',
+                animationDelay: `${index * 0.06}s`,
+                padding: '2.25rem',
                 cursor: 'pointer',
                 position: 'relative',
                 overflow: 'hidden',
-                borderColor: isHovered ? 'var(--primary)' : 'var(--border-color)',
-                transform: isHovered ? 'translateY(-8px)' : 'translateY(0)',
+                borderColor: isHovered ? currentOrg.themeColor : 'var(--border-color)',
+                transform: isHovered ? 'translateY(-6px)' : 'translateY(0)',
+                boxShadow: isHovered ? `0 20px 40px rgba(0,0,0,0.5), 0 0 25px ${currentOrg.themeColor}30` : 'var(--shadow-md)',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                minHeight: '320px'
               }}
               onMouseEnter={() => setHoveredRole(role.id)}
               onMouseLeave={() => setHoveredRole(null)}
               onClick={() => handleSelect(role.id)}
             >
-              {/* Animated Background Gradient on Hover */}
+              {/* Top accent line on hover */}
               <div style={{
                 position: 'absolute', top: 0, left: 0, right: 0, height: '4px',
-                background: 'var(--primary-gradient)',
+                background: currentOrg.themeColor,
                 opacity: isHovered ? 1 : 0,
                 transition: 'opacity 0.3s ease'
               }} />
-              
-              <div style={{
-                position: 'absolute', inset: 0,
-                background: 'var(--primary-gradient)',
-                opacity: isHovered ? 0.05 : 0,
-                transition: 'opacity 0.3s ease',
-                zIndex: 0
-              }} />
 
-              <div style={{ position: 'relative', zIndex: 1 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem' }}>
+              <div>
+                {/* Top Role Header */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
                   <div style={{ 
-                    width: '64px', height: '64px', borderRadius: '16px', 
-                    backgroundColor: isHovered ? 'var(--primary)' : 'var(--bg-secondary)',
-                    color: isHovered ? 'white' : 'var(--primary)',
+                    width: '60px', height: '60px', borderRadius: '16px', 
+                    backgroundColor: isHovered ? currentOrg.themeColor : 'var(--bg-tertiary)',
+                    color: isHovered ? '#FFFFFF' : currentOrg.themeColor,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     transition: 'all 0.3s ease',
-                    boxShadow: isHovered ? 'var(--shadow-glow)' : 'none'
+                    boxShadow: isHovered ? `0 0 20px ${currentOrg.themeColor}50` : 'none',
+                    border: `1px solid ${isHovered ? currentOrg.themeColor : 'var(--border-color)'}`
                   }}>
-                    <role.icon size={32} />
+                    <RoleIcon size={30} />
                   </div>
+
                   <div style={{ 
-                    padding: '0.25rem 0.75rem', borderRadius: '12px', fontSize: '0.75rem', fontWeight: '600',
-                    backgroundColor: 'var(--bg-secondary)', color: 'var(--text-secondary)',
-                    border: '1px solid var(--border-color)'
+                    padding: '0.35rem 0.85rem', borderRadius: '100px', fontSize: '0.75rem', fontWeight: '700',
+                    backgroundColor: 'var(--bg-tertiary)', 
+                    color: role.levelNumber >= 4 ? '#10B981' : role.levelNumber >= 3 ? currentOrg.themeColor : '#94A3B8',
+                    border: '1px solid var(--border-color)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px'
                   }}>
-                    {role.access}
+                    {role.accessLevel}
                   </div>
                 </div>
 
-                <h2 style={{ fontSize: '1.75rem', fontWeight: '700', marginBottom: '0.75rem' }}>{role.title}</h2>
-                <p style={{ color: 'var(--text-secondary)', lineHeight: '1.6', marginBottom: '2rem' }}>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: '800', marginBottom: '0.6rem', color: '#FFFFFF', lineHeight: 1.2 }}>
+                  {role.title}
+                </h2>
+
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.6', marginBottom: '1.5rem' }}>
                   {role.desc}
                 </p>
+              </div>
 
-                <div>
-                  <h3 style={{ fontSize: '0.875rem', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                    Module Permissions
-                  </h3>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
-                    {role.perms.map((perm: string, i: number) => (
-                      <div key={i} style={{
-                        display: 'flex', alignItems: 'center', gap: '0.5rem',
-                        padding: '0.5rem 0.75rem', borderRadius: '8px',
-                        backgroundColor: 'var(--bg-secondary)',
-                        border: '1px solid var(--border-color)',
-                        fontSize: '0.875rem', color: 'var(--text-secondary)'
-                      }}>
-                        <ShieldCheck size={14} color="var(--primary)" />
-                        {perm}
-                      </div>
-                    ))}
+              {/* Bottom Modules Allowed & Action Bar */}
+              <div>
+                <div style={{ 
+                  borderTop: '1px solid var(--border-color)', 
+                  paddingTop: '1rem', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'space-between' 
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                    <ShieldCheck size={16} color={currentOrg.themeColor} />
+                    <span>{role.permissions.includes('all') ? 'Full Platform Clearance' : `${role.permissions.length} Modules Authorized`}</span>
+                  </div>
+
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.4rem',
+                    fontSize: '0.85rem',
+                    fontWeight: '700',
+                    color: isHovered ? currentOrg.themeColor : 'var(--text-secondary)',
+                    transition: 'color 0.2s ease'
+                  }}>
+                    <span>Authenticate</span>
+                    <ArrowRight size={16} />
                   </div>
                 </div>
               </div>
+
             </div>
           );
         })}
       </div>
+
     </div>
   );
 };

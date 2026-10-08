@@ -69,15 +69,7 @@ export const Landing = () => {
   };
 
   const handleInitialize = () => {
-    if (isAuthenticated) {
-      if (organization && role) {
-        navigate('/dashboard');
-      } else {
-        navigate('/organization');
-      }
-    } else {
-      navigate('/login');
-    }
+    navigate('/organization');
   };
 
   return (

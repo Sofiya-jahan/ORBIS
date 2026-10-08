@@ -1,205 +1,346 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
-import { Building2, Landmark, GraduationCap, Briefcase, Activity, ShieldCheck, TrendingUp, Users } from 'lucide-react';
+import { ORGANIZATIONS, type OrganizationConfig } from '../config/platformConfig';
+import { 
+  Activity, Landmark, GraduationCap, Factory, Cpu, Building2, 
+  ShieldCheck, ShoppingBag, HardHat, Zap, Truck, Scale, Flame,
+  Search, ArrowRight, TrendingUp, ShieldAlert, Sparkles, Check
+} from 'lucide-react';
 
-const organizations = [
-  { 
-    id: 'hospital', 
-    name: 'Healthcare', 
-    icon: Activity, 
-    color: '#0B6EFD',
-    bgImage: 'https://images.unsplash.com/photo-1538108149393-fbbd81895907?q=80&w=2000&auto=format&fit=crop',
-    description: 'Medical risk, patient predictive analytics, and resource optimization.',
-    stats: { label: 'Active Patients', value: '14.2k+' }
-  },
-  { 
-    id: 'bank', 
-    name: 'Financial Services', 
-    icon: Landmark, 
-    color: '#FFD700',
-    bgImage: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=2000&auto=format&fit=crop',
-    description: 'Fraud detection, market risk, and compliance monitoring AI.',
-    stats: { label: 'Transactions/sec', value: '8.5k' }
-  },
-  { 
-    id: 'college', 
-    name: 'Education', 
-    icon: GraduationCap, 
-    color: '#C084FC',
-    bgImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=2000&auto=format&fit=crop',
-    description: 'Student success prediction and smart campus management.',
-    stats: { label: 'Students Tracked', value: '45k+' }
-  },
-  { 
-    id: 'company', 
-    name: 'Corporate', 
-    icon: Briefcase, 
-    color: '#10B981',
-    bgImage: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2000&auto=format&fit=crop',
-    description: 'Enterprise resource planning and operational risk intelligence.',
-    stats: { label: 'Risk Models', value: '124' }
-  },
-  { 
-    id: 'government', 
-    name: 'Public Sector', 
-    icon: Building2, 
-    color: '#90A4AE',
-    bgImage: 'https://images.unsplash.com/photo-1523292562811-8fa7962ba5c2?q=80&w=2000&auto=format&fit=crop',
-    description: 'Public service analytics, smart city planning, and security.',
-    stats: { label: 'Citizens Served', value: '2.4M' }
-  }
-];
+const iconMap: Record<string, React.ComponentType<{ size?: number; color?: string; className?: string }>> = {
+  Activity, Landmark, GraduationCap, Factory, Cpu, Building2,
+  ShieldCheck, ShoppingBag, HardHat, Zap, Truck, Scale, Flame
+};
 
-const OrgSelect = () => {
+export const OrgSelect = () => {
   const setOrganization = useAuthStore(state => state.setOrganization);
   const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [hoveredOrg, setHoveredOrg] = useState<string | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
+  const orgList = Object.values(ORGANIZATIONS);
+
+  const categories = [
+    { id: 'all', label: 'All Industries (13)' },
+    { id: 'healthcare', label: 'Healthcare' },
+    { id: 'finance', label: 'Finance & Banking' },
+    { id: 'tech', label: 'Tech & Cloud' },
+    { id: 'industrial', label: 'Industrial & Energy' },
+    { id: 'public', label: 'Public Sector & Legal' }
+  ];
+
+  const filteredOrgs = orgList.filter(org => {
+    const matchesSearch = org.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          org.sector.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          org.description.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    if (!matchesSearch) return false;
+    if (selectedCategory === 'all') return true;
+    if (selectedCategory === 'healthcare') return org.id === 'hospital';
+    if (selectedCategory === 'finance') return org.id === 'bank' || org.id === 'insurance';
+    if (selectedCategory === 'tech') return org.id === 'it' || org.id === 'startup';
+    if (selectedCategory === 'industrial') return ['manufacturing', 'energy', 'construction', 'logistics'].includes(org.id);
+    if (selectedCategory === 'public') return ['government', 'university', 'lawfirm', 'retail'].includes(org.id);
+    return true;
+  });
+
   const handleSelect = (orgId: string) => {
     setIsTransitioning(true);
-    // Add a slight delay for the beautiful transition effect before navigating
+    setOrganization(orgId);
     setTimeout(() => {
-      setOrganization(orgId);
       navigate('/role-selection');
-    }, 600);
+    }, 450);
   };
 
   return (
     <div style={{ 
       minHeight: '100vh', 
       backgroundColor: 'var(--bg-primary)', 
-      color: 'white',
-      padding: '4rem 2rem',
+      color: 'var(--text-primary)',
+      padding: '3.5rem 2rem 5rem 2rem',
       position: 'relative',
       overflow: 'hidden',
-      opacity: isTransitioning ? 0 : 1,
-      transition: 'opacity 0.6s ease-in-out',
+      opacity: isTransitioning ? 0.4 : 1,
+      transform: isTransitioning ? 'scale(0.98)' : 'scale(1)',
+      transition: 'all 0.4s ease-in-out',
       fontFamily: 'var(--font-family)'
     }}>
       
-      {/* Background glow effects based on hovered org */}
+      {/* Background ambient lighting */}
       <div style={{
         position: 'absolute', inset: 0,
-        background: hoveredOrg 
-          ? `radial-gradient(circle at center, ${organizations.find(o => o.id === hoveredOrg)?.color}22 0%, transparent 70%)`
-          : 'radial-gradient(circle at center, rgba(0,212,255,0.1) 0%, transparent 70%)',
+        background: hoveredOrg && ORGANIZATIONS[hoveredOrg]
+          ? `radial-gradient(circle at center 20%, ${ORGANIZATIONS[hoveredOrg].themeColor}22 0%, transparent 65%)`
+          : 'radial-gradient(circle at center 20%, rgba(11,110,253,0.12) 0%, transparent 60%)',
         transition: 'background 0.5s ease',
         zIndex: 0,
         pointerEvents: 'none'
       }} />
 
-      <div style={{ position: 'relative', zIndex: 1, maxWidth: '1400px', margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: '4rem' }} className="animate-fade-in">
-          <h1 style={{ fontSize: '3.5rem', fontWeight: '800', marginBottom: '1rem', letterSpacing: '-1px', fontFamily: 'var(--font-heading)' }}>
-            Select Workspace
+      <div style={{ position: 'relative', zIndex: 1, maxWidth: '1440px', margin: '0 auto' }}>
+        
+        {/* Header Title Section */}
+        <div style={{ textAlign: 'center', marginBottom: '3rem' }} className="animate-fade-in">
+          <div style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.6rem',
+            padding: '0.4rem 1rem',
+            borderRadius: 'var(--radius-full)',
+            background: 'var(--primary-light)',
+            border: '1px solid var(--primary)',
+            color: 'var(--primary)',
+            fontSize: '0.8rem',
+            fontWeight: '700',
+            letterSpacing: '1px',
+            textTransform: 'uppercase',
+            marginBottom: '1.25rem'
+          }}>
+            <Sparkles size={15} /> PHASE 1: ENTERPRISE TENANT SELECTION
+          </div>
+          
+          <h1 style={{ 
+            fontSize: '3.2rem', 
+            fontWeight: '800', 
+            marginBottom: '0.85rem', 
+            letterSpacing: '-1px', 
+            fontFamily: 'var(--font-heading)',
+            lineHeight: 1.15
+          }}>
+            Select Organization Workspace
           </h1>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '1.25rem', maxWidth: '600px', margin: '0 auto' }}>
-            Choose your deployment sector to configure the AI models and dashboard environment.
+          
+          <p style={{ color: 'var(--text-secondary)', fontSize: '1.15rem', maxWidth: '680px', margin: '0 auto', lineHeight: 1.6 }}>
+            IPRAP dynamically configures neural risk models, compliance frameworks, telemetry pipelines, and access tiers for your specific sector.
           </p>
         </div>
 
+        {/* Search & Category Filter Bar */}
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '1.25rem',
+          marginBottom: '3rem',
+          maxWidth: '880px',
+          margin: '0 auto 3rem auto'
+        }}>
+          {/* Search Input */}
+          <div style={{ position: 'relative', width: '100%' }}>
+            <Search size={20} style={{ position: 'absolute', left: '1.25rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+            <input
+              type="text"
+              placeholder="Search by industry name, risk sector, or keywords (e.g. Hospital, Bank, SCADA, Fraud, HIPAA)..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{
+                width: '100%',
+                padding: '1.1rem 1.25rem 1.1rem 3.25rem',
+                borderRadius: '16px',
+                background: 'var(--bg-secondary)',
+                border: '1px solid var(--border-color)',
+                color: 'var(--text-primary)',
+                fontSize: '1rem',
+                outline: 'none',
+                boxShadow: 'var(--shadow-md)',
+                transition: 'border-color 0.2s, box-shadow 0.2s'
+              }}
+              onFocus={(e) => {
+                e.target.style.borderColor = 'var(--primary)';
+                e.target.style.boxShadow = '0 0 0 3px var(--primary-light)';
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = 'var(--border-color)';
+                e.target.style.boxShadow = 'var(--shadow-md)';
+              }}
+            />
+          </div>
+
+          {/* Filter Pills */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.6rem', justifyContent: 'center' }}>
+            {categories.map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => setSelectedCategory(cat.id)}
+                style={{
+                  padding: '0.5rem 1.1rem',
+                  borderRadius: '12px',
+                  fontSize: '0.85rem',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  border: '1px solid',
+                  borderColor: selectedCategory === cat.id ? 'var(--primary)' : 'var(--border-color)',
+                  background: selectedCategory === cat.id ? 'var(--primary-light)' : 'var(--bg-secondary)',
+                  color: selectedCategory === cat.id ? 'var(--primary)' : 'var(--text-secondary)',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* 13 Industry Grid */}
         <div style={{ 
           display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', 
-          gap: '2rem',
-          padding: '1rem'
+          gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', 
+          gap: '1.75rem',
+          padding: '0.5rem'
         }}>
-          {organizations.map((org, index) => {
+          {filteredOrgs.map((org, index) => {
             const isHovered = hoveredOrg === org.id;
+            const IconComponent = iconMap[org.iconName] || Activity;
+
             return (
               <div 
                 key={org.id}
                 className="animate-fade-in-delayed"
-                style={{ animationDelay: `${index * 0.1}s` }}
+                style={{ animationDelay: `${index * 0.04}s` }}
                 onMouseEnter={() => setHoveredOrg(org.id)}
                 onMouseLeave={() => setHoveredOrg(null)}
                 onClick={() => handleSelect(org.id)}
               >
                 <div style={{
                   position: 'relative',
-                  height: '420px',
+                  height: '380px',
                   borderRadius: '24px',
                   overflow: 'hidden',
                   cursor: 'pointer',
-                  transform: isHovered ? 'translateY(-10px) scale(1.02)' : 'translateY(0) scale(1)',
-                  boxShadow: isHovered ? `0 30px 60px rgba(0,0,0,0.5), 0 0 40px ${org.color}33` : '0 10px 30px rgba(0,0,0,0.5)',
-                  transition: 'all 0.4s cubic-bezier(0.25, 1, 0.5, 1)',
-                  border: `1px solid ${isHovered ? org.color : 'rgba(255,255,255,0.1)'}`
+                  transform: isHovered ? 'translateY(-8px)' : 'translateY(0)',
+                  boxShadow: isHovered 
+                    ? `0 24px 50px rgba(0,0,0,0.6), 0 0 35px ${org.themeColor}35` 
+                    : '0 8px 24px rgba(0,0,0,0.3)',
+                  transition: 'all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1)',
+                  border: `1px solid ${isHovered ? org.themeColor : 'var(--border-color)'}`,
+                  display: 'flex',
+                  flexDirection: 'column'
                 }}>
-                  {/* Background Image */}
+                  {/* Background Sector Image */}
                   <div style={{
-                    position: 'absolute', inset: -20,
+                    position: 'absolute', inset: -15,
                     backgroundImage: `url(${org.bgImage})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
-                    transform: isHovered ? 'scale(1.1)' : 'scale(1)',
-                    transition: 'transform 6s ease-out',
+                    transform: isHovered ? 'scale(1.08)' : 'scale(1)',
+                    transition: 'transform 5s ease-out',
                     zIndex: 0
                   }} />
 
-                  {/* Glass Overlay */}
+                  {/* Dark Glass Overlay */}
                   <div style={{
                     position: 'absolute', inset: 0,
                     background: isHovered 
-                      ? 'linear-gradient(to top, rgba(2,6,23,0.95) 0%, rgba(2,6,23,0.4) 60%, rgba(2,6,23,0.2) 100%)'
-                      : 'linear-gradient(to top, rgba(2,6,23,0.98) 0%, rgba(2,6,23,0.7) 50%, rgba(2,6,23,0.5) 100%)',
-                    backdropFilter: isHovered ? 'blur(4px)' : 'blur(8px)',
-                    transition: 'all 0.4s ease',
+                      ? 'linear-gradient(to top, rgba(7,20,36,0.98) 0%, rgba(7,20,36,0.75) 45%, rgba(7,20,36,0.4) 100%)'
+                      : 'linear-gradient(to top, rgba(7,20,36,0.95) 0%, rgba(7,20,36,0.8) 50%, rgba(7,20,36,0.55) 100%)',
+                    backdropFilter: 'blur(6px)',
+                    transition: 'all 0.3s ease',
                     zIndex: 1
                   }} />
 
-                  {/* Content */}
+                  {/* Card Content */}
                   <div style={{
-                    position: 'absolute', inset: 0, zIndex: 2,
-                    padding: '2.5rem',
-                    display: 'flex', flexDirection: 'column', justifyContent: 'flex-end'
+                    position: 'relative', zIndex: 2,
+                    padding: '2rem',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    height: '100%'
                   }}>
-                    {/* Top Icon */}
-                    <div style={{
-                      position: 'absolute', top: '2.5rem', left: '2.5rem',
-                      width: '64px', height: '64px', borderRadius: '16px',
-                      background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(10px)',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      border: '1px solid rgba(255,255,255,0.2)',
-                      color: isHovered ? org.color : 'white',
-                      transition: 'all 0.3s ease',
-                      transform: isHovered ? 'scale(1.1)' : 'scale(1)'
-                    }}>
-                      <org.icon size={32} />
+                    {/* Top Row: Sector Badge + Icon */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                      <div style={{
+                        width: '56px', height: '56px', borderRadius: '16px',
+                        background: 'rgba(255,255,255,0.08)',
+                        backdropFilter: 'blur(12px)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        border: `1px solid ${isHovered ? org.themeColor : 'rgba(255,255,255,0.15)'}`,
+                        color: org.themeColor,
+                        transition: 'all 0.3s ease',
+                        boxShadow: isHovered ? `0 0 20px ${org.themeColor}50` : 'none'
+                      }}>
+                        <IconComponent size={28} />
+                      </div>
+
+                      <div style={{
+                        padding: '0.35rem 0.85rem',
+                        borderRadius: '100px',
+                        background: 'rgba(255,255,255,0.06)',
+                        border: '1px solid rgba(255,255,255,0.12)',
+                        color: '#CBD5E1',
+                        fontSize: '0.75rem',
+                        fontWeight: '700',
+                        letterSpacing: '0.5px'
+                      }}>
+                        {org.roles.length} Access Roles
+                      </div>
                     </div>
 
-                    {/* Text */}
-                    <div style={{
-                      transform: isHovered ? 'translateY(0)' : 'translateY(20px)',
-                      transition: 'transform 0.4s ease'
-                    }}>
-                      <h2 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '0.5rem', color: 'white' }}>
+                    {/* Bottom Area: Name, Description, Telemetry */}
+                    <div>
+                      <div style={{ 
+                        fontSize: '0.75rem', 
+                        color: org.themeColor, 
+                        fontWeight: '700', 
+                        textTransform: 'uppercase', 
+                        letterSpacing: '1px',
+                        marginBottom: '0.35rem' 
+                      }}>
+                        {org.sector}
+                      </div>
+
+                      <h2 style={{ fontSize: '1.65rem', fontWeight: '800', marginBottom: '0.6rem', color: '#FFFFFF', lineHeight: 1.2 }}>
                         {org.name}
                       </h2>
-                      <p style={{ color: '#cbd5e1', fontSize: '1rem', lineHeight: '1.6', marginBottom: '1.5rem', opacity: isHovered ? 1 : 0.7, transition: 'opacity 0.3s' }}>
+
+                      <p style={{ 
+                        color: '#94A3B8', 
+                        fontSize: '0.88rem', 
+                        lineHeight: '1.5', 
+                        marginBottom: '1.25rem',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden'
+                      }}>
                         {org.description}
                       </p>
 
-                      {/* Stats - Only visible heavily on hover */}
+                      {/* Live Telemetry Pill */}
                       <div style={{
-                        display: 'flex', alignItems: 'center', gap: '1rem',
-                        opacity: isHovered ? 1 : 0,
-                        transform: isHovered ? 'translateY(0)' : 'translateY(10px)',
-                        transition: 'all 0.4s ease 0.1s',
-                        padding: '1rem', borderRadius: '12px',
-                        background: 'rgba(255,255,255,0.05)',
-                        border: '1px solid rgba(255,255,255,0.1)'
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: '0.75rem 1rem',
+                        borderRadius: '14px',
+                        background: isHovered ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.04)',
+                        border: `1px solid ${isHovered ? org.themeColor + '40' : 'rgba(255,255,255,0.08)'}`,
+                        transition: 'all 0.3s ease'
                       }}>
-                        <TrendingUp size={20} color={org.color} />
-                        <div>
-                          <div style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px' }}>
-                            {org.stats.label}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                          <TrendingUp size={16} color={org.themeColor} />
+                          <div>
+                            <div style={{ fontSize: '0.65rem', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                              {org.statLabel}
+                            </div>
+                            <div style={{ fontSize: '0.95rem', fontWeight: '700', color: '#FFFFFF' }}>
+                              {org.statValue}
+                            </div>
                           </div>
-                          <div style={{ fontSize: '1.25rem', fontWeight: '700', color: 'white' }}>
-                            {org.stats.value}
-                          </div>
+                        </div>
+
+                        <div style={{
+                          width: '32px', height: '32px', borderRadius: '50%',
+                          background: isHovered ? org.themeColor : 'rgba(255,255,255,0.08)',
+                          color: isHovered ? '#FFFFFF' : '#94A3B8',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          transition: 'all 0.3s ease',
+                          transform: isHovered ? 'translateX(3px)' : 'translateX(0)'
+                        }}>
+                          <ArrowRight size={16} />
                         </div>
                       </div>
                     </div>
@@ -209,6 +350,15 @@ const OrgSelect = () => {
             );
           })}
         </div>
+
+        {filteredOrgs.length === 0 && (
+          <div style={{ textAlign: 'center', padding: '5rem 2rem', color: 'var(--text-muted)' }}>
+            <ShieldAlert size={48} style={{ margin: '0 auto 1rem auto', opacity: 0.5 }} />
+            <h3 style={{ fontSize: '1.25rem', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>No matching industry found</h3>
+            <p>Try searching for a different term or clear the filter.</p>
+          </div>
+        )}
+
       </div>
     </div>
   );
