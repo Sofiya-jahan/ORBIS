@@ -54,13 +54,19 @@ export const IncidentManagement = () => {
   ]);
 
   const [newTitle, setNewTitle] = useState('');
-  const [newDept, setNewDept] = useState(currentOrg.departments[0]);
+  const [newDept, setNewDept] = useState(currentOrg.departments[0] || 'Core');
   const [newSeverity, setNewSeverity] = useState('Medium');
   const [newDesc, setNewDesc] = useState('');
   const [evidenceFile, setEvidenceFile] = useState<File | null>(null);
   const [evidencePreview, setEvidencePreview] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [reportSuccess, setReportSuccess] = useState(false);
+
+  useEffect(() => {
+    if (currentOrg.departments && currentOrg.departments.length > 0) {
+      setNewDept(currentOrg.departments[0]);
+    }
+  }, [currentOrg]);
 
   // Load incidents from Neon DB
   useEffect(() => {

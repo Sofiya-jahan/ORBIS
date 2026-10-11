@@ -177,6 +177,13 @@ export const DashboardLayout = () => {
     return parts.slice(1).map(p => p.charAt(0).toUpperCase() + p.slice(1).replace(/-/g, ' ')).join(' / ');
   };
 
+  // Check if current route requires an authorization permission
+  const currentRouteItem = navigationGroups
+    .flatMap(g => g.items)
+    .find(item => location.pathname === item.path || (item.path !== '/dashboard' && location.pathname.startsWith(item.path)));
+
+  const isPermitted = !currentRouteItem || hasPermission(userPermissions, currentRouteItem.perm, userLevel);
+
   return (
     <div style={{ 
       display: 'flex', 
@@ -378,13 +385,33 @@ export const DashboardLayout = () => {
               }}>
                 {user?.name?.charAt(0) || 'E'}
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>
                 <span style={{ fontSize: '0.82rem', fontWeight: '700', color: '#FFFFFF', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                   {user?.name || 'Authorized Executive'}
                 </span>
-                <span style={{ fontSize: '0.7rem', color: currentOrg.themeColor, fontWeight: '600' }}>
-                  {currentRole.title.split('/')[0]}
-                </span>
+                <select
+                  value={role || currentRole.id}
+                  onChange={(e) => setRole(e.target.value)}
+                  title="Switch Role"
+                  style={{
+                    fontSize: '0.72rem',
+                    color: currentOrg.themeColor,
+                    background: 'transparent',
+                    border: 'none',
+                    fontWeight: '700',
+                    cursor: 'pointer',
+                    outline: 'none',
+                    padding: 0,
+                    width: '100%',
+                    textOverflow: 'ellipsis'
+                  }}
+                >
+                  {currentOrg.roles.map(r => (
+                    <option key={r.id} value={r.id} style={{ background: '#0F172A', color: '#FFFFFF' }}>
+                      {r.title.split('(')[0].trim()} ({r.accessLevel.split(' ')[0]})
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
           )}
@@ -517,6 +544,40 @@ export const DashboardLayout = () => {
               </div>
             </div>
 
+            {/* Quick Role Switcher Pill */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              padding: '0.35rem 0.85rem',
+              borderRadius: '10px',
+              background: 'var(--bg-tertiary)',
+              border: '1px solid var(--border-color)',
+            }}>
+              <ShieldCheck size={15} color={currentOrg.themeColor} />
+              <select
+                value={role || currentRole.id}
+                onChange={(e) => setRole(e.target.value)}
+                title="Switch Active Role"
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  color: 'var(--text-primary)',
+                  fontWeight: 700,
+                  fontSize: '0.78rem',
+                  cursor: 'pointer',
+                  outline: 'none',
+                  fontFamily: 'var(--font-heading)',
+                }}
+              >
+                {currentOrg.roles.map(r => (
+                  <option key={r.id} value={r.id} style={{ background: '#0F172A', color: '#FFFFFF' }}>
+                    {r.title.split('(')[0].trim()} ({r.accessLevel.split(' ')[0]})
+                  </option>
+                ))}
+              </select>
+            </div>
+
             {/* Notification & Theme Icons */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
               <button 
@@ -603,7 +664,62 @@ export const DashboardLayout = () => {
             backgroundColor: 'var(--bg-primary)'
           }}
         >
-          <Outlet />
+          {!isPermitted ? (
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              minHeight: '60vh',
+              textAlign: 'center',
+              padding: '2rem'
+            }}>
+              <div style={{
+                width: '74px', height: '74px', borderRadius: '22px',
+                background: 'rgba(239, 68, 68, 0.12)',
+                border: '1px solid rgba(239, 68, 68, 0.35)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                color: '#EF4444', marginBottom: '1.5rem',
+                boxShadow: '0 0 30px rgba(239, 68, 68, 0.2)'
+              }}>
+                <ShieldAlert size={38} />
+              </div>
+              <div style={{
+                fontSize: '0.78rem', fontWeight: 800, color: '#F59E0B',
+                letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '0.5rem',
+                fontFamily: 'var(--font-mono)'
+              }}>
+                CLEARANCE RESTRICTED // ACCESS LEVEL {userLevel}
+              </div>
+              <h2 style={{ fontSize: '1.9rem', fontWeight: 800, color: '#FFFFFF', marginBottom: '0.75rem' }}>
+                Role Clearance Required
+              </h2>
+              <p style={{ color: 'var(--text-secondary)', maxWidth: '540px', fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '2rem' }}>
+                Your active role clearance as <strong>{currentRole.title}</strong> is restricted from accessing the <strong>{currentRouteItem?.name}</strong> module. Switch to an Executive or authorized specialist role to review this data.
+              </p>
+              <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+                <button
+                  onClick={() => navigate('/dashboard')}
+                  className="btn btn-secondary"
+                  style={{ padding: '0.65rem 1.4rem' }}
+                >
+                  Return to Dashboard
+                </button>
+                <button
+                  onClick={() => {
+                    const execRole = currentOrg.roles.find(r => r.permissions.includes('all') || r.permissions.includes(currentRouteItem?.perm || ''));
+                    if (execRole) setRole(execRole.id);
+                  }}
+                  className="btn btn-primary"
+                  style={{ background: currentOrg.themeColor, padding: '0.65rem 1.4rem' }}
+                >
+                  Elevate Clearance to Executive
+                </button>
+              </div>
+            </div>
+          ) : (
+            <Outlet />
+          )}
         </div>
       </main>
 
