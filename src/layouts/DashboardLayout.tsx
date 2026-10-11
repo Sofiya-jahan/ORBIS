@@ -559,14 +559,27 @@ export const DashboardLayout = () => {
                 cursor: 'pointer' 
               }}
             >
-              <div style={{ 
-                width: '32px', height: '32px', borderRadius: '8px', 
-                background: currentOrg.themeColor, color: '#FFFFFF', 
-                display: 'flex', alignItems: 'center', justifyContent: 'center', 
-                fontWeight: 'bold', fontSize: '0.9rem' 
-              }}>
-                {user?.name?.charAt(0) || 'E'}
-              </div>
+              {user?.photoURL ? (
+                <img 
+                  src={user.photoURL} 
+                  alt={user.name || 'User'} 
+                  style={{ 
+                    width: '32px', 
+                    height: '32px', 
+                    borderRadius: '8px', 
+                    objectFit: 'cover' 
+                  }} 
+                />
+              ) : (
+                <div style={{ 
+                  width: '32px', height: '32px', borderRadius: '8px', 
+                  background: currentOrg.themeColor, color: '#FFFFFF', 
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', 
+                  fontWeight: 'bold', fontSize: '0.9rem' 
+                }}>
+                  {user?.name?.charAt(0) || 'E'}
+                </div>
+              )}
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <span style={{ fontWeight: '700', fontSize: '0.82rem', color: 'var(--text-primary)' }}>
                   {user?.name || 'Executive User'}

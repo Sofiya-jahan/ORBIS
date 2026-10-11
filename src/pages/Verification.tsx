@@ -97,31 +97,37 @@ export const Verification = () => {
       alignItems: 'center', 
       justifyContent: 'center', 
       padding: '2rem',
-      backgroundColor: 'var(--bg-primary)',
+      backgroundColor: '#070A0E',
+      color: '#FFFFFF',
       position: 'relative',
       overflow: 'hidden',
-      fontFamily: 'var(--font-family)'
+      fontFamily: "'Times New Roman', Times, serif"
     }}>
       
-      {/* Background glow tailored to tenant */}
+      {/* Background ambient glow matching sovereign emerald and champagne gold funnel */}
       <div style={{
         position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
         width: '60vw', height: '60vw', borderRadius: '50%',
         background: error 
-          ? 'radial-gradient(circle, rgba(239,68,68,0.08) 0%, transparent 70%)' 
+          ? 'radial-gradient(circle, rgba(239,68,68,0.15) 0%, transparent 70%)' 
           : success 
-          ? 'radial-gradient(circle, rgba(16,185,129,0.1) 0%, transparent 70%)'
-          : `radial-gradient(circle, ${currentOrg?.themeColor || '#0B6EFD'}18 0%, transparent 70%)`,
+          ? 'radial-gradient(circle, rgba(16,185,129,0.25) 0%, transparent 70%)'
+          : 'radial-gradient(circle, rgba(16, 185, 129, 0.18) 0%, rgba(229, 192, 123, 0.08) 40%, transparent 70%)',
         zIndex: 0, pointerEvents: 'none', transition: 'all 0.5s ease'
       }} />
 
-      <div className="glass-card animate-fade-in" style={{ 
+      <div style={{ 
         width: '100%', 
         maxWidth: '520px', 
         padding: '3rem 2.5rem', 
         position: 'relative', 
         zIndex: 1, 
-        borderTop: `4px solid ${error ? 'var(--danger)' : success ? 'var(--success)' : currentOrg?.themeColor || 'var(--primary)'}` 
+        background: 'rgba(10, 18, 23, 0.94)',
+        backdropFilter: 'blur(30px)',
+        borderRadius: '24px',
+        border: '1px solid rgba(16, 185, 129, 0.3)',
+        borderTop: `4px solid ${error ? '#EF4444' : success ? '#10B981' : '#E5C07B'}`,
+        boxShadow: '0 30px 70px rgba(0, 0, 0, 0.9), 0 0 45px rgba(16, 185, 129, 0.2)'
       }}>
         
         {/* Back Link */}
@@ -133,12 +139,13 @@ export const Verification = () => {
             gap: '0.4rem',
             background: 'none',
             border: 'none',
-            color: 'var(--text-muted)',
+            color: '#E5C07B',
             cursor: 'pointer',
-            fontSize: '0.8rem',
-            fontWeight: 600,
+            fontSize: '0.85rem',
+            fontWeight: 700,
             marginBottom: '1.5rem',
-            padding: 0
+            padding: 0,
+            fontFamily: "'Times New Roman', Times, serif"
           }}
         >
           <ChevronLeft size={16} /> Back to Role Selection
@@ -150,38 +157,39 @@ export const Verification = () => {
           <div style={{ 
             width: '84px', height: '84px', borderRadius: '24px', 
             background: error 
-              ? 'rgba(239, 68, 68, 0.12)' 
+              ? 'rgba(239, 68, 68, 0.15)' 
               : success 
-              ? 'rgba(16, 185, 129, 0.12)' 
-              : `${currentOrg?.themeColor || '#0B6EFD'}20`, 
-            color: error ? 'var(--danger)' : success ? 'var(--success)' : currentOrg?.themeColor || 'var(--primary)',
+              ? 'rgba(16, 185, 129, 0.25)' 
+              : 'rgba(16, 185, 129, 0.15)', 
+            color: error ? '#EF4444' : success ? '#10B981' : '#E5C07B',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             marginBottom: '1.5rem',
             boxShadow: error 
-              ? '0 0 25px rgba(239, 68, 68, 0.25)' 
+              ? '0 0 25px rgba(239, 68, 68, 0.35)' 
               : success 
-              ? '0 0 30px rgba(16, 185, 129, 0.3)' 
-              : `0 0 30px ${currentOrg?.themeColor || '#0B6EFD'}30`,
-            border: `1px solid ${error ? 'var(--danger)' : success ? 'var(--success)' : currentOrg?.themeColor || 'var(--primary)'}`
+              ? '0 0 35px rgba(16, 185, 129, 0.45)' 
+              : '0 0 30px rgba(229, 192, 123, 0.35)',
+            border: `1px solid ${error ? '#EF4444' : success ? '#10B981' : 'rgba(229, 192, 123, 0.4)'}`
           }}>
             {error ? <ShieldAlert size={42} /> : success ? <ShieldCheck size={42} /> : <KeyRound size={42} />}
           </div>
           
           <div style={{
             fontSize: '0.75rem',
-            fontWeight: '700',
-            letterSpacing: '1.5px',
+            fontWeight: '800',
+            letterSpacing: '2px',
             textTransform: 'uppercase',
-            color: currentOrg?.themeColor || 'var(--primary)',
-            marginBottom: '0.4rem'
+            color: '#E5C07B',
+            marginBottom: '0.4rem',
+            fontFamily: "'Space Mono', monospace"
           }}>
             PHASE 3: ORGANIZATION SECURITY KEY
           </div>
 
-          <h2 style={{ fontSize: '2rem', fontWeight: '800', marginBottom: '0.5rem', textAlign: 'center', fontFamily: 'var(--font-heading)' }}>
+          <h2 style={{ fontSize: '2.1rem', fontWeight: '800', marginBottom: '0.5rem', textAlign: 'center', color: '#FFFFFF', fontFamily: "'Times New Roman', Times, serif" }}>
             {success ? 'Security Verification Complete' : 'Enter Organization Key'}
           </h2>
-          <p style={{ color: 'var(--text-secondary)', textAlign: 'center', fontSize: '0.95rem', lineHeight: 1.5 }}>
+          <p style={{ color: '#CBD5E1', textAlign: 'center', fontSize: '1rem', lineHeight: 1.5, fontFamily: "'Times New Roman', Times, serif" }}>
             {success ? 'Cryptographic session verified. Launching enterprise workspace...' : 'Enter your 6-character organizational encryption key to decrypt and initialize the dashboard.'}
           </p>
         </div>
@@ -192,24 +200,24 @@ export const Verification = () => {
             {/* Identity Badge */}
             <div style={{ 
               display: 'flex', alignItems: 'center', gap: '0.75rem', 
-              padding: '0.75rem 1.25rem', borderRadius: '14px', 
-              backgroundColor: 'var(--bg-tertiary)', border: '1px solid var(--border-color)',
+              padding: '0.85rem 1.25rem', borderRadius: '14px', 
+              backgroundColor: 'rgba(15, 23, 30, 0.85)', border: '1px solid rgba(16, 185, 129, 0.25)',
               width: '100%'
             }}>
               <div style={{
                 width: '36px', height: '36px', borderRadius: '10px',
-                background: `${currentOrg?.themeColor || '#0B6EFD'}20`,
-                color: currentOrg?.themeColor || 'var(--primary)',
+                background: 'rgba(16, 185, 129, 0.15)',
+                color: '#E5C07B',
                 display: 'flex', alignItems: 'center', justifyContent: 'center'
               }}>
                 <Lock size={18} />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                <span style={{ fontSize: '0.72rem', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.8px', fontFamily: "'Space Mono', monospace" }}>
                   Target Workspace & Role
                 </span>
-                <span style={{ fontWeight: '700', fontSize: '0.9rem', color: '#FFFFFF' }}>
-                  {currentOrg?.name} &bull; <span style={{ color: currentOrg?.themeColor }}>{currentRole?.title || role}</span>
+                <span style={{ fontWeight: '700', fontSize: '0.95rem', color: '#FFFFFF', fontFamily: "'Times New Roman', Times, serif" }}>
+                  {currentOrg?.name} &bull; <span style={{ color: '#E5C07B' }}>{currentRole?.title || role}</span>
                 </span>
               </div>
             </div>
@@ -229,15 +237,21 @@ export const Verification = () => {
                     disabled={isLoading}
                     style={{
                       width: '52px', height: '62px',
-                      fontSize: '1.75rem', textAlign: 'center', fontWeight: '800', fontFamily: 'var(--font-mono)',
+                      fontSize: '1.75rem', textAlign: 'center', fontWeight: '800', fontFamily: "'Space Mono', monospace",
                       borderRadius: '14px', border: '1px solid',
-                      borderColor: error ? 'var(--danger)' : digit ? currentOrg?.themeColor || 'var(--primary)' : 'var(--border-color)',
-                      backgroundColor: 'var(--bg-tertiary)', color: '#FFFFFF',
-                      boxShadow: digit && !error ? `0 0 15px ${currentOrg?.themeColor || '#0B6EFD'}30` : 'none',
+                      borderColor: error ? '#EF4444' : digit ? '#10B981' : 'rgba(16, 185, 129, 0.3)',
+                      backgroundColor: 'rgba(15, 23, 30, 0.9)', color: '#FFFFFF',
+                      boxShadow: digit && !error ? '0 0 15px rgba(16, 185, 129, 0.35)' : 'none',
                       transition: 'all 0.2s', outline: 'none'
                     }}
-                    onFocus={e => e.target.style.borderColor = currentOrg?.themeColor || 'var(--primary)'}
-                    onBlur={e => e.target.style.borderColor = error ? 'var(--danger)' : digit ? currentOrg?.themeColor || 'var(--primary)' : 'var(--border-color)'}
+                    onFocus={e => {
+                      e.target.style.borderColor = '#10B981';
+                      e.target.style.boxShadow = '0 0 15px rgba(16, 185, 129, 0.4)';
+                    }}
+                    onBlur={e => {
+                      e.target.style.borderColor = error ? '#EF4444' : digit ? '#10B981' : 'rgba(16, 185, 129, 0.3)';
+                      e.target.style.boxShadow = digit && !error ? '0 0 15px rgba(16, 185, 129, 0.35)' : 'none';
+                    }}
                   />
                 ))}
               </div>
@@ -250,30 +264,31 @@ export const Verification = () => {
                   style={{
                     background: 'none',
                     border: 'none',
-                    color: currentOrg?.themeColor || 'var(--primary)',
-                    fontSize: '0.8rem',
+                    color: '#E5C07B',
+                    fontSize: '0.82rem',
                     fontWeight: '700',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '0.35rem'
+                    gap: '0.35rem',
+                    fontFamily: "'Space Mono', monospace"
                   }}
                 >
-                  <Sparkles size={14} /> Quick Demo Key (123456)
+                  <Sparkles size={14} color="#E5C07B" /> Quick Demo Key (123456)
                 </button>
               </div>
             </div>
 
             {error && (
-              <div style={{ color: 'var(--danger)', fontSize: '0.85rem', fontWeight: '600', animation: 'fadeIn 0.3s', textAlign: 'center' }}>
+              <div style={{ color: '#EF4444', fontSize: '0.85rem', fontWeight: '600', animation: 'fadeIn 0.3s', textAlign: 'center' }}>
                 {error}
               </div>
             )}
 
             {isLoading && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: currentOrg?.themeColor || 'var(--primary)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: '#10B981' }}>
                 <Loader2 size={20} className="animate-spin" />
-                <span style={{ fontWeight: '600', fontSize: '0.9rem' }}>Verifying Zero-Knowledge Security Token...</span>
+                <span style={{ fontWeight: '600', fontSize: '0.9rem', fontFamily: "'Times New Roman', Times, serif" }}>Verifying Zero-Knowledge Security Token...</span>
               </div>
             )}
           </div>

@@ -1,10 +1,41 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 :root {
-  /* Core Typography */
-  --font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-heading: 'Space Grotesk', system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', 'IBM Plex Sans', monospace;
+  /* ==========================================================================
+  /* ==========================================================================
+     Sovereign Emerald & Champagne Obsidian Palette (Pre-Auth / Login Funnel)
+     Elevated mix-and-match: Deep Obsidian Velvet + Imperial Emerald + Sovereign Gold
+     ========================================================================== */
+  --pal-pine-base: #070A0E;
+  --pal-forest-surface: rgba(10, 18, 23, 0.85);
+  --pal-evergreen-border: rgba(16, 185, 129, 0.22);
+  --pal-jade-accent: #10B981;
+  --pal-emerald-vibrant: #00E599;
+  --pal-sage-glow: #34D399;
+  --pal-gold-accent: #E5C07B;
+  --pal-gold-glow: #F59E0B;
+  --pal-mint-text: #FFFFFF;
+  --pal-subtext: #94A3B8;
+
+  /* Premium Bespoke Times New Roman Editorial Serif Typography */
+  --font-display-luxury: 'Times New Roman', Times, 'Playfair Display', Georgia, serif;
+  --font-body-luxury: 'Times New Roman', Times, Georgia, serif;
+  --font-mono-luxury: 'Space Mono', 'JetBrains Mono', monospace;
+
+  /* Funnel Surfaces & Radiance (Vibrant & Visually Appealing) */
+  --funnel-bg: #070A0E;
+  --funnel-card: rgba(10, 18, 23, 0.82);
+  --funnel-card-border: rgba(16, 185, 129, 0.25);
+  --funnel-card-hover: rgba(14, 25, 32, 0.95);
+  --funnel-glow: 0 0 40px rgba(16, 185, 129, 0.25);
+  --funnel-gradient-primary: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  --funnel-gradient-gold: linear-gradient(135deg, #F59E0B 0%, #E5C07B 100%);
+  --funnel-gradient-text: linear-gradient(135deg, #FFFFFF 0%, #DAF1DE 45%, #10B981 100%);
+
+  /* Core Typography Defaults */
+  --font-family: 'Times New Roman', Times, Georgia, serif;
+  --font-heading: 'Times New Roman', Times, 'Playfair Display', Georgia, serif;
+  --font-mono: 'Space Mono', 'JetBrains Mono', monospace;
   
   /* Geometric Tokens */
   --radius-xs: 6px;
@@ -26,44 +57,59 @@
   --spacing-16: 4rem;
 
   /* Default Dark Enterprise AI Canvas */
-  --bg-primary: #071424;
-  --bg-secondary: #0A1B2E;
-  --bg-tertiary: #10253D;
-  --bg-elevated: #152F4D;
+  --bg-primary: #070A0E;
+  --bg-secondary: #0B1218;
+  --bg-tertiary: #101B24;
+  --bg-elevated: #162633;
   
   --text-primary: #FFFFFF;
   --text-secondary: #94A3B8;
   --text-muted: #64748B;
-  --text-inverse: #071424;
+  --text-inverse: #070A0E;
 
   --border-color: rgba(255, 255, 255, 0.08);
   --border-subtle: rgba(255, 255, 255, 0.04);
-  --border-hover: rgba(255, 255, 255, 0.18);
+  --border-hover: rgba(16, 185, 129, 0.3);
   
-  --glass-bg: rgba(10, 27, 46, 0.75);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-overlay: rgba(7, 20, 36, 0.85);
+  --glass-bg: rgba(10, 18, 23, 0.8);
+  --glass-border: rgba(16, 185, 129, 0.2);
+  --glass-overlay: rgba(7, 10, 14, 0.88);
   
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 8px 24px -4px rgba(0, 0, 0, 0.45);
-  --shadow-lg: 0 20px 40px -8px rgba(0, 0, 0, 0.6);
-  --shadow-glow: 0 0 30px rgba(0, 200, 255, 0.25);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 8px 24px -4px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 20px 40px -8px rgba(0, 0, 0, 0.7);
+  --shadow-glow: 0 0 35px rgba(16, 185, 129, 0.3);
 
-  /* Primary Default (Hospital/Clean Tech) */
-  --primary: #0B6EFD;
-  --primary-rgb: 11, 110, 253;
-  --secondary: #3EC6FF;
-  --accent: #00E0FF;
-  --primary-light: rgba(11, 110, 253, 0.12);
-  --primary-gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-  --secondary-gradient: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%);
+  /* Primary Default (Vibrant Sovereign Emerald before login) */
+  --primary: #10B981;
+  --primary-rgb: 16, 185, 129;
+  --secondary: #34D399;
+  --accent: #E5C07B;
+  --primary-light: rgba(16, 185, 129, 0.15);
+  --primary-gradient: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  --secondary-gradient: linear-gradient(135deg, #34D399 0%, #E5C07B 100%);
 
   --success: #10B981;
   --warning: #F59E0B;
   --danger: #EF4444;
-  --info: #00C8FF;
+  --info: #00E5FF;
 
-  --page-bg-gradient: radial-gradient(circle at 50% 0%, #0E2A47 0%, #071424 70%);
+  --page-bg-gradient: radial-gradient(circle at 50% -10%, rgba(16, 185, 129, 0.22) 0%, rgba(5, 31, 32, 0.45) 45%, #070A0E 80%);
+}
+
+/* ==========================================================================
+   Pre-Auth / Login Funnel Sovereign Emerald & Champagne Glow
+   ========================================================================== */
+[data-funnel="emerald"] {
+  --primary: #10B981;
+  --primary-rgb: 16, 185, 129;
+  --secondary: #34D399;
+  --accent: #E5C07B;
+  --primary-light: rgba(16, 185, 129, 0.15);
+  --primary-gradient: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  --secondary-gradient: linear-gradient(135deg, #34D399 0%, #E5C07B 100%);
+  --shadow-glow: 0 0 40px rgba(16, 185, 129, 0.35);
+  --page-bg-gradient: radial-gradient(circle at 50% -10%, rgba(16, 185, 129, 0.22) 0%, rgba(5, 31, 32, 0.45) 45%, #070A0E 80%);
 }
 
 /* ==========================================================================
@@ -97,150 +143,176 @@
 }
 
 /* ==========================================================================
-   13 Organization Specific Dynamic Theme Tokens
+   13 Organization Specific Dynamic Theme Tokens (Active in Authenticated Platform)
    ========================================================================== */
 
-/* 1. Hospital (Blue / White / Teal) */
+/* 1. Hospital (Healthcare & Life Sciences - Clinical Blue / Cyan / Ice) */
 [data-org="hospital"] {
   --primary: #0B6EFD;
   --primary-rgb: 11, 110, 253;
   --secondary: #3EC6FF;
   --accent: #00E0FF;
-  --primary-light: rgba(11, 110, 253, 0.12);
+  --primary-light: rgba(11, 110, 253, 0.14);
   --primary-gradient: linear-gradient(135deg, #0B6EFD 0%, #00E0FF 100%);
-  --shadow-glow: 0 0 30px rgba(11, 110, 253, 0.25);
+  --secondary-gradient: linear-gradient(135deg, #3EC6FF 0%, #00E0FF 100%);
+  --shadow-glow: 0 0 35px rgba(11, 110, 253, 0.3);
+  --page-bg-gradient: radial-gradient(circle at 50% 0%, #0B3050 0%, #071424 75%);
 }
 
-/* 2. Manufacturing (Orange / Gray) */
+/* 2. Manufacturing (Industrial & Robotics - Amber Flame / Tangerine) */
 [data-org="manufacturing"] {
   --primary: #FF6B00;
   --primary-rgb: 255, 107, 0;
   --secondary: #FF9E40;
   --accent: #F59E0B;
-  --primary-light: rgba(255, 107, 0, 0.12);
+  --primary-light: rgba(255, 107, 0, 0.14);
   --primary-gradient: linear-gradient(135deg, #FF6B00 0%, #F59E0B 100%);
-  --shadow-glow: 0 0 30px rgba(255, 107, 0, 0.25);
+  --secondary-gradient: linear-gradient(135deg, #FF9E40 0%, #FFA500 100%);
+  --shadow-glow: 0 0 35px rgba(255, 107, 0, 0.3);
+  --page-bg-gradient: radial-gradient(circle at 50% 0%, #3D1C06 0%, #150E0A 75%);
 }
 
-/* 3. IT Company (Purple / Blue) */
+/* 3. IT Company (Cloud & Cyber - Electric Violet / Quantum Cyan) */
 [data-org="it"] {
   --primary: #7B61FF;
   --primary-rgb: 123, 97, 255;
   --secondary: #9D85FF;
   --accent: #00E5FF;
-  --primary-light: rgba(123, 97, 255, 0.12);
+  --primary-light: rgba(123, 97, 255, 0.14);
   --primary-gradient: linear-gradient(135deg, #7B61FF 0%, #00E5FF 100%);
-  --shadow-glow: 0 0 30px rgba(123, 97, 255, 0.25);
+  --secondary-gradient: linear-gradient(135deg, #9D85FF 0%, #00E5FF 100%);
+  --shadow-glow: 0 0 35px rgba(123, 97, 255, 0.3);
+  --page-bg-gradient: radial-gradient(circle at 50% 0%, #201040 0%, #0C071C 75%);
 }
 
-/* 4. Bank (Dark Blue / Gold) */
+/* 4. Bank (Capital Markets & Banking - Sapphire Blue / Sovereign Gold) */
 [data-org="bank"] {
   --primary: #0F52BA;
   --primary-rgb: 15, 82, 186;
   --secondary: #2563EB;
   --accent: #FFD700;
-  --primary-light: rgba(15, 82, 186, 0.12);
+  --primary-light: rgba(15, 82, 186, 0.14);
   --primary-gradient: linear-gradient(135deg, #0F52BA 0%, #FFD700 100%);
-  --shadow-glow: 0 0 30px rgba(255, 215, 0, 0.2);
+  --secondary-gradient: linear-gradient(135deg, #2563EB 0%, #FFD700 100%);
+  --shadow-glow: 0 0 35px rgba(255, 215, 0, 0.25);
+  --page-bg-gradient: radial-gradient(circle at 50% 0%, #081D3D 0%, #040E1E 75%);
 }
 
-/* 5. University (Green / White / Violet) */
+/* 5. University (Higher Education & Research - Academic Green / Mint) */
 [data-org="university"], [data-org="college"] {
   --primary: #059669;
   --primary-rgb: 5, 150, 105;
   --secondary: #10B981;
   --accent: #34D399;
-  --primary-light: rgba(5, 150, 105, 0.12);
+  --primary-light: rgba(5, 150, 105, 0.14);
   --primary-gradient: linear-gradient(135deg, #059669 0%, #34D399 100%);
-  --shadow-glow: 0 0 30px rgba(16, 185, 129, 0.25);
+  --secondary-gradient: linear-gradient(135deg, #10B981 0%, #34D399 100%);
+  --shadow-glow: 0 0 35px rgba(16, 185, 129, 0.3);
+  --page-bg-gradient: radial-gradient(circle at 50% 0%, #063022 0%, #03140E 75%);
 }
 
-/* 6. Government (Navy / Slate Gray) */
+/* 6. Government (Public Administration - Slate Navy / Silver Platinum) */
 [data-org="government"] {
   --primary: #334155;
   --primary-rgb: 51, 65, 85;
   --secondary: #475569;
   --accent: #94A3B8;
-  --primary-light: rgba(71, 85, 105, 0.15);
-  --primary-gradient: linear-gradient(135deg, #334155 0%, #64748B 100%);
-  --shadow-glow: 0 0 30px rgba(148, 163, 184, 0.2);
+  --primary-light: rgba(71, 85, 105, 0.16);
+  --primary-gradient: linear-gradient(135deg, #334155 0%, #94A3B8 100%);
+  --secondary-gradient: linear-gradient(135deg, #475569 0%, #94A3B8 100%);
+  --shadow-glow: 0 0 35px rgba(148, 163, 184, 0.25);
+  --page-bg-gradient: radial-gradient(circle at 50% 0%, #17202E 0%, #0B111A 75%);
 }
 
-/* 7. Insurance (Emerald / Sky Blue) */
+/* 7. Insurance (Actuarial & Solvency - Sky Cerulean / Ice Sky) */
 [data-org="insurance"] {
-  --primary: #059669;
-  --primary-rgb: 5, 150, 105;
-  --secondary: #0284C7;
+  --primary: #0284C7;
+  --primary-rgb: 2, 132, 199;
+  --secondary: #0369A1;
   --accent: #38BDF8;
-  --primary-light: rgba(2, 132, 199, 0.12);
-  --primary-gradient: linear-gradient(135deg, #059669 0%, #0284C7 100%);
-  --shadow-glow: 0 0 30px rgba(2, 132, 199, 0.25);
+  --primary-light: rgba(2, 132, 199, 0.14);
+  --primary-gradient: linear-gradient(135deg, #0284C7 0%, #38BDF8 100%);
+  --secondary-gradient: linear-gradient(135deg, #0369A1 0%, #38BDF8 100%);
+  --shadow-glow: 0 0 35px rgba(2, 132, 199, 0.3);
+  --page-bg-gradient: radial-gradient(circle at 50% 0%, #042E3D 0%, #03131A 75%);
 }
 
-/* 8. Retail (Crimson Red / White) */
+/* 8. Retail (Omnichannel Commerce - Crimson Rose / Ruby Neon) */
 [data-org="retail"] {
   --primary: #E11D48;
   --primary-rgb: 225, 29, 72;
   --secondary: #F43F5E;
   --accent: #FB7185;
-  --primary-light: rgba(225, 29, 72, 0.12);
+  --primary-light: rgba(225, 29, 72, 0.14);
   --primary-gradient: linear-gradient(135deg, #E11D48 0%, #FB7185 100%);
-  --shadow-glow: 0 0 30px rgba(225, 29, 72, 0.25);
+  --secondary-gradient: linear-gradient(135deg, #F43F5E 0%, #FB7185 100%);
+  --shadow-glow: 0 0 35px rgba(225, 29, 72, 0.3);
+  --page-bg-gradient: radial-gradient(circle at 50% 0%, #3D0818 0%, #17040A 75%);
 }
 
-/* 9. Construction (Amber Yellow / Charcoal) */
+/* 9. Construction (Civil Engineering - Heavy Amber / High-Vis Gold) */
 [data-org="construction"] {
   --primary: #D97706;
   --primary-rgb: 217, 119, 6;
   --secondary: #F59E0B;
   --accent: #FCD34D;
-  --primary-light: rgba(217, 119, 6, 0.12);
-  --primary-gradient: linear-gradient(135deg, #D97706 0%, #F59E0B 100%);
-  --shadow-glow: 0 0 30px rgba(245, 158, 11, 0.25);
+  --primary-light: rgba(217, 119, 6, 0.14);
+  --primary-gradient: linear-gradient(135deg, #D97706 0%, #FCD34D 100%);
+  --secondary-gradient: linear-gradient(135deg, #F59E0B 0%, #FCD34D 100%);
+  --shadow-glow: 0 0 35px rgba(245, 158, 11, 0.3);
+  --page-bg-gradient: radial-gradient(circle at 50% 0%, #3D2305 0%, #170E02 75%);
 }
 
-/* 10. Energy (Dark Forest Green / Mint) */
+/* 10. Energy (Utilities & Power Grid - Forest Green / Electric Lime) */
 [data-org="energy"] {
   --primary: #15803D;
   --primary-rgb: 21, 128, 61;
   --secondary: #22C55E;
   --accent: #86EFAC;
-  --primary-light: rgba(21, 128, 61, 0.12);
-  --primary-gradient: linear-gradient(135deg, #15803D 0%, #22C55E 100%);
-  --shadow-glow: 0 0 30px rgba(34, 197, 94, 0.25);
+  --primary-light: rgba(21, 128, 61, 0.14);
+  --primary-gradient: linear-gradient(135deg, #15803D 0%, #86EFAC 100%);
+  --secondary-gradient: linear-gradient(135deg, #22C55E 0%, #86EFAC 100%);
+  --shadow-glow: 0 0 35px rgba(34, 197, 94, 0.3);
+  --page-bg-gradient: radial-gradient(circle at 50% 0%, #073318 0%, #03140A 75%);
 }
 
-/* 11. Logistics (Deep Indigo / Ice Blue) */
+/* 11. Logistics (Maritime & Global Supply - Deep Indigo / Ice Blue) */
 [data-org="logistics"] {
   --primary: #4F46E5;
   --primary-rgb: 79, 70, 229;
   --secondary: #6366F1;
   --accent: #A5B4FC;
-  --primary-light: rgba(79, 70, 229, 0.12);
-  --primary-gradient: linear-gradient(135deg, #4F46E5 0%, #818CF8 100%);
-  --shadow-glow: 0 0 30px rgba(99, 102, 241, 0.25);
+  --primary-light: rgba(79, 70, 229, 0.14);
+  --primary-gradient: linear-gradient(135deg, #4F46E5 0%, #A5B4FC 100%);
+  --secondary-gradient: linear-gradient(135deg, #6366F1 0%, #A5B4FC 100%);
+  --shadow-glow: 0 0 35px rgba(99, 102, 241, 0.3);
+  --page-bg-gradient: radial-gradient(circle at 50% 0%, #141340 0%, #08071C 75%);
 }
 
-/* 12. Law Firm (Burgundy / Gold) */
+/* 12. Law Firm (Legal & Compliance - Imperial Burgundy / Bronze Gold) */
 [data-org="lawfirm"] {
   --primary: #881337;
   --primary-rgb: 136, 19, 55;
   --secondary: #BE123C;
   --accent: #F59E0B;
-  --primary-light: rgba(136, 19, 55, 0.15);
-  --primary-gradient: linear-gradient(135deg, #881337 0%, #BE123C 100%);
-  --shadow-glow: 0 0 30px rgba(190, 18, 60, 0.25);
+  --primary-light: rgba(136, 19, 55, 0.16);
+  --primary-gradient: linear-gradient(135deg, #881337 0%, #F59E0B 100%);
+  --secondary-gradient: linear-gradient(135deg, #BE123C 0%, #F59E0B 100%);
+  --shadow-glow: 0 0 35px rgba(190, 18, 60, 0.3);
+  --page-bg-gradient: radial-gradient(circle at 50% 0%, #330715 0%, #17030A 75%);
 }
 
-/* 13. Startup (Electric Violet / Cyan) */
+/* 13. Startup (Venture & Hyper-Growth - Venture Violet / Cyan) */
 [data-org="startup"], [data-org="company"] {
   --primary: #8B5CF6;
   --primary-rgb: 139, 92, 246;
   --secondary: #A855F7;
   --accent: #06B6D4;
-  --primary-light: rgba(139, 92, 246, 0.12);
+  --primary-light: rgba(139, 92, 246, 0.14);
   --primary-gradient: linear-gradient(135deg, #8B5CF6 0%, #06B6D4 100%);
-  --shadow-glow: 0 0 30px rgba(139, 92, 246, 0.25);
+  --secondary-gradient: linear-gradient(135deg, #A855F7 0%, #06B6D4 100%);
+  --shadow-glow: 0 0 35px rgba(139, 92, 246, 0.3);
+  --page-bg-gradient: radial-gradient(circle at 50% 0%, #290B4A 0%, #10041F 75%);
 }
 
 /* ==========================================================================
@@ -250,6 +322,15 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-family: var(--font-family);
+}
+
+html, body, button, input, select, textarea, h1, h2, h3, h4, h5, h6, p, span, a, div, table, th, td {
+  font-family: 'Times New Roman', Times, 'Playfair Display', Georgia, serif;
+}
+
+code, pre, .font-mono, [data-mono="true"] {
+  font-family: 'Space Mono', 'JetBrains Mono', monospace !important;
 }
 
 body {

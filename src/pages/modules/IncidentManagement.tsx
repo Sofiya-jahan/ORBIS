@@ -1,17 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuthStore } from '../../store/useAuthStore';
 import { ORGANIZATIONS } from '../../config/platformConfig';
 import { 
   AlertOctagon, Plus, Search, Filter, CheckCircle2, 
-  Clock, ShieldAlert, FileText, Upload, ChevronRight
+  Clock, ShieldAlert, FileText, Upload, ChevronRight,
+  Database, Cloud, Image as ImageIcon, Loader2
 } from 'lucide-react';
+import { saveIncidentToNeon, loadIncidentsFromNeon } from '../../services/neonService';
+import { uploadIncidentEvidence } from '../../services/supabaseStorage';
 
 export const IncidentManagement = () => {
-  const { organization } = useAuthStore();
+  const { organization, user } = useAuthStore();
   const currentOrg = organization && ORGANIZATIONS[organization] ? ORGANIZATIONS[organization] : ORGANIZATIONS.hospital;
   
   const [activeTab, setActiveTab] = useState<'register' | 'report' | 'investigation'>('register');
-  const [incidents, setIncidents] = useState([
+  const [incidents, setIncidents] = useState<any[]>([
     {
       id: 'INC-2026-084',
       title: 'Telemetry Node Drift on Cluster 4',
@@ -21,7 +24,8 @@ export const IncidentManagement = () => {
       reportedAt: '12 mins ago',
       status: 'Under Investigation',
       rootCause: 'Transient network bottleneck causing sensor sample packet loss.',
-      evidenceCount: 3
+      evidenceCount: 3,
+      evidenceUrls: []
     },
     {
       id: 'INC-2026-081',
@@ -32,7 +36,8 @@ export const IncidentManagement = () => {
       reportedAt: '3 hours ago',
       status: 'Mitigated',
       rootCause: 'Concurrent batch sync task scheduled during peak operational load.',
-      evidenceCount: 1
+      evidenceCount: 1,
+      evidenceUrls: []
     },
     {
       id: 'INC-2026-079',
@@ -43,7 +48,8 @@ export const IncidentManagement = () => {
       reportedAt: 'Yesterday',
       status: 'Resolved',
       rootCause: 'Capacitor bank switchover latency stabilized.',
-      evidenceCount: 2
+      evidenceCount: 2,
+      evidenceUrls: []
     }
   ]);
 
@@ -51,31 +57,110 @@ export const IncidentManagement = () => {
   const [newDept, setNewDept] = useState(currentOrg.departments[0]);
   const [newSeverity, setNewSeverity] = useState('Medium');
   const [newDesc, setNewDesc] = useState('');
+  const [evidenceFile, setEvidenceFile] = useState<File | null>(null);
+  const [evidencePreview, setEvidencePreview] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [reportSuccess, setReportSuccess] = useState(false);
 
-  const handleCreateIncident = (e: React.FormEvent) => {
+  // Load incidents from Neon DB
+  useEffect(() => {
+    let isMounted = true;
+    const fetchIncidents = async () => {
+      try {
+        const saved = await loadIncidentsFromNeon(organization || undefined);
+        if (isMounted && saved && saved.length > 0) {
+          setIncidents(prev => {
+            const ids = new Set(saved.map(s => s.id));
+            const filteredPrev = prev.filter(p => !ids.has(p.id));
+            return [...saved.map(s => ({
+              id: s.id,
+              title: s.title,
+              department: s.department,
+              severity: s.severity,
+              reporter: s.reporter,
+              reportedAt: s.reported_at,
+              status: s.status,
+              rootCause: s.root_cause,
+              evidenceCount: s.evidence_count,
+              evidenceUrls: s.evidence_urls || []
+            })), ...filteredPrev];
+          });
+        }
+      } catch (err) {
+        console.warn('Neon DB Incident fetch warning:', err);
+      }
+    };
+    fetchIncidents();
+    return () => { isMounted = false; };
+  }, [organization]);
+
+  const handleEvidenceSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setEvidenceFile(file);
+      setEvidencePreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handleCreateIncident = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newTitle) return;
 
+    setIsSubmitting(true);
+    const incidentId = `INC-2026-${Math.floor(100 + Math.random() * 900)}`;
+    const evidenceUrls: string[] = [];
+
+    // If an image evidence is provided, upload directly to Supabase Storage
+    if (evidenceFile) {
+      try {
+        const uploadResult = await uploadIncidentEvidence(evidenceFile, incidentId);
+        if (uploadResult.url) {
+          evidenceUrls.push(uploadResult.url);
+        }
+      } catch (err) {
+        console.warn('Supabase evidence image upload warning:', err);
+      }
+    }
+
     const newInc = {
-      id: `INC-2026-${Math.floor(100 + Math.random() * 900)}`,
+      id: incidentId,
       title: newTitle,
       department: newDept,
       severity: newSeverity,
-      reporter: 'Authorized User',
+      reporter: user?.name || 'Authorized Sentry',
       reportedAt: 'Just now',
       status: 'Under Investigation',
       rootCause: newDesc || 'Pending root-cause analysis.',
-      evidenceCount: 0
+      evidenceCount: evidenceUrls.length,
+      evidenceUrls: evidenceUrls
     };
 
-    setIncidents([newInc, ...incidents]);
+    // Save incident record to Neon DB
+    saveIncidentToNeon({
+      id: newInc.id,
+      title: newInc.title,
+      department: newInc.department,
+      severity: newInc.severity,
+      reporter: newInc.reporter,
+      reported_at: newInc.reportedAt,
+      status: newInc.status,
+      root_cause: newInc.rootCause,
+      evidence_count: newInc.evidenceCount,
+      evidence_urls: newInc.evidenceUrls,
+      organization: organization || 'general'
+    }).catch(err => console.error('Failed to save incident to Neon DB:', err));
+
+    setIncidents(prev => [newInc, ...prev]);
+    setIsSubmitting(false);
     setReportSuccess(true);
+    
     setTimeout(() => {
       setReportSuccess(false);
       setActiveTab('register');
       setNewTitle('');
       setNewDesc('');
+      setEvidenceFile(null);
+      setEvidencePreview(null);
     }, 1200);
   };
 
@@ -96,7 +181,25 @@ export const IncidentManagement = () => {
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '0.75rem' }}>
+        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: '6px',
+            padding: '0.4rem 0.75rem', borderRadius: '12px',
+            background: 'rgba(0, 229, 255, 0.08)', border: '1px solid rgba(0, 229, 255, 0.25)',
+            fontSize: '0.75rem', color: '#00E5FF', fontWeight: 700
+          }}>
+            <Database size={13} />
+            NEON DB // ALL STORAGE
+          </div>
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: '6px',
+            padding: '0.4rem 0.75rem', borderRadius: '12px',
+            background: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.25)',
+            fontSize: '0.75rem', color: '#10B981', fontWeight: 700
+          }}>
+            <Cloud size={13} />
+            SUPABASE // EVIDENCE IMAGES
+          </div>
           <button 
             className={`btn ${activeTab === 'register' ? 'btn-primary' : 'btn-secondary'}`}
             style={{ background: activeTab === 'register' ? currentOrg.themeColor : undefined }}
@@ -134,6 +237,18 @@ export const IncidentManagement = () => {
                   <td style={{ padding: '1.1rem 1.25rem' }}>
                     <div style={{ fontWeight: '700', fontSize: '0.92rem', color: '#FFFFFF' }}>{inc.title}</div>
                     <div style={{ fontSize: '0.75rem', color: currentOrg.themeColor, fontFamily: 'var(--font-mono)' }}>{inc.id} &bull; {inc.reporter}</div>
+                    {inc.evidenceUrls && inc.evidenceUrls.length > 0 && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '6px' }}>
+                        <span style={{ fontSize: '0.68rem', color: '#10B981', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                          <Cloud size={10} /> Supabase Evidence:
+                        </span>
+                        {inc.evidenceUrls.map((url: string, idx: number) => (
+                          <a key={idx} href={url} target="_blank" rel="noopener noreferrer" title="View Evidence Image in Supabase Storage">
+                            <img src={url} alt="Evidence" style={{ width: '22px', height: '22px', borderRadius: '4px', objectFit: 'cover', border: '1px solid #10B981' }} />
+                          </a>
+                        ))}
+                      </div>
+                    )}
                   </td>
                   <td style={{ padding: '1.1rem 1.25rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
                     {inc.department}
@@ -240,12 +355,67 @@ export const IncidentManagement = () => {
                 />
               </div>
 
+              <div>
+                <label className="label" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <Cloud size={14} color="#10B981" />
+                  Evidence Screenshot / Photo (Supabase Storage)
+                </label>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginTop: '0.4rem', flexWrap: 'wrap' }}>
+                  <label style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    padding: '0.75rem 1.25rem',
+                    borderRadius: '10px',
+                    background: 'rgba(255,255,255,0.05)',
+                    border: '1px dashed rgba(255,255,255,0.25)',
+                    color: 'white',
+                    cursor: 'pointer',
+                    fontSize: '0.85rem',
+                    fontWeight: 600,
+                    transition: 'all 0.2s ease'
+                  }}>
+                    <Upload size={16} />
+                    <span>{evidenceFile ? evidenceFile.name : 'Attach Image to Supabase...'}</span>
+                    <input type="file" accept="image/*" onChange={handleEvidenceSelect} style={{ display: 'none' }} />
+                  </label>
+                  {evidencePreview && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <img src={evidencePreview} alt="Preview" style={{ width: '42px', height: '42px', borderRadius: '8px', objectFit: 'cover', border: '1px solid #10B981' }} />
+                      <button 
+                        type="button" 
+                        onClick={() => { setEvidenceFile(null); setEvidencePreview(null); }} 
+                        style={{ background: 'none', border: 'none', color: '#EF4444', fontSize: '0.75rem', cursor: 'pointer', fontWeight: 600 }}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+
               <button
                 type="submit"
+                disabled={isSubmitting}
                 className="btn btn-primary"
-                style={{ background: currentOrg.themeColor, padding: '1rem', marginTop: '0.5rem' }}
+                style={{
+                  background: currentOrg.themeColor,
+                  padding: '1rem',
+                  marginTop: '0.5rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem'
+                }}
               >
-                Submit Incident Report
+                {isSubmitting ? (
+                  <>
+                    <Loader2 size={18} className="animate-spin" />
+                    Saving to Neon DB & Uploading to Supabase...
+                  </>
+                ) : (
+                  'Submit Incident Report'
+                )}
               </button>
             </form>
           )}

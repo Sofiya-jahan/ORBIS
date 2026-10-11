@@ -1,594 +1,645 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { Stars, Float } from '@react-three/drei';
-import * as THREE from 'three';
-import { Volume2, VolumeX, FastForward, Shield, Brain, Activity, Globe2, Lock } from 'lucide-react';
+import { 
+  ArrowRight, Lock, Unlock, ShieldCheck, Activity, 
+  Sparkles, SkipForward, ChevronDown, Radio, Compass
+} from 'lucide-react';
 
 interface IntroProps {
   onComplete: () => void;
 }
 
-// -------------------------------------------------------------
-// Cinematic Web Audio Engine (Interstellar/Blade Runner Synth)
-// -------------------------------------------------------------
-class CinematicAudioDirector {
-  private ctx: AudioContext | null = null;
-  private isMuted: boolean = false;
-  private droneOsc: OscillatorNode | null = null;
-  private subOsc: OscillatorNode | null = null;
-  private masterGain: GainNode | null = null;
-
-  init() {
-    if (this.ctx) return;
-    try {
-      const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
-      this.ctx = new AudioContextClass();
-      
-      this.masterGain = this.ctx.createGain();
-      this.masterGain.gain.setValueAtTime(this.isMuted ? 0 : 0.08, this.ctx.currentTime);
-      this.masterGain.connect(this.ctx.destination);
-
-      // Deep cinematic sub-bass drone
-      this.subOsc = this.ctx.createOscillator();
-      this.subOsc.type = 'sine';
-      this.subOsc.frequency.setValueAtTime(45, this.ctx.currentTime);
-      const subGain = this.ctx.createGain();
-      subGain.gain.setValueAtTime(0.06, this.ctx.currentTime);
-      this.subOsc.connect(subGain);
-      subGain.connect(this.masterGain);
-      this.subOsc.start();
-
-      // Atmospheric spatial hum
-      this.droneOsc = this.ctx.createOscillator();
-      this.droneOsc.type = 'sawtooth';
-      this.droneOsc.frequency.setValueAtTime(110, this.ctx.currentTime);
-      const filter = this.ctx.createBiquadFilter();
-      filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(280, this.ctx.currentTime);
-      const droneGain = this.ctx.createGain();
-      droneGain.gain.setValueAtTime(0.02, this.ctx.currentTime);
-      this.droneOsc.connect(filter);
-      filter.connect(droneGain);
-      droneGain.connect(this.masterGain);
-      this.droneOsc.start();
-    } catch (e) {
-      console.log('WebAudio initialization delayed or unsupported');
-    }
-  }
-
-  setMuted(muted: boolean) {
-    this.isMuted = muted;
-    if (this.masterGain && this.ctx) {
-      this.masterGain.gain.setTargetAtTime(muted ? 0 : 0.08, this.ctx.currentTime, 0.1);
-    }
-  }
-
-  playImpact() {
-    if (this.isMuted || !this.ctx) return;
-    try {
-      if (this.ctx.state === 'suspended') this.ctx.resume();
-      
-      // Massive cinematic sub drop
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(90, this.ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(28, this.ctx.currentTime + 1.8);
-      
-      gain.gain.setValueAtTime(0.35, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 2.2);
-
-      osc.connect(gain);
-      gain.connect(this.ctx.destination);
-      osc.start();
-      osc.stop(this.ctx.currentTime + 2.2);
-
-      // Shimmer layer
-      const shimmer = this.ctx.createOscillator();
-      const sGain = this.ctx.createGain();
-      shimmer.type = 'triangle';
-      shimmer.frequency.setValueAtTime(880, this.ctx.currentTime);
-      shimmer.frequency.exponentialRampToValueAtTime(220, this.ctx.currentTime + 1.2);
-      sGain.gain.setValueAtTime(0.08, this.ctx.currentTime);
-      sGain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 1.2);
-      shimmer.connect(sGain);
-      sGain.connect(this.ctx.destination);
-      shimmer.start();
-      shimmer.stop(this.ctx.currentTime + 1.2);
-    } catch (e) {}
-  }
-
-  playDataPulse(freq: number = 750) {
-    if (this.isMuted || !this.ctx) return;
-    try {
-      if (this.ctx.state === 'suspended') this.ctx.resume();
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
-      gain.gain.setValueAtTime(0.04, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.08);
-      osc.connect(gain);
-      gain.connect(this.ctx.destination);
-      osc.start();
-      osc.stop(this.ctx.currentTime + 0.08);
-    } catch (e) {}
-  }
-
-  stop() {
-    if (this.ctx) {
-      try { this.ctx.close(); } catch (e) {}
-      this.ctx = null;
-    }
-  }
-}
-
-// -------------------------------------------------------------
-// 3D Visual Scenes for Sequential Intro Phases
-// -------------------------------------------------------------
-const Intro3DScene = ({ phase }: { phase: number }) => {
-  const pointsRef = useRef<THREE.Points>(null);
-  const coreRef = useRef<THREE.Group>(null);
-  const ringRef = useRef<THREE.Mesh>(null);
-
-  // Generate 2500 dynamic particles
-  const { positions, colors } = useMemo(() => {
-    const count = 2500;
-    const pos = new Float32Array(count * 3);
-    const col = new Float32Array(count * 3);
-    const cCyan = new THREE.Color('#00E5FF');
-    const cPurple = new THREE.Color('#7B61FF');
-    const cBlue = new THREE.Color('#4F8CFF');
-
-    for (let i = 0; i < count; i++) {
-      const radius = 1.0 + Math.random() * 4.5;
-      const theta = Math.random() * Math.PI * 2;
-      const phi = Math.acos(Math.random() * 2 - 1);
-
-      pos[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
-      pos[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
-      pos[i * 3 + 2] = radius * Math.cos(phi);
-
-      const chosen = Math.random() > 0.6 ? cCyan : (Math.random() > 0.3 ? cPurple : cBlue);
-      col[i * 3] = chosen.r;
-      col[i * 3 + 1] = chosen.g;
-      col[i * 3 + 2] = chosen.b;
-    }
-    return { positions: pos, colors: col };
-  }, []);
-
-  useFrame(({ clock }, delta) => {
-    const t = clock.getElapsedTime();
-    if (pointsRef.current) {
-      pointsRef.current.rotation.y = t * (phase >= 3 ? 0.3 : 0.08);
-      pointsRef.current.rotation.x = t * 0.04;
-      if (phase === 1) {
-        pointsRef.current.scale.setScalar(1 + Math.sin(t * 2) * 0.1);
-      }
-    }
-    if (coreRef.current) {
-      coreRef.current.rotation.y += delta * 0.4;
-      coreRef.current.rotation.z += delta * 0.2;
-    }
-    if (ringRef.current) {
-      ringRef.current.rotation.x = t * 0.5;
-      ringRef.current.rotation.y = t * 0.3;
-    }
-  });
-
-  return (
-    <group>
-      {/* 1. Global Interconnected Particles */}
-      <points ref={pointsRef}>
-        <bufferGeometry>
-          <bufferAttribute attach="attributes-position" args={[positions, 3]} />
-          <bufferAttribute attach="attributes-color" args={[colors, 3]} />
-        </bufferGeometry>
-        <pointsMaterial size={phase >= 4 ? 0.05 : 0.04} vertexColors transparent opacity={0.85} />
-      </points>
-
-      {/* 2. Holographic Neural Lattice Core (Emerges Phase 4+) */}
-      {phase >= 4 && (
-        <group ref={coreRef}>
-          <mesh>
-            <icosahedronGeometry args={[1.5, 2]} />
-            <meshStandardMaterial
-              color="#00E5FF"
-              emissive="#0044ff"
-              emissiveIntensity={1.2}
-              wireframe
-              transparent
-              opacity={0.8}
-            />
-          </mesh>
-          <mesh>
-            <octahedronGeometry args={[0.9, 0]} />
-            <meshStandardMaterial color="#7B61FF" emissive="#7B61FF" emissiveIntensity={1.5} roughness={0.2} metalness={0.8} />
-          </mesh>
-        </group>
-      )}
-
-      {/* 3. Orbiting Energy Rings */}
-      {phase >= 3 && (
-        <mesh ref={ringRef}>
-          <torusGeometry args={[3.2, 0.015, 16, 120]} />
-          <meshBasicMaterial color="#00CFFF" transparent opacity={0.4} />
-        </mesh>
-      )}
-    </group>
-  );
-};
+const TOTAL_FRAMES = 300;
+const FPS = 30;
 
 export const CinematicIntro: React.FC<IntroProps> = ({ onComplete }) => {
-  const [phase, setPhase] = useState(0);
-  const [isMuted, setIsMuted] = useState(false);
-  const [isFadingOut, setIsFadingOut] = useState(false);
-  const audioDirector = useRef<CinematicAudioDirector | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [currentFrame, setCurrentFrame] = useState(0);
+  const [isCompleted, setIsCompleted] = useState(false);
+  const targetFrameRef = useRef(0);
+  const animatedFrameRef = useRef(0);
+  const rafId = useRef<number | null>(null);
 
-  // 18-Second Hollywood-Grade Storyboard Sequence
+  // Smooth scroll scrubbing handler
   useEffect(() => {
-    const sequence = [
-      { delay: 1800, nextPhase: 1 }, // Phase 0 -> 1: Spark of Intelligence
-      { delay: 2600, nextPhase: 2 }, // Phase 1 -> 2: Neural Network Genesis
-      { delay: 2800, nextPhase: 3 }, // Phase 2 -> 3: Global Planetary Topology
-      { delay: 2800, nextPhase: 4 }, // Phase 3 -> 4: Multi-Sector Risk Signal Ingestion
-      { delay: 3000, nextPhase: 5 }, // Phase 4 -> 5: Holographic AI Core Convergence
-      { delay: 3200, nextPhase: 6 }, // Phase 5 -> 6: IPRAP Grand Identity Reveal
-      { delay: 2600, nextPhase: 7 }, // Phase 6 -> 7: Smooth Fade to Landing
-    ];
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      if (maxScroll <= 0) return;
 
-    let currentStep = 0;
-    const runStep = () => {
-      if (currentStep < sequence.length) {
-        const step = sequence[currentStep];
-        const timer = setTimeout(() => {
-          setPhase(step.nextPhase);
-          
-          // Sound synchronization
-          if (step.nextPhase === 6) {
-            audioDirector.current?.playImpact();
-          } else if (step.nextPhase >= 2 && step.nextPhase <= 5) {
-            audioDirector.current?.playDataPulse(450 + step.nextPhase * 120);
-          }
-          
-          currentStep++;
-          if (step.nextPhase === 7) {
-            handleComplete();
-          } else {
-            runStep();
-          }
-        }, step.delay);
-        return timer;
+      const progress = Math.min(1, Math.max(0, scrollY / maxScroll));
+      const target = Math.min(TOTAL_FRAMES, Math.floor(progress * TOTAL_FRAMES));
+      targetFrameRef.current = target;
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Butter-smooth frame interpolation loop (lerping towards targetFrame at 60fps)
+  useEffect(() => {
+    const loop = () => {
+      const diff = targetFrameRef.current - animatedFrameRef.current;
+      if (Math.abs(diff) > 0.05) {
+        animatedFrameRef.current += diff * 0.18; // smooth spring damping
+      } else {
+        animatedFrameRef.current = targetFrameRef.current;
       }
+
+      const frameInt = Math.min(TOTAL_FRAMES, Math.max(0, Math.round(animatedFrameRef.current)));
+      setCurrentFrame(frameInt);
+
+      // Auto-trigger completion at end of 300-frame scroll
+      if (frameInt >= TOTAL_FRAMES && !isCompleted) {
+        setIsCompleted(true);
+        setTimeout(() => {
+          onComplete();
+        }, 800);
+      }
+
+      rafId.current = requestAnimationFrame(loop);
     };
 
-    const initialTimer = runStep();
-    return () => clearTimeout(initialTimer);
-  }, []);
-
-  // Initialize Web Audio on mount
-  useEffect(() => {
-    audioDirector.current = new CinematicAudioDirector();
-    audioDirector.current.init();
-    audioDirector.current.setMuted(isMuted);
-
+    rafId.current = requestAnimationFrame(loop);
     return () => {
-      audioDirector.current?.stop();
-      audioDirector.current = null;
+      if (rafId.current) cancelAnimationFrame(rafId.current);
     };
+  }, [isCompleted, onComplete]);
+
+  // High-DPI Procedural 300-Frame Canvas Renderer
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const handleResize = () => {
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
+      ctx.scale(dpr, dpr);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const toggleMute = () => {
-    setIsMuted(prev => {
-      const next = !prev;
-      audioDirector.current?.setMuted(next);
-      return next;
-    });
+  // Main 300-Frame Procedural Animation Draw Function
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    const frame = animatedFrameRef.current;
+    const p = Math.min(1, Math.max(0, frame / TOTAL_FRAMES));
+
+    // Reset Canvas
+    ctx.clearRect(0, 0, width, height);
+
+    // Zoom factor during final stage (frames 250-300)
+    let zoom = 1;
+    if (p > 0.83) {
+      const zoomP = (p - 0.83) / 0.17;
+      zoom = 1 + zoomP * 1.6;
+    }
+
+    ctx.save();
+    const cx = width / 2;
+    const cy = height * 0.48;
+
+    // Apply camera dolly zoom centered on portal
+    ctx.translate(cx, cy);
+    ctx.scale(zoom, zoom);
+    ctx.translate(-cx, -cy);
+
+    // 1. BASE BACKGROUND: Deep Obsidian Sci-Fi Atrium
+    const bgGrad = ctx.createRadialGradient(cx, cy, 30, cx, cy, width * 0.8);
+    bgGrad.addColorStop(0, p > 0.4 ? 'rgba(15, 30, 34, 1)' : 'rgba(7, 16, 20, 1)');
+    bgGrad.addColorStop(0.6, 'rgba(5, 11, 14, 1)');
+    bgGrad.addColorStop(1, 'rgba(3, 7, 9, 1)');
+    ctx.fillStyle = bgGrad;
+    ctx.fillRect(0, 0, width, height);
+
+    // 2. FLOOR PERSPECTIVE GRID
+    const floorY = cy + 40;
+    const gridCols = 18;
+    ctx.lineWidth = 1;
+
+    for (let i = -gridCols; i <= gridCols; i++) {
+      const startX = cx + i * (width / (gridCols * 3.5));
+      const endX = cx + i * (width * 0.9);
+      
+      const gridGrad = ctx.createLinearGradient(startX, floorY, endX, height);
+      gridGrad.addColorStop(0, 'rgba(16, 185, 129, 0.45)');
+      gridGrad.addColorStop(0.7, p > 0.3 ? 'rgba(229, 192, 123, 0.25)' : 'rgba(16, 185, 129, 0.12)');
+      gridGrad.addColorStop(1, 'transparent');
+
+      ctx.strokeStyle = gridGrad;
+      ctx.beginPath();
+      ctx.moveTo(startX, floorY);
+      ctx.lineTo(endX, height);
+      ctx.stroke();
+    }
+
+    // Horizontal perspective lines on floor
+    const horizCount = 14;
+    for (let j = 1; j <= horizCount; j++) {
+      const tNorm = Math.pow(j / horizCount, 2.2);
+      const hy = floorY + tNorm * (height - floorY);
+      
+      ctx.strokeStyle = `rgba(16, 185, 129, ${0.35 * (1 - tNorm * 0.7)})`;
+      ctx.beginPath();
+      ctx.moveTo(0, hy);
+      ctx.lineTo(width, hy);
+      ctx.stroke();
+    }
+
+    // 3. ARCHITECTURAL PORTAL GEOMETRY
+    const portalW = Math.min(480, width * 0.36);
+    const portalH = Math.min(680, height * 0.72);
+    const portalLeft = cx - portalW / 2;
+    const portalTop = cy - portalH / 2;
+
+    // Portal Outer Chamfered Arch Frame
+    ctx.strokeStyle = 'rgba(16, 185, 129, 0.5)';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(portalLeft - 18, portalTop - 18, portalW + 36, portalH + 36);
+
+    ctx.strokeStyle = 'rgba(229, 192, 123, 0.35)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(portalLeft - 28, portalTop - 28, portalW + 56, portalH + 56);
+
+    // 4. BLAST GATES & OPENING MECHANISM (Frames 0 to 300)
+    // - Phase 1 (0 to 80): Doors sealed, central lock rotates and calibrations complete
+    // - Phase 2 (81 to 240): Dual doors slide laterally open, light pours outward
+    // - Phase 3 (241 to 300): Doors wide open, volumetric light bloom expands
+    let doorOpenOffset = 0;
+    if (p > 0.25) {
+      const openP = Math.min(1, (p - 0.25) / 0.60);
+      // Smooth cubic easing for heavy mechanical blast doors
+      const ease = openP < 0.5 ? 4 * openP * openP * openP : 1 - Math.pow(-2 * openP + 2, 3) / 2;
+      doorOpenOffset = ease * (portalW * 0.55);
+    }
+
+    // A. INNER RADIANT DIMENSION (Visible as doors open)
+    if (doorOpenOffset > 2) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(portalLeft, portalTop, portalW, portalH);
+      ctx.clip();
+
+      // Deep Golden Amber & Mint Volumetric Core
+      const innerGrad = ctx.createLinearGradient(cx, portalTop, cx, portalTop + portalH);
+      innerGrad.addColorStop(0, '#F59E0B');
+      innerGrad.addColorStop(0.4, '#E5C07B');
+      innerGrad.addColorStop(0.75, '#10B981');
+      innerGrad.addColorStop(1, '#059669');
+      ctx.fillStyle = innerGrad;
+      ctx.fillRect(portalLeft, portalTop, portalW, portalH);
+
+      // Golden Volumetric Light Ray Beams
+      const beamSpread = doorOpenOffset * 2.2;
+      const beamGrad = ctx.createRadialGradient(cx, cy, 10, cx, cy, beamSpread);
+      beamGrad.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
+      beamGrad.addColorStop(0.3, 'rgba(245, 158, 11, 0.8)');
+      beamGrad.addColorStop(0.7, 'rgba(16, 185, 129, 0.4)');
+      beamGrad.addColorStop(1, 'transparent');
+      ctx.fillStyle = beamGrad;
+      ctx.fillRect(portalLeft, portalTop, portalW, portalH);
+
+      // Quantum Grid matrix within the open doorway
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+      ctx.lineWidth = 1;
+      const step = 28;
+      for (let gx = portalLeft; gx < portalLeft + portalW; gx += step) {
+        ctx.beginPath();
+        ctx.moveTo(gx, portalTop);
+        ctx.lineTo(gx, portalTop + portalH);
+        ctx.stroke();
+      }
+      for (let gy = portalTop; gy < portalTop + portalH; gy += step) {
+        ctx.beginPath();
+        ctx.moveTo(portalLeft, gy);
+        ctx.lineTo(portalLeft + portalW, gy);
+        ctx.stroke();
+      }
+
+      ctx.restore();
+
+      // Light Reflections spilling across the floor
+      const floorLightGrad = ctx.createRadialGradient(cx, floorY, 10, cx, height, portalW * 1.6);
+      floorLightGrad.addColorStop(0, `rgba(245, 158, 11, ${0.7 * (doorOpenOffset / (portalW * 0.55))})`);
+      floorLightGrad.addColorStop(0.4, `rgba(229, 192, 123, ${0.45 * (doorOpenOffset / (portalW * 0.55))})`);
+      floorLightGrad.addColorStop(0.8, 'rgba(16, 185, 129, 0.15)');
+      floorLightGrad.addColorStop(1, 'transparent');
+      ctx.fillStyle = floorLightGrad;
+      ctx.fillRect(0, floorY, width, height - floorY);
+    }
+
+    // B. LEFT MONOLITH BLAST DOOR
+    ctx.save();
+    ctx.translate(-doorOpenOffset, 0);
+
+    const leftDoorW = portalW / 2;
+    const leftDoorGrad = ctx.createLinearGradient(portalLeft, portalTop, portalLeft + leftDoorW, portalTop);
+    leftDoorGrad.addColorStop(0, '#09151A');
+    leftDoorGrad.addColorStop(0.6, '#0D1E24');
+    leftDoorGrad.addColorStop(1, '#071014');
+    ctx.fillStyle = leftDoorGrad;
+    ctx.fillRect(portalLeft, portalTop, leftDoorW, portalH);
+
+    // Left door metallic armor ridges & border
+    ctx.strokeStyle = 'rgba(16, 185, 129, 0.4)';
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(portalLeft, portalTop, leftDoorW, portalH);
+
+    for (let r = 1; r <= 6; r++) {
+      const ry = portalTop + r * (portalH / 7);
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+      ctx.beginPath();
+      ctx.moveTo(portalLeft + 12, ry);
+      ctx.lineTo(portalLeft + leftDoorW - 8, ry);
+      ctx.stroke();
+    }
+
+    ctx.restore();
+
+    // C. RIGHT MONOLITH BLAST DOOR
+    ctx.save();
+    ctx.translate(doorOpenOffset, 0);
+
+    const rightDoorW = portalW / 2;
+    const rightDoorX = cx;
+    const rightDoorGrad = ctx.createLinearGradient(rightDoorX, portalTop, rightDoorX + rightDoorW, portalTop);
+    rightDoorGrad.addColorStop(0, '#071014');
+    rightDoorGrad.addColorStop(0.4, '#0D1E24');
+    rightDoorGrad.addColorStop(1, '#09151A');
+    ctx.fillStyle = rightDoorGrad;
+    ctx.fillRect(rightDoorX, portalTop, rightDoorW, portalH);
+
+    // Right door metallic armor ridges & border
+    ctx.strokeStyle = 'rgba(16, 185, 129, 0.4)';
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(rightDoorX, portalTop, rightDoorW, portalH);
+
+    for (let r = 1; r <= 6; r++) {
+      const ry = portalTop + r * (portalH / 7);
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+      ctx.beginPath();
+      ctx.moveTo(rightDoorX + 8, ry);
+      ctx.lineTo(rightDoorX + rightDoorW - 12, ry);
+      ctx.stroke();
+    }
+
+    ctx.restore();
+
+    // 5. CENTRAL BIOMETRIC VAULT SEAL (Frames 0 to 80 active, then parts in half)
+    const lockRadius = 80;
+    const lockAngle = (p * Math.PI * 4); // Rotates with scroll
+
+    // Render Left Half of Lock
+    ctx.save();
+    ctx.translate(cx - doorOpenOffset, cy);
+    ctx.beginPath();
+    ctx.arc(0, 0, lockRadius, Math.PI / 2, Math.PI * 1.5);
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(10, 22, 27, 0.95)';
+    ctx.fill();
+    ctx.strokeStyle = p < 0.25 ? '#10B981' : '#E5C07B';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Ticks on left lock half
+    for (let a = Math.PI / 2; a <= Math.PI * 1.5; a += Math.PI / 8) {
+      const tx1 = Math.cos(a + lockAngle) * (lockRadius - 12);
+      const ty1 = Math.sin(a + lockAngle) * (lockRadius - 12);
+      const tx2 = Math.cos(a + lockAngle) * (lockRadius - 4);
+      const ty2 = Math.sin(a + lockAngle) * (lockRadius - 4);
+      ctx.beginPath();
+      ctx.moveTo(tx1, ty1);
+      ctx.lineTo(tx2, ty2);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    // Render Right Half of Lock
+    ctx.save();
+    ctx.translate(cx + doorOpenOffset, cy);
+    ctx.beginPath();
+    ctx.arc(0, 0, lockRadius, -Math.PI / 2, Math.PI / 2);
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(10, 22, 27, 0.95)';
+    ctx.fill();
+    ctx.strokeStyle = p < 0.25 ? '#10B981' : '#E5C07B';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Ticks on right lock half
+    for (let a = -Math.PI / 2; a <= Math.PI / 2; a += Math.PI / 8) {
+      const tx1 = Math.cos(a + lockAngle) * (lockRadius - 12);
+      const ty1 = Math.sin(a + lockAngle) * (lockRadius - 12);
+      const tx2 = Math.cos(a + lockAngle) * (lockRadius - 4);
+      const ty2 = Math.sin(a + lockAngle) * (lockRadius - 4);
+      ctx.beginPath();
+      ctx.moveTo(tx1, ty1);
+      ctx.lineTo(tx2, ty2);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    // 6. VOLUMETRIC FLASH / BLOOM (Frames 270 to 300)
+    if (p > 0.88) {
+      const bloomP = (p - 0.88) / 0.12;
+      ctx.fillStyle = `rgba(255, 255, 255, ${bloomP * 0.85})`;
+      ctx.fillRect(0, 0, width, height);
+    }
+
+    ctx.restore();
+  }, []);
+
+  // Compute textual milestone indicator
+  const getPhaseDescription = (frame: number) => {
+    if (frame <= 60) return { title: 'CALIBRATING SECURITY LATTICE', sub: 'ALIGNING 256-BIT HYDRAULIC LOCKS', progress: 'Phase 1/5' };
+    if (frame <= 130) return { title: 'DECOUPLING BIOMETRIC SEALS', sub: 'PRESSURE EQUALIZATION IN PROGRESS', progress: 'Phase 2/5' };
+    if (frame <= 200) return { title: 'UNSEALING SOVEREIGN BLAST DOORS', sub: 'DISPERSING VOLUMETRIC AMBER CORE', progress: 'Phase 3/5' };
+    if (frame <= 265) return { title: 'PORTAL THRESHOLD DILATION', sub: 'ESTABLISHING TELEMETRY CONNECTION', progress: 'Phase 4/5' };
+    return { title: 'SOVEREIGN ACCESS GRANTED', sub: 'INITIALIZING ENTERPRISE PLATFORM', progress: 'Phase 5/5' };
   };
 
-  const handleComplete = () => {
-    setIsFadingOut(true);
-    audioDirector.current?.stop();
-    setTimeout(() => {
-      onComplete();
-    }, 1200);
-  };
+  const phase = getPhaseDescription(currentFrame);
+  const timeSeconds = (currentFrame / FPS).toFixed(2);
 
   return (
-    <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 1 }}
-        animate={isFadingOut ? { opacity: 0, scale: 1.08, filter: 'blur(20px)' } : { opacity: 1, scale: 1, filter: 'blur(0px)' }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-        style={{
-          position: 'fixed',
-          inset: 0,
-          zIndex: 99999,
-          backgroundColor: '#050D16',
-          color: 'white',
-          overflow: 'hidden',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontFamily: 'var(--font-family, system-ui, sans-serif)',
-        }}
-      >
-        {/* 3D WebGL Canvas Layer */}
-        <div style={{ position: 'absolute', inset: 0, zIndex: 1 }}>
-          <Canvas camera={{ position: [0, 0, 7.5], fov: 45 }}>
-            <ambientLight intensity={0.25} />
-            <pointLight position={[10, 10, 10]} intensity={2.5} color="#00E5FF" />
-            <pointLight position={[-10, -10, -10]} intensity={1.5} color="#7B61FF" />
-            <Stars radius={120} depth={60} count={3500} factor={4} fade speed={1.2} />
-            <Intro3DScene phase={phase} />
-          </Canvas>
-        </div>
+    <div
+      ref={containerRef}
+      style={{
+        height: '420vh', // Extended scroll track for 300 deliberate, cinematic frames
+        position: 'relative',
+        background: '#04080A',
+        fontFamily: "'Times New Roman', Times, serif",
+        color: '#FFFFFF'
+      }}
+    >
+      
+      {/* FIXED 100VH CINEMATIC STAGE */}
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        overflow: 'hidden',
+        zIndex: 10,
+        pointerEvents: 'auto'
+      }}>
+        
+        {/* Render Canvas */}
+        <canvas
+          ref={canvasRef}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            display: 'block',
+            width: '100%',
+            height: '100%',
+            zIndex: 1
+          }}
+        />
 
-        {/* Cinematic Vignette & Ambient Radial Glow */}
-        <div style={{ position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none', background: 'radial-gradient(circle at center, rgba(0,229,255,0.06) 0%, rgba(5,13,22,0.95) 80%)' }} />
-
-        {/* Top Control Overlay (Audio & Skip) */}
-        <div style={{
+        {/* TOP HUD BAR */}
+        <header style={{
           position: 'absolute',
           top: 0,
           left: 0,
           right: 0,
-          zIndex: 10,
-          padding: '2rem 3rem',
+          padding: '1.8rem 3.5rem',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
+          zIndex: 20,
+          boxSizing: 'border-box'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <div style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#00E5FF', boxShadow: '0 0 12px #00E5FF' }} />
-            <span style={{ fontSize: '0.75rem', fontWeight: 700, letterSpacing: '2px', color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase' }}>
-              COGNITIVE SEQUENCE // INITIALIZING
-            </span>
+          {/* Brand & Technical Timebase Header */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <div style={{
+              width: 38,
+              height: 38,
+              borderRadius: '10px',
+              background: 'rgba(10, 24, 28, 0.85)',
+              border: '1px solid rgba(16, 185, 129, 0.45)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#34D399',
+              boxShadow: '0 0 16px rgba(16, 185, 129, 0.25)'
+            }}>
+              <Activity size={20} strokeWidth={2.4} />
+            </div>
+            <div>
+              <div style={{ fontSize: '1.4rem', fontWeight: 900, letterSpacing: '1px', color: '#FFFFFF', lineHeight: 1.1 }}>
+                IPRAP <span style={{ color: '#E5C07B', fontSize: '0.85rem', fontStyle: 'italic' }}>// SOVEREIGN GATE</span>
+              </div>
+              <div style={{ fontSize: '0.65rem', color: '#34D399', letterSpacing: '1.5px', fontFamily: "'Space Mono', monospace", fontWeight: 700 }}>
+                SCROLL REVEAL ENGINE • 300 FRAMES @ 30 FPS
+              </div>
+            </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-            <button
-              onClick={toggleMute}
-              style={{
-                background: 'rgba(255,255,255,0.08)',
-                border: '1px solid rgba(255,255,255,0.15)',
-                color: isMuted ? 'rgba(255,255,255,0.4)' : '#00E5FF',
-                borderRadius: '20px',
-                padding: '0.5rem 1.25rem',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                fontSize: '0.75rem',
-                fontWeight: 600,
-                backdropFilter: 'blur(10px)',
-              }}
+          {/* Direct Skip Action */}
+          <button
+            onClick={() => onComplete()}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              padding: '0.65rem 1.3rem',
+              background: 'rgba(10, 22, 28, 0.85)',
+              border: '1px solid rgba(229, 192, 123, 0.35)',
+              borderRadius: '12px',
+              color: '#FFFFFF',
+              fontSize: '0.82rem',
+              fontWeight: 700,
+              fontFamily: "'Times New Roman', Times, serif",
+              cursor: 'pointer',
+              backdropFilter: 'blur(15px)',
+              transition: 'all 0.2s',
+              boxShadow: '0 4px 15px rgba(0,0,0,0.5)'
+            }}
+            onMouseOver={e => {
+              e.currentTarget.style.borderColor = '#10B981';
+              e.currentTarget.style.boxShadow = '0 0 20px rgba(16, 185, 129, 0.4)';
+            }}
+            onMouseOut={e => {
+              e.currentTarget.style.borderColor = 'rgba(229, 192, 123, 0.35)';
+              e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.5)';
+            }}
+          >
+            <span>Skip to Application</span>
+            <SkipForward size={14} color="#E5C07B" />
+          </button>
+        </header>
+
+        {/* CENTER PROMPT (During early scroll frames) */}
+        {currentFrame < 70 && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            style={{
+              position: 'absolute',
+              bottom: '12%',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              zIndex: 20,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '0.65rem',
+              pointerEvents: 'none'
+            }}
+          >
+            <div style={{
+              background: 'rgba(9, 20, 25, 0.88)',
+              border: '1px solid rgba(16, 185, 129, 0.4)',
+              borderRadius: '999px',
+              padding: '0.55rem 1.4rem',
+              backdropFilter: 'blur(15px)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.6rem',
+              boxShadow: '0 0 25px rgba(16, 185, 129, 0.25)'
+            }}>
+              <Compass size={14} color="#34D399" className="animate-spin" />
+              <span style={{ fontSize: '0.75rem', fontFamily: "'Space Mono', monospace", fontWeight: 700, color: '#FFFFFF', letterSpacing: '1px' }}>
+                SCROLL TO UNSEAL PORTAL
+              </span>
+            </div>
+            <motion.div
+              animate={{ y: [0, 6, 0] }}
+              transition={{ repeat: Infinity, duration: 1.4 }}
             >
-              {isMuted ? <VolumeX size={16} /> : <Volume2 size={16} />}
-              <span>{isMuted ? 'UNMUTE AUDIO' : 'CINEMATIC SOUND ON'}</span>
-            </button>
+              <ChevronDown size={20} color="#34D399" />
+            </motion.div>
+          </motion.div>
+        )}
 
-            <button
-              onClick={handleComplete}
-              style={{
-                background: 'rgba(255,255,255,0.08)',
-                border: '1px solid rgba(255,255,255,0.15)',
-                color: 'white',
-                borderRadius: '20px',
-                padding: '0.5rem 1.25rem',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                fontSize: '0.75rem',
-                fontWeight: 600,
-                backdropFilter: 'blur(10px)',
-                transition: 'all 0.2s',
-              }}
-              onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'}
-              onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.08)'}
-            >
-              <span>ENTER PLATFORM</span>
-              <FastForward size={14} />
-            </button>
-          </div>
-        </div>
-
-        {/* Center Dynamic Storyboard Elements */}
-        <div style={{ position: 'relative', zIndex: 5, textAlign: 'center', maxWidth: '1000px', padding: '0 2rem' }}>
-          
-          {/* Phase 0 & 1: Genesis Spark */}
-          <AnimatePresence>
-            {(phase === 0 || phase === 1) && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 1.2 }}
-                transition={{ duration: 0.8 }}
-              >
-                <div style={{ fontSize: '0.85rem', letterSpacing: '6px', textTransform: 'uppercase', color: '#00E5FF', fontWeight: 700, marginBottom: '1rem' }}>
-                  A NEW PARADIGM OF FORESIGHT
-                </div>
-                <div style={{ fontSize: '3rem', fontWeight: 800, letterSpacing: '2px', color: 'white' }}>
-                  Connecting Global Risk Signals
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Phase 2 & 3: Global Neural Topology */}
-          <AnimatePresence>
-            {(phase === 2 || phase === 3) && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.8 }}
-              >
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 16px', borderRadius: '20px', background: 'rgba(123,97,255,0.15)', border: '1px solid rgba(123,97,255,0.4)', marginBottom: '1.5rem' }}>
-                  <Globe2 size={16} color="#7B61FF" />
-                  <span style={{ fontSize: '0.75rem', fontWeight: 700, letterSpacing: '2px', color: '#7B61FF' }}>
-                    1.8 BILLION TRANSACTIONS / SEC
-                  </span>
-                </div>
-                <div style={{ fontSize: '3.5rem', fontWeight: 800, letterSpacing: '1px', lineHeight: 1.15 }}>
-                  Synthesizing Planetary Intelligence
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Phase 4: Multi-Sector Threat Convergence */}
-          <AnimatePresence>
-            {phase === 4 && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 1.1 }}
-                transition={{ duration: 0.6 }}
-              >
-                <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', marginBottom: '1.5rem' }}>
-                  {[
-                    { icon: Brain, label: 'Capital Risk' },
-                    { icon: Shield, label: 'Cyber Defense' },
-                    { icon: Activity, label: 'Biotech & Health' },
-                    { icon: Lock, label: 'Sovereign Grid' }
-                  ].map((item, idx) => (
-                    <div
-                      key={idx}
-                      style={{
-                        padding: '8px 16px',
-                        borderRadius: '10px',
-                        background: 'rgba(7,20,35,0.8)',
-                        border: '1px solid rgba(0,229,255,0.3)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        fontSize: '0.8rem',
-                        color: '#00E5FF',
-                        fontWeight: 600,
-                      }}
-                    >
-                      {React.createElement(item.icon, { size: 16 })}
-                      {item.label}
-                    </div>
-                  ))}
-                </div>
-                <div style={{ fontSize: '3rem', fontWeight: 800 }}>
-                  Autonomous Threat Neutralization Active
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Phase 5 & 6: IPRAP Grand Reveal */}
-          <AnimatePresence>
-            {(phase === 5 || phase === 6) && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.85, filter: 'blur(15px)' }}
-                animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-              >
-                <div style={{
-                  display: 'inline-block',
-                  fontSize: '1rem',
-                  fontWeight: 800,
-                  letterSpacing: '8px',
-                  color: '#00E5FF',
-                  textTransform: 'uppercase',
-                  marginBottom: '1rem',
-                  textShadow: '0 0 20px rgba(0,229,255,0.6)'
-                }}>
-                  INTELLIGENT PREDICTIVE RISK ANALYTICS PLATFORM
-                </div>
-
-                <h1 style={{
-                  fontSize: '6.5rem',
-                  fontWeight: 900,
-                  letterSpacing: '6px',
-                  margin: '0 0 1.5rem 0',
-                  background: 'linear-gradient(135deg, #FFFFFF 0%, #00E5FF 50%, #7B61FF 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  textShadow: '0 0 60px rgba(0,229,255,0.4)',
-                }}>
-                  IPRAP
-                </h1>
-
-                <div style={{ display: 'flex', justifyContent: 'center', gap: '3rem', marginBottom: '2.5rem' }}>
-                  {['PREDICT.', 'PREVENT.', 'PROTECT.'].map((word, idx) => (
-                    <motion.span
-                      key={idx}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.3 + idx * 0.2 }}
-                      style={{
-                        fontSize: '1.25rem',
-                        fontWeight: 800,
-                        letterSpacing: '5px',
-                        color: idx === 0 ? '#00E5FF' : (idx === 1 ? '#00FFB2' : '#7B61FF'),
-                        textShadow: '0 0 15px currentColor',
-                      }}
-                    >
-                      {word}
-                    </motion.span>
-                  ))}
-                </div>
-
-                <motion.button
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.9 }}
-                  whileHover={{ scale: 1.06, boxShadow: '0 0 40px rgba(0,229,255,0.6)' }}
-                  whileTap={{ scale: 0.96 }}
-                  onClick={handleComplete}
-                  style={{
-                    padding: '1.2rem 3.5rem',
-                    fontSize: '1.1rem',
-                    fontWeight: 800,
-                    letterSpacing: '2px',
-                    textTransform: 'uppercase',
-                    borderRadius: '14px',
-                    background: 'linear-gradient(135deg, #00E5FF 0%, #4F8CFF 100%)',
-                    color: '#050D16',
-                    border: 'none',
-                    cursor: 'pointer',
-                    boxShadow: '0 10px 30px rgba(0,229,255,0.35)',
-                  }}
-                >
-                  Enter Platform
-                </motion.button>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-        </div>
-
-        {/* Bottom Sequence Progress Bar */}
-        <div style={{
+        {/* BOTTOM TELEMETRY FOOTER HUD */}
+        <footer style={{
           position: 'absolute',
           bottom: 0,
           left: 0,
           right: 0,
-          height: '4px',
-          background: 'rgba(255,255,255,0.1)',
-          zIndex: 10,
+          padding: '2rem 3.5rem',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'flex-end',
+          zIndex: 20,
+          boxSizing: 'border-box',
+          pointerEvents: 'none'
         }}>
-          <div
-            style={{
-              height: '100%',
-              width: `${(phase / 6) * 100}%`,
-              background: 'linear-gradient(90deg, #00E5FF, #7B61FF)',
-              boxShadow: '0 0 12px #00E5FF',
-              transition: 'width 0.8s ease',
-            }}
-          />
-        </div>
+          {/* Left Milestone Status */}
+          <div style={{ maxWidth: '400px' }}>
+            <div style={{ fontSize: '0.68rem', color: '#E5C07B', fontFamily: "'Space Mono', monospace", fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '0.2rem' }}>
+              {phase.progress} // {phase.title}
+            </div>
+            <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#FFFFFF', fontFamily: "'Times New Roman', Times, serif" }}>
+              {phase.sub}
+            </div>
+          </div>
 
-      </motion.div>
-    </AnimatePresence>
+          {/* Right Frame Counter & Scrub Progress */}
+          <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.4rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <div style={{ fontSize: '0.72rem', color: '#94A3B8', fontFamily: "'Space Mono', monospace" }}>
+                TC: 00:{String(Math.floor(currentFrame / FPS)).padStart(2, '0')}:{String(currentFrame % FPS).padStart(2, '0')}
+              </div>
+              <div style={{
+                fontSize: '1.35rem',
+                fontWeight: 900,
+                color: currentFrame >= 270 ? '#10B981' : '#FFFFFF',
+                fontFamily: "'Space Mono', monospace",
+                letterSpacing: '1px'
+              }}>
+                FRAME [{String(currentFrame).padStart(3, '0')} / {TOTAL_FRAMES}]
+              </div>
+            </div>
+
+            {/* Scrub Progress Track */}
+            <div style={{
+              width: '260px',
+              height: '5px',
+              background: 'rgba(255, 255, 255, 0.1)',
+              borderRadius: '3px',
+              overflow: 'hidden',
+              border: '1px solid rgba(16, 185, 129, 0.25)'
+            }}>
+              <div style={{
+                width: `${(currentFrame / TOTAL_FRAMES) * 100}%`,
+                height: '100%',
+                background: 'linear-gradient(90deg, #10B981 0%, #E5C07B 100%)',
+                boxShadow: '0 0 10px #10B981',
+                transition: 'width 0.05s ease-out'
+              }} />
+            </div>
+
+            <div style={{ fontSize: '0.65rem', color: '#34D399', fontFamily: "'Space Mono', monospace" }}>
+              {Math.round((currentFrame / TOTAL_FRAMES) * 100)}% UNSEALED • 30 FPS SCRUB
+            </div>
+          </div>
+        </footer>
+
+        {/* ENTER APPLICATION BUTTON (Appears near the end of scroll) */}
+        {currentFrame >= 240 && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            style={{
+              position: 'absolute',
+              top: '52%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              zIndex: 30
+            }}
+          >
+            <motion.button
+              whileHover={{ scale: 1.05, boxShadow: '0 0 45px rgba(16, 185, 129, 0.7)' }}
+              whileTap={{ scale: 0.96 }}
+              onClick={() => onComplete()}
+              style={{
+                padding: '1.2rem 2.8rem',
+                borderRadius: '16px',
+                background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+                color: '#FFFFFF',
+                border: '1px solid rgba(255, 255, 255, 0.4)',
+                fontSize: '1.15rem',
+                fontWeight: 800,
+                letterSpacing: '1px',
+                fontFamily: "'Times New Roman', Times, serif",
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                boxShadow: '0 15px 40px rgba(16, 185, 129, 0.5)'
+              }}
+            >
+              <span>ENTER SOVEREIGN COMMAND PORTAL</span>
+              <ArrowRight size={20} />
+            </motion.button>
+          </motion.div>
+        )}
+
+      </div>
+
+    </div>
   );
 };
+
+export default CinematicIntro;

@@ -60,6 +60,7 @@ const RequireAuth = ({ children }: { children: React.ReactNode }) => {
 export const App = () => {
   const { theme, organization, initAuthListener } = useAuthStore();
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     initAuthListener();
@@ -67,12 +68,20 @@ export const App = () => {
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
-    if (organization) {
-      document.documentElement.setAttribute('data-org', organization.toLowerCase());
+    
+    // Company color palette is active inside the authenticated platform (/dashboard)
+    // Up to that endpoint (the entire onboarding & login session), the sovereign Emerald palette is preserved
+    const isDashboard = location.pathname.startsWith('/dashboard');
+
+    if (isDashboard) {
+      const activeOrg = (organization || 'hospital').toLowerCase();
+      document.documentElement.setAttribute('data-org', activeOrg);
+      document.documentElement.removeAttribute('data-funnel');
     } else {
       document.documentElement.removeAttribute('data-org');
+      document.documentElement.setAttribute('data-funnel', 'emerald');
     }
-  }, [theme, organization]);
+  }, [theme, organization, location.pathname]);
 
   // Wrapper for Intro to handle the "onComplete" transition
   const IntroWrapper = () => {

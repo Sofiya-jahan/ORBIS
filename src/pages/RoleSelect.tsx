@@ -43,8 +43,8 @@ export const RoleSelect = () => {
   return (
     <div style={{ 
       minHeight: '100vh', 
-      backgroundColor: 'var(--bg-primary)',
-      color: 'var(--text-primary)',
+      backgroundColor: '#070A0E',
+      color: '#FFFFFF',
       padding: '3rem 2rem 5rem 2rem',
       display: 'flex', 
       flexDirection: 'column', 
@@ -53,14 +53,14 @@ export const RoleSelect = () => {
       opacity: isTransitioning ? 0.4 : 1,
       transform: isTransitioning ? 'scale(0.98)' : 'scale(1)',
       transition: 'all 0.4s ease-in-out',
-      fontFamily: 'var(--font-family)'
+      fontFamily: "'Times New Roman', Times, serif"
     }}>
       
-      {/* Background glow tailored to organization */}
+      {/* Background glow tailored with obsidian velvet, emerald radiance, and gold auras */}
       <div style={{
         position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)',
-        width: '80vw', height: '400px',
-        background: `radial-gradient(ellipse at center, ${currentOrg.themeColor}18 0%, transparent 70%)`,
+        width: '90vw', height: '480px',
+        background: `radial-gradient(ellipse at center, rgba(16, 185, 129, 0.2) 0%, rgba(229, 192, 123, 0.08) 40%, transparent 70%)`,
         zIndex: 0, pointerEvents: 'none'
       }} />
 
@@ -72,23 +72,27 @@ export const RoleSelect = () => {
             display: 'inline-flex',
             alignItems: 'center',
             gap: '0.5rem',
-            background: 'var(--bg-secondary)',
-            border: '1px solid var(--border-color)',
+            background: 'rgba(10, 18, 23, 0.85)',
+            border: '1px solid rgba(229, 192, 123, 0.35)',
             borderRadius: '12px',
-            padding: '0.6rem 1.2rem',
-            color: 'var(--text-secondary)',
+            padding: '0.65rem 1.3rem',
+            color: '#E5C07B',
             cursor: 'pointer',
-            fontSize: '0.85rem',
-            fontWeight: 600,
-            transition: 'all 0.2s ease'
+            fontSize: '0.88rem',
+            fontWeight: 700,
+            transition: 'all 0.2s ease',
+            fontFamily: "'Times New Roman', Times, serif",
+            boxShadow: '0 4px 15px rgba(0,0,0,0.5)'
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.color = 'var(--primary)';
-            e.currentTarget.style.borderColor = 'var(--primary)';
+            e.currentTarget.style.color = '#FFFFFF';
+            e.currentTarget.style.borderColor = '#10B981';
+            e.currentTarget.style.background = 'rgba(16, 185, 129, 0.15)';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.color = 'var(--text-secondary)';
-            e.currentTarget.style.borderColor = 'var(--border-color)';
+            e.currentTarget.style.color = '#E5C07B';
+            e.currentTarget.style.borderColor = 'rgba(229, 192, 123, 0.35)';
+            e.currentTarget.style.background = 'rgba(10, 18, 23, 0.85)';
           }}
         >
           <ChevronLeft size={16} /> Switch Organization ({currentOrg.name})
@@ -99,28 +103,31 @@ export const RoleSelect = () => {
       <div style={{ textAlign: 'center', marginBottom: '3.5rem', position: 'relative', zIndex: 1 }} className="animate-fade-in">
         <div style={{ 
           display: 'inline-flex', alignItems: 'center', gap: '0.5rem', 
-          padding: '0.4rem 1.1rem', borderRadius: '100px', 
-          backgroundColor: `${currentOrg.themeColor}18`, 
-          border: `1px solid ${currentOrg.themeColor}40`,
-          marginBottom: '1.25rem', color: currentOrg.themeColor, 
-          fontSize: '0.85rem', fontWeight: '700',
-          textTransform: 'uppercase', letterSpacing: '1px'
+          padding: '0.5rem 1.3rem', borderRadius: '100px', 
+          backgroundColor: 'rgba(16, 185, 129, 0.12)', 
+          border: '1px solid rgba(229, 192, 123, 0.35)',
+          marginBottom: '1.25rem', color: '#E5C07B', 
+          fontSize: '0.8rem', fontWeight: '800',
+          letterSpacing: '1.5px',
+          fontFamily: "'Space Mono', monospace",
+          boxShadow: '0 0 20px rgba(16, 185, 129, 0.15)'
         }}>
-          <Lock size={14} /> PHASE 2: ROLE-BASED ACCESS CONTROL
+          <Lock size={14} color="#E5C07B" /> PHASE 02: ROLE-BASED ACCESS PROTOCOL
         </div>
 
         <h1 style={{ 
-          fontSize: '3rem', 
+          fontSize: 'clamp(2.4rem, 5vw, 3.8rem)', 
           fontWeight: '800', 
           marginBottom: '0.75rem', 
           letterSpacing: '-1px', 
-          fontFamily: 'var(--font-heading)' 
+          fontFamily: "'Times New Roman', Times, serif",
+          color: '#FFFFFF'
         }}>
           Select Your Access Role
         </h1>
 
-        <p style={{ color: 'var(--text-secondary)', fontSize: '1.15rem', maxWidth: '640px', margin: '0 auto', lineHeight: 1.6 }}>
-          Only roles authenticated for <span style={{ color: currentOrg.themeColor, fontWeight: 700 }}>{currentOrg.name}</span> are available. Permissions dynamically dictate your dashboard modules.
+        <p style={{ color: '#CBD5E1', fontSize: '1.18rem', maxWidth: '640px', margin: '0 auto', lineHeight: 1.6, fontFamily: "'Times New Roman', Times, serif" }}>
+          Only roles authenticated for <span style={{ color: '#E5C07B', fontWeight: 700, textDecoration: 'underline', textDecorationColor: '#10B981' }}>{currentOrg.name}</span> are available. Permissions dynamically dictate your dashboard modules.
         </p>
       </div>
 
@@ -141,20 +148,30 @@ export const RoleSelect = () => {
           return (
             <div 
               key={role.id}
-              className="glass-card animate-fade-in-delayed"
+              className="animate-fade-in-delayed"
               style={{ 
                 animationDelay: `${index * 0.06}s`,
                 padding: '2.25rem',
                 cursor: 'pointer',
                 position: 'relative',
                 overflow: 'hidden',
-                borderColor: isHovered ? currentOrg.themeColor : 'var(--border-color)',
+                borderRadius: '20px',
+                background: isHovered 
+                  ? 'linear-gradient(145deg, rgba(14, 25, 32, 0.96), rgba(16, 185, 129, 0.18))' 
+                  : 'rgba(10, 18, 23, 0.85)',
+                backdropFilter: 'blur(20px)',
+                border: isHovered 
+                  ? '1px solid #10B981' 
+                  : '1px solid rgba(16, 185, 129, 0.22)',
                 transform: isHovered ? 'translateY(-6px)' : 'translateY(0)',
-                boxShadow: isHovered ? `0 20px 40px rgba(0,0,0,0.5), 0 0 25px ${currentOrg.themeColor}30` : 'var(--shadow-md)',
+                boxShadow: isHovered 
+                  ? '0 24px 48px rgba(0, 0, 0, 0.8), 0 0 35px rgba(16, 185, 129, 0.25)' 
+                  : '0 8px 32px rgba(0, 0, 0, 0.6)',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
-                minHeight: '320px'
+                minHeight: '320px',
+                transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
               }}
               onMouseEnter={() => setHoveredRole(role.id)}
               onMouseLeave={() => setHoveredRole(null)}
@@ -162,8 +179,8 @@ export const RoleSelect = () => {
             >
               {/* Top accent line on hover */}
               <div style={{
-                position: 'absolute', top: 0, left: 0, right: 0, height: '4px',
-                background: currentOrg.themeColor,
+                position: 'absolute', top: 0, left: 0, right: 0, height: '3px',
+                background: 'linear-gradient(90deg, #10B981, #E5C07B, #00F2FE)',
                 opacity: isHovered ? 1 : 0,
                 transition: 'opacity 0.3s ease'
               }} />
@@ -173,33 +190,40 @@ export const RoleSelect = () => {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
                   <div style={{ 
                     width: '60px', height: '60px', borderRadius: '16px', 
-                    backgroundColor: isHovered ? currentOrg.themeColor : 'var(--bg-tertiary)',
-                    color: isHovered ? '#FFFFFF' : currentOrg.themeColor,
+                    backgroundColor: isHovered ? 'rgba(16, 185, 129, 0.25)' : 'rgba(15, 23, 30, 0.9)',
+                    color: isHovered ? '#10B981' : '#E5C07B',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     transition: 'all 0.3s ease',
-                    boxShadow: isHovered ? `0 0 20px ${currentOrg.themeColor}50` : 'none',
-                    border: `1px solid ${isHovered ? currentOrg.themeColor : 'var(--border-color)'}`
+                    boxShadow: isHovered ? '0 0 24px rgba(16, 185, 129, 0.4)' : 'none',
+                    border: `1px solid ${isHovered ? '#10B981' : 'rgba(229, 192, 123, 0.3)'}`
                   }}>
-                    <RoleIcon size={30} />
+                    <RoleIcon size={28} />
                   </div>
 
                   <div style={{ 
-                    padding: '0.35rem 0.85rem', borderRadius: '100px', fontSize: '0.75rem', fontWeight: '700',
-                    backgroundColor: 'var(--bg-tertiary)', 
-                    color: role.levelNumber >= 4 ? '#10B981' : role.levelNumber >= 3 ? currentOrg.themeColor : '#94A3B8',
-                    border: '1px solid var(--border-color)',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.5px'
+                    padding: '0.4rem 0.95rem', borderRadius: '100px', fontSize: '0.75rem', fontWeight: '700',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)', 
+                    color: '#E5C07B',
+                    border: '1px solid rgba(229, 192, 123, 0.35)',
+                    letterSpacing: '1px',
+                    fontFamily: "'Space Mono', monospace"
                   }}>
                     {role.accessLevel}
                   </div>
                 </div>
 
-                <h2 style={{ fontSize: '1.5rem', fontWeight: '800', marginBottom: '0.6rem', color: '#FFFFFF', lineHeight: 1.2 }}>
+                <h2 style={{ 
+                  fontSize: '1.55rem', 
+                  fontWeight: '800', 
+                  marginBottom: '0.6rem', 
+                  color: '#FFFFFF', 
+                  lineHeight: 1.25,
+                  fontFamily: "'Times New Roman', Times, serif"
+                }}>
                   {role.title}
                 </h2>
 
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.6', marginBottom: '1.5rem' }}>
+                <p style={{ color: '#CBD5E1', fontSize: '0.94rem', lineHeight: '1.6', marginBottom: '1.5rem', fontFamily: "'Times New Roman', Times, serif" }}>
                   {role.desc}
                 </p>
               </div>
@@ -207,14 +231,14 @@ export const RoleSelect = () => {
               {/* Bottom Modules Allowed & Action Bar */}
               <div>
                 <div style={{ 
-                  borderTop: '1px solid var(--border-color)', 
-                  paddingTop: '1rem', 
+                  borderTop: '1px solid rgba(16, 185, 129, 0.2)', 
+                  paddingTop: '1.1rem', 
                   display: 'flex', 
                   alignItems: 'center', 
                   justifyContent: 'space-between' 
                 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                    <ShieldCheck size={16} color={currentOrg.themeColor} />
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontSize: '0.8rem', color: '#10B981', fontFamily: "'Space Mono', monospace" }}>
+                    <ShieldCheck size={16} color="#10B981" />
                     <span>{role.permissions.includes('all') ? 'Full Platform Clearance' : `${role.permissions.length} Modules Authorized`}</span>
                   </div>
 
@@ -222,9 +246,11 @@ export const RoleSelect = () => {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '0.4rem',
-                    fontSize: '0.85rem',
+                    fontSize: '0.88rem',
                     fontWeight: '700',
-                    color: isHovered ? currentOrg.themeColor : 'var(--text-secondary)',
+                    color: isHovered ? '#E5C07B' : '#FFFFFF',
+                    fontFamily: "'Times New Roman', Times, serif",
+                    letterSpacing: '0.5px',
                     transition: 'color 0.2s ease'
                   }}>
                     <span>Authenticate</span>
@@ -237,7 +263,6 @@ export const RoleSelect = () => {
           );
         })}
       </div>
-
     </div>
   );
 };

@@ -79,40 +79,41 @@ class TelemetryAudioEngine {
 }
 
 // -------------------------------------------------------------
-// Chapter 1 3D Scene: Global Ingestion & Earth Hologram
+// Chapter 1 3D Scene: Global Ingestion & Quantum Manifold
 // -------------------------------------------------------------
-const DemoEarthScene = () => {
-  const earthRef = useRef<THREE.Mesh>(null);
-  const cloudsRef = useRef<THREE.Mesh>(null);
-  
-  const [colorMap, normalMap, cloudsMap] = useTexture([
-    '/textures/planets/earth_atmos_2048.jpg',
-    '/textures/planets/earth_normal_2048.jpg',
-    '/textures/planets/earth_clouds_2048.png',
-  ]);
+const DemoQuantumIngestionScene = () => {
+  const coreRef = useRef<THREE.Group>(null);
+  const ringRef1 = useRef<THREE.Mesh>(null);
+  const ringRef2 = useRef<THREE.Mesh>(null);
 
   useFrame((_, delta) => {
-    if (earthRef.current) earthRef.current.rotation.y += delta * 0.15;
-    if (cloudsRef.current) cloudsRef.current.rotation.y += delta * 0.19;
+    if (coreRef.current) {
+      coreRef.current.rotation.y += delta * 0.2;
+      coreRef.current.rotation.x += delta * 0.1;
+    }
+    if (ringRef1.current) ringRef1.current.rotation.z += delta * 0.15;
+    if (ringRef2.current) ringRef2.current.rotation.y += delta * 0.25;
   });
 
   return (
-    <group rotation={[0, 0, 0.4]}>
-      <mesh ref={earthRef}>
-        <sphereGeometry args={[2.2, 48, 48]} />
-        <meshStandardMaterial map={colorMap} normalMap={normalMap} roughness={0.6} metalness={0.1} />
-      </mesh>
-      <mesh ref={cloudsRef}>
-        <sphereGeometry args={[2.22, 48, 48]} />
-        <meshStandardMaterial map={cloudsMap} transparent opacity={0.8} depthWrite={false} />
-      </mesh>
-      <mesh>
+    <group rotation={[0, 0, 0.3]}>
+      <group ref={coreRef}>
+        <mesh>
+          <icosahedronGeometry args={[2.0, 1]} />
+          <meshStandardMaterial color="#DAF1DE" emissive="#235347" emissiveIntensity={1.3} wireframe />
+        </mesh>
+        <mesh>
+          <octahedronGeometry args={[1.3, 0]} />
+          <meshStandardMaterial color="#8EB69B" emissive="#8EB69B" emissiveIntensity={1.5} roughness={0.2} metalness={0.8} />
+        </mesh>
+      </group>
+      <mesh ref={ringRef1}>
         <torusGeometry args={[3.2, 0.015, 16, 100]} />
-        <meshBasicMaterial color="#00C6FF" transparent opacity={0.4} />
+        <meshBasicMaterial color="#8EB69B" transparent opacity={0.6} />
       </mesh>
-      <mesh rotation={[Math.PI / 2.5, 0.4, 0]}>
+      <mesh ref={ringRef2} rotation={[Math.PI / 2.5, 0.4, 0]}>
         <torusGeometry args={[3.6, 0.012, 16, 100]} />
-        <meshBasicMaterial color="#7A5CFF" transparent opacity={0.3} />
+        <meshBasicMaterial color="#DAF1DE" transparent opacity={0.4} />
       </mesh>
     </group>
   );
@@ -336,11 +337,11 @@ export const DemoModal: React.FC<DemoModalProps> = ({ isOpen, onClose }) => {
             position: 'fixed',
             inset: 0,
             zIndex: 10000,
-            backgroundColor: '#020610',
+            backgroundColor: '#051F20',
             display: 'flex',
             flexDirection: 'column',
             overflow: 'hidden',
-            fontFamily: 'var(--font-family, system-ui, sans-serif)',
+            fontFamily: "'Times New Roman', Times, serif",
           }}
         >
           {/* Top Bar Navigation */}
@@ -354,40 +355,41 @@ export const DemoModal: React.FC<DemoModalProps> = ({ isOpen, onClose }) => {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            background: 'linear-gradient(to bottom, rgba(2,6,16,0.95) 0%, transparent 100%)',
+            background: 'linear-gradient(to bottom, rgba(5,31,32,0.96) 0%, transparent 100%)',
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
               <div style={{
                 width: 44,
                 height: 44,
                 borderRadius: '12px',
-                background: 'linear-gradient(135deg, rgba(0,198,255,0.2) 0%, rgba(122,92,255,0.2) 100%)',
-                border: '1px solid rgba(0,198,255,0.4)',
+                background: 'linear-gradient(135deg, rgba(35,83,71,0.6) 0%, rgba(142,182,155,0.4) 100%)',
+                border: '1px solid rgba(142,182,155,0.4)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-                <Zap size={22} color="#00C6FF" />
+                <Zap size={22} color="#8EB69B" />
               </div>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ color: 'white', fontSize: '1.1rem', fontWeight: 800, letterSpacing: '1.5px' }}>
+                  <span style={{ color: '#DAF1DE', fontSize: '1.15rem', fontWeight: 800, letterSpacing: '1.5px', fontFamily: "'Times New Roman', Times, serif" }}>
                     IPRAP PRODUCT EXPERIENCE
                   </span>
                   <span style={{
                     padding: '2px 8px',
                     borderRadius: '6px',
-                    background: 'rgba(0,198,255,0.15)',
-                    border: '1px solid rgba(0,198,255,0.4)',
-                    color: '#00C6FF',
+                    background: 'rgba(35,83,71,0.4)',
+                    border: '1px solid rgba(142,182,155,0.4)',
+                    color: '#8EB69B',
                     fontSize: '0.65rem',
                     fontWeight: 700,
                     letterSpacing: '1px',
+                    fontFamily: "'Space Mono', monospace"
                   }}>
                     4K REAL-TIME
                   </span>
                 </div>
-                <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.75rem', letterSpacing: '0.5px' }}>
+                <div style={{ color: 'rgba(218,241,222,0.6)', fontSize: '0.75rem', letterSpacing: '0.5px' }}>
                   Next-Gen Enterprise Risk Intelligence Architecture Showcase
                 </div>
               </div>
@@ -400,16 +402,17 @@ export const DemoModal: React.FC<DemoModalProps> = ({ isOpen, onClose }) => {
                 style={{
                   padding: '0.65rem 1.4rem',
                   borderRadius: '10px',
-                  background: 'linear-gradient(135deg, #00C6FF 0%, #0077ff 100%)',
+                  background: 'linear-gradient(135deg, #DAF1DE 0%, #8EB69B 100%)',
                   border: 'none',
-                  color: 'white',
-                  fontWeight: 700,
+                  color: '#051F20',
+                  fontWeight: 800,
                   fontSize: '0.85rem',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '6px',
-                  boxShadow: '0 0 20px rgba(0,198,255,0.3)',
+                  boxShadow: '0 0 20px rgba(142,182,155,0.3)',
+                  fontFamily: "'Times New Roman', Times, serif"
                 }}
               >
                 Launch Platform <ChevronRight size={16} />
@@ -449,7 +452,7 @@ export const DemoModal: React.FC<DemoModalProps> = ({ isOpen, onClose }) => {
                 <Stars radius={80} count={2500} factor={3} fade speed={1} />
                 
                 <React.Suspense fallback={null}>
-                  {currentChapter === 0 && <DemoEarthScene />}
+                  {currentChapter === 0 && <DemoQuantumIngestionScene />}
                   {currentChapter === 1 && <NeuralTopologyScene />}
                   {currentChapter === 2 && <ThreatShieldScene />}
                   {currentChapter === 3 && <ExecutiveMatrixScene />}

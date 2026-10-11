@@ -1,10 +1,80 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AIIntelligenceCore } from '../components/AIIntelligenceCore';
+import { EnterpriseCommandPreview } from '../components/EnterpriseCommandPreview';
 import { DemoModal } from '../components/DemoModal';
-import { Play, Shield, Activity, Cpu, ArrowUpRight, Globe, Lock, Terminal, Zap } from 'lucide-react';
+import { 
+  Play, Shield, Activity, Cpu, ArrowUpRight, Globe, Lock, 
+  Terminal, Zap, CheckCircle2, ChevronRight, Sparkles, Layers,
+  TrendingDown, ShieldCheck, Landmark, HeartPulse, HardHat, Truck
+} from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
+
+// -------------------------------------------------------------
+// Interactive Sovereign Sectors for Real-Time Simulation Bar
+// -------------------------------------------------------------
+const SECTOR_SIMULATIONS = [
+  {
+    id: 'banking',
+    name: 'Central Banking & Capital',
+    icon: Landmark,
+    code: 'SEC-FIN-01',
+    exposure: '4.2% Anomaly Delta',
+    latency: '8.4 ms',
+    containment: '99.99%',
+    status: 'Nominal',
+    headline: 'Autonomous Liquidity & Cross-Border Sovereign Stress Containment',
+    details: 'Detecting synthetic volatility cascades, foreign exchange dislocations, and collateral haircut shocks.'
+  },
+  {
+    id: 'energy',
+    name: 'Sovereign Energy & Power Grid',
+    icon: Zap,
+    code: 'SEC-NRG-02',
+    exposure: '1.8% Harmonic Drift',
+    latency: '11.2 ms',
+    containment: '100.0%',
+    status: 'Secured',
+    headline: 'SCADA Intercept & Predictive Load Cascade Neutralization',
+    details: 'Zero-day protection across 38,000 sub-stations and high-voltage transmission interconnects.'
+  },
+  {
+    id: 'healthcare',
+    name: 'Metropolitan Healthcare',
+    icon: HeartPulse,
+    code: 'SEC-MED-03',
+    exposure: '0.9% Ingress Variance',
+    latency: '14.0 ms',
+    containment: '99.98%',
+    status: 'Calibrated',
+    headline: 'Clinical Telemetry & Critical Biomedical Device Defense',
+    details: 'Safeguarding ICU telemetry nodes, patient privacy vectors, and pharmaceutical cold-chain cold nodes.'
+  },
+  {
+    id: 'aerospace',
+    name: 'Aerospace & Defense',
+    icon: ShieldCheck,
+    code: 'SEC-DEF-04',
+    exposure: '0.0% Breach Delta',
+    latency: '4.6 ms',
+    containment: '100.0%',
+    status: 'Armed',
+    headline: 'Hypersonic Telemetry & Sovereign Orbital Coordinate Shield',
+    details: 'Real-time sensor fusion with zero-latency threat triage and autonomous electronic counter-measures.'
+  },
+  {
+    id: 'supply',
+    name: 'Global Maritime Supply Chain',
+    icon: Truck,
+    code: 'SEC-LOG-05',
+    exposure: '3.1% Port Bottleneck',
+    latency: '19.8 ms',
+    containment: '99.92%',
+    status: 'Optimizing',
+    headline: 'Maritime Chokepoint & Deep-Sea Vessel Disruption Routing',
+    details: 'Predictive rerouting algorithms avoiding geopolitical blockades across critical international straits.'
+  }
+];
 
 const AnimatedMetric = ({ value, label, suffix = '', precision = 2 }: { value: string; label: string; suffix?: string; precision?: number }) => {
   const [display, setDisplay] = useState('0');
@@ -12,8 +82,8 @@ const AnimatedMetric = ({ value, label, suffix = '', precision = 2 }: { value: s
   useEffect(() => {
     let start = 0;
     const target = parseFloat(value.replace(/,/g, ''));
-    const duration = 2200;
-    const steps = 60;
+    const duration = 2000;
+    const steps = 50;
     const stepVal = target / steps;
 
     const interval = setInterval(() => {
@@ -31,21 +101,22 @@ const AnimatedMetric = ({ value, label, suffix = '', precision = 2 }: { value: s
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
       <div style={{
-        fontSize: '2.8rem',
-        fontWeight: 900,
-        fontFamily: 'monospace',
-        background: 'linear-gradient(180deg, #FFFFFF 0%, #00E5FF 60%, #4F8CFF 100%)',
+        fontSize: 'clamp(2.4rem, 4vw, 3.4rem)',
+        fontWeight: 700,
+        fontFamily: "'Times New Roman', Times, serif",
+        background: 'linear-gradient(180deg, #FFFFFF 0%, #34D399 55%, #10B981 100%)',
         WebkitBackgroundClip: 'text',
         WebkitTextFillColor: 'transparent',
-        textShadow: '0 0 25px rgba(0,229,255,0.4)',
+        textShadow: '0 0 35px rgba(16, 185, 129, 0.45)',
         letterSpacing: '-1px',
       }}>
         {display}{suffix}
       </div>
       <div style={{
-        color: 'rgba(255,255,255,0.65)',
-        fontSize: '0.75rem',
+        color: '#E5C07B',
+        fontSize: '0.78rem',
         fontWeight: 700,
+        fontFamily: "'Space Mono', monospace",
         textTransform: 'uppercase',
         letterSpacing: '2px',
       }}>
@@ -57,9 +128,12 @@ const AnimatedMetric = ({ value, label, suffix = '', precision = 2 }: { value: s
 
 export const Landing = () => {
   const [showDemo, setShowDemo] = useState(false);
+  const [activeSectorIdx, setActiveSectorIdx] = useState(0);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const navigate = useNavigate();
-  const { isAuthenticated, organization, role } = useAuthStore();
+
+  const activeSector = SECTOR_SIMULATIONS[activeSectorIdx];
+  const SectorIcon = activeSector.icon;
 
   const handleMouseMove = (e: React.MouseEvent) => {
     const { clientX, clientY } = e;
@@ -76,248 +150,637 @@ export const Landing = () => {
     <div
       onMouseMove={handleMouseMove}
       style={{
-        backgroundColor: '#050D16',
-        color: 'white',
+        backgroundColor: '#070A0E',
+        color: '#FFFFFF',
         overflowX: 'hidden',
         minHeight: '100vh',
         position: 'relative',
-        fontFamily: 'var(--font-family, system-ui, sans-serif)',
+        fontFamily: "'Times New Roman', Times, Georgia, serif",
       }}
     >
       {/* 4K Real-time 3D AI Product Experience Modal */}
       <DemoModal isOpen={showDemo} onClose={() => setShowDemo(false)} />
 
-      {/* Volumetric Scanlines & Dynamic Ambient Glow */}
+      {/* Volumetric Scanlines & Dynamic Ambient Emerald + Gold Atmosphere */}
       <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none' }}>
         <div style={{
           position: 'absolute',
           inset: 0,
-          background: 'radial-gradient(circle at 65% 50%, rgba(0,229,255,0.08) 0%, transparent 60%)',
-          transform: `translate(${mousePos.x * 0.5}px, ${mousePos.y * 0.5}px)`,
+          background: 'radial-gradient(circle at 70% 35%, rgba(16, 185, 129, 0.22) 0%, transparent 60%)',
+          transform: `translate(${mousePos.x * 0.4}px, ${mousePos.y * 0.4}px)`,
           transition: 'transform 0.2s ease-out',
         }} />
         <div style={{
           position: 'absolute',
           inset: 0,
-          background: 'radial-gradient(circle at 25% 75%, rgba(123,97,255,0.05) 0%, transparent 50%)',
+          background: 'radial-gradient(circle at 20% 75%, rgba(245, 158, 11, 0.1) 0%, transparent 50%)',
+        }} />
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.15) 0%, transparent 70%)',
         }} />
         <div className="command-grid" />
       </div>
 
-      {/* Top Enterprise Command Header */}
+      {/* Top Sovereign Command Header */}
       <header style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
+        position: 'relative',
         zIndex: 20,
-        padding: '2rem 4rem',
+        padding: '1.75rem 4.5rem',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
       }}>
-        {/* Brand Lockup */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+        {/* Brand Lockup in Times New Roman */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
           <div style={{
-            width: 44,
-            height: 44,
-            borderRadius: '12px',
-            background: 'linear-gradient(135deg, #00E5FF 0%, #7B61FF 100%)',
+            width: 50,
+            height: 50,
+            borderRadius: '14px',
+            background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 0 20px rgba(0,229,255,0.4)',
+            boxShadow: '0 0 25px rgba(16, 185, 129, 0.5)',
+            border: '1px solid rgba(255, 255, 255, 0.3)'
           }}>
-            <Shield size={24} color="#050D16" strokeWidth={2.5} />
+            <Shield size={26} color="#FFFFFF" strokeWidth={2.4} />
           </div>
           <div>
-            <div style={{ fontSize: '1.3rem', fontWeight: 900, letterSpacing: '2px', fontFamily: 'var(--font-heading)' }}>
+            <div style={{
+              fontSize: '1.85rem',
+              fontWeight: 900,
+              letterSpacing: '2px',
+              fontFamily: "'Times New Roman', Times, serif",
+              color: '#FFFFFF',
+              lineHeight: 1
+            }}>
               IPRAP
             </div>
-            <div style={{ fontSize: '0.65rem', fontWeight: 700, letterSpacing: '1.5px', color: '#00E5FF', textTransform: 'uppercase' }}>
-              AUTONOMOUS RISK OPERATING SYSTEM
+            <div style={{
+              fontSize: '0.68rem',
+              fontWeight: 700,
+              letterSpacing: '2.5px',
+              color: '#E5C07B',
+              textTransform: 'uppercase',
+              fontFamily: "'Space Mono', monospace",
+              marginTop: '4px'
+            }}>
+              SOVEREIGN RISK OPERATING SYSTEM
             </div>
           </div>
         </div>
 
-        {/* Real-time Telemetry Status Pill */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+        {/* Real-time Telemetry Status Pill & Direct Access */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
           <div style={{
-            background: 'rgba(8, 21, 34, 0.7)',
-            border: '1px solid rgba(0,229,255,0.25)',
-            borderRadius: '20px',
-            padding: '0.5rem 1.25rem',
+            background: 'rgba(10, 18, 23, 0.82)',
+            border: '1px solid rgba(16, 185, 129, 0.3)',
+            borderRadius: '24px',
+            padding: '0.6rem 1.4rem',
             backdropFilter: 'blur(15px)',
             display: 'flex',
             alignItems: 'center',
             gap: '10px',
+            boxShadow: '0 0 25px rgba(0, 0, 0, 0.6)'
           }}>
-            <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#00FFB2', boxShadow: '0 0 10px #00FFB2' }} className="pulse-beacon" />
-            <span style={{ fontSize: '0.75rem', fontFamily: 'monospace', fontWeight: 700, color: 'rgba(255,255,255,0.85)' }}>
-              FEED: 1.84M TX/S // QUANTUM LATTICE ARMED
+            <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#34D399', boxShadow: '0 0 12px #34D399' }} className="pulse-beacon" />
+            <span style={{ fontSize: '0.75rem', fontFamily: "'Space Mono', monospace", fontWeight: 700, color: '#34D399' }}>
+              QKD 256-BIT LATTICE // NOMINAL
             </span>
           </div>
 
           <button
             onClick={() => setShowDemo(true)}
             style={{
-              background: 'transparent',
-              border: '1px solid rgba(255,255,255,0.2)',
-              borderRadius: '10px',
-              padding: '0.6rem 1.2rem',
-              color: 'white',
-              fontSize: '0.8rem',
+              background: 'rgba(10, 18, 23, 0.75)',
+              border: '1px solid rgba(229, 192, 123, 0.35)',
+              borderRadius: '12px',
+              padding: '0.65rem 1.4rem',
+              color: '#FFFFFF',
+              fontSize: '0.85rem',
               fontWeight: 700,
+              fontFamily: "'Times New Roman', Times, serif",
+              letterSpacing: '0.5px',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              gap: '6px',
+              gap: '8px',
               backdropFilter: 'blur(10px)',
+              transition: 'all 0.25s ease',
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.borderColor = '#E5C07B';
+              e.currentTarget.style.background = 'rgba(245, 158, 11, 0.15)';
+              e.currentTarget.style.boxShadow = '0 0 20px rgba(229, 192, 123, 0.3)';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.borderColor = 'rgba(229, 192, 123, 0.35)';
+              e.currentTarget.style.background = 'rgba(10, 18, 23, 0.75)';
+              e.currentTarget.style.boxShadow = 'none';
+            }}
+          >
+            <Play size={13} fill="#E5C07B" color="#E5C07B" />
+            Product Showcase
+          </button>
+
+          <button
+            onClick={() => navigate('/login')}
+            style={{
+              background: 'transparent',
+              border: '1px solid rgba(16, 185, 129, 0.35)',
+              borderRadius: '12px',
+              padding: '0.65rem 1.3rem',
+              color: '#34D399',
+              fontSize: '0.85rem',
+              fontWeight: 700,
+              fontFamily: "'Times New Roman', Times, serif",
+              cursor: 'pointer',
               transition: 'all 0.2s',
             }}
-            onMouseEnter={e => e.currentTarget.style.borderColor = '#00E5FF'}
-            onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'}
+            onMouseEnter={e => {
+              e.currentTarget.style.color = '#FFFFFF';
+              e.currentTarget.style.borderColor = '#10B981';
+              e.currentTarget.style.background = 'rgba(16, 185, 129, 0.15)';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.color = '#34D399';
+              e.currentTarget.style.borderColor = 'rgba(16, 185, 129, 0.35)';
+              e.currentTarget.style.background = 'transparent';
+            }}
           >
-            <Play size={14} fill="white" />
-            PRODUCT SHOWCASE
+            Sign In
+          </button>
+
+          <button
+            onClick={() => navigate('/login?mode=signup')}
+            style={{
+              background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+              border: 'none',
+              borderRadius: '12px',
+              padding: '0.65rem 1.35rem',
+              color: '#FFFFFF',
+              fontSize: '0.85rem',
+              fontWeight: 800,
+              fontFamily: "'Times New Roman', Times, serif",
+              cursor: 'pointer',
+              boxShadow: '0 4px 18px rgba(16, 185, 129, 0.4)',
+              transition: 'all 0.2s',
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 6px 22px rgba(16, 185, 129, 0.6)';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 4px 18px rgba(16, 185, 129, 0.4)';
+            }}
+          >
+            Create Account
           </button>
         </div>
       </header>
 
       {/* Main Command Center Stage */}
-      <main style={{ display: 'flex', minHeight: '100vh', position: 'relative', zIndex: 1, alignItems: 'center' }}>
+      <main style={{ display: 'flex', minHeight: 'calc(100vh - 100px)', position: 'relative', zIndex: 1, alignItems: 'center', paddingTop: '1rem', paddingBottom: '3rem' }}>
         
-        {/* LEFT PANE: Mission Typography & High-Impact Directives (48%) */}
-        <div style={{ flex: '0 0 50%', padding: '0 4rem 0 5rem', position: 'relative', zIndex: 2 }}>
+        {/* LEFT PANE: Mission Typography in Regal Times New Roman (52%) */}
+        <div style={{ flex: '0 0 52%', padding: '0 3.5rem 0 5rem', position: 'relative', zIndex: 2 }}>
           <motion.div
             initial={{ opacity: 0, x: -40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
           >
             
-            {/* Mission Tag */}
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 14px', borderRadius: '20px', background: 'rgba(0,229,255,0.1)', border: '1px solid rgba(0,229,255,0.3)', marginBottom: '1.5rem' }}>
-              <Zap size={14} color="#00E5FF" />
-              <span style={{ color: '#00E5FF', fontSize: '0.75rem', fontWeight: 800, letterSpacing: '1.5px', textTransform: 'uppercase' }}>
-                GLOBAL SOVEREIGN & CAPITAL DEFENSE
+            {/* Mission Tag with Emerald Aura & Gold Accent */}
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '7px 18px',
+              borderRadius: '24px',
+              background: 'rgba(16, 185, 129, 0.12)',
+              border: '1px solid rgba(16, 185, 129, 0.35)',
+              boxShadow: '0 0 20px rgba(16, 185, 129, 0.15)',
+              marginBottom: '1.75rem'
+            }}>
+              <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#F59E0B', boxShadow: '0 0 8px #F59E0B' }} />
+              <span style={{
+                color: '#34D399',
+                fontSize: '0.75rem',
+                fontWeight: 800,
+                letterSpacing: '2px',
+                textTransform: 'uppercase',
+                fontFamily: "'Space Mono', monospace"
+              }}>
+                AUTONOMOUS SYSTEMIC DEFENSE MATRIX
               </span>
             </div>
 
-            {/* Monumental Headline */}
+            {/* Monumental Headline in Times New Roman (Crisp Platinum White + Radiant Mint/Gold Accent) */}
             <h1 style={{
-              fontSize: '4.8rem',
-              fontWeight: 900,
-              fontFamily: 'var(--font-heading)',
-              lineHeight: '1.05',
+              fontSize: 'clamp(3.8rem, 6.2vw, 5.4rem)',
+              fontWeight: 800,
+              fontFamily: "'Times New Roman', Times, Georgia, serif",
+              lineHeight: '1.04',
               letterSpacing: '-1.5px',
               margin: '0 0 1.5rem 0',
+              color: '#FFFFFF'
             }}>
-              The Operating <br />
-              System for <br />
+              The Architecture of <br />
+              Certainty in an Era of <br />
               <span style={{
-                background: 'linear-gradient(135deg, #00E5FF 0%, #4F8CFF 50%, #7B61FF 100%)',
+                fontStyle: 'italic',
+                background: 'linear-gradient(135deg, #FFFFFF 0%, #34D399 45%, #E5C07B 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
-                textShadow: '0 0 40px rgba(0,229,255,0.3)',
+                textShadow: '0 0 50px rgba(16, 185, 129, 0.4)',
               }}>
-                Predictive Risk
+                Systemic Volatility.
               </span>
             </h1>
 
             <p style={{
-              fontSize: '1.15rem',
-              color: 'rgba(255,255,255,0.65)',
-              maxWidth: '520px',
-              lineHeight: '1.65',
+              fontSize: '1.25rem',
+              color: '#CBD5E1',
+              maxWidth: '560px',
+              lineHeight: '1.75',
               marginBottom: '2.5rem',
               fontWeight: 400,
+              fontFamily: "'Times New Roman', Times, Georgia, serif"
             }}>
-              Anticipate geopolitical anomalies, liquidity crises, and cyber incursions before they manifest. IPRAP transforms chaos into actionable foresight for institutional leaders.
+              IPRAP autonomously intercepts systemic anomalies, liquidity cascades, and sovereign infrastructure vulnerabilities before propagation—powered by NVIDIA Nemotron-3 120B reasoning.
             </p>
 
             {/* Action Directives */}
-            <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'center' }}>
+            <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'center', flexWrap: 'wrap' }}>
               <motion.button
-                whileHover={{ scale: 1.04, boxShadow: '0 0 35px rgba(0,229,255,0.5)' }}
+                whileHover={{ scale: 1.04, boxShadow: '0 0 45px rgba(16, 185, 129, 0.6)' }}
                 whileTap={{ scale: 0.96 }}
                 onClick={handleInitialize}
                 style={{
-                  padding: '1.2rem 2.8rem',
+                  padding: '1.25rem 2.9rem',
                   fontSize: '1rem',
                   fontWeight: 800,
-                  letterSpacing: '1.5px',
-                  textTransform: 'uppercase',
+                  letterSpacing: '1px',
                   borderRadius: '12px',
-                  background: 'linear-gradient(135deg, #00E5FF 0%, #4F8CFF 100%)',
-                  color: '#050D16',
+                  background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+                  color: '#FFFFFF',
                   border: 'none',
                   cursor: 'pointer',
-                  boxShadow: '0 10px 25px rgba(0,229,255,0.3)',
+                  boxShadow: '0 12px 30px rgba(16, 185, 129, 0.45)',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '8px',
+                  gap: '10px',
+                  fontFamily: "'Times New Roman', Times, serif"
                 }}
               >
-                INITIALIZE COMMAND <ArrowUpRight size={18} />
+                INITIALIZE COMMAND PORTAL <ArrowUpRight size={18} strokeWidth={2.5} />
               </motion.button>
 
               <motion.button
-                whileHover={{ scale: 1.04, backgroundColor: 'rgba(255,255,255,0.1)' }}
+                whileHover={{ scale: 1.04, borderColor: '#10B981', backgroundColor: 'rgba(16, 185, 129, 0.18)' }}
+                whileTap={{ scale: 0.96 }}
+                onClick={() => navigate('/login?mode=signup')}
+                style={{
+                  padding: '1.25rem 2.2rem',
+                  fontSize: '0.98rem',
+                  fontWeight: 700,
+                  letterSpacing: '0.5px',
+                  borderRadius: '12px',
+                  background: 'rgba(10, 18, 23, 0.85)',
+                  border: '1px solid rgba(16, 185, 129, 0.45)',
+                  color: '#FFFFFF',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  backdropFilter: 'blur(15px)',
+                  fontFamily: "'Times New Roman', Times, serif",
+                  boxShadow: '0 4px 18px rgba(0,0,0,0.4)'
+                }}
+              >
+                Create Account
+              </motion.button>
+
+              <motion.button
+                whileHover={{ scale: 1.04, borderColor: '#E5C07B', backgroundColor: 'rgba(245, 158, 11, 0.15)' }}
                 whileTap={{ scale: 0.96 }}
                 onClick={() => setShowDemo(true)}
                 style={{
-                  padding: '1.2rem 2.2rem',
-                  fontSize: '1rem',
+                  padding: '1.25rem 2.2rem',
+                  fontSize: '0.98rem',
                   fontWeight: 700,
-                  letterSpacing: '1px',
+                  letterSpacing: '0.5px',
                   borderRadius: '12px',
-                  background: 'rgba(8, 21, 34, 0.6)',
-                  border: '1px solid rgba(0,229,255,0.3)',
-                  color: 'white',
+                  background: 'rgba(10, 18, 23, 0.8)',
+                  border: '1px solid rgba(229, 192, 123, 0.35)',
+                  color: '#CBD5E1',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '10px',
                   backdropFilter: 'blur(15px)',
+                  fontFamily: "'Times New Roman', Times, serif"
                 }}
               >
-                <div style={{ width: '26px', height: '26px', borderRadius: '50%', background: 'rgba(0,229,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Play size={12} fill="#00E5FF" color="#00E5FF" />
+                <div style={{
+                  width: '26px',
+                  height: '26px',
+                  borderRadius: '50%',
+                  background: 'rgba(245, 158, 11, 0.2)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <Play size={12} fill="#E5C07B" color="#E5C07B" />
                 </div>
-                WATCH DEMO
+                Live Simulation Showcase
               </motion.button>
             </div>
 
-            {/* Live Real-time Telemetry Metrics */}
+            {/* Live Real-time Telemetry Metrics in Times New Roman */}
             <div style={{
               display: 'flex',
               gap: '3.5rem',
-              marginTop: '4rem',
-              borderTop: '1px solid rgba(255,255,255,0.12)',
+              marginTop: '3.5rem',
+              borderTop: '1px solid rgba(255, 255, 255, 0.1)',
               paddingTop: '2.5rem',
             }}>
-              <AnimatedMetric value="99.98" suffix="%" label="Interception Rate" />
+              <AnimatedMetric value="99.98" suffix="%" label="Interception Velocity" />
               <AnimatedMetric value="1.84" suffix="B" label="Records Processed/s" />
-              <AnimatedMetric value="420" suffix="+" label="Institutional Nodes" precision={0} />
+              <AnimatedMetric value="13" suffix=" Sectors" label="Sovereign Nodes Active" precision={0} />
             </div>
 
           </motion.div>
         </div>
 
-        {/* RIGHT PANE: Living 3D Geospatial Intelligence Core (52%) */}
-        <div style={{ flex: '0 0 50%', height: '100vh', position: 'relative' }}>
-          <AIIntelligenceCore />
+        {/* RIGHT PANE: Grounded Sovereign Command Console Preview (48%) */}
+        <div style={{ flex: '0 0 48%', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 4rem 0 0', position: 'relative' }}>
+          <EnterpriseCommandPreview />
         </div>
 
       </main>
+
+      {/* -------------------------------------------------------------
+          INTERACTIVE SECTOR THREAT SIMULATOR BAR (Elevated Contrast)
+          ------------------------------------------------------------- */}
+      <section style={{
+        maxWidth: '1280px',
+        margin: '2rem auto 6rem auto',
+        padding: '0 2rem',
+        position: 'relative',
+        zIndex: 5
+      }}>
+        <div style={{
+          background: 'rgba(10, 18, 23, 0.85)',
+          border: '1px solid rgba(16, 185, 129, 0.25)',
+          borderRadius: '24px',
+          padding: '2.5rem',
+          backdropFilter: 'blur(20px)',
+          boxShadow: '0 25px 60px rgba(0, 0, 0, 0.7), 0 0 35px rgba(16, 185, 129, 0.15)'
+        }}>
+          {/* Header */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
+            <div>
+              <div style={{ fontSize: '0.75rem', color: '#E5C07B', letterSpacing: '2px', fontWeight: 700, fontFamily: "'Space Mono', monospace", textTransform: 'uppercase' }}>
+                LIVE SECTOR THREAT HARNESS // SELECT ACTIVE TENANT
+              </div>
+              <h3 style={{ fontSize: '2rem', fontWeight: 800, color: '#FFFFFF', margin: '4px 0 0 0', fontFamily: "'Times New Roman', Times, serif" }}>
+                Multi-Sector Autonomous Surveillance Matrix
+              </h3>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 14px', borderRadius: '100px', background: 'rgba(16, 185, 129, 0.12)', border: '1px solid rgba(16, 185, 129, 0.3)' }}>
+              <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#10B981', boxShadow: '0 0 8px #10B981' }} />
+              <span style={{ fontSize: '0.75rem', color: '#34D399', fontFamily: "'Space Mono', monospace", fontWeight: 700 }}>
+                NEMOTRON-3 120B ENGINE: ACTIVE
+              </span>
+            </div>
+          </div>
+
+          {/* Sector Selector Tabs */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))',
+            gap: '1rem',
+            marginBottom: '2rem'
+          }}>
+            {SECTOR_SIMULATIONS.map((sec, idx) => {
+              const Icon = sec.icon;
+              const isSelected = activeSectorIdx === idx;
+              return (
+                <button
+                  key={sec.id}
+                  onClick={() => setActiveSectorIdx(idx)}
+                  style={{
+                    padding: '1.1rem 1.25rem',
+                    borderRadius: '16px',
+                    background: isSelected ? 'linear-gradient(135deg, rgba(16, 185, 129, 0.25) 0%, rgba(5, 150, 105, 0.15) 100%)' : 'rgba(16, 26, 34, 0.5)',
+                    border: isSelected ? '1px solid #34D399' : '1px solid rgba(255, 255, 255, 0.08)',
+                    color: isSelected ? '#FFFFFF' : '#94A3B8',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    transition: 'all 0.25s ease',
+                    boxShadow: isSelected ? '0 8px 25px rgba(16, 185, 129, 0.3)' : 'none',
+                    textAlign: 'left'
+                  }}
+                >
+                  <div style={{
+                    width: 36,
+                    height: 36,
+                    borderRadius: '10px',
+                    background: isSelected ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' : 'rgba(16, 185, 129, 0.12)',
+                    color: isSelected ? '#FFFFFF' : '#34D399',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0
+                  }}>
+                    <Icon size={18} />
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '0.85rem', fontWeight: 800, fontFamily: "'Times New Roman', Times, serif", color: isSelected ? '#FFFFFF' : '#CBD5E1' }}>
+                      {sec.name}
+                    </div>
+                    <div style={{ fontSize: '0.65rem', color: isSelected ? '#E5C07B' : '#64748B', fontFamily: "'Space Mono', monospace" }}>
+                      {sec.code}
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Active Sector Telemetry Display Card */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeSector.id}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.35 }}
+              style={{
+                background: 'rgba(7, 12, 16, 0.92)',
+                border: '1px solid rgba(16, 185, 129, 0.25)',
+                borderRadius: '18px',
+                padding: '2rem',
+                display: 'grid',
+                gridTemplateColumns: '2fr 1fr 1fr 1fr',
+                gap: '2rem',
+                alignItems: 'center'
+              }}
+            >
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '0.5rem' }}>
+                  <SectorIcon size={18} color="#34D399" />
+                  <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#34D399', fontFamily: "'Space Mono', monospace" }}>
+                    {activeSector.name.toUpperCase()} // SECTOR PROFILE
+                  </span>
+                </div>
+                <h4 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#FFFFFF', margin: '0 0 0.5rem 0', fontFamily: "'Times New Roman', Times, serif" }}>
+                  {activeSector.headline}
+                </h4>
+                <p style={{ fontSize: '0.92rem', color: '#94A3B8', margin: 0, lineHeight: 1.6, fontFamily: "'Times New Roman', Times, serif" }}>
+                  {activeSector.details}
+                </p>
+              </div>
+
+              <div style={{ borderLeft: '1px solid rgba(255, 255, 255, 0.1)', paddingLeft: '1.5rem' }}>
+                <div style={{ fontSize: '0.7rem', color: '#E5C07B', fontFamily: "'Space Mono', monospace", textTransform: 'uppercase' }}>
+                  Anomaly Vector
+                </div>
+                <div style={{ fontSize: '1.35rem', fontWeight: 800, color: '#FFFFFF', fontFamily: "'Times New Roman', Times, serif" }}>
+                  {activeSector.exposure}
+                </div>
+              </div>
+
+              <div style={{ borderLeft: '1px solid rgba(255, 255, 255, 0.1)', paddingLeft: '1.5rem' }}>
+                <div style={{ fontSize: '0.7rem', color: '#E5C07B', fontFamily: "'Space Mono', monospace", textTransform: 'uppercase' }}>
+                  Inference Latency
+                </div>
+                <div style={{ fontSize: '1.35rem', fontWeight: 800, color: '#34D399', fontFamily: "'Times New Roman', Times, serif" }}>
+                  {activeSector.latency}
+                </div>
+              </div>
+
+              <div style={{ borderLeft: '1px solid rgba(255, 255, 255, 0.1)', paddingLeft: '1.5rem' }}>
+                <div style={{ fontSize: '0.7rem', color: '#E5C07B', fontFamily: "'Space Mono', monospace", textTransform: 'uppercase' }}>
+                  Containment Index
+                </div>
+                <div style={{ fontSize: '1.35rem', fontWeight: 800, color: '#10B981', fontFamily: "'Times New Roman', Times, serif" }}>
+                  {activeSector.containment}
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+
+        </div>
+      </section>
+
+      {/* -------------------------------------------------------------
+          INSTITUTIONAL PILLARS & STATUTORY GOVERNANCE STRIP
+          ------------------------------------------------------------- */}
+      <section style={{
+        maxWidth: '1280px',
+        margin: '0 auto 6rem auto',
+        padding: '0 2rem',
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+        gap: '1.75rem',
+        position: 'relative',
+        zIndex: 5
+      }}>
+        {[
+          {
+            num: '01',
+            title: 'Autonomous Circuit Breakers',
+            desc: 'Sub-second algorithmic mitigation execution isolating compromised sub-networks before contagion spreads.'
+          },
+          {
+            num: '02',
+            title: '100K-Path Monte Carlo',
+            desc: 'Recursive predictive simulation engine identifying black-swan tail-risk across correlated macro variables.'
+          },
+          {
+            num: '03',
+            title: 'Explainable AI & SHAP Weights',
+            desc: 'Zero black-box obscurity. Every anomaly score is deconstructed into exact Shapley feature importance vectors.'
+          },
+          {
+            num: '04',
+            title: 'Post-Quantum Sovereign Shield',
+            desc: 'Lattice-based cryptography securing multi-tenant data pipelines against next-generation quantum decryptors.'
+          }
+        ].map((pillar) => (
+          <div
+            key={pillar.num}
+            style={{
+              background: 'rgba(10, 18, 23, 0.75)',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
+              borderRadius: '20px',
+              padding: '2.25rem',
+              backdropFilter: 'blur(16px)',
+              transition: 'all 0.3s ease'
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.borderColor = 'rgba(16, 185, 129, 0.5)';
+              e.currentTarget.style.transform = 'translateY(-4px)';
+              e.currentTarget.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.7), 0 0 25px rgba(16, 185, 129, 0.2)';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = 'none';
+            }}
+          >
+            <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#E5C07B', fontFamily: "'Space Mono', monospace", marginBottom: '1rem' }}>
+              // {pillar.num}
+            </div>
+            <h4 style={{ fontSize: '1.45rem', fontWeight: 800, color: '#FFFFFF', margin: '0 0 0.75rem 0', fontFamily: "'Times New Roman', Times, serif" }}>
+              {pillar.title}
+            </h4>
+            <p style={{ fontSize: '0.92rem', color: '#94A3B8', lineHeight: 1.7, margin: 0, fontFamily: "'Times New Roman', Times, serif" }}>
+              {pillar.desc}
+            </p>
+          </div>
+        ))}
+      </section>
+
+      {/* Footer Branding Strip */}
+      <footer style={{
+        borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+        padding: '2.5rem 4.5rem',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        position: 'relative',
+        zIndex: 5,
+        color: '#94A3B8',
+        fontSize: '0.85rem',
+        fontFamily: "'Times New Roman', Times, serif"
+      }}>
+        <div>
+          &copy; {new Date().getFullYear()} IPRAP &bull; Intelligent Predictive Risk Analytics Platform. Powered by NVIDIA Nemotron-3 120B.
+        </div>
+        <div style={{ display: 'flex', gap: '2rem', fontFamily: "'Space Mono', monospace", fontSize: '0.75rem', color: '#E5C07B' }}>
+          <span>ISO 31000</span>
+          <span>NIST CSF 2.0</span>
+          <span>BASEL III</span>
+          <span>SOC 2 TYPE II</span>
+        </div>
+      </footer>
 
       <style>{`
         .command-grid {
           position: absolute;
           inset: 0;
           background-image: 
-            linear-gradient(rgba(0,229,255,0.035) 1px, transparent 1px), 
-            linear-gradient(90deg, rgba(0,229,255,0.035) 1px, transparent 1px);
+            linear-gradient(rgba(142, 182, 155, 0.04) 1px, transparent 1px), 
+            linear-gradient(90deg, rgba(142, 182, 155, 0.04) 1px, transparent 1px);
           background-size: 60px 60px;
           mask-image: radial-gradient(circle at 60% 50%, black 0%, transparent 80%);
           -webkit-mask-image: radial-gradient(circle at 60% 50%, black 0%, transparent 80%);
