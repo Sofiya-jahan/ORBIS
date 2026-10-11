@@ -66,7 +66,7 @@ export const OrgSelect = () => {
       opacity: isTransitioning ? 0.4 : 1,
       transform: isTransitioning ? 'scale(0.98)' : 'scale(1)',
       transition: 'all 0.4s ease-in-out',
-      fontFamily: "'Times New Roman', Times, serif"
+      fontFamily: "var(--font-family, 'Inter', sans-serif)"
     }}>
       
       {/* Background ambient lighting */}
@@ -109,14 +109,14 @@ export const OrgSelect = () => {
             fontWeight: '800', 
             marginBottom: '0.85rem', 
             letterSpacing: '-1px', 
-            fontFamily: "'Times New Roman', Times, serif",
+            fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)",
             lineHeight: 1.15,
             color: '#FFFFFF'
           }}>
             Select Organization Workspace
           </h1>
           
-          <p style={{ color: '#CBD5E1', fontSize: '1.18rem', maxWidth: '680px', margin: '0 auto', lineHeight: 1.6, fontFamily: "'Times New Roman', Times, serif" }}>
+          <p style={{ color: '#CBD5E1', fontSize: '1.18rem', maxWidth: '680px', margin: '0 auto', lineHeight: 1.6, fontFamily: "var(--font-family, 'Inter', sans-serif)" }}>
             IPRAP dynamically configures neural risk models, compliance frameworks, telemetry pipelines, and access tiers for your specific sector.
           </p>
         </div>
@@ -147,7 +147,7 @@ export const OrgSelect = () => {
                 border: '1px solid rgba(16, 185, 129, 0.3)',
                 color: '#FFFFFF',
                 fontSize: '1rem',
-                fontFamily: "'Times New Roman', Times, serif",
+                fontFamily: "var(--font-family, 'Inter', sans-serif)",
                 outline: 'none',
                 boxShadow: '0 8px 24px rgba(0,0,0,0.6)',
                 transition: 'border-color 0.2s, box-shadow 0.2s'
@@ -174,7 +174,7 @@ export const OrgSelect = () => {
                   borderRadius: '12px',
                   fontSize: '0.85rem',
                   fontWeight: 700,
-                  fontFamily: "'Times New Roman', Times, serif",
+                  fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)",
                   cursor: 'pointer',
                   border: '1px solid',
                   borderColor: selectedCategory === cat.id ? '#10B981' : 'rgba(16, 185, 129, 0.25)',
@@ -300,7 +300,7 @@ export const OrgSelect = () => {
                         {org.sector}
                       </div>
 
-                      <h2 style={{ fontSize: '1.65rem', fontWeight: '800', marginBottom: '0.6rem', color: '#FFFFFF', lineHeight: 1.2, fontFamily: "'Times New Roman', Times, serif" }}>
+                      <h2 style={{ fontSize: '1.65rem', fontWeight: '800', marginBottom: '0.6rem', color: '#FFFFFF', lineHeight: 1.2, fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)" }}>
                         {org.name}
                       </h2>
 
@@ -308,7 +308,7 @@ export const OrgSelect = () => {
                         color: '#CBD5E1', 
                         fontSize: '0.92rem', 
                         lineHeight: '1.55', 
-                        fontFamily: "'Times New Roman', Times, serif",
+                        fontFamily: "var(--font-family, 'Inter', sans-serif)",
                         marginBottom: '1.25rem',
                         display: '-webkit-box',
                         WebkitLineClamp: 2,

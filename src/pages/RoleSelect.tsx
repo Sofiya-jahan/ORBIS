@@ -53,7 +53,7 @@ export const RoleSelect = () => {
       opacity: isTransitioning ? 0.4 : 1,
       transform: isTransitioning ? 'scale(0.98)' : 'scale(1)',
       transition: 'all 0.4s ease-in-out',
-      fontFamily: "'Times New Roman', Times, serif"
+      fontFamily: "var(--font-family, 'Inter', sans-serif)"
     }}>
       
       {/* Background glow tailored with obsidian velvet, emerald radiance, and gold auras */}
@@ -81,7 +81,7 @@ export const RoleSelect = () => {
             fontSize: '0.88rem',
             fontWeight: 700,
             transition: 'all 0.2s ease',
-            fontFamily: "'Times New Roman', Times, serif",
+            fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)",
             boxShadow: '0 4px 15px rgba(0,0,0,0.5)'
           }}
           onMouseEnter={(e) => {
@@ -120,13 +120,13 @@ export const RoleSelect = () => {
           fontWeight: '800', 
           marginBottom: '0.75rem', 
           letterSpacing: '-1px', 
-          fontFamily: "'Times New Roman', Times, serif",
+          fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)",
           color: '#FFFFFF'
         }}>
           Select Your Access Role
         </h1>
 
-        <p style={{ color: '#CBD5E1', fontSize: '1.18rem', maxWidth: '640px', margin: '0 auto', lineHeight: 1.6, fontFamily: "'Times New Roman', Times, serif" }}>
+        <p style={{ color: '#CBD5E1', fontSize: '1.18rem', maxWidth: '640px', margin: '0 auto', lineHeight: 1.6, fontFamily: "var(--font-family, 'Inter', sans-serif)" }}>
           Only roles authenticated for <span style={{ color: '#E5C07B', fontWeight: 700, textDecoration: 'underline', textDecorationColor: '#10B981' }}>{currentOrg.name}</span> are available. Permissions dynamically dictate your dashboard modules.
         </p>
       </div>
@@ -218,12 +218,12 @@ export const RoleSelect = () => {
                   marginBottom: '0.6rem', 
                   color: '#FFFFFF', 
                   lineHeight: 1.25,
-                  fontFamily: "'Times New Roman', Times, serif"
+                  fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)"
                 }}>
                   {role.title}
                 </h2>
 
-                <p style={{ color: '#CBD5E1', fontSize: '0.94rem', lineHeight: '1.6', marginBottom: '1.5rem', fontFamily: "'Times New Roman', Times, serif" }}>
+                <p style={{ color: '#CBD5E1', fontSize: '0.94rem', lineHeight: '1.6', marginBottom: '1.5rem', fontFamily: "var(--font-family, 'Inter', sans-serif)" }}>
                   {role.desc}
                 </p>
               </div>
@@ -249,7 +249,7 @@ export const RoleSelect = () => {
                     fontSize: '0.88rem',
                     fontWeight: '700',
                     color: isHovered ? '#E5C07B' : '#FFFFFF',
-                    fontFamily: "'Times New Roman', Times, serif",
+                    fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)",
                     letterSpacing: '0.5px',
                     transition: 'color 0.2s ease'
                   }}>

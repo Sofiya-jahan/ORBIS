@@ -26,16 +26,12 @@ export const AuthVerification = () => {
     } else {
       setIsUnlocked(true);
       const timer = setTimeout(() => {
-        // Proceed strictly to organization selection (or dashboard if already selected)
-        if (organization && role) {
-          navigate('/dashboard', { replace: true });
-        } else {
-          navigate('/organization', { replace: true });
-        }
-      }, 1600);
+        // Proceed strictly to institutional security key verification
+        navigate('/security-key', { replace: true });
+      }, 1400);
       return () => clearTimeout(timer);
     }
-  }, [currentStep, navigate, organization, role]);
+  }, [currentStep, navigate]);
 
   const activeStep = verificationSteps[currentStep];
   const CurrentIcon = activeStep.icon;
@@ -50,7 +46,7 @@ export const AuthVerification = () => {
       justifyContent: 'center',
       position: 'relative',
       overflow: 'hidden',
-      fontFamily: "'Times New Roman', Times, serif",
+      fontFamily: "var(--font-family, 'Inter', sans-serif)",
     }}>
       
       {/* Background Animated Atmosphere */}
@@ -151,11 +147,11 @@ export const AuthVerification = () => {
               AUTHENTICATION PROTOCOL // 0{currentStep + 1}
             </div>
 
-            <h2 style={{ fontSize: '1.9rem', fontWeight: 800, marginBottom: '0.5rem', letterSpacing: '-0.5px', color: '#FFFFFF', fontFamily: "'Times New Roman', Times, serif" }}>
+            <h2 style={{ fontSize: '1.9rem', fontWeight: 800, marginBottom: '0.5rem', letterSpacing: '-0.5px', color: '#FFFFFF', fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)" }}>
               {activeStep.text}
             </h2>
 
-            <p style={{ color: '#CBD5E1', fontSize: '0.95rem', maxWidth: '380px', margin: '0 auto', fontFamily: "'Times New Roman', Times, serif" }}>
+            <p style={{ color: '#CBD5E1', fontSize: '0.95rem', maxWidth: '380px', margin: '0 auto', fontFamily: "var(--font-family, 'Inter', sans-serif)" }}>
               {activeStep.subtext}
             </p>
           </motion.div>
