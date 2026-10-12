@@ -8,6 +8,7 @@ import {
   BarChart3, HeartPulse, Share2
 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { sanitizeInput, logSecurityEvent } from '../services/securityService';
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -44,6 +45,9 @@ export const Login = () => {
     e.preventDefault();
     setError('');
 
+    const cleanEmail = sanitizeInput(email);
+    const cleanFullName = sanitizeInput(fullName);
+
     if (isSignUp && confirmPassword && password !== confirmPassword) {
       setError('Passwords do not match. Please verify your confirmation password.');
       return;
@@ -52,17 +56,21 @@ export const Login = () => {
     setLoading(true);
     try {
       if (isSignUp) {
-        await register(email, password, fullName);
+        await register(cleanEmail, password, cleanFullName);
+        logSecurityEvent('LOGIN_SUCCESS', 'INFO', `New user registered: ${cleanEmail}`, cleanEmail);
       } else {
-        await login(email, password);
+        await login(cleanEmail, password);
+        logSecurityEvent('LOGIN_SUCCESS', 'INFO', `User logged in successfully: ${cleanEmail}`, cleanEmail);
       }
       navigate('/authentication');
     } catch (err: any) {
       // In demo mode or if using standard test credentials, gracefully proceed
-      if (email.includes('iprap.ai') || password === 'enterprise2026' || !window.navigator.onLine) {
+      if (cleanEmail.includes('iprap.ai') || password === 'enterprise2026' || !window.navigator.onLine) {
+        logSecurityEvent('LOGIN_SUCCESS', 'INFO', `Demo evaluation login bypassed for: ${cleanEmail}`, cleanEmail);
         navigate('/authentication');
         return;
       }
+      logSecurityEvent('LOGIN_FAILURE', 'WARNING', `Failed login attempt for: ${cleanEmail} (${err.message || 'Invalid credentials'})`, cleanEmail);
       setError(err.message || 'Authentication failed. Please verify credentials.');
     } finally {
       setLoading(false);

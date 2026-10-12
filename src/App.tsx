@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from './store/useAuthStore';
 import { Loader2 } from 'lucide-react';
+import { verifySecuritySession, logSecurityEvent } from './services/securityService';
 
 // Lazy loading pages & modules
 const CinematicIntro = React.lazy(() => import('./components/CinematicIntro').then(m => ({ default: m.CinematicIntro })));
@@ -42,7 +43,7 @@ const FullScreenLoader = () => (
 
 // Strictly Protected Routes for Master Dashboard
 const RequireAuth = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated, isAuthLoaded } = useAuthStore();
+  const { isAuthenticated, isAuthLoaded, user } = useAuthStore();
   const location = useLocation();
 
   if (!isAuthLoaded) {
@@ -51,6 +52,18 @@ const RequireAuth = ({ children }: { children: React.ReactNode }) => {
 
   if (!isAuthenticated) {
     return <Navigate to="/landing" state={{ from: location }} replace />;
+  }
+
+  // Institutional Security Key & Session Integrity Check
+  const sessionCheck = verifySecuritySession();
+  if (!sessionCheck.valid) {
+    logSecurityEvent(
+      'UNAUTHORIZED_ACCESS_BLOCKED',
+      'WARNING',
+      `Access to protected route ${location.pathname} blocked: ${sessionCheck.reason || 'Missing institutional cryptographic key'}`,
+      user?.email || 'operator@iprap.ai'
+    );
+    return <Navigate to="/security-key" state={{ from: location }} replace />;
   }
 
   return <>{children}</>;

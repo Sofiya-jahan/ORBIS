@@ -4,18 +4,52 @@ import { useAuthStore } from '../store/useAuthStore';
 import { ORGANIZATIONS } from '../config/platformConfig';
 import { 
   ShieldCheck, Loader2, Lock, ShieldAlert, 
-  KeyRound, Sparkles, ChevronLeft, ArrowRight, Shield, Check
+  KeyRound, Sparkles, ChevronLeft, ArrowRight, Shield, Check, Clock
 } from 'lucide-react';
+import { 
+  createSecuritySession, 
+  checkRateLimit, 
+  recordFailedAttempt, 
+  resetRateLimit, 
+  logSecurityEvent 
+} from '../services/securityService';
 
 export const Verification = () => {
   const navigate = useNavigate();
-  const { organization, role, verifyPIN, setOrganization, setRole } = useAuthStore();
+  const { organization, role, user, verifyPIN, setOrganization, setRole } = useAuthStore();
   
   const [pin, setPin] = useState(['', '', '', '', '', '']);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [lockoutSec, setLockoutSec] = useState(0);
+  const [remainingAttempts, setRemainingAttempts] = useState(5);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  // Check rate limit on mount
+  useEffect(() => {
+    const status = checkRateLimit('auth_key_attempt', 5, 60000);
+    setRemainingAttempts(status.remainingAttempts);
+    if (status.isLocked) {
+      setLockoutSec(status.retryAfterSec);
+    }
+  }, []);
+
+  // Countdown timer for lockout
+  useEffect(() => {
+    if (lockoutSec <= 0) return;
+    const interval = setInterval(() => {
+      setLockoutSec(prev => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          setRemainingAttempts(5);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [lockoutSec]);
 
   // Default fallback if accessed directly
   const activeOrgId = organization || 'hospital';
@@ -61,6 +95,14 @@ export const Verification = () => {
   };
 
   const handleSubmitKey = async (specifiedKey?: string) => {
+    // Check if locked out
+    const rateStatus = checkRateLimit('auth_key_attempt', 5, 60000);
+    if (rateStatus.isLocked) {
+      setLockoutSec(rateStatus.retryAfterSec);
+      setError(`Rate Limit Exceeded: Lockout active for ${rateStatus.retryAfterSec}s to prevent brute-force attacks.`);
+      return;
+    }
+
     // If key is not provided (or blank/incomplete), default to '123456' as specified!
     const keyToSubmit = (specifiedKey && specifiedKey.trim().length === 6)
       ? specifiedKey.trim()
@@ -74,28 +116,36 @@ export const Verification = () => {
     setIsLoading(true);
     setError('');
 
+    let isValid = false;
     try {
-      const isValid = await verifyPIN(keyToSubmit);
-      if (isValid || keyToSubmit === '123456') {
-        sessionStorage.setItem('iprap_key_verified', 'true');
-        setSuccess(true);
-        setTimeout(() => {
-          navigate('/dashboard');
-        }, 1100);
-      } else {
-        setError('Invalid Security Key. Defaulting to 123456 will grant institutional access.');
-        setIsLoading(false);
-      }
+      isValid = await verifyPIN(keyToSubmit);
     } catch {
-      sessionStorage.setItem('iprap_key_verified', 'true');
+      isValid = false;
+    }
+
+    if (isValid || keyToSubmit === '123456') {
+      resetRateLimit('auth_key_attempt');
+      setRemainingAttempts(5);
+      createSecuritySession(activeOrgId, role || 'cmo', user?.email || 'operator@iprap.ai');
       setSuccess(true);
       setTimeout(() => {
         navigate('/dashboard');
       }, 1100);
+    } else {
+      const failStatus = recordFailedAttempt('auth_key_attempt', 5, 45000, 60000);
+      setRemainingAttempts(failStatus.remainingAttempts);
+      if (failStatus.isLocked) {
+        setLockoutSec(failStatus.retryAfterSec);
+        setError(`Security Lockout Active: Too many failed key attempts. Unlocking in ${failStatus.retryAfterSec}s.`);
+      } else {
+        setError(`Invalid Security Key. ${failStatus.remainingAttempts} attempt(s) remaining before temporary lockout. Tip: 123456 grants institutional access.`);
+      }
+      setIsLoading(false);
     }
   };
 
   const handleAutofillDefault = () => {
+    if (lockoutSec > 0) return;
     const defaultKey = ['1', '2', '3', '4', '5', '6'];
     setPin(defaultKey);
     handleSubmitKey('123456');
@@ -273,6 +323,28 @@ export const Verification = () => {
               </button>
             </div>
 
+            {/* Active Security Lockout Banner */}
+            {lockoutSec > 0 && (
+              <div style={{
+                width: '100%',
+                padding: '0.9rem 1.1rem',
+                borderRadius: '12px',
+                background: 'rgba(239, 68, 68, 0.12)',
+                border: '1px solid rgba(239, 68, 68, 0.4)',
+                color: '#F87171',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.85rem',
+                boxSizing: 'border-box'
+              }}>
+                <Clock size={22} className="animate-spin" />
+                <div style={{ fontSize: '0.82rem', lineHeight: 1.4 }}>
+                  <div style={{ fontWeight: 800 }}>Adaptive Security Lockout Active</div>
+                  <div>Automated brute-force defense engaged. Key entry unlocked in <strong>{lockoutSec}s</strong>.</div>
+                </div>
+              </div>
+            )}
+
             {/* 6-Digit PIN Inputs */}
             <div style={{ width: '100%' }}>
               <div style={{ display: 'flex', gap: '0.65rem', justifyContent: 'center' }}>
@@ -286,19 +358,23 @@ export const Verification = () => {
                     placeholder="•"
                     onChange={e => handleChange(index, e.target.value)}
                     onKeyDown={e => handleKeyDown(index, e)}
-                    disabled={isLoading}
+                    disabled={isLoading || lockoutSec > 0}
                     style={{
                       width: '52px', height: '62px',
                       fontSize: '1.75rem', textAlign: 'center', fontWeight: '800', fontFamily: "'Space Mono', 'JetBrains Mono', monospace",
                       borderRadius: '14px', border: '1px solid',
-                      borderColor: error ? '#EF4444' : digit ? '#10B981' : 'rgba(16, 185, 129, 0.3)',
-                      backgroundColor: 'rgba(15, 23, 30, 0.9)', color: '#FFFFFF',
-                      boxShadow: digit && !error ? '0 0 15px rgba(16, 185, 129, 0.35)' : 'none',
-                      transition: 'all 0.2s', outline: 'none'
+                      borderColor: lockoutSec > 0 ? 'rgba(239, 68, 68, 0.4)' : error ? '#EF4444' : digit ? '#10B981' : 'rgba(16, 185, 129, 0.3)',
+                      backgroundColor: lockoutSec > 0 ? 'rgba(20, 10, 10, 0.7)' : 'rgba(15, 23, 30, 0.9)', 
+                      color: lockoutSec > 0 ? '#9CA3AF' : '#FFFFFF',
+                      boxShadow: digit && !error && lockoutSec === 0 ? '0 0 15px rgba(16, 185, 129, 0.35)' : 'none',
+                      transition: 'all 0.2s', outline: 'none',
+                      cursor: lockoutSec > 0 ? 'not-allowed' : 'text'
                     }}
                     onFocus={e => {
-                      e.target.style.borderColor = '#10B981';
-                      e.target.style.boxShadow = '0 0 15px rgba(16, 185, 129, 0.4)';
+                      if (lockoutSec === 0) {
+                        e.target.style.borderColor = '#10B981';
+                        e.target.style.boxShadow = '0 0 15px rgba(16, 185, 129, 0.4)';
+                      }
                     }}
                     onBlur={e => {
                       e.target.style.borderColor = error ? '#EF4444' : digit ? '#10B981' : 'rgba(16, 185, 129, 0.3)';
@@ -309,39 +385,49 @@ export const Verification = () => {
               </div>
             </div>
 
+            {/* Defense Status Footer */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', fontSize: '0.72rem', color: '#94A3B8', fontFamily: "'Space Mono', monospace" }}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <Shield size={12} color="#10B981" /> Lattice HMAC-256
+              </span>
+              <span>
+                Attempts: <strong style={{ color: remainingAttempts <= 2 ? '#EF4444' : '#10B981' }}>{remainingAttempts}/5</strong>
+              </span>
+            </div>
+
             {/* Primary Action Button (Submits key or automatically defaults to 123456) */}
             <button
               type="button"
               onClick={() => handleSubmitKey()}
-              disabled={isLoading}
+              disabled={isLoading || lockoutSec > 0}
               style={{
                 width: '100%',
                 padding: '1.05rem',
                 borderRadius: '12px',
-                background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+                background: lockoutSec > 0 ? 'rgba(55, 65, 81, 0.6)' : 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
                 border: 'none',
                 color: '#FFFFFF',
                 fontSize: '0.95rem',
                 fontWeight: 700,
                 letterSpacing: '0.5px',
-                cursor: isLoading ? 'not-allowed' : 'pointer',
+                cursor: (isLoading || lockoutSec > 0) ? 'not-allowed' : 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '8px',
-                boxShadow: '0 10px 25px rgba(16, 185, 129, 0.4)',
+                boxShadow: lockoutSec > 0 ? 'none' : '0 10px 25px rgba(16, 185, 129, 0.4)',
                 fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)",
                 transition: 'all 0.2s ease',
               }}
               onMouseEnter={e => {
-                if (!isLoading) {
+                if (!isLoading && lockoutSec === 0) {
                   e.currentTarget.style.transform = 'translateY(-2px)';
                   e.currentTarget.style.boxShadow = '0 15px 30px rgba(16, 185, 129, 0.6)';
                 }
               }}
               onMouseLeave={e => {
                 e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 10px 25px rgba(16, 185, 129, 0.4)';
+                e.currentTarget.style.boxShadow = lockoutSec > 0 ? 'none' : '0 10px 25px rgba(16, 185, 129, 0.4)';
               }}
             >
               {isLoading ? (
@@ -349,6 +435,8 @@ export const Verification = () => {
                   <Loader2 size={18} className="animate-spin" />
                   <span>Verifying Institutional Clearance...</span>
                 </>
+              ) : lockoutSec > 0 ? (
+                <span>Rate Limited ({lockoutSec}s remaining)</span>
               ) : (
                 <>
                   <span>Authorize Institutional Access</span>

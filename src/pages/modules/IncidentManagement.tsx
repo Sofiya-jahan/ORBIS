@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { saveIncidentToNeon, loadIncidentsFromNeon } from '../../services/neonService';
 import { uploadIncidentEvidence } from '../../services/supabaseStorage';
+import { validateFileUpload, sanitizeInput } from '../../services/securityService';
 
 export const IncidentManagement = () => {
   const { organization, user } = useAuthStore();
@@ -59,6 +60,7 @@ export const IncidentManagement = () => {
   const [newDesc, setNewDesc] = useState('');
   const [evidenceFile, setEvidenceFile] = useState<File | null>(null);
   const [evidencePreview, setEvidencePreview] = useState<string | null>(null);
+  const [fileSecurityError, setFileSecurityError] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [reportSuccess, setReportSuccess] = useState(false);
 
@@ -102,15 +104,36 @@ export const IncidentManagement = () => {
 
   const handleEvidenceSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      setEvidenceFile(file);
-      setEvidencePreview(URL.createObjectURL(file));
+    if (!file) return;
+
+    // Secure file sieve check
+    const validation = validateFileUpload(file, { maxSizeBytes: 10 * 1024 * 1024 });
+    if (!validation.valid) {
+      setFileSecurityError(validation.error || 'File failed security sieve.');
+      setEvidenceFile(null);
+      setEvidencePreview(null);
+      e.target.value = '';
+      return;
     }
+
+    setFileSecurityError('');
+    setEvidenceFile(file);
+    setEvidencePreview(URL.createObjectURL(file));
   };
 
   const handleCreateIncident = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newTitle) return;
+    setFileSecurityError('');
+
+    // Input sanitization against XSS & script injection
+    const sanitizedTitle = sanitizeInput(newTitle);
+    const sanitizedDesc = sanitizeInput(newDesc);
+    const sanitizedDept = sanitizeInput(newDept);
+
+    if (!sanitizedTitle) {
+      setFileSecurityError('Incident title is required and must contain valid characters.');
+      return;
+    }
 
     setIsSubmitting(true);
     const incidentId = `INC-2026-${Math.floor(100 + Math.random() * 900)}`;
@@ -130,13 +153,13 @@ export const IncidentManagement = () => {
 
     const newInc = {
       id: incidentId,
-      title: newTitle,
-      department: newDept,
+      title: sanitizedTitle,
+      department: sanitizedDept,
       severity: newSeverity,
       reporter: user?.name || 'Authorized Sentry',
       reportedAt: 'Just now',
       status: 'Under Investigation',
-      rootCause: newDesc || 'Pending root-cause analysis.',
+      rootCause: sanitizedDesc || 'Pending root-cause analysis.',
       evidenceCount: evidenceUrls.length,
       evidenceUrls: evidenceUrls
     };
@@ -167,6 +190,7 @@ export const IncidentManagement = () => {
       setNewDesc('');
       setEvidenceFile(null);
       setEvidencePreview(null);
+      setFileSecurityError('');
     }, 1200);
   };
 
@@ -399,6 +423,23 @@ export const IncidentManagement = () => {
                   )}
                 </div>
               </div>
+
+              {fileSecurityError && (
+                <div style={{
+                  padding: '0.85rem 1rem',
+                  borderRadius: '10px',
+                  background: 'rgba(239, 68, 68, 0.12)',
+                  border: '1px solid rgba(239, 68, 68, 0.35)',
+                  color: '#EF4444',
+                  fontSize: '0.85rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem'
+                }}>
+                  <ShieldAlert size={18} />
+                  <span>{fileSecurityError}</span>
+                </div>
+              )}
 
               <button
                 type="submit"
