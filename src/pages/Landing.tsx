@@ -439,7 +439,7 @@ export const Landing = () => {
               marginBottom: '2.25rem',
               fontWeight: 400,
             }}>
-              IPRAP autonomously intercepts systemic anomalies, liquidity cascades, and sovereign infrastructure vulnerabilities before propagation—powered by NVIDIA Nemotron-3 120B reasoning.
+              IPRAP autonomously intercepts systemic anomalies, liquidity cascades, and sovereign infrastructure vulnerabilities before propagation—powered by IPRAP Neural Risk Engine v4.2.
             </p>
 
             {/* Action Directives */}
@@ -764,7 +764,7 @@ export const Landing = () => {
                     <RefreshCw size={12} className="animate-spin" />
                     <span>
                       {simStage === 1 && 'STAGE 1: Ingesting high-amplitude anomaly wave...'}
-                      {simStage === 2 && 'STAGE 2: Nemotron-3 120B evaluating risk graph weights...'}
+                      {simStage === 2 && 'STAGE 2: Neural Risk Engine evaluating graph weights...'}
                       {simStage === 3 && 'STAGE 3: Autonomous circuit breaker locked. Contained!'}
                     </span>
                   </div>
@@ -912,7 +912,7 @@ export const Landing = () => {
         fontSize: '0.82rem',
       }}>
         <div>
-          &copy; {new Date().getFullYear()} IPRAP &bull; Intelligent Predictive Risk Analytics Platform. Powered by NVIDIA Nemotron-3 120B.
+          &copy; {new Date().getFullYear()} IPRAP &bull; Intelligent Predictive Risk Analytics Platform. Enterprise Neural Architecture.
         </div>
         <div style={{ display: 'flex', gap: '2rem', fontFamily: "'JetBrains Mono', monospace", fontSize: '0.72rem', color: '#E5C07B' }}>
           <span>ISO 31000</span>

@@ -67,12 +67,12 @@ export const AICopilot = () => {
           const initialGreeting: ChatMessage = {
             id: `msg-init-${organization || 'default'}`,
             sender: 'ai',
-            text: `Greetings ${user?.name || 'Commander'}. I am **IPRAP Enterprise Sentinel**, your autonomous Cognitive AI Risk Copilot powered by **NVIDIA Nemotron-3 Super 120B** (\`nvidia/nemotron-3-super-120b-a12b\`).\n\nI am synchronized with **${currentOrg.name}** for your role as **${currentRole?.title || role || 'Officer'}** (${currentRole?.accessLevel || 'Authorized Clearance'}). Multi-modal risk surveillance, SHAP interpretability weights, and Neon DB storage are active.\n\nHow can I assist your operational risk analysis today?`,
+            text: `Greetings ${user?.name || 'Commander'}. I am **IPRAP Risk Intelligence Copilot**, your autonomous Enterprise Risk Analytics Assistant.\n\nI am synchronized with **${currentOrg.name}** for your role as **${currentRole?.title || role || 'Officer'}** (${currentRole?.accessLevel || 'Authorized Clearance'}). Multi-modal risk surveillance, SHAP interpretability metrics, and real-time telemetry analytics are active.\n\nHow can I assist your operational risk analysis today?`,
             timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
             actionCard: {
-              title: `AI Risk Exposure: ${currentOrg.aiRiskScore}% (Nemotron Monitored)`,
+              title: `AI Risk Exposure: ${currentOrg.aiRiskScore}% (Real-time Monitored)`,
               description: `Systemic Health Score is at ${currentOrg.healthScore} / 100 with active neural surveillance across ${currentOrg.industryModules.length} sector modules.`,
-              metric: 'NVIDIA Nemotron 120B Active',
+              metric: 'IPRAP Neural Engine Active',
               status: currentOrg.aiRiskScore > 15 ? 'warning' : 'optimal'
             }
           };
@@ -197,7 +197,7 @@ export const AICopilot = () => {
   };
 
   const handleClearChat = async () => {
-    if (window.confirm('Clear copilot conversation stored in Neon DB?')) {
+    if (window.confirm('Clear copilot conversation session history?')) {
       await clearMessagesFromNeon(organization || undefined);
       setMessages([]);
     }
@@ -243,10 +243,10 @@ export const AICopilot = () => {
             </div>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               <span style={{ fontSize: '0.85rem', fontWeight: '800', letterSpacing: '0.5px' }}>
-                IPRAP Copilot
+                IPRAP Risk Advisor
               </span>
               <span style={{ fontSize: '0.65rem', opacity: 0.9, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                AI Assistant Online
+                AI Intelligence Online
               </span>
             </div>
           </div>
@@ -296,7 +296,7 @@ export const AICopilot = () => {
               </div>
               <div>
                 <div style={{ fontSize: '0.95rem', fontWeight: '800', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-                  IPRAP Sentinel Copilot
+                  IPRAP Risk Intelligence Copilot
                   <span style={{
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -306,12 +306,12 @@ export const AICopilot = () => {
                     fontWeight: 700,
                     padding: '2px 7px',
                     borderRadius: '10px',
-                    background: 'rgba(118, 185, 0, 0.15)',
-                    border: '1px solid rgba(118, 185, 0, 0.45)',
-                    color: '#76B900'
+                    background: 'rgba(16, 185, 129, 0.15)',
+                    border: '1px solid rgba(16, 185, 129, 0.45)',
+                    color: '#10B981'
                   }}>
                     <Zap size={10} />
-                    NEMOTRON 120B
+                    NEURAL RISK ENGINE
                   </span>
                   <span style={{
                     display: 'inline-flex',
@@ -322,12 +322,12 @@ export const AICopilot = () => {
                     fontWeight: 700,
                     padding: '2px 7px',
                     borderRadius: '10px',
-                    background: 'rgba(0, 229, 255, 0.1)',
-                    border: '1px solid rgba(0, 229, 255, 0.3)',
-                    color: '#00E5FF'
+                    background: 'rgba(0, 200, 255, 0.1)',
+                    border: '1px solid rgba(0, 200, 255, 0.3)',
+                    color: '#00C8FF'
                   }}>
                     <Database size={10} />
-                    {neonSyncing ? 'SYNC...' : 'NEON DB'}
+                    {neonSyncing ? 'SYNC...' : 'INTELLIGENCE VAULT'}
                   </span>
                 </div>
                 <div style={{ fontSize: '0.75rem', color: 'var(--primary)', fontWeight: '600', textTransform: 'capitalize' }}>
@@ -343,7 +343,7 @@ export const AICopilot = () => {
                   background: 'none', border: 'none', color: 'var(--text-secondary)',
                   cursor: 'pointer', padding: '0.4rem', borderRadius: '8px', display: 'flex'
                 }}
-                title="Clear Neon DB Chat History"
+                title="Clear Session History"
               >
                 <Trash2 size={16} />
               </button>
@@ -448,9 +448,9 @@ export const AICopilot = () => {
             ))}
 
             {isThinking && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', padding: '0.75rem 1rem', background: 'var(--bg-secondary)', borderRadius: '14px', alignSelf: 'flex-start', border: '1px solid rgba(118, 185, 0, 0.4)' }}>
-                <RefreshCw size={16} className="animate-spin" color="#76B900" />
-                <span style={{ fontSize: '0.8rem', color: 'var(--text-primary)', fontWeight: 600 }}>NVIDIA Nemotron 120B reasoning in progress...</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', padding: '0.75rem 1rem', background: 'var(--bg-secondary)', borderRadius: '14px', alignSelf: 'flex-start', border: '1px solid rgba(16, 185, 129, 0.4)' }}>
+                <RefreshCw size={16} className="animate-spin" color="#10B981" />
+                <span style={{ fontSize: '0.8rem', color: 'var(--text-primary)', fontWeight: 600 }}>IPRAP Neural Risk Engine synthesizing operational intelligence...</span>
               </div>
             )}
 
@@ -510,7 +510,7 @@ export const AICopilot = () => {
           >
             <input
               type="text"
-              placeholder={`Ask AI Copilot about ${currentOrg?.name || 'risks'}...`}
+              placeholder={`Ask IPRAP Risk Copilot about ${currentOrg?.name || 'risks'}...`}
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               style={{

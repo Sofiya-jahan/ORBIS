@@ -341,7 +341,7 @@ export const AIIntelligenceCore: React.FC = () => {
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1.5rem' }}>
             <span style={{ fontSize: '0.68rem', fontWeight: 800, color: '#E5C07B', letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: "'Space Mono', monospace" }}>
-              NEMOTRON-3 120B ENGINE
+              IPRAP NEURAL RISK ENGINE
             </span>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#10B981', boxShadow: '0 0 10px #10B981' }} />

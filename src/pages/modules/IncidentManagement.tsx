@@ -219,7 +219,7 @@ export const IncidentManagement = () => {
             fontSize: '0.75rem', color: '#00E5FF', fontWeight: 700
           }}>
             <Database size={13} />
-            NEON DB // ALL STORAGE
+            INCIDENT LOGS // ENCRYPTED
           </div>
           <div style={{
             display: 'flex', alignItems: 'center', gap: '6px',
@@ -228,7 +228,7 @@ export const IncidentManagement = () => {
             fontSize: '0.75rem', color: '#10B981', fontWeight: 700
           }}>
             <Cloud size={13} />
-            SUPABASE // EVIDENCE IMAGES
+            EVIDENCE VAULT // VERIFIED
           </div>
           <button 
             className={`btn ${activeTab === 'register' ? 'btn-primary' : 'btn-secondary'}`}
@@ -270,10 +270,10 @@ export const IncidentManagement = () => {
                     {inc.evidenceUrls && inc.evidenceUrls.length > 0 && (
                       <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '6px' }}>
                         <span style={{ fontSize: '0.68rem', color: '#10B981', display: 'flex', alignItems: 'center', gap: '3px' }}>
-                          <Cloud size={10} /> Supabase Evidence:
+                          <Cloud size={10} /> Cloud Evidence:
                         </span>
                         {inc.evidenceUrls.map((url: string, idx: number) => (
-                          <a key={idx} href={url} target="_blank" rel="noopener noreferrer" title="View Evidence Image in Supabase Storage">
+                          <a key={idx} href={url} target="_blank" rel="noopener noreferrer" title="View Encrypted Evidence Attachment">
                             <img src={url} alt="Evidence" style={{ width: '22px', height: '22px', borderRadius: '4px', objectFit: 'cover', border: '1px solid #10B981' }} />
                           </a>
                         ))}
@@ -388,7 +388,7 @@ export const IncidentManagement = () => {
               <div>
                 <label className="label" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <Cloud size={14} color="#10B981" />
-                  Evidence Screenshot / Photo (Supabase Storage)
+                  Evidence Attachment / Screenshot (Encrypted Cloud)
                 </label>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginTop: '0.4rem', flexWrap: 'wrap' }}>
                   <label style={{
@@ -406,7 +406,7 @@ export const IncidentManagement = () => {
                     transition: 'all 0.2s ease'
                   }}>
                     <Upload size={16} />
-                    <span>{evidenceFile ? evidenceFile.name : 'Attach Image to Supabase...'}</span>
+                    <span>{evidenceFile ? evidenceFile.name : 'Attach Evidence Image...'}</span>
                     <input type="file" accept="image/*" onChange={handleEvidenceSelect} style={{ display: 'none' }} />
                   </label>
                   {evidencePreview && (
@@ -458,7 +458,7 @@ export const IncidentManagement = () => {
                 {isSubmitting ? (
                   <>
                     <Loader2 size={18} className="animate-spin" />
-                    Saving to Neon DB & Uploading to Supabase...
+                    Encrypting & Saving Incident Record...
                   </>
                 ) : (
                   'Submit Incident Report'
