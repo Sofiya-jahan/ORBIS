@@ -120,15 +120,15 @@ export const CinematicIntro: React.FC<IntroProps> = ({ onComplete }) => {
     ctx.scale(zoom, zoom);
     ctx.translate(-cx, -cy);
 
-    // 1. BASE BACKGROUND: Deep Obsidian Sci-Fi Atrium
+    // 1. BASE BACKGROUND: Layered Dark Navy (#07112E -> #0D234D)
     const bgGrad = ctx.createRadialGradient(cx, cy, 30, cx, cy, width * 0.8);
-    bgGrad.addColorStop(0, p > 0.4 ? 'rgba(15, 30, 34, 1)' : 'rgba(7, 16, 20, 1)');
-    bgGrad.addColorStop(0.6, 'rgba(5, 11, 14, 1)');
-    bgGrad.addColorStop(1, 'rgba(3, 7, 9, 1)');
+    bgGrad.addColorStop(0, p > 0.4 ? '#0D234D' : '#07112E');
+    bgGrad.addColorStop(0.6, '#07112E');
+    bgGrad.addColorStop(1, '#040A1C');
     ctx.fillStyle = bgGrad;
     ctx.fillRect(0, 0, width, height);
 
-    // 2. FLOOR PERSPECTIVE GRID
+    // 2. FLOOR PERSPECTIVE GRID: Radiant Sky Blue & Cyan Horizon
     const floorY = cy + 40;
     const gridCols = 18;
     ctx.lineWidth = 1;
@@ -138,8 +138,8 @@ export const CinematicIntro: React.FC<IntroProps> = ({ onComplete }) => {
       const endX = cx + i * (width * 0.9);
       
       const gridGrad = ctx.createLinearGradient(startX, floorY, endX, height);
-      gridGrad.addColorStop(0, 'rgba(16, 185, 129, 0.45)');
-      gridGrad.addColorStop(0.7, p > 0.3 ? 'rgba(229, 192, 123, 0.25)' : 'rgba(16, 185, 129, 0.12)');
+      gridGrad.addColorStop(0, 'rgba(106, 231, 247, 0.45)');
+      gridGrad.addColorStop(0.7, p > 0.3 ? 'rgba(46, 155, 248, 0.3)' : 'rgba(21, 84, 232, 0.22)');
       gridGrad.addColorStop(1, 'transparent');
 
       ctx.strokeStyle = gridGrad;
@@ -155,7 +155,7 @@ export const CinematicIntro: React.FC<IntroProps> = ({ onComplete }) => {
       const tNorm = Math.pow(j / horizCount, 2.2);
       const hy = floorY + tNorm * (height - floorY);
       
-      ctx.strokeStyle = `rgba(16, 185, 129, ${0.35 * (1 - tNorm * 0.7)})`;
+      ctx.strokeStyle = `rgba(106, 231, 247, ${0.35 * (1 - tNorm * 0.7)})`;
       ctx.beginPath();
       ctx.moveTo(0, hy);
       ctx.lineTo(width, hy);
@@ -169,11 +169,11 @@ export const CinematicIntro: React.FC<IntroProps> = ({ onComplete }) => {
     const portalTop = cy - portalH / 2;
 
     // Portal Outer Chamfered Arch Frame
-    ctx.strokeStyle = 'rgba(16, 185, 129, 0.5)';
+    ctx.strokeStyle = 'rgba(46, 155, 248, 0.6)';
     ctx.lineWidth = 2;
     ctx.strokeRect(portalLeft - 18, portalTop - 18, portalW + 36, portalH + 36);
 
-    ctx.strokeStyle = 'rgba(229, 192, 123, 0.35)';
+    ctx.strokeStyle = 'rgba(106, 231, 247, 0.4)';
     ctx.lineWidth = 1;
     ctx.strokeRect(portalLeft - 28, portalTop - 28, portalW + 56, portalH + 56);
 
@@ -236,9 +236,9 @@ export const CinematicIntro: React.FC<IntroProps> = ({ onComplete }) => {
 
       // Light Reflections spilling across the floor
       const floorLightGrad = ctx.createRadialGradient(cx, floorY, 10, cx, height, portalW * 1.6);
-      floorLightGrad.addColorStop(0, `rgba(245, 158, 11, ${0.7 * (doorOpenOffset / (portalW * 0.55))})`);
-      floorLightGrad.addColorStop(0.4, `rgba(229, 192, 123, ${0.45 * (doorOpenOffset / (portalW * 0.55))})`);
-      floorLightGrad.addColorStop(0.8, 'rgba(16, 185, 129, 0.15)');
+      floorLightGrad.addColorStop(0, `rgba(46, 155, 248, ${0.7 * (doorOpenOffset / (portalW * 0.55))})`);
+      floorLightGrad.addColorStop(0.4, `rgba(21, 84, 232, ${0.45 * (doorOpenOffset / (portalW * 0.55))})`);
+      floorLightGrad.addColorStop(0.8, 'rgba(106, 231, 247, 0.18)');
       floorLightGrad.addColorStop(1, 'transparent');
       ctx.fillStyle = floorLightGrad;
       ctx.fillRect(0, floorY, width, height - floorY);
@@ -250,20 +250,20 @@ export const CinematicIntro: React.FC<IntroProps> = ({ onComplete }) => {
 
     const leftDoorW = portalW / 2;
     const leftDoorGrad = ctx.createLinearGradient(portalLeft, portalTop, portalLeft + leftDoorW, portalTop);
-    leftDoorGrad.addColorStop(0, '#09151A');
-    leftDoorGrad.addColorStop(0.6, '#0D1E24');
-    leftDoorGrad.addColorStop(1, '#071014');
+    leftDoorGrad.addColorStop(0, '#07112E');
+    leftDoorGrad.addColorStop(0.6, '#0D234D');
+    leftDoorGrad.addColorStop(1, '#050D24');
     ctx.fillStyle = leftDoorGrad;
     ctx.fillRect(portalLeft, portalTop, leftDoorW, portalH);
 
     // Left door metallic armor ridges & border
-    ctx.strokeStyle = 'rgba(16, 185, 129, 0.4)';
+    ctx.strokeStyle = 'rgba(46, 155, 248, 0.5)';
     ctx.lineWidth = 1.5;
     ctx.strokeRect(portalLeft, portalTop, leftDoorW, portalH);
 
     for (let r = 1; r <= 6; r++) {
       const ry = portalTop + r * (portalH / 7);
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+      ctx.strokeStyle = 'rgba(217, 251, 255, 0.12)';
       ctx.beginPath();
       ctx.moveTo(portalLeft + 12, ry);
       ctx.lineTo(portalLeft + leftDoorW - 8, ry);
@@ -279,20 +279,20 @@ export const CinematicIntro: React.FC<IntroProps> = ({ onComplete }) => {
     const rightDoorW = portalW / 2;
     const rightDoorX = cx;
     const rightDoorGrad = ctx.createLinearGradient(rightDoorX, portalTop, rightDoorX + rightDoorW, portalTop);
-    rightDoorGrad.addColorStop(0, '#071014');
-    rightDoorGrad.addColorStop(0.4, '#0D1E24');
-    rightDoorGrad.addColorStop(1, '#09151A');
+    rightDoorGrad.addColorStop(0, '#050D24');
+    rightDoorGrad.addColorStop(0.4, '#0D234D');
+    rightDoorGrad.addColorStop(1, '#07112E');
     ctx.fillStyle = rightDoorGrad;
     ctx.fillRect(rightDoorX, portalTop, rightDoorW, portalH);
 
     // Right door metallic armor ridges & border
-    ctx.strokeStyle = 'rgba(16, 185, 129, 0.4)';
+    ctx.strokeStyle = 'rgba(46, 155, 248, 0.5)';
     ctx.lineWidth = 1.5;
     ctx.strokeRect(rightDoorX, portalTop, rightDoorW, portalH);
 
     for (let r = 1; r <= 6; r++) {
       const ry = portalTop + r * (portalH / 7);
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+      ctx.strokeStyle = 'rgba(217, 251, 255, 0.12)';
       ctx.beginPath();
       ctx.moveTo(rightDoorX + 8, ry);
       ctx.lineTo(rightDoorX + rightDoorW - 12, ry);
@@ -369,7 +369,7 @@ export const CinematicIntro: React.FC<IntroProps> = ({ onComplete }) => {
   const getPhaseDescription = (frame: number) => {
     if (frame <= 60) return { title: 'CALIBRATING SECURITY LATTICE', sub: 'ALIGNING 256-BIT HYDRAULIC LOCKS', progress: 'Phase 1/5' };
     if (frame <= 130) return { title: 'DECOUPLING BIOMETRIC SEALS', sub: 'PRESSURE EQUALIZATION IN PROGRESS', progress: 'Phase 2/5' };
-    if (frame <= 200) return { title: 'UNSEALING SOVEREIGN BLAST DOORS', sub: 'DISPERSING VOLUMETRIC AMBER CORE', progress: 'Phase 3/5' };
+    if (frame <= 200) return { title: 'UNSEALING SOVEREIGN BLAST DOORS', sub: 'DISPERSING VOLUMETRIC SAPPHIRE CORE', progress: 'Phase 3/5' };
     if (frame <= 265) return { title: 'PORTAL THRESHOLD DILATION', sub: 'ESTABLISHING TELEMETRY CONNECTION', progress: 'Phase 4/5' };
     return { title: 'SOVEREIGN ACCESS GRANTED', sub: 'INITIALIZING ENTERPRISE PLATFORM', progress: 'Phase 5/5' };
   };
@@ -383,9 +383,9 @@ export const CinematicIntro: React.FC<IntroProps> = ({ onComplete }) => {
       style={{
         height: '420vh', // Extended scroll track for 300 deliberate, cinematic frames
         position: 'relative',
-        background: '#04080A',
-        fontFamily: "'Times New Roman', Times, serif",
-        color: '#FFFFFF'
+        background: '#07112E',
+        fontFamily: "'Inter', sans-serif",
+        color: '#F6FDFF'
       }}
     >
       
