@@ -179,6 +179,7 @@ export const App = () => {
           <Route path="/organization" element={<OrgSelect />} />
           <Route path="/role-selection" element={<RoleSelect />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Login />} />
           
           {/* Authentication Animation & Security Key Step */}
           <Route path="/authentication" element={<AuthVerification />} />

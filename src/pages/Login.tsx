@@ -20,7 +20,7 @@ export const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const isCreateAccountMode = searchParams.get('mode') === 'signup' || searchParams.get('mode') === 'create-account';
+  const isCreateAccountMode = searchParams.get('mode') === 'signup' || searchParams.get('mode') === 'create-account' || location.pathname === '/register';
 
   const [email, setEmail] = useState('');
   const [fullName, setFullName] = useState('');
