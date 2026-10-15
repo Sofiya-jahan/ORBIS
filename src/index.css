@@ -479,6 +479,32 @@ a:hover {
   background: var(--card-gradient) !important;
   border-color: var(--glass-border) !important;
   box-shadow: var(--shadow-sm);
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .glass-card p,
+[data-theme="light"] .neo-card p,
+[data-theme="light"] .card p {
+  color: var(--text-secondary);
+}
+
+/* Fail-safe protection: ensure elements with inline white text are never invisible on light card surfaces */
+[data-theme="light"] .glass-card [style*="#F6FDFF"]:not(.btn-primary *):not(.btn-ai *):not([data-theme-ignore]),
+[data-theme="light"] .neo-card [style*="#F6FDFF"]:not(.btn-primary *):not(.btn-ai *):not([data-theme-ignore]),
+[data-theme="light"] .card [style*="#F6FDFF"]:not(.btn-primary *):not(.btn-ai *):not([data-theme-ignore]),
+[data-theme="light"] .glass-card [style*="#f6fdff"]:not(.btn-primary *):not(.btn-ai *):not([data-theme-ignore]),
+[data-theme="light"] .neo-card [style*="#f6fdff"]:not(.btn-primary *):not(.btn-ai *):not([data-theme-ignore]),
+[data-theme="light"] .card [style*="#f6fdff"]:not(.btn-primary *):not(.btn-ai *):not([data-theme-ignore]) {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="light"] .glass-card [style*="rgba(246, 253, 255"]:not(.btn-primary *):not(.btn-ai *):not([data-theme-ignore]),
+[data-theme="light"] .neo-card [style*="rgba(246, 253, 255"]:not(.btn-primary *):not(.btn-ai *):not([data-theme-ignore]),
+[data-theme="light"] .card [style*="rgba(246, 253, 255"]:not(.btn-primary *):not(.btn-ai *):not([data-theme-ignore]),
+[data-theme="light"] .glass-card [style*="rgba(246,253,255"]:not(.btn-primary *):not(.btn-ai *):not([data-theme-ignore]),
+[data-theme="light"] .neo-card [style*="rgba(246,253,255"]:not(.btn-primary *):not(.btn-ai *):not([data-theme-ignore]),
+[data-theme="light"] .card [style*="rgba(246,253,255"]:not(.btn-primary *):not(.btn-ai *):not([data-theme-ignore]) {
+  color: var(--text-secondary) !important;
 }
 
 [data-theme="light"] .glass-card:hover,
@@ -499,3 +525,4 @@ a:hover {
 [data-theme="light"] .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 0, 0, 0.28);
 }
+

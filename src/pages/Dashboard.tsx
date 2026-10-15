@@ -74,24 +74,24 @@ export const Dashboard = () => {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
         {/* Welcome Header */}
-        <div className="glass-card" style={{ 
+        <div className="neo-card" style={{ 
           padding: '2rem', 
           display: 'flex', 
           justifyContent: 'space-between', 
           alignItems: 'center', 
-          background: 'rgba(7, 17, 46, 0.92)',
-          border: '1px solid rgba(46, 155, 248, 0.25)',
+          background: 'var(--card-gradient, linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%))',
+          border: '1px solid var(--border-color)',
           borderRadius: '20px',
-          boxShadow: '0 20px 50px rgba(7, 17, 46, 0.9)'
+          boxShadow: 'var(--shadow-md)'
         }}>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#6AE7F7', fontWeight: '700', fontSize: '0.85rem', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: currentOrg.themeColor || 'var(--primary)', fontWeight: '700', fontSize: '0.85rem', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
               <ShieldCheck size={18} /> {currentOrg.name} &bull; Operational Portal
             </div>
-            <h1 style={{ fontSize: '2rem', fontWeight: '800', marginBottom: '0.5rem', color: '#F6FDFF' }}>
+            <h1 style={{ fontSize: '2rem', fontWeight: '800', marginBottom: '0.5rem', color: 'var(--text-primary)', fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)" }}>
               Welcome, {user?.name || 'Specialist'}
             </h1>
-            <p style={{ color: 'rgba(246, 253, 255, 0.75)', fontSize: '0.95rem' }}>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>
               Your workspace is filtered to show your assigned active tasks, departmental alerts, and direct incident filings.
             </p>
           </div>
@@ -106,38 +106,38 @@ export const Dashboard = () => {
 
         {/* 3 Metric Summary Cards */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
-          <div className="glass-card" style={{ padding: '1.75rem', background: 'rgba(7, 17, 46, 0.9)', border: '1px solid rgba(46, 155, 248, 0.22)', borderRadius: '18px' }}>
-            <div style={{ color: 'rgba(246, 253, 255, 0.65)', fontSize: '0.8rem', fontWeight: '700', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
+          <div className="neo-card" style={{ padding: '1.75rem', background: 'var(--card-bg, var(--bg-secondary))', border: '1px solid var(--border-color)', borderRadius: '18px', boxShadow: 'var(--shadow-sm)' }}>
+            <div style={{ color: 'var(--text-muted)', fontSize: '0.8rem', fontWeight: '700', textTransform: 'uppercase', marginBottom: '0.5rem', fontFamily: "'JetBrains Mono', monospace" }}>
               My Assigned Tasks
             </div>
-            <div style={{ fontSize: '2.4rem', fontWeight: '800', color: '#2E9BF8', marginBottom: '0.5rem' }}>
+            <div style={{ fontSize: '2.4rem', fontWeight: '800', color: currentOrg.themeColor || 'var(--primary)', marginBottom: '0.5rem', fontFamily: "'JetBrains Mono', monospace" }}>
               4 Pending
             </div>
-            <div style={{ fontSize: '0.85rem', color: 'rgba(246, 253, 255, 0.75)' }}>
+            <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
               2 due before end of shift (17:00)
             </div>
           </div>
 
-          <div className="glass-card" style={{ padding: '1.75rem', background: 'rgba(7, 17, 46, 0.9)', border: '1px solid rgba(46, 155, 248, 0.22)', borderRadius: '18px' }}>
-            <div style={{ color: 'rgba(246, 253, 255, 0.65)', fontSize: '0.8rem', fontWeight: '700', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
+          <div className="neo-card" style={{ padding: '1.75rem', background: 'var(--card-bg, var(--bg-secondary))', border: '1px solid var(--border-color)', borderRadius: '18px', boxShadow: 'var(--shadow-sm)' }}>
+            <div style={{ color: 'var(--text-muted)', fontSize: '0.8rem', fontWeight: '700', textTransform: 'uppercase', marginBottom: '0.5rem', fontFamily: "'JetBrains Mono', monospace" }}>
               Department Status
             </div>
-            <div style={{ fontSize: '2.4rem', fontWeight: '800', color: '#6AE7F7', marginBottom: '0.5rem' }}>
+            <div style={{ fontSize: '2.4rem', fontWeight: '800', color: '#10B981', marginBottom: '0.5rem', fontFamily: "'JetBrains Mono', monospace" }}>
               Optimal (98%)
             </div>
-            <div style={{ fontSize: '0.85rem', color: 'rgba(246, 253, 255, 0.75)' }}>
+            <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
               Zero critical escalation flags
             </div>
           </div>
 
-          <div className="glass-card" style={{ padding: '1.75rem', background: 'rgba(7, 17, 46, 0.9)', border: '1px solid rgba(46, 155, 248, 0.22)', borderRadius: '18px' }}>
-            <div style={{ color: 'rgba(246, 253, 255, 0.65)', fontSize: '0.8rem', fontWeight: '700', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
+          <div className="neo-card" style={{ padding: '1.75rem', background: 'var(--card-bg, var(--bg-secondary))', border: '1px solid var(--border-color)', borderRadius: '18px', boxShadow: 'var(--shadow-sm)' }}>
+            <div style={{ color: 'var(--text-muted)', fontSize: '0.8rem', fontWeight: '700', textTransform: 'uppercase', marginBottom: '0.5rem', fontFamily: "'JetBrains Mono', monospace" }}>
               Unread System Alerts
             </div>
-            <div style={{ fontSize: '2.4rem', fontWeight: '800', color: '#8671F9', marginBottom: '0.5rem' }}>
+            <div style={{ fontSize: '2.4rem', fontWeight: '800', color: 'var(--accent)', marginBottom: '0.5rem', fontFamily: "'JetBrains Mono', monospace" }}>
               1 Alert
             </div>
-            <div style={{ fontSize: '0.85rem', color: 'rgba(246, 253, 255, 0.75)' }}>
+            <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
               Scheduled protocol maintenance at 22:00
             </div>
           </div>
@@ -204,7 +204,7 @@ export const Dashboard = () => {
           width: '300px',
           height: '300px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(21, 84, 232, 0.25) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(var(--primary-rgb), 0.15) 0%, transparent 70%)',
           pointerEvents: 'none',
           zIndex: 0
         }} />
@@ -221,23 +221,23 @@ export const Dashboard = () => {
                 borderRadius: '100px',
                 fontSize: '0.75rem',
                 fontWeight: 700,
-                background: 'rgba(21, 84, 232, 0.2)',
-                color: '#6AE7F7',
-                border: '1px solid rgba(106, 231, 247, 0.4)'
+                background: 'var(--hover-bg)',
+                color: currentOrg.themeColor || 'var(--primary)',
+                border: '1px solid var(--border-color)'
               }}>
                 <Sparkles size={14} /> AI Risk Surveillance Active
               </span>
-              <span style={{ fontSize: '0.82rem', color: 'rgba(246, 253, 255, 0.65)', fontFamily: "'JetBrains Mono', monospace" }}>
+              <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)', fontFamily: "'JetBrains Mono', monospace" }}>
                 {currentOrg.sector} &bull; {currentRole.title}
               </span>
             </div>
 
-            <h1 style={{ fontSize: '2.4rem', fontWeight: '900', marginBottom: '0.75rem', lineHeight: 1.15, color: '#F6FDFF', fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)" }}>
+            <h1 style={{ fontSize: '2.4rem', fontWeight: '900', marginBottom: '0.75rem', lineHeight: 1.15, color: 'var(--text-primary)', fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)" }}>
               Predictive Risk & Intelligence Matrix
             </h1>
 
-            <p style={{ color: 'rgba(246, 253, 255, 0.75)', fontSize: '1rem', lineHeight: 1.6 }}>
-              Autonomous telemetry correlating <strong style={{ color: '#6AE7F7' }}>{currentOrg.statValue}</strong> across {currentOrg.departments.length} key departments. Systemic vulnerability index evaluated at <strong style={{ color: '#2E9BF8' }}>{currentOrg.aiRiskScore}%</strong> with high algorithmic stability.
+            <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: 1.6 }}>
+              Autonomous telemetry correlating <strong style={{ color: currentOrg.themeColor || 'var(--primary)' }}>{currentOrg.statValue}</strong> across {currentOrg.departments.length} key departments. Systemic vulnerability index evaluated at <strong style={{ color: currentOrg.secondaryColor || 'var(--secondary)' }}>{currentOrg.aiRiskScore}%</strong> with high algorithmic stability.
             </p>
           </div>
 
@@ -248,41 +248,41 @@ export const Dashboard = () => {
             gap: '1.5rem',
             padding: '1.25rem 1.75rem',
             borderRadius: '20px',
-            background: 'rgba(13, 35, 77, 0.75)',
-            border: '1px solid rgba(46, 155, 248, 0.28)',
-            boxShadow: '0 15px 35px rgba(7, 17, 46, 0.8), 0 0 25px rgba(21, 84, 232, 0.2)'
+            background: 'var(--bg-secondary)',
+            border: '1px solid var(--border-color)',
+            boxShadow: 'var(--shadow-md)'
           }}>
             <div style={{ position: 'relative', width: '72px', height: '72px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <svg width="72" height="72" viewBox="0 0 36 36">
                 <path
                   d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                   fill="none"
-                  stroke="rgba(246, 253, 255, 0.08)"
+                  stroke="var(--border-color)"
                   strokeWidth="3.2"
                 />
                 <path
                   d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                   fill="none"
-                  stroke="#6AE7F7"
+                  stroke={currentOrg.themeColor || 'var(--primary)'}
                   strokeWidth="3.2"
                   strokeDasharray={`${currentOrg.healthScore}, 100`}
                   strokeLinecap="round"
-                  style={{ filter: 'drop-shadow(0 0 6px #6AE7F7)' }}
+                  style={{ filter: `drop-shadow(0 0 6px ${currentOrg.themeColor || 'var(--primary)'})` }}
                 />
               </svg>
-              <div style={{ position: 'absolute', fontSize: '1.1rem', fontWeight: '800', color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>
+              <div style={{ position: 'absolute', fontSize: '1.1rem', fontWeight: '800', color: 'var(--text-primary)', fontFamily: "'JetBrains Mono', monospace" }}>
                 {currentOrg.healthScore}%
               </div>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <span style={{ fontSize: '0.72rem', color: 'rgba(246, 253, 255, 0.65)', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: 700, fontFamily: "'JetBrains Mono', monospace" }}>
+              <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: 700, fontFamily: "'JetBrains Mono', monospace" }}>
                 Organizational Health
               </span>
-              <span style={{ fontSize: '1.15rem', fontWeight: '800', color: '#6AE7F7' }}>
+              <span style={{ fontSize: '1.15rem', fontWeight: '800', color: currentOrg.themeColor || 'var(--primary)' }}>
                 Nominal Condition
               </span>
-              <span style={{ fontSize: '0.75rem', color: 'rgba(246, 253, 255, 0.75)' }}>
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
                 Confidence: 99.4%
               </span>
             </div>
@@ -294,7 +294,7 @@ export const Dashboard = () => {
         <div style={{ 
           marginTop: '1.75rem', 
           paddingTop: '1.25rem', 
-          borderTop: '1px solid rgba(46, 155, 248, 0.18)', 
+          borderTop: '1px solid var(--border-color)', 
           display: 'flex', 
           alignItems: 'center', 
           justifyContent: 'space-between',
@@ -316,10 +316,10 @@ export const Dashboard = () => {
                     fontWeight: 700,
                     cursor: 'pointer',
                     border: '1px solid',
-                    borderColor: isActive ? 'rgba(106, 231, 247, 0.5)' : 'rgba(46, 155, 248, 0.2)',
-                    background: isActive ? 'linear-gradient(135deg, #1554E8 0%, #2E9BF8 100%)' : 'rgba(13, 35, 77, 0.65)',
-                    color: isActive ? '#F6FDFF' : 'rgba(246, 253, 255, 0.65)',
-                    boxShadow: isActive ? '0 0 16px rgba(21, 84, 232, 0.4)' : 'none',
+                    borderColor: isActive ? 'var(--primary)' : 'var(--border-color)',
+                    background: isActive ? 'var(--primary-gradient)' : 'var(--bg-secondary)',
+                    color: isActive ? '#FFFFFF' : 'var(--text-secondary)',
+                    boxShadow: isActive ? 'var(--shadow-glow)' : 'none',
                     transition: 'all 0.2s'
                   }}
                 >
@@ -336,12 +336,12 @@ export const Dashboard = () => {
               style={{
                 display: 'flex', alignItems: 'center', gap: '0.5rem',
                 padding: '0.55rem 1.15rem', borderRadius: '10px',
-                background: 'rgba(13, 35, 77, 0.75)', border: '1px solid rgba(46, 155, 248, 0.25)',
-                color: '#F6FDFF', cursor: 'pointer', fontSize: '0.82rem', fontWeight: 600,
+                background: 'var(--bg-secondary)', border: '1px solid var(--border-color)',
+                color: 'var(--text-primary)', cursor: 'pointer', fontSize: '0.82rem', fontWeight: 600,
                 transition: 'all 0.2s ease'
               }}
             >
-              <RefreshCw size={14} className={isRefreshing ? 'animate-spin' : ''} color="#6AE7F7" />
+              <RefreshCw size={14} className={isRefreshing ? 'animate-spin' : ''} color={currentOrg.themeColor || 'var(--primary)'} />
               Sync Telemetry
             </button>
 
@@ -359,44 +359,44 @@ export const Dashboard = () => {
       {/* KPI Cards Row (4 Primary Metrics) */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.5rem' }}>
         {[
-          { label: 'Systemic AI Risk Score', value: `${currentOrg.aiRiskScore}%`, change: '-2.4%', positive: true, icon: TrendingUp, color: '#6AE7F7' },
-          { label: 'Active Sector Telemetry', value: currentOrg.statValue, change: '+14%', positive: true, icon: Activity, color: '#2E9BF8' },
-          { label: 'Unmitigated Anomalies', value: '3 Active', change: '-4 today', positive: true, icon: AlertTriangle, color: '#8671F9' },
-          { label: 'Regulatory Adherence', value: '100% Compliant', change: '0 Flags', positive: true, icon: ShieldCheck, color: '#6AE7F7' }
+          { label: 'Systemic AI Risk Score', value: `${currentOrg.aiRiskScore}%`, change: '-2.4%', positive: true, icon: TrendingUp, color: currentOrg.themeColor || 'var(--primary)' },
+          { label: 'Active Sector Telemetry', value: currentOrg.statValue, change: '+14%', positive: true, icon: Activity, color: currentOrg.secondaryColor || 'var(--secondary)' },
+          { label: 'Unmitigated Anomalies', value: '3 Active', change: '-4 today', positive: true, icon: AlertTriangle, color: 'var(--accent)' },
+          { label: 'Regulatory Adherence', value: '100% Compliant', change: '0 Flags', positive: true, icon: ShieldCheck, color: '#10B981' }
         ].map((kpi, idx) => (
           <div 
             key={idx} 
-            className="glass-card animate-fade-in-delayed" 
+            className="neo-card animate-fade-in-delayed" 
             style={{ 
               padding: '1.6rem', 
               animationDelay: `${idx * 0.08}s`, 
               display: 'flex', 
               justifyContent: 'space-between', 
               alignItems: 'flex-start',
-              background: 'rgba(7, 17, 46, 0.92)',
-              border: '1px solid rgba(46, 155, 248, 0.22)',
+              background: 'var(--card-bg, var(--bg-secondary))',
+              border: '1px solid var(--border-color)',
               borderRadius: '20px',
-              boxShadow: '0 15px 35px rgba(7, 17, 46, 0.8)'
+              boxShadow: 'var(--shadow-md)'
             }}
           >
             <div>
-              <div style={{ color: 'rgba(246, 253, 255, 0.6)', fontSize: '0.78rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '0.4rem', fontFamily: "'JetBrains Mono', monospace" }}>
+              <div style={{ color: 'var(--text-muted)', fontSize: '0.78rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '0.4rem', fontFamily: "'JetBrains Mono', monospace" }}>
                 {kpi.label}
               </div>
-              <div style={{ fontSize: '2rem', fontWeight: '800', color: '#F6FDFF', marginBottom: '0.4rem', fontFamily: "'JetBrains Mono', monospace" }}>
+              <div style={{ fontSize: '2rem', fontWeight: '800', color: 'var(--text-primary)', marginBottom: '0.4rem', fontFamily: "'JetBrains Mono', monospace" }}>
                 {kpi.value}
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.75rem', fontWeight: '700', color: kpi.positive ? '#6AE7F7' : '#EF4444' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.75rem', fontWeight: '700', color: kpi.positive ? '#10B981' : '#EF4444' }}>
                 {kpi.positive ? <ArrowDownRight size={14} /> : <ArrowUpRight size={14} />}
                 {kpi.change} vs prior baseline
               </div>
             </div>
             <div style={{
               width: '46px', height: '46px', borderRadius: '14px',
-              backgroundColor: `${kpi.color}18`, color: kpi.color,
+              backgroundColor: 'var(--hover-bg)', color: kpi.color,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              border: `1px solid ${kpi.color}35`,
-              boxShadow: `0 0 16px ${kpi.color}25`
+              border: '1px solid var(--border-color)',
+              boxShadow: 'var(--shadow-sm)'
             }}>
               <kpi.icon size={22} />
             </div>
@@ -405,19 +405,19 @@ export const Dashboard = () => {
       </div>
 
       {/* Role-Based Intelligence Deck: Adaptive to User Role */}
-      <div className="glass-card" style={{
+      <div className="neo-card" style={{
         padding: '2rem 2.25rem',
-        background: 'linear-gradient(135deg, rgba(7, 17, 46, 0.95) 0%, rgba(13, 35, 77, 0.9) 100%)',
-        border: '1px solid rgba(46, 155, 248, 0.28)',
+        background: 'var(--card-gradient, linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%))',
+        border: '1px solid var(--border-color)',
         borderRadius: '24px',
-        boxShadow: '0 20px 50px rgba(0, 0, 0, 0.6)'
+        boxShadow: 'var(--shadow-md)'
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#6AE7F7', fontWeight: 800, fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '0.25rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: currentOrg.themeColor || 'var(--primary)', fontWeight: 800, fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '0.25rem' }}>
               <ShieldCheck size={16} /> Tailored Role Intelligence &bull; {currentRole.title}
             </div>
-            <h2 style={{ fontSize: '1.4rem', fontWeight: 900, color: '#F6FDFF', margin: 0 }}>
+            <h2 style={{ fontSize: '1.4rem', fontWeight: 900, color: 'var(--text-primary)', margin: 0, fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)" }}>
               {rolePerspective === 'ceo' && 'Executive & Board Oversight Deck'}
               {rolePerspective === 'risk_manager' && 'Risk Center & Mitigation Intelligence Deck'}
               {rolePerspective === 'hr' && 'People & Workforce Risk Intelligence Deck'}
@@ -449,92 +449,92 @@ export const Dashboard = () => {
         {/* 4 Role-Specific Tactical KPIs */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem' }}>
           {rolePerspective === 'ceo' && [
-            { label: 'Strategic Risk Delta', val: 'Low (-2.8%)', note: 'Within Board bounds', color: '#6AE7F7' },
-            { label: 'Capital Exposure At Risk', val: '$2.4M Safe', note: '100% hedged / insured', color: '#2E9BF8' },
-            { label: 'Board Foresight Index', val: '94.2 / 100', note: 'Algorithmic stability', color: '#8671F9' },
-            { label: 'Operating Margin Integrity', val: '99.2%', note: '0 critical escalations', color: '#6AE7F7' }
+            { label: 'Strategic Risk Delta', val: 'Low (-2.8%)', note: 'Within Board bounds', color: '#10B981' },
+            { label: 'Capital Exposure At Risk', val: '$2.4M Safe', note: '100% hedged / insured', color: currentOrg.secondaryColor || 'var(--secondary)' },
+            { label: 'Board Foresight Index', val: '94.2 / 100', note: 'Algorithmic stability', color: 'var(--accent)' },
+            { label: 'Operating Margin Integrity', val: '99.2%', note: '0 critical escalations', color: '#10B981' }
           ].map((item, i) => (
-            <div key={i} style={{ padding: '1.25rem', borderRadius: '16px', background: 'rgba(7, 17, 46, 0.75)', border: '1px solid rgba(46, 155, 248, 0.2)' }}>
-              <div style={{ fontSize: '0.72rem', color: 'rgba(246, 253, 255, 0.6)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>{item.label}</div>
-              <div style={{ fontSize: '1.6rem', fontWeight: 900, color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>{item.val}</div>
+            <div key={i} style={{ padding: '1.25rem', borderRadius: '16px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-sm)' }}>
+              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem', fontFamily: "'JetBrains Mono', monospace" }}>{item.label}</div>
+              <div style={{ fontSize: '1.6rem', fontWeight: 900, color: 'var(--text-primary)', fontFamily: "'JetBrains Mono', monospace" }}>{item.val}</div>
               <div style={{ fontSize: '0.75rem', color: item.color, marginTop: '0.25rem', fontWeight: 700 }}>{item.note}</div>
             </div>
           ))}
 
           {rolePerspective === 'risk_manager' && [
             { label: '5x5 Matrix Peak Cell', val: '2 Critical', note: 'Score >= 16 (Tier 1)', color: '#EF4444' },
-            { label: 'Mitigation Progress Rate', val: '87.5%', note: '21 of 24 risks controlled', color: '#6AE7F7' },
-            { label: 'Residual Risk Index', val: '14.2 / 100', note: 'Within ISO-31000 tolerance', color: '#2E9BF8' },
-            { label: 'Open Incidents Triage', val: '0 Uncontained', note: 'All incidents triaged', color: '#6AE7F7' }
+            { label: 'Mitigation Progress Rate', val: '87.5%', note: '21 of 24 risks controlled', color: '#10B981' },
+            { label: 'Residual Risk Index', val: '14.2 / 100', note: 'Within ISO-31000 tolerance', color: currentOrg.secondaryColor || 'var(--secondary)' },
+            { label: 'Open Incidents Triage', val: '0 Uncontained', note: 'All incidents triaged', color: '#10B981' }
           ].map((item, i) => (
-            <div key={i} style={{ padding: '1.25rem', borderRadius: '16px', background: 'rgba(7, 17, 46, 0.75)', border: '1px solid rgba(46, 155, 248, 0.2)' }}>
-              <div style={{ fontSize: '0.72rem', color: 'rgba(246, 253, 255, 0.6)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>{item.label}</div>
-              <div style={{ fontSize: '1.6rem', fontWeight: 900, color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>{item.val}</div>
+            <div key={i} style={{ padding: '1.25rem', borderRadius: '16px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-sm)' }}>
+              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem', fontFamily: "'JetBrains Mono', monospace" }}>{item.label}</div>
+              <div style={{ fontSize: '1.6rem', fontWeight: 900, color: 'var(--text-primary)', fontFamily: "'JetBrains Mono', monospace" }}>{item.val}</div>
               <div style={{ fontSize: '0.75rem', color: item.color, marginTop: '0.25rem', fontWeight: 700 }}>{item.note}</div>
             </div>
           ))}
 
           {rolePerspective === 'hr' && [
-            { label: 'Staff Fatigue & Burnout Risk', val: '12% (Low)', note: '0 division alerts', color: '#6AE7F7' },
-            { label: 'Workforce Coverage Ratio', val: '96.4%', note: 'All shifts staffed', color: '#2E9BF8' },
-            { label: 'Retention Stability Index', val: '94.8 / 100', note: 'Top decile benchmark', color: '#8671F9' },
-            { label: 'Attendance Anomaly Delta', val: '0.4% Dev', note: 'Within normal variation', color: '#6AE7F7' }
+            { label: 'Staff Fatigue & Burnout Risk', val: '12% (Low)', note: '0 division alerts', color: '#10B981' },
+            { label: 'Workforce Coverage Ratio', val: '96.4%', note: 'All shifts staffed', color: currentOrg.secondaryColor || 'var(--secondary)' },
+            { label: 'Retention Stability Index', val: '94.8 / 100', note: 'Top decile benchmark', color: 'var(--accent)' },
+            { label: 'Attendance Anomaly Delta', val: '0.4% Dev', note: 'Within normal variation', color: '#10B981' }
           ].map((item, i) => (
-            <div key={i} style={{ padding: '1.25rem', borderRadius: '16px', background: 'rgba(7, 17, 46, 0.75)', border: '1px solid rgba(46, 155, 248, 0.2)' }}>
-              <div style={{ fontSize: '0.72rem', color: 'rgba(246, 253, 255, 0.6)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>{item.label}</div>
-              <div style={{ fontSize: '1.6rem', fontWeight: 900, color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>{item.val}</div>
+            <div key={i} style={{ padding: '1.25rem', borderRadius: '16px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-sm)' }}>
+              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem', fontFamily: "'JetBrains Mono', monospace" }}>{item.label}</div>
+              <div style={{ fontSize: '1.6rem', fontWeight: 900, color: 'var(--text-primary)', fontFamily: "'JetBrains Mono', monospace" }}>{item.val}</div>
               <div style={{ fontSize: '0.75rem', color: item.color, marginTop: '0.25rem', fontWeight: 700 }}>{item.note}</div>
             </div>
           ))}
 
           {rolePerspective === 'finance' && [
-            { label: 'Value-at-Risk (VaR 99%)', val: '0.04%', note: 'Parametric 24h risk', color: '#6AE7F7' },
-            { label: 'Operating Capital Liquidity', val: '$48.2M', note: 'Optimal cash reserves', color: '#2E9BF8' },
-            { label: 'Anomalous Transaction Flags', val: '0 Active', note: 'Zero fraud ingress', color: '#6AE7F7' },
-            { label: 'Budget Variance Delta', val: '+0.6%', note: 'Favorable operational delta', color: '#8671F9' }
+            { label: 'Value-at-Risk (VaR 99%)', val: '0.04%', note: 'Parametric 24h risk', color: '#10B981' },
+            { label: 'Operating Capital Liquidity', val: '$48.2M', note: 'Optimal cash reserves', color: currentOrg.secondaryColor || 'var(--secondary)' },
+            { label: 'Anomalous Transaction Flags', val: '0 Active', note: 'Zero fraud ingress', color: '#10B981' },
+            { label: 'Budget Variance Delta', val: '+0.6%', note: 'Favorable operational delta', color: 'var(--accent)' }
           ].map((item, i) => (
-            <div key={i} style={{ padding: '1.25rem', borderRadius: '16px', background: 'rgba(7, 17, 46, 0.75)', border: '1px solid rgba(46, 155, 248, 0.2)' }}>
-              <div style={{ fontSize: '0.72rem', color: 'rgba(246, 253, 255, 0.6)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>{item.label}</div>
-              <div style={{ fontSize: '1.6rem', fontWeight: 900, color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>{item.val}</div>
+            <div key={i} style={{ padding: '1.25rem', borderRadius: '16px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-sm)' }}>
+              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem', fontFamily: "'JetBrains Mono', monospace" }}>{item.label}</div>
+              <div style={{ fontSize: '1.6rem', fontWeight: 900, color: 'var(--text-primary)', fontFamily: "'JetBrains Mono', monospace" }}>{item.val}</div>
               <div style={{ fontSize: '0.75rem', color: item.color, marginTop: '0.25rem', fontWeight: 700 }}>{item.note}</div>
             </div>
           ))}
 
           {rolePerspective === 'compliance' && [
-            { label: 'Regulatory Framework Score', val: '98.6%', note: 'SOC2 & HIPAA Compliant', color: '#6AE7F7' },
-            { label: 'Active Policy Violations', val: '0 Flags', note: 'Zero non-compliance issues', color: '#6AE7F7' },
-            { label: 'Continuous Control Evidence', val: '47 / 48', note: '1 awaiting sign-off', color: '#2E9BF8' },
-            { label: 'Upcoming Audit Countdown', val: '34 Days', note: 'Automated pack ready', color: '#8671F9' }
+            { label: 'Regulatory Framework Score', val: '98.6%', note: 'SOC2 & HIPAA Compliant', color: '#10B981' },
+            { label: 'Active Policy Violations', val: '0 Flags', note: 'Zero non-compliance issues', color: '#10B981' },
+            { label: 'Continuous Control Evidence', val: '47 / 48', note: '1 awaiting sign-off', color: currentOrg.secondaryColor || 'var(--secondary)' },
+            { label: 'Upcoming Audit Countdown', val: '34 Days', note: 'Automated pack ready', color: 'var(--accent)' }
           ].map((item, i) => (
-            <div key={i} style={{ padding: '1.25rem', borderRadius: '16px', background: 'rgba(7, 17, 46, 0.75)', border: '1px solid rgba(46, 155, 248, 0.2)' }}>
-              <div style={{ fontSize: '0.72rem', color: 'rgba(246, 253, 255, 0.6)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>{item.label}</div>
-              <div style={{ fontSize: '1.6rem', fontWeight: 900, color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>{item.val}</div>
+            <div key={i} style={{ padding: '1.25rem', borderRadius: '16px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-sm)' }}>
+              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem', fontFamily: "'JetBrains Mono', monospace" }}>{item.label}</div>
+              <div style={{ fontSize: '1.6rem', fontWeight: 900, color: 'var(--text-primary)', fontFamily: "'JetBrains Mono', monospace" }}>{item.val}</div>
               <div style={{ fontSize: '0.75rem', color: item.color, marginTop: '0.25rem', fontWeight: 700 }}>{item.note}</div>
             </div>
           ))}
 
           {rolePerspective === 'security' && [
-            { label: 'Lattice Cryptographic Posture', val: 'AES-256 HMAC', note: 'Session tokens signed', color: '#6AE7F7' },
-            { label: 'Zero-Day Vulnerability Score', val: 'A+ Rated', note: 'Zero open CVEs', color: '#6AE7F7' },
-            { label: 'Rate Limiter Quarantine', val: '0 Locked', note: '5 attempts / 45s gate active', color: '#2E9BF8' },
-            { label: 'Tamper-Evident Audit Trail', val: '100% Synced', note: 'Immutable security log', color: '#8671F9' }
+            { label: 'Lattice Cryptographic Posture', val: 'AES-256 HMAC', note: 'Session tokens signed', color: '#10B981' },
+            { label: 'Zero-Day Vulnerability Score', val: 'A+ Rated', note: 'Zero open CVEs', color: '#10B981' },
+            { label: 'Rate Limiter Quarantine', val: '0 Locked', note: '5 attempts / 45s gate active', color: currentOrg.secondaryColor || 'var(--secondary)' },
+            { label: 'Tamper-Evident Audit Trail', val: '100% Synced', note: 'Immutable security log', color: 'var(--accent)' }
           ].map((item, i) => (
-            <div key={i} style={{ padding: '1.25rem', borderRadius: '16px', background: 'rgba(7, 17, 46, 0.75)', border: '1px solid rgba(46, 155, 248, 0.2)' }}>
-              <div style={{ fontSize: '0.72rem', color: 'rgba(246, 253, 255, 0.6)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>{item.label}</div>
-              <div style={{ fontSize: '1.6rem', fontWeight: 900, color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>{item.val}</div>
+            <div key={i} style={{ padding: '1.25rem', borderRadius: '16px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-sm)' }}>
+              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem', fontFamily: "'JetBrains Mono', monospace" }}>{item.label}</div>
+              <div style={{ fontSize: '1.6rem', fontWeight: 900, color: 'var(--text-primary)', fontFamily: "'JetBrains Mono', monospace" }}>{item.val}</div>
               <div style={{ fontSize: '0.75rem', color: item.color, marginTop: '0.25rem', fontWeight: 700 }}>{item.note}</div>
             </div>
           ))}
 
           {rolePerspective === 'operations' && [
-            { label: 'Operational Uptime SLA', val: '99.98%', note: 'Zero facility disruptions', color: '#6AE7F7' },
-            { label: 'Shift Directives Pending', val: '3 Directives', note: 'All supervisors notified', color: '#2E9BF8' },
-            { label: 'Safety Incidents Logged', val: '0 Critical', note: 'Safe operating window', color: '#6AE7F7' },
-            { label: 'Readiness Index', val: '100%', note: 'Equipment & staff calibrated', color: '#8671F9' }
+            { label: 'Operational Uptime SLA', val: '99.98%', note: 'Zero facility disruptions', color: '#10B981' },
+            { label: 'Shift Directives Pending', val: '3 Directives', note: 'All supervisors notified', color: currentOrg.secondaryColor || 'var(--secondary)' },
+            { label: 'Safety Incidents Logged', val: '0 Critical', note: 'Safe operating window', color: '#10B981' },
+            { label: 'Readiness Index', val: '100%', note: 'Equipment & staff calibrated', color: 'var(--accent)' }
           ].map((item, i) => (
-            <div key={i} style={{ padding: '1.25rem', borderRadius: '16px', background: 'rgba(7, 17, 46, 0.75)', border: '1px solid rgba(46, 155, 248, 0.2)' }}>
-              <div style={{ fontSize: '0.72rem', color: 'rgba(246, 253, 255, 0.6)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>{item.label}</div>
-              <div style={{ fontSize: '1.6rem', fontWeight: 900, color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>{item.val}</div>
+            <div key={i} style={{ padding: '1.25rem', borderRadius: '16px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-sm)' }}>
+              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem', fontFamily: "'JetBrains Mono', monospace" }}>{item.label}</div>
+              <div style={{ fontSize: '1.6rem', fontWeight: 900, color: 'var(--text-primary)', fontFamily: "'JetBrains Mono', monospace" }}>{item.val}</div>
               <div style={{ fontSize: '0.75rem', color: item.color, marginTop: '0.25rem', fontWeight: 700 }}>{item.note}</div>
             </div>
           ))}
