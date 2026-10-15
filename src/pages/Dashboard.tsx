@@ -16,7 +16,6 @@ import {
   Wrench, Building2, Landmark, Factory, Scale
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { OrganizationalPortalBackdrop } from '../components/OrganizationalPortalBackdrop';
 
 export const Dashboard = () => {
   const { organization, role, user } = useAuthStore();
@@ -187,16 +186,16 @@ export const Dashboard = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       
-      {/* Top Header & AI Executive Summary Banner with Realistic Blended Architectural Portal */}
-      <OrganizationalPortalBackdrop
-        themeColor={currentOrg.themeColor}
-        secondaryColor={currentOrg.secondaryColor}
-        accentColor={currentOrg.accentColor}
-        nodeBadgeText={`${currentOrg.name.split('&')[0]} • SECURE PERIMETER ONLINE`}
-        variant="banner"
-        className="animate-fade-in"
-      >
-        <div style={{ padding: '2.5rem' }}>
+      {/* Top Header & AI Executive Summary Banner */}
+      <div className="neo-card animate-fade-in" style={{ 
+        padding: '2.5rem', 
+        borderRadius: '24px', 
+        position: 'relative', 
+        overflow: 'hidden',
+        background: 'var(--card-gradient, linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%))',
+        border: '1px solid var(--border-color)',
+        boxShadow: 'var(--shadow-lg)'
+      }}>
         {/* Ambient Top Glow */}
         <div style={{
           position: 'absolute',
@@ -356,7 +355,6 @@ export const Dashboard = () => {
           </div>
         </div>
       </div>
-    </OrganizationalPortalBackdrop>
 
       {/* KPI Cards Row (4 Primary Metrics) */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.5rem' }}>
