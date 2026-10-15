@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
 import { ORGANIZATIONS } from '../config/platformConfig';
 import { 
@@ -25,8 +25,7 @@ export const RoleSelect = () => {
 
   // If no organization selected, redirect back to organization selection
   if (!organization || !ORGANIZATIONS[organization]) {
-    navigate('/organization');
-    return null;
+    return <Navigate to="/organization" replace />;
   }
 
   const currentOrg = ORGANIZATIONS[organization];

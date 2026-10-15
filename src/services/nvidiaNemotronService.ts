@@ -1,5 +1,5 @@
 /**
- * NVIDIA Nemotron-3 Super 120B AI Assistant Integration for IPRAP
+ * NVIDIA Nemotron-3 Super 120B AI Assistant Integration for ORBIS
  * Model: nvidia/nemotron-3-super-120b-a12b
  * Endpoint: https://integrate.api.nvidia.com/v1
  */
@@ -42,7 +42,7 @@ const NVIDIA_MODEL =
   'nvidia/nemotron-3-super-120b-a12b';
 
 /**
- * Builds the official IPRAP Enterprise Sentinel System Prompt
+ * Builds the official ORBIS Enterprise Sentinel System Prompt
  */
 export function buildNemotronSystemPrompt(context?: NemotronContext): string {
   const orgName = context?.organization?.name || 'Enterprise System';
@@ -53,7 +53,7 @@ export function buildNemotronSystemPrompt(context?: NemotronContext): string {
   const aiRiskScore = context?.aiRiskScore ?? context?.organization?.aiRiskScore ?? 12;
   const modules = context?.activeModules?.join(', ') || context?.organization?.industryModules?.map(m => m.name).join(', ') || 'Predictive AI, Risk Register, Compliance Matrix';
 
-  return `You are "IPRAP Enterprise Sentinel", the authoritative autonomous Cognitive AI Risk Copilot for the Intelligent Predictive Risk Analytics Platform (IPRAP).
+  return `You are "ORBIS Enterprise Sentinel", the authoritative autonomous Cognitive AI Risk Copilot for the Organizational Risk and Business Intelligence System (ORBIS).
 You are powered by NVIDIA's Nemotron-3 Super 120B reasoning model ("nvidia/nemotron-3-super-120b-a12b").
 
 ### CURRENT ACTIVE OPERATIONAL CONTEXT:

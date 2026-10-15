@@ -43,7 +43,7 @@ const FullScreenLoader = () => (
 
 // Strictly Protected Routes for Master Dashboard
 const RequireAuth = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated, isAuthLoaded, user } = useAuthStore();
+  const { isAuthenticated, isAuthLoaded, user, organization } = useAuthStore();
   const location = useLocation();
 
   if (!isAuthLoaded) {
@@ -61,7 +61,18 @@ const RequireAuth = ({ children }: { children: React.ReactNode }) => {
       'UNAUTHORIZED_ACCESS_BLOCKED',
       'WARNING',
       `Access to protected route ${location.pathname} blocked: ${sessionCheck.reason || 'Missing institutional cryptographic key'}`,
-      user?.email || 'operator@iprap.ai'
+      user?.email || 'operator@orbis.ai'
+    );
+    return <Navigate to="/security-key" state={{ from: location }} replace />;
+  }
+
+  // Tenant Boundary Check: verify active session matches currently selected organization
+  if (sessionCheck.session && organization && sessionCheck.session.organization.toLowerCase() !== organization.toLowerCase()) {
+    logSecurityEvent(
+      'UNAUTHORIZED_ACCESS_BLOCKED',
+      'CRITICAL',
+      `Cross-tenant access breach blocked! Session org '${sessionCheck.session.organization}' does not match requested tenant '${organization}'. Re-verification required.`,
+      user?.email || 'operator@orbis.ai'
     );
     return <Navigate to="/security-key" state={{ from: location }} replace />;
   }

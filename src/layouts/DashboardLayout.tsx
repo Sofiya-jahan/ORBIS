@@ -221,18 +221,18 @@ export const DashboardLayout = () => {
           {sidebarOpen ? (
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
               <div style={{
-                width: '40px', height: '40px', borderRadius: '12px',
-                background: `${currentOrg.themeColor}20`,
+                width: '42px', height: '42px', borderRadius: '12px',
+                background: 'rgba(10, 20, 38, 0.7)',
                 border: `1px solid ${currentOrg.themeColor}50`,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                color: currentOrg.themeColor,
-                boxShadow: `0 0 15px ${currentOrg.themeColor}30`
+                overflow: 'hidden',
+                boxShadow: `0 0 20px ${currentOrg.themeColor}35`
               }}>
-                <OrgIcon size={22} />
+                <img src="/orbis-logo.png" alt="ORBIS Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
               <div>
                 <div style={{ fontWeight: '900', fontSize: '1.2rem', letterSpacing: '-0.5px', fontFamily: 'var(--font-heading)' }}>
-                  IPRAP <span style={{ color: currentOrg.themeColor, fontSize: '0.8rem', fontWeight: '700' }}>AI</span>
+                  ORBIS <span style={{ color: currentOrg.themeColor, fontSize: '0.8rem', fontWeight: '700' }}>AI</span>
                 </div>
                 <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: 600 }}>
                   {currentOrg.sector.split('&')[0]}
@@ -241,12 +241,14 @@ export const DashboardLayout = () => {
             </div>
           ) : (
             <div style={{
-              width: '40px', height: '40px', borderRadius: '12px',
-              background: `${currentOrg.themeColor}20`,
+              width: '42px', height: '42px', borderRadius: '12px',
+              background: 'rgba(10, 20, 38, 0.7)',
+              border: `1px solid ${currentOrg.themeColor}50`,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: currentOrg.themeColor
+              overflow: 'hidden',
+              boxShadow: `0 0 15px ${currentOrg.themeColor}20`
             }}>
-              <OrgIcon size={22} />
+              <img src="/orbis-logo.png" alt="ORBIS Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
           )}
         </div>

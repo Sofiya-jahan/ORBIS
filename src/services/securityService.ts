@@ -1,5 +1,5 @@
 /**
- * Enterprise Defense & Zero-Trust Security Service (IPRAP Core)
+ * Enterprise Defense & Zero-Trust Security Service (ORBIS Core)
  *
  * Implements:
  * 1. Cryptographic session generation and signature verification with expiry.
@@ -45,9 +45,9 @@ export interface SecuritySessionData {
   signature: string;
 }
 
-const SESSION_KEY = 'iprap_sec_session';
-const AUDIT_LOG_KEY = 'iprap_security_audit_log';
-const RATE_LIMIT_KEY_PREFIX = 'iprap_rate_';
+const SESSION_KEY = 'orbis_sec_session';
+const AUDIT_LOG_KEY = 'orbis_security_audit_log';
+const RATE_LIMIT_KEY_PREFIX = 'orbis_rate_';
 const MAX_LOGS = 150;
 const SESSION_TTL_MS = 8 * 60 * 60 * 1000; // 8 Hours
 
@@ -68,7 +68,7 @@ export function generateCryptoId(length = 24): string {
  */
 function computeSignature(payload: string): string {
   let hash = 0;
-  const salt = 'iprap_sovereign_lattice_salt_2026';
+  const salt = 'orbis_sovereign_lattice_salt_2026';
   const combined = payload + salt;
   for (let i = 0; i < combined.length; i++) {
     const char = combined.charCodeAt(i);
@@ -84,7 +84,7 @@ function computeSignature(payload: string): string {
 export function createSecuritySession(
   organization: string,
   role: string,
-  userEmail = 'operator@iprap.ai'
+  userEmail = 'operator@orbis.ai'
 ): string {
   const issuedAt = Date.now();
   const expiresAt = issuedAt + SESSION_TTL_MS;
@@ -105,6 +105,7 @@ export function createSecuritySession(
 
   try {
     sessionStorage.setItem(SESSION_KEY, JSON.stringify(sessionData));
+    sessionStorage.setItem('orbis_key_verified', 'true');
     sessionStorage.setItem('iprap_key_verified', 'true');
   } catch (e) {
     console.warn('SecuritySession storage fallback:', e);
@@ -129,10 +130,14 @@ export function verifySecuritySession(): {
   session?: SecuritySessionData;
 } {
   try {
-    const raw = sessionStorage.getItem(SESSION_KEY);
+    let raw = sessionStorage.getItem(SESSION_KEY);
+    if (!raw) {
+      // Check legacy session key if migrated
+      raw = sessionStorage.getItem('iprap_sec_session');
+    }
     if (!raw) {
       // Legacy check fallback
-      const legacyKey = sessionStorage.getItem('iprap_key_verified');
+      const legacyKey = sessionStorage.getItem('orbis_key_verified') || sessionStorage.getItem('iprap_key_verified');
       if (legacyKey === 'true') {
         return { valid: true };
       }
@@ -176,11 +181,48 @@ export function verifySecuritySession(): {
 }
 
 /**
+ * Synchronize role change with active cryptographic session
+ */
+export function updateSecuritySessionRole(newRole: string): boolean {
+  try {
+    const raw = sessionStorage.getItem(SESSION_KEY);
+    if (!raw) return false;
+    const session: SecuritySessionData = JSON.parse(raw);
+    session.role = newRole;
+    const rawPayload = `${session.sessionId}:${session.organization}:${session.role}:${session.userEmail}:${session.issuedAt}:${session.expiresAt}`;
+    session.signature = computeSignature(rawPayload);
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    logSecurityEvent(
+      'KEY_ROTATED',
+      'INFO',
+      `Session clearance updated to role '${newRole}' for organization '${session.organization}'. Signature recomputed.`,
+      session.userEmail
+    );
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Validate that an active session belongs strictly to the requested organization
+ */
+export function isSessionValidForTenant(organization: string): boolean {
+  if (!organization) return false;
+  const check = verifySecuritySession();
+  if (!check.valid) return false;
+  if (!check.session) return true; // Legacy verified fallback
+  return check.session.organization.toLowerCase() === organization.toLowerCase();
+}
+
+/**
  * Revoke and wipe session tokens
  */
 export function clearSecuritySession(): void {
   try {
     sessionStorage.removeItem(SESSION_KEY);
+    sessionStorage.removeItem('iprap_sec_session');
+    sessionStorage.removeItem('orbis_key_verified');
     sessionStorage.removeItem('iprap_key_verified');
   } catch (e) {
     console.error('Failed to clear security session:', e);
@@ -282,15 +324,15 @@ export function resetRateLimit(actionKey: string): void {
  * XSS & Script Injection Sanitizer
  */
 const SUSPICIOUS_PATTERNS = [
-  /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
-  /javascript:/gi,
-  /onload\s*=/gi,
-  /onerror\s*=/gi,
-  /onclick\s*=/gi,
-  /<iframe/gi,
-  /eval\s*\(/gi,
-  /document\.cookie/gi,
-  /window\.location/gi,
+  /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/i,
+  /javascript:/i,
+  /onload\s*=/i,
+  /onerror\s*=/i,
+  /onclick\s*=/i,
+  /<iframe/i,
+  /eval\s*\(/i,
+  /document\.cookie/i,
+  /window\.location/i,
 ];
 
 export function isSuspiciousInput(input: string): boolean {
@@ -329,6 +371,7 @@ export function sanitizeInput(input: string): string {
  */
 const ALLOWED_MIME_TYPES = new Set([
   'image/jpeg',
+  'image/jpg',
   'image/png',
   'image/webp',
   'image/gif',
@@ -411,6 +454,7 @@ export function logSecurityEvent(
 
     // Dispatch custom browser event for live UI reaction in AdminSecurity
     if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('orbis:security_event', { detail: entry }));
       window.dispatchEvent(new CustomEvent('iprap:security_event', { detail: entry }));
     }
   } catch (e) {
@@ -422,7 +466,10 @@ export function logSecurityEvent(
 
 export function getSecurityLogs(): SecurityLogEntry[] {
   try {
-    const raw = localStorage.getItem(AUDIT_LOG_KEY);
+    let raw = localStorage.getItem(AUDIT_LOG_KEY);
+    if (!raw) {
+      raw = localStorage.getItem('iprap_security_audit_log');
+    }
     if (!raw) {
       // Seed initial security baseline entries if empty
       const initialLogs: SecurityLogEntry[] = [
@@ -457,7 +504,9 @@ export function getSecurityLogs(): SecurityLogEntry[] {
 export function clearSecurityLogs(): void {
   try {
     localStorage.removeItem(AUDIT_LOG_KEY);
+    localStorage.removeItem('iprap_security_audit_log');
     if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('orbis:security_event', { detail: null }));
       window.dispatchEvent(new CustomEvent('iprap:security_event', { detail: null }));
     }
   } catch (e) {

@@ -221,14 +221,14 @@ export const Landing = () => {
             width: 46,
             height: 46,
             borderRadius: '12px',
-            background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+            overflow: 'hidden',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 0 25px rgba(16, 185, 129, 0.5)',
-            border: '1px solid rgba(255, 255, 255, 0.3)'
+            boxShadow: '0 0 25px rgba(59, 130, 246, 0.5)',
+            border: '1px solid rgba(59, 130, 246, 0.4)'
           }}>
-            <Shield size={24} color="#FFFFFF" strokeWidth={2.4} />
+            <img src="/orbis-logo.png" alt="ORBIS Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
           <div>
             <div style={{
@@ -239,7 +239,7 @@ export const Landing = () => {
               color: '#FFFFFF',
               lineHeight: 1
             }}>
-              IPRAP
+              ORBIS
             </div>
             <div style={{
               fontSize: '0.65rem',
@@ -439,7 +439,7 @@ export const Landing = () => {
               marginBottom: '2.25rem',
               fontWeight: 400,
             }}>
-              IPRAP autonomously intercepts systemic anomalies, liquidity cascades, and sovereign infrastructure vulnerabilities before propagation—powered by IPRAP Neural Risk Engine v4.2.
+              ORBIS autonomously intercepts systemic anomalies, liquidity cascades, and sovereign infrastructure vulnerabilities before propagation—powered by ORBIS Neural Risk Engine v4.2.
             </p>
 
             {/* Action Directives */}
@@ -912,7 +912,7 @@ export const Landing = () => {
         fontSize: '0.82rem',
       }}>
         <div>
-          &copy; {new Date().getFullYear()} IPRAP &bull; Intelligent Predictive Risk Analytics Platform. Enterprise Neural Architecture.
+          &copy; {new Date().getFullYear()} ORBIS &bull; Organizational Risk and Business Intelligence System. Enterprise Neural Architecture.
         </div>
         <div style={{ display: 'flex', gap: '2rem', fontFamily: "'JetBrains Mono', monospace", fontSize: '0.72rem', color: '#E5C07B' }}>
           <span>ISO 31000</span>

@@ -6,6 +6,7 @@ import {
   ShieldCheck, Upload, Loader2, Lock, CheckCircle2, Shield, Camera
 } from 'lucide-react';
 import { uploadProfileAvatar } from '../services/supabaseStorage';
+import { validateFileUpload, sanitizeInput } from '../services/securityService';
 
 export const Profile = () => {
   const { user, organization, role, updateUser } = useAuthStore();
@@ -26,6 +27,15 @@ export const Profile = () => {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // Validate avatar file with zero-trust sieve
+    const sieve = validateFileUpload(file, { maxSizeBytes: 5 * 1024 * 1024 });
+    if (!sieve.valid) {
+      setUploadStatus(sieve.error || 'Avatar file rejected by security policy.');
+      setTimeout(() => setUploadStatus(null), 4000);
+      e.target.value = '';
+      return;
+    }
+
     setIsUploading(true);
     setUploadStatus('Encrypting & uploading avatar image...');
 
@@ -45,9 +55,12 @@ export const Profile = () => {
 
   const handleSaveProfile = (e: React.FormEvent) => {
     e.preventDefault();
+    const cleanName = sanitizeInput(nameInput);
+    const cleanContact = sanitizeInput(contactInput);
+
     updateUser({
-      name: nameInput,
-      contact: contactInput,
+      name: cleanName || user.name,
+      contact: cleanContact,
     });
     setSaveSuccess(true);
     setTimeout(() => setSaveSuccess(false), 3000);

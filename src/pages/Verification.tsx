@@ -126,7 +126,7 @@ export const Verification = () => {
     if (isValid || keyToSubmit === '123456') {
       resetRateLimit('auth_key_attempt');
       setRemainingAttempts(5);
-      createSecuritySession(activeOrgId, role || 'cmo', user?.email || 'operator@iprap.ai');
+      createSecuritySession(activeOrgId, role || 'cmo', user?.email || 'operator@orbis.ai');
       setSuccess(true);
       setTimeout(() => {
         navigate('/dashboard');

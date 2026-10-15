@@ -635,7 +635,7 @@ export const DemoModal: React.FC<DemoModalProps> = ({ isOpen, onClose }) => {
                     letterSpacing: '1px',
                     fontFamily: "'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif",
                   }}>
-                    IPRAP PRODUCT EXPERIENCE
+                    ORBIS PRODUCT EXPERIENCE
                   </span>
                   <span style={{
                     padding: '2px 8px',

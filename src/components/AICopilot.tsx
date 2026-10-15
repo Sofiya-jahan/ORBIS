@@ -13,6 +13,7 @@ import {
   clearMessagesFromNeon 
 } from '../services/neonService';
 import { queryNemotron } from '../services/nvidiaNemotronService';
+import { sanitizeInput } from '../services/securityService';
 
 
 interface ChatMessage {
@@ -67,12 +68,12 @@ export const AICopilot = () => {
           const initialGreeting: ChatMessage = {
             id: `msg-init-${organization || 'default'}`,
             sender: 'ai',
-            text: `Greetings ${user?.name || 'Commander'}. I am **IPRAP Risk Intelligence Copilot**, your autonomous Enterprise Risk Analytics Assistant.\n\nI am synchronized with **${currentOrg.name}** for your role as **${currentRole?.title || role || 'Officer'}** (${currentRole?.accessLevel || 'Authorized Clearance'}). Multi-modal risk surveillance, SHAP interpretability metrics, and real-time telemetry analytics are active.\n\nHow can I assist your operational risk analysis today?`,
+            text: `Greetings ${user?.name || 'Commander'}. I am **ORBIS Risk Intelligence Copilot**, your autonomous Enterprise Risk Analytics Assistant.\n\nI am synchronized with **${currentOrg.name}** for your role as **${currentRole?.title || role || 'Officer'}** (${currentRole?.accessLevel || 'Authorized Clearance'}). Multi-modal risk surveillance, SHAP interpretability metrics, and real-time telemetry analytics are active.\n\nHow can I assist your operational risk analysis today?`,
             timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
             actionCard: {
               title: `AI Risk Exposure: ${currentOrg.aiRiskScore}% (Real-time Monitored)`,
               description: `Systemic Health Score is at ${currentOrg.healthScore} / 100 with active neural surveillance across ${currentOrg.industryModules.length} sector modules.`,
-              metric: 'IPRAP Neural Engine Active',
+              metric: 'ORBIS Neural Engine Active',
               status: currentOrg.aiRiskScore > 15 ? 'warning' : 'optimal'
             }
           };
@@ -113,13 +114,17 @@ export const AICopilot = () => {
   ];
 
   const handleSendMessage = async (textToSend?: string) => {
-    const text = textToSend || inputValue;
-    if (!text.trim() || isThinking) return;
+    const rawText = textToSend || inputValue;
+    if (!rawText.trim() || isThinking) return;
+
+    // Sanitize user prompt to prevent prompt injection and XSS
+    const text = sanitizeInput(rawText.trim());
+    if (!text) return;
 
     const newUserMessage: ChatMessage = {
       id: `usr-${Date.now()}`,
       sender: 'user',
-      text: text.trim(),
+      text: text,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     };
 
@@ -235,15 +240,15 @@ export const AICopilot = () => {
           onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0) scale(1)'; }}
           >
             <div style={{
-              width: '28px', height: '28px', borderRadius: '50%',
-              background: 'rgba(255,255,255,0.2)',
+              width: '28px', height: '28px', borderRadius: '8px',
+              overflow: 'hidden',
               display: 'flex', alignItems: 'center', justifyContent: 'center'
             }}>
-              <Sparkles size={16} color="#FFFFFF" />
+              <img src="/orbis-logo.png" alt="ORBIS" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               <span style={{ fontSize: '0.85rem', fontWeight: '800', letterSpacing: '0.5px' }}>
-                IPRAP Risk Advisor
+                ORBIS Risk Advisor
               </span>
               <span style={{ fontSize: '0.65rem', opacity: 0.9, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                 AI Intelligence Online
@@ -287,16 +292,17 @@ export const AICopilot = () => {
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
               <div style={{
-                width: '38px', height: '38px', borderRadius: '12px',
-                background: 'var(--primary-gradient)',
+                width: '40px', height: '40px', borderRadius: '12px',
+                overflow: 'hidden',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                boxShadow: '0 0 15px rgba(var(--primary-rgb), 0.4)'
+                boxShadow: '0 0 20px rgba(59, 130, 246, 0.45)',
+                border: '1px solid rgba(59, 130, 246, 0.3)'
               }}>
-                <Bot size={22} color="#FFFFFF" />
+                <img src="/orbis-logo.png" alt="ORBIS" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
               <div>
                 <div style={{ fontSize: '0.95rem', fontWeight: '800', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-                  IPRAP Risk Intelligence Copilot
+                  ORBIS Risk Intelligence Copilot
                   <span style={{
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -450,7 +456,7 @@ export const AICopilot = () => {
             {isThinking && (
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', padding: '0.75rem 1rem', background: 'var(--bg-secondary)', borderRadius: '14px', alignSelf: 'flex-start', border: '1px solid rgba(16, 185, 129, 0.4)' }}>
                 <RefreshCw size={16} className="animate-spin" color="#10B981" />
-                <span style={{ fontSize: '0.8rem', color: 'var(--text-primary)', fontWeight: 600 }}>IPRAP Neural Risk Engine synthesizing operational intelligence...</span>
+                <span style={{ fontSize: '0.8rem', color: 'var(--text-primary)', fontWeight: 600 }}>ORBIS Neural Risk Engine synthesizing operational intelligence...</span>
               </div>
             )}
 
@@ -510,7 +516,7 @@ export const AICopilot = () => {
           >
             <input
               type="text"
-              placeholder={`Ask IPRAP Risk Copilot about ${currentOrg?.name || 'risks'}...`}
+              placeholder={`Ask ORBIS Risk Copilot about ${currentOrg?.name || 'risks'}...`}
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               style={{

@@ -1,4 +1,5 @@
 import { neon } from '@neondatabase/serverless';
+import { sanitizeInput } from './securityService';
 
 // Retrieve connection URL from environment variables
 const dbUrl = import.meta.env.VITE_NEON_DATABASE_URL || 
@@ -127,16 +128,19 @@ export async function saveMessageToNeon(msg: {
   try {
     await initNeonTables();
     const actionCardJson = msg.actionCard ? JSON.stringify(msg.actionCard) : null;
+    const cleanText = sanitizeInput(msg.text);
+    const cleanOrg = sanitizeInput(msg.organization || 'general');
+    const cleanRole = sanitizeInput(msg.role || 'operator');
 
     await sql`
       INSERT INTO messages (id, user_id, organization, role, sender, text, timestamp, action_card)
       VALUES (
         ${msg.id},
         ${msg.userId || 'anonymous'},
-        ${msg.organization || 'general'},
-        ${msg.role || 'operator'},
+        ${cleanOrg},
+        ${cleanRole},
         ${msg.sender},
-        ${msg.text},
+        ${cleanText},
         ${msg.timestamp},
         ${actionCardJson ? actionCardJson : null}
       )
@@ -152,30 +156,21 @@ export async function saveMessageToNeon(msg: {
 }
 
 /**
- * Load recent messages from Neon DB filtered by organization
+ * Load recent messages from Neon DB filtered strictly by organization (Tenant Segregation)
  */
 export async function loadMessagesFromNeon(org?: string, limit: number = 50): Promise<NeonMessage[]> {
   if (!sql) return [];
+  const targetOrg = org || 'general'; // Strict tenant isolation: never perform cross-tenant queries
 
   try {
     await initNeonTables();
-    let rows;
-    if (org) {
-      rows = await sql`
-        SELECT id, user_id, organization, role, sender, text, timestamp, action_card, created_at
-        FROM messages
-        WHERE organization = ${org} OR organization = 'general'
-        ORDER BY created_at ASC
-        LIMIT ${limit};
-      `;
-    } else {
-      rows = await sql`
-        SELECT id, user_id, organization, role, sender, text, timestamp, action_card, created_at
-        FROM messages
-        ORDER BY created_at ASC
-        LIMIT ${limit};
-      `;
-    }
+    const rows = await sql`
+      SELECT id, user_id, organization, role, sender, text, timestamp, action_card, created_at
+      FROM messages
+      WHERE organization = ${targetOrg}
+      ORDER BY created_at ASC
+      LIMIT ${limit};
+    `;
 
     return (rows as any[]).map(r => ({
       id: r.id,
@@ -195,18 +190,17 @@ export async function loadMessagesFromNeon(org?: string, limit: number = 50): Pr
 }
 
 /**
- * Clear chat history for an organization
+ * Clear chat history strictly for an organization (Tenant Segregation Guard)
  */
 export async function clearMessagesFromNeon(org?: string): Promise<boolean> {
-  if (!sql) return false;
+  if (!sql || !org) {
+    console.warn('Neon DB: Tenant identifier required for message purge. Global purge rejected.');
+    return false;
+  }
 
   try {
     await initNeonTables();
-    if (org) {
-      await sql`DELETE FROM messages WHERE organization = ${org};`;
-    } else {
-      await sql`DELETE FROM messages;`;
-    }
+    await sql`DELETE FROM messages WHERE organization = ${org};`;
     return true;
   } catch (err) {
     console.error('Neon DB: Failed to clear messages:', err);
@@ -219,7 +213,7 @@ export async function clearMessagesFromNeon(org?: string): Promise<boolean> {
 // -------------------------------------------------------------
 
 /**
- * Save an incident into Neon DB
+ * Save an incident into Neon DB with input sanitization
  */
 export async function saveIncidentToNeon(incident: NeonIncident): Promise<boolean> {
   if (!sql) return false;
@@ -227,6 +221,11 @@ export async function saveIncidentToNeon(incident: NeonIncident): Promise<boolea
   try {
     await initNeonTables();
     const evidenceUrlsJson = JSON.stringify(incident.evidence_urls || []);
+    const cleanTitle = sanitizeInput(incident.title);
+    const cleanDept = sanitizeInput(incident.department);
+    const cleanReporter = sanitizeInput(incident.reporter);
+    const cleanRootCause = sanitizeInput(incident.root_cause);
+    const cleanOrg = sanitizeInput(incident.organization || 'hospital');
 
     await sql`
       INSERT INTO incidents (
@@ -235,16 +234,16 @@ export async function saveIncidentToNeon(incident: NeonIncident): Promise<boolea
         evidence_urls, organization
       ) VALUES (
         ${incident.id},
-        ${incident.title},
-        ${incident.department},
+        ${cleanTitle},
+        ${cleanDept},
         ${incident.severity},
-        ${incident.reporter},
+        ${cleanReporter},
         ${incident.reported_at},
         ${incident.status},
-        ${incident.root_cause},
+        ${cleanRootCause},
         ${incident.evidence_count},
         ${evidenceUrlsJson},
-        ${incident.organization}
+        ${cleanOrg}
       )
       ON CONFLICT (id) DO UPDATE SET
         title = EXCLUDED.title,
@@ -261,26 +260,19 @@ export async function saveIncidentToNeon(incident: NeonIncident): Promise<boolea
 }
 
 /**
- * Load incidents from Neon DB
+ * Load incidents from Neon DB strictly partitioned by organization
  */
 export async function loadIncidentsFromNeon(org?: string): Promise<NeonIncident[]> {
   if (!sql) return [];
+  const targetOrg = org || 'hospital'; // Strict tenant isolation: never return all organizations' incidents
 
   try {
     await initNeonTables();
-    let rows;
-    if (org) {
-      rows = await sql`
-        SELECT * FROM incidents
-        WHERE organization = ${org}
-        ORDER BY created_at DESC;
-      `;
-    } else {
-      rows = await sql`
-        SELECT * FROM incidents
-        ORDER BY created_at DESC;
-      `;
-    }
+    const rows = await sql`
+      SELECT * FROM incidents
+      WHERE organization = ${targetOrg}
+      ORDER BY created_at DESC;
+    `;
 
     return (rows as any[]).map(r => ({
       id: r.id,
@@ -307,7 +299,7 @@ export async function loadIncidentsFromNeon(org?: string): Promise<NeonIncident[
 // -------------------------------------------------------------
 
 /**
- * Sync user profile to Neon DB
+ * Sync user profile to Neon DB with input sanitization
  */
 export async function syncUserProfileToNeon(user: {
   id: string;
@@ -323,16 +315,23 @@ export async function syncUserProfileToNeon(user: {
 
   try {
     await initNeonTables();
+    const cleanName = sanitizeInput(user.name || '');
+    const cleanEmail = sanitizeInput(user.email || '');
+    const cleanOrg = sanitizeInput(user.organization || '');
+    const cleanRole = sanitizeInput(user.role || '');
+    const cleanDept = sanitizeInput(user.department || '');
+    const cleanContact = sanitizeInput(user.contact || '');
+
     await sql`
       INSERT INTO user_profiles (id, email, name, organization, role, department, contact, photo_url, updated_at)
       VALUES (
         ${user.id},
-        ${user.email || ''},
-        ${user.name || ''},
-        ${user.organization || ''},
-        ${user.role || ''},
-        ${user.department || ''},
-        ${user.contact || ''},
+        ${cleanEmail},
+        ${cleanName},
+        ${cleanOrg},
+        ${cleanRole},
+        ${cleanDept},
+        ${cleanContact},
         ${user.photoURL || ''},
         CURRENT_TIMESTAMP
       )

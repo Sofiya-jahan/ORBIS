@@ -8,7 +8,13 @@ import {
   BarChart3, HeartPulse, Share2
 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { sanitizeInput, logSecurityEvent } from '../services/securityService';
+import { 
+  sanitizeInput, 
+  logSecurityEvent,
+  checkRateLimit,
+  recordFailedAttempt,
+  resetRateLimit
+} from '../services/securityService';
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -26,15 +32,42 @@ export const Login = () => {
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState('');
+  const [lockoutSec, setLockoutSec] = useState(0);
+  const [remainingAttempts, setRemainingAttempts] = useState(5);
 
   const { login, register, loginWithGoogle, isAuthenticated, organization, role } = useAuthStore();
 
   const currentOrg = organization && ORGANIZATIONS[organization] ? ORGANIZATIONS[organization] : ORGANIZATIONS.hospital;
   const currentRole = currentOrg.roles.find(r => r.id === role) || currentOrg.roles[0];
 
+  // Check rate limit on mount
+  useEffect(() => {
+    const status = checkRateLimit('login_attempt', 5, 60000);
+    setRemainingAttempts(status.remainingAttempts);
+    if (status.isLocked) {
+      setLockoutSec(status.retryAfterSec);
+    }
+  }, []);
+
+  // Countdown timer for lockout
+  useEffect(() => {
+    if (lockoutSec <= 0) return;
+    const interval = setInterval(() => {
+      setLockoutSec(prev => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          setRemainingAttempts(5);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [lockoutSec]);
+
   useEffect(() => {
     // Only auto-redirect if key verification was previously completed in this session
-    const keyVerified = sessionStorage.getItem('iprap_key_verified') === 'true';
+    const keyVerified = sessionStorage.getItem('orbis_key_verified') === 'true' || sessionStorage.getItem('iprap_key_verified') === 'true';
     if (keyVerified && isAuthenticated && organization && role) {
       const from = (location.state as any)?.from?.pathname || '/dashboard';
       navigate(from, { replace: true });
@@ -45,8 +78,29 @@ export const Login = () => {
     e.preventDefault();
     setError('');
 
+    // Check brute-force lockout status
+    const rateCheck = checkRateLimit('login_attempt', 5, 60000);
+    if (rateCheck.isLocked) {
+      setLockoutSec(rateCheck.retryAfterSec);
+      setError(`Brute-force defense active: Maximum login attempts exceeded. Lockout active for ${rateCheck.retryAfterSec}s.`);
+      return;
+    }
+
     const cleanEmail = sanitizeInput(email);
     const cleanFullName = sanitizeInput(fullName);
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(cleanEmail)) {
+      setError('Please enter a valid enterprise email address.');
+      return;
+    }
+
+    // Validate password length
+    if (!password || password.length < 6) {
+      setError('Password must contain at least 6 characters.');
+      return;
+    }
 
     if (isSignUp && confirmPassword && password !== confirmPassword) {
       setError('Passwords do not match. Please verify your confirmation password.');
@@ -57,21 +111,31 @@ export const Login = () => {
     try {
       if (isSignUp) {
         await register(cleanEmail, password, cleanFullName);
+        resetRateLimit('login_attempt');
         logSecurityEvent('LOGIN_SUCCESS', 'INFO', `New user registered: ${cleanEmail}`, cleanEmail);
       } else {
         await login(cleanEmail, password);
+        resetRateLimit('login_attempt');
         logSecurityEvent('LOGIN_SUCCESS', 'INFO', `User logged in successfully: ${cleanEmail}`, cleanEmail);
       }
       navigate('/authentication');
     } catch (err: any) {
       // In demo mode or if using standard test credentials, gracefully proceed
-      if (cleanEmail.includes('iprap.ai') || password === 'enterprise2026' || !window.navigator.onLine) {
+      if (cleanEmail.includes('orbis.ai') || cleanEmail.includes('iprap.ai') || password === 'enterprise2026' || !window.navigator.onLine) {
+        resetRateLimit('login_attempt');
         logSecurityEvent('LOGIN_SUCCESS', 'INFO', `Demo evaluation login bypassed for: ${cleanEmail}`, cleanEmail);
         navigate('/authentication');
         return;
       }
+      const failStatus = recordFailedAttempt('login_attempt', 5, 45000, 60000);
+      setRemainingAttempts(failStatus.remainingAttempts);
+      if (failStatus.isLocked) {
+        setLockoutSec(failStatus.retryAfterSec);
+        setError(`Security Lockout Active: Too many failed login attempts. Unlocking in ${failStatus.retryAfterSec}s.`);
+      } else {
+        setError(`${err.message || 'Authentication failed. Please verify credentials.'} (${failStatus.remainingAttempts} attempts remaining)`);
+      }
       logSecurityEvent('LOGIN_FAILURE', 'WARNING', `Failed login attempt for: ${cleanEmail} (${err.message || 'Invalid credentials'})`, cleanEmail);
-      setError(err.message || 'Authentication failed. Please verify credentials.');
     } finally {
       setLoading(false);
     }
@@ -104,7 +168,7 @@ export const Login = () => {
   };
 
   const handleDemoFill = () => {
-    setEmail(`executive@${currentOrg.id}.iprap.ai`);
+    setEmail(`executive@${currentOrg.id}.orbis.ai`);
     setPassword('enterprise2026');
   };
 
@@ -189,18 +253,17 @@ export const Login = () => {
         {/* Brand Lockup */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.9rem' }}>
           <div style={{
-            width: 38,
-            height: 38,
-            borderRadius: '10px',
-            background: 'rgba(10, 26, 28, 0.85)',
-            border: '1px solid rgba(16, 185, 129, 0.45)',
+            width: 42,
+            height: 42,
+            borderRadius: '11px',
+            overflow: 'hidden',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 0 16px rgba(16, 185, 129, 0.35)',
-            color: '#34D399'
+            boxShadow: '0 0 20px rgba(59, 130, 246, 0.45)',
+            border: '1px solid rgba(59, 130, 246, 0.4)'
           }}>
-            <Activity size={20} strokeWidth={2.4} />
+            <img src="/orbis-logo.png" alt="ORBIS Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
           <div>
             <div style={{
@@ -211,7 +274,7 @@ export const Login = () => {
               color: '#FFFFFF',
               lineHeight: 1.1
             }}>
-              IPRAP
+              ORBIS
             </div>
             <div style={{
               fontSize: '0.66rem',
@@ -500,17 +563,20 @@ export const Login = () => {
             }}>
               Welcome to
             </div>
-            <h2 style={{
-              fontSize: '2.1rem',
-              fontWeight: 800,
-              color: '#FFFFFF',
-              lineHeight: 1.1,
-              letterSpacing: '1px',
-              margin: 0,
-              fontFamily: "'Times New Roman', Times, serif"
-            }}>
-              IPRAP
-            </h2>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', marginTop: '0.2rem' }}>
+              <img src="/orbis-logo.png" alt="ORBIS Logo" style={{ width: '42px', height: '42px', borderRadius: '12px', boxShadow: '0 0 20px rgba(59, 130, 246, 0.4)', border: '1px solid rgba(59, 130, 246, 0.3)' }} />
+              <h2 style={{
+                fontSize: '2.1rem',
+                fontWeight: 900,
+                color: '#FFFFFF',
+                lineHeight: 1.1,
+                letterSpacing: '1px',
+                margin: 0,
+                fontFamily: "'Space Grotesk', -apple-system, sans-serif"
+              }}>
+                ORBIS
+              </h2>
+            </div>
             <div style={{
               fontSize: '0.74rem',
               color: '#34D399',
@@ -771,31 +837,38 @@ export const Login = () => {
 
             {/* Primary Submit Button */}
             <motion.button
-              whileHover={{ scale: 1.01, boxShadow: '0 0 25px rgba(16, 185, 129, 0.55)' }}
-              whileTap={{ scale: 0.99 }}
+              whileHover={{ scale: lockoutSec > 0 ? 1 : 1.01, boxShadow: lockoutSec > 0 ? 'none' : '0 0 25px rgba(16, 185, 129, 0.55)' }}
+              whileTap={{ scale: lockoutSec > 0 ? 1 : 0.99 }}
               type="submit"
-              disabled={loading}
+              disabled={loading || lockoutSec > 0}
               style={{
                 width: '100%',
                 padding: '0.72rem',
                 borderRadius: '11px',
-                background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
-                color: '#FFFFFF',
-                border: 'none',
+                background: lockoutSec > 0 
+                  ? 'rgba(239, 68, 68, 0.25)' 
+                  : 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+                color: lockoutSec > 0 ? '#F87171' : '#FFFFFF',
+                border: lockoutSec > 0 ? '1px solid rgba(239, 68, 68, 0.4)' : 'none',
                 fontSize: '0.92rem',
                 fontWeight: 700,
                 fontFamily: "'Times New Roman', Times, serif",
-                cursor: loading ? 'not-allowed' : 'pointer',
+                cursor: (loading || lockoutSec > 0) ? 'not-allowed' : 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '0.5rem',
-                boxShadow: '0 8px 25px rgba(16, 185, 129, 0.35)',
+                boxShadow: lockoutSec > 0 ? 'none' : '0 8px 25px rgba(16, 185, 129, 0.35)',
                 marginBottom: '0.85rem'
               }}
             >
               {loading ? (
                 <Loader2 size={18} className="animate-spin" />
+              ) : lockoutSec > 0 ? (
+                <>
+                  <Lock size={17} />
+                  <span>Security Lockout ({lockoutSec}s)</span>
+                </>
               ) : (
                 <>
                   <span>{isSignUp ? 'Create Account' : 'Sign In'}</span>

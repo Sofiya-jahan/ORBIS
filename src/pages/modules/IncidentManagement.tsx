@@ -70,12 +70,12 @@ export const IncidentManagement = () => {
     }
   }, [currentOrg]);
 
-  // Load incidents from Neon DB
+  // Load incidents from Neon DB strictly partitioned by current organization
   useEffect(() => {
     let isMounted = true;
     const fetchIncidents = async () => {
       try {
-        const saved = await loadIncidentsFromNeon(organization || undefined);
+        const saved = await loadIncidentsFromNeon(currentOrg.id);
         if (isMounted && saved && saved.length > 0) {
           setIncidents(prev => {
             const ids = new Set(saved.map(s => s.id));
@@ -100,7 +100,7 @@ export const IncidentManagement = () => {
     };
     fetchIncidents();
     return () => { isMounted = false; };
-  }, [organization]);
+  }, [currentOrg.id]);
 
   const handleEvidenceSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -176,7 +176,7 @@ export const IncidentManagement = () => {
       root_cause: newInc.rootCause,
       evidence_count: newInc.evidenceCount,
       evidence_urls: newInc.evidenceUrls,
-      organization: organization || 'general'
+      organization: currentOrg.id
     }).catch(err => console.error('Failed to save incident to Neon DB:', err));
 
     setIncidents(prev => [newInc, ...prev]);

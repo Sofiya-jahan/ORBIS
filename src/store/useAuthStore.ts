@@ -4,6 +4,14 @@ import { onAuthStateChanged, signOut, type User as FirebaseUser } from 'firebase
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 import { syncUserProfileToNeon } from '../services/neonService';
+import { 
+  clearSecuritySession, 
+  updateSecuritySessionRole, 
+  verifySecuritySession, 
+  logSecurityEvent,
+  sanitizeInput
+} from '../services/securityService';
+import { ORGANIZATIONS } from '../config/platformConfig';
 
 interface UserProfile {
   name: string;
@@ -122,7 +130,12 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
   
   logout: async () => {
-    await signOut(auth);
+    try {
+      await signOut(auth);
+    } catch (e) {
+      console.warn('SignOut error:', e);
+    }
+    clearSecuritySession();
     document.documentElement.removeAttribute('data-org');
     set({ isAuthenticated: false, organization: null, role: null, user: null, firebaseUser: null });
   },
@@ -196,11 +209,32 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     set({ theme });
   },
 
-  setOrganization: (org) => {
-    set({ organization: org });
+  setOrganization: (org: string) => {
+    const validOrg = (ORGANIZATIONS as any)[org] ? org : (Object.keys(ORGANIZATIONS).includes(org.toLowerCase()) ? org.toLowerCase() : 'hospital');
+    const prevOrg = get().organization;
+    
+    if (prevOrg && prevOrg.toLowerCase() !== validOrg.toLowerCase()) {
+      // Switching tenants requires re-verification of the target tenant's key
+      const session = verifySecuritySession();
+      if (session.session && session.session.organization.toLowerCase() !== validOrg.toLowerCase()) {
+        clearSecuritySession();
+      }
+      logSecurityEvent(
+        'KEY_ROTATED',
+        'INFO',
+        `Tenant switch requested from '${prevOrg}' to '${validOrg}'. Security session aligned.`,
+        get().user?.email || 'operator@orbis.ai'
+      );
+    }
+    set({ organization: validOrg });
   },
 
-  setRole: (role) => set({ role }),
+  setRole: (role: string) => {
+    const cleanRole = sanitizeInput(role);
+    // Synchronize cryptographic signature if session exists
+    updateSecuritySessionRole(cleanRole);
+    set({ role: cleanRole });
+  },
 
   verifyPIN: async (pin) => {
     const { organization, role, firebaseUser, user } = get();

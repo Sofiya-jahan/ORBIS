@@ -212,7 +212,7 @@ export const EnterpriseCommandPreview: React.FC<EnterpriseCommandPreviewProps> =
                 letterSpacing: '0.5px',
                 fontFamily: "'Space Grotesk', -apple-system, sans-serif"
               }}>
-                IPRAP // SOVEREIGN RISK SENTINEL
+                ORBIS // SOVEREIGN RISK SENTINEL
               </div>
               <div style={{
                 fontSize: '0.65rem',
@@ -316,7 +316,7 @@ export const EnterpriseCommandPreview: React.FC<EnterpriseCommandPreviewProps> =
               AI Model Engine
             </div>
             <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#FFFFFF', fontFamily: "'Space Grotesk', sans-serif", marginTop: '4px' }}>
-              IPRAP Neural
+              ORBIS Neural
             </div>
             <div style={{ fontSize: '0.65rem', color: '#94A3B8', fontFamily: "'JetBrains Mono', monospace", marginTop: '2px' }}>
               Deep Cognitive Core
@@ -347,7 +347,7 @@ export const EnterpriseCommandPreview: React.FC<EnterpriseCommandPreviewProps> =
                 <RefreshCw size={12} className="animate-spin text-red-400" />
                 <span>
                   {simulationStep === 1 && 'STAGE 1/3: Simulated Anomaly Surge Injected (+12.4% Delta)'}
-                  {simulationStep === 2 && 'STAGE 2/3: IPRAP Cognitive Model Synthesizing Latent Vectors...'}
+                  {simulationStep === 2 && 'STAGE 2/3: ORBIS Cognitive Model Synthesizing Latent Vectors...'}
                   {simulationStep === 3 && 'STAGE 3/3: Autonomous Circuit Breaker Executed. Lattice Restored!'}
                 </span>
               </div>
@@ -533,7 +533,7 @@ export const EnterpriseCommandPreview: React.FC<EnterpriseCommandPreviewProps> =
           {activeTab === 'reasoning' && (
             <div>
               <div style={{ fontSize: '0.66rem', color: '#94A3B8', fontFamily: "'JetBrains Mono', monospace", marginBottom: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                IPRAP Deep Neural Reasoning Trace // Active Sector: {activeSector?.name || 'Central Banking'}
+                ORBIS Deep Neural Reasoning Trace // Active Sector: {activeSector?.name || 'Central Banking'}
               </div>
               <div style={{
                 background: 'rgba(6, 14, 18, 0.9)',
@@ -580,7 +580,7 @@ export const EnterpriseCommandPreview: React.FC<EnterpriseCommandPreviewProps> =
             <Lock size={11} color="#10B981" />
             <span>FIPS 140-3 LEVEL 4 QUANTUM HARDENED</span>
           </div>
-          <span style={{ color: '#E5C07B' }}>IPRAP SOVEREIGN MATRIX</span>
+          <span style={{ color: '#E5C07B' }}>ORBIS SOVEREIGN MATRIX</span>
         </div>
 
       </div>

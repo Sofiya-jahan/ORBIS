@@ -84,6 +84,19 @@ export const OrgSelect = () => {
         
         {/* Header Title Section */}
         <div style={{ textAlign: 'center', marginBottom: '3rem' }} className="animate-fade-in">
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
+            <div style={{
+              width: 64,
+              height: 64,
+              borderRadius: '16px',
+              overflow: 'hidden',
+              boxShadow: '0 0 35px rgba(59, 130, 246, 0.55)',
+              border: '1px solid rgba(59, 130, 246, 0.4)'
+            }}>
+              <img src="/orbis-logo.png" alt="ORBIS Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            </div>
+          </div>
+
           <div style={{
             display: 'inline-flex',
             alignItems: 'center',
@@ -117,7 +130,7 @@ export const OrgSelect = () => {
           </h1>
           
           <p style={{ color: '#CBD5E1', fontSize: '1.18rem', maxWidth: '680px', margin: '0 auto', lineHeight: 1.6, fontFamily: "var(--font-family, 'Inter', sans-serif)" }}>
-            IPRAP dynamically configures neural risk models, compliance frameworks, telemetry pipelines, and access tiers for your specific sector.
+            ORBIS dynamically configures neural risk models, compliance frameworks, telemetry pipelines, and access tiers for your specific sector.
           </p>
         </div>
 

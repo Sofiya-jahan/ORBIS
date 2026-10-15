@@ -15,7 +15,13 @@ export const AuthVerification = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [isUnlocked, setIsUnlocked] = useState(false);
   const navigate = useNavigate();
-  const { organization, role } = useAuthStore();
+  const { organization, role, isAuthenticated, isAuthLoaded } = useAuthStore();
+
+  useEffect(() => {
+    if (isAuthLoaded && !isAuthenticated) {
+      navigate('/login', { replace: true });
+    }
+  }, [isAuthLoaded, isAuthenticated, navigate]);
 
   useEffect(() => {
     if (currentStep < verificationSteps.length - 1) {

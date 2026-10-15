@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { validateFileUpload } from './securityService';
 
 // Retrieve Supabase URL and Publishable Key from environment variables
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 
@@ -13,7 +14,7 @@ const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
 // Initialize Supabase client
 export const supabase = createClient(supabaseUrl, supabaseKey);
 
-export const DEFAULT_BUCKET = 'iprap-images';
+export const DEFAULT_BUCKET = 'orbis-images';
 
 /**
  * Upload an image file to Supabase Storage and retrieve its public URL
@@ -23,11 +24,22 @@ export async function uploadImageToSupabase(
   path: string,
   bucket: string = DEFAULT_BUCKET
 ): Promise<{ url: string; error?: string }> {
+  // Defense-in-depth security sieve for File objects
+  if (typeof File !== 'undefined' && file instanceof File) {
+    const sieve = validateFileUpload(file, { maxSizeBytes: 10 * 1024 * 1024 });
+    if (!sieve.valid) {
+      return { url: '', error: sieve.error || 'File failed security sieve' };
+    }
+  }
+
+  // Prevent path traversal
+  const cleanPath = path.replace(/\.\./g, '').replace(/^\/+/, '');
+
   try {
     // 1. Attempt upload to Supabase storage bucket
     const { data, error } = await supabase.storage
       .from(bucket)
-      .upload(path, file, {
+      .upload(cleanPath, file, {
         cacheControl: '3600',
         upsert: true,
       });
@@ -35,8 +47,8 @@ export async function uploadImageToSupabase(
     if (error) {
       console.warn(`Supabase Storage upload warning (${error.message}). Checking fallback...`, error);
       
-      // If the bucket doesn't exist yet, we attempt with 'images' or 'public'
-      const fallbackBuckets = ['images', 'public', 'media'];
+      // If the bucket doesn't exist yet, we attempt with 'orbis-images', 'iprap-images', 'images' or 'public'
+      const fallbackBuckets = ['orbis-images', 'iprap-images', 'images', 'public', 'media'];
       for (const fallback of fallbackBuckets) {
         if (fallback === bucket) continue;
         const retry = await supabase.storage.from(fallback).upload(path, file, { upsert: true });

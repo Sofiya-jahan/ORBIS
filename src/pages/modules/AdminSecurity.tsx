@@ -33,8 +33,12 @@ export const AdminSecurity = () => {
       setLogs(getSecurityLogs());
     };
 
+    window.addEventListener('orbis:security_event', handleNewLog);
     window.addEventListener('iprap:security_event', handleNewLog);
-    return () => window.removeEventListener('iprap:security_event', handleNewLog);
+    return () => {
+      window.removeEventListener('orbis:security_event', handleNewLog);
+      window.removeEventListener('iprap:security_event', handleNewLog);
+    };
   }, []);
 
   const handleRotateKey = () => {
@@ -48,7 +52,7 @@ export const AdminSecurity = () => {
         'KEY_ROTATED',
         'INFO',
         `Tenant master security key rotated for ${currentOrg.name}. New lattice HMAC key hash: ${generateCryptoId(12)}`,
-        user?.email || 'admin@iprap.ai'
+        user?.email || 'admin@orbis.ai'
       );
       setTimeout(() => setRotatedSuccess(false), 3000);
     }, 700);
@@ -58,7 +62,7 @@ export const AdminSecurity = () => {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(logs, null, 2));
     const downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", `iprap_security_audit_${new Date().toISOString().slice(0, 10)}.json`);
+    downloadAnchor.setAttribute("download", `orbis_security_audit_${new Date().toISOString().slice(0, 10)}.json`);
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();

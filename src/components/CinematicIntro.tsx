@@ -430,22 +430,21 @@ export const CinematicIntro: React.FC<IntroProps> = ({ onComplete }) => {
           {/* Brand & Technical Timebase Header */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             <div style={{
-              width: 38,
-              height: 38,
-              borderRadius: '10px',
-              background: 'rgba(10, 24, 28, 0.85)',
-              border: '1px solid rgba(16, 185, 129, 0.45)',
+              width: 42,
+              height: 42,
+              borderRadius: '11px',
+              overflow: 'hidden',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#34D399',
-              boxShadow: '0 0 16px rgba(16, 185, 129, 0.25)'
+              boxShadow: '0 0 20px rgba(59, 130, 246, 0.45)',
+              border: '1px solid rgba(59, 130, 246, 0.4)'
             }}>
-              <Activity size={20} strokeWidth={2.4} />
+              <img src="/orbis-logo.png" alt="ORBIS Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
             <div>
               <div style={{ fontSize: '1.4rem', fontWeight: 900, letterSpacing: '1px', color: '#FFFFFF', lineHeight: 1.1 }}>
-                IPRAP <span style={{ color: '#E5C07B', fontSize: '0.85rem', fontStyle: 'italic' }}>// SOVEREIGN GATE</span>
+                ORBIS <span style={{ color: '#E5C07B', fontSize: '0.85rem', fontStyle: 'italic' }}>// SOVEREIGN GATE</span>
               </div>
               <div style={{ fontSize: '0.65rem', color: '#34D399', letterSpacing: '1.5px', fontFamily: "'Space Mono', monospace", fontWeight: 700 }}>
                 SCROLL REVEAL ENGINE • 300 FRAMES @ 30 FPS
