@@ -217,8 +217,8 @@ The ORBIS platform includes a comprehensive, automated test suite built on Vites
 
 ### 1. Clone & Install
 ```bash
-git clone https://github.com/Sofiya-jahan/Intelligent-Risk-Analytics-Platform-IPRAP-.git orbis
-cd orbis
+git clone https://github.com/Sofiya-jahan/ORBIS.git
+cd ORBIS
 npm install
 ```
 
