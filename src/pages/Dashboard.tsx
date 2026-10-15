@@ -26,6 +26,19 @@ export const Dashboard = () => {
   const currentRole = currentOrg.roles.find(r => r.id === role) || currentOrg.roles[0];
   const roleCategory = currentRole?.roleCategory || 'executive';
 
+  const getRolePerspective = () => {
+    const r = (role || '').toLowerCase();
+    const title = (currentRole?.title || '').toLowerCase();
+    if (r.includes('cfo') || title.includes('financial') || title.includes('treasury')) return 'finance';
+    if (r.includes('hr') || title.includes('people') || title.includes('human')) return 'hr';
+    if (r.includes('compliance') || title.includes('regulatory') || title.includes('legal')) return 'compliance';
+    if (r.includes('ciso') || title.includes('security') || title.includes('cyber') || title.includes('data')) return 'security';
+    if (r.includes('cro') || title.includes('risk') || title.includes('safety')) return 'risk_manager';
+    if (r.includes('ceo') || r.includes('director') || r.includes('dean') || title.includes('chief executive') || roleCategory === 'executive') return 'ceo';
+    return 'operations';
+  };
+  const rolePerspective = getRolePerspective();
+
   const handleRefresh = () => {
     setIsRefreshing(true);
     setTimeout(() => setIsRefreshing(false), 600);
@@ -81,7 +94,7 @@ export const Dashboard = () => {
             </p>
           </div>
           <button 
-            onClick={() => navigate('/dashboard/incidents')}
+            onClick={() => navigate('/dashboard/risk-center?tab=timeline')}
             className="btn btn-primary"
             style={{ padding: '0.85rem 1.5rem', fontSize: '0.9rem' }}
           >
@@ -331,7 +344,7 @@ export const Dashboard = () => {
             </button>
 
             <button
-              onClick={() => navigate('/dashboard/reports')}
+              onClick={() => navigate('/dashboard/governance?tab=reports')}
               className="btn btn-primary"
               style={{ padding: '0.55rem 1.25rem', fontSize: '0.82rem' }}
             >
@@ -387,6 +400,143 @@ export const Dashboard = () => {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Role-Based Intelligence Deck: Adaptive to User Role */}
+      <div className="glass-card" style={{
+        padding: '2rem 2.25rem',
+        background: 'linear-gradient(135deg, rgba(7, 17, 46, 0.95) 0%, rgba(13, 35, 77, 0.9) 100%)',
+        border: '1px solid rgba(46, 155, 248, 0.28)',
+        borderRadius: '24px',
+        boxShadow: '0 20px 50px rgba(0, 0, 0, 0.6)'
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#6AE7F7', fontWeight: 800, fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '0.25rem' }}>
+              <ShieldCheck size={16} /> Tailored Role Intelligence &bull; {currentRole.title}
+            </div>
+            <h2 style={{ fontSize: '1.4rem', fontWeight: 900, color: '#F6FDFF', margin: 0 }}>
+              {rolePerspective === 'ceo' && 'Executive & Board Oversight Deck'}
+              {rolePerspective === 'risk_manager' && 'Risk Center & Mitigation Intelligence Deck'}
+              {rolePerspective === 'hr' && 'People & Workforce Risk Intelligence Deck'}
+              {rolePerspective === 'finance' && 'Financial Risk & Capital Exposure Deck'}
+              {rolePerspective === 'compliance' && 'Regulatory Compliance & Audit Posture Deck'}
+              {rolePerspective === 'security' && 'Cyber Threat & Zero-Trust Defense Deck'}
+              {rolePerspective === 'operations' && 'Operational Health & Shift Directives Deck'}
+            </h2>
+          </div>
+
+          <div style={{ display: 'flex', gap: '0.5rem' }}>
+            <button
+              onClick={() => navigate('/dashboard/risk-center')}
+              className="btn btn-secondary"
+              style={{ fontSize: '0.8rem', padding: '0.55rem 1rem' }}
+            >
+              Risk Center &rarr;
+            </button>
+            <button
+              onClick={() => navigate('/dashboard/ai-intelligence')}
+              className="btn btn-ai"
+              style={{ fontSize: '0.8rem', padding: '0.55rem 1rem' }}
+            >
+              AI Copilot &rarr;
+            </button>
+          </div>
+        </div>
+
+        {/* 4 Role-Specific Tactical KPIs */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem' }}>
+          {rolePerspective === 'ceo' && [
+            { label: 'Strategic Risk Delta', val: 'Low (-2.8%)', note: 'Within Board bounds', color: '#6AE7F7' },
+            { label: 'Capital Exposure At Risk', val: '$2.4M Safe', note: '100% hedged / insured', color: '#2E9BF8' },
+            { label: 'Board Foresight Index', val: '94.2 / 100', note: 'Algorithmic stability', color: '#8671F9' },
+            { label: 'Operating Margin Integrity', val: '99.2%', note: '0 critical escalations', color: '#6AE7F7' }
+          ].map((item, i) => (
+            <div key={i} style={{ padding: '1.25rem', borderRadius: '16px', background: 'rgba(7, 17, 46, 0.75)', border: '1px solid rgba(46, 155, 248, 0.2)' }}>
+              <div style={{ fontSize: '0.72rem', color: 'rgba(246, 253, 255, 0.6)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>{item.label}</div>
+              <div style={{ fontSize: '1.6rem', fontWeight: 900, color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>{item.val}</div>
+              <div style={{ fontSize: '0.75rem', color: item.color, marginTop: '0.25rem', fontWeight: 700 }}>{item.note}</div>
+            </div>
+          ))}
+
+          {rolePerspective === 'risk_manager' && [
+            { label: '5x5 Matrix Peak Cell', val: '2 Critical', note: 'Score >= 16 (Tier 1)', color: '#EF4444' },
+            { label: 'Mitigation Progress Rate', val: '87.5%', note: '21 of 24 risks controlled', color: '#6AE7F7' },
+            { label: 'Residual Risk Index', val: '14.2 / 100', note: 'Within ISO-31000 tolerance', color: '#2E9BF8' },
+            { label: 'Open Incidents Triage', val: '0 Uncontained', note: 'All incidents triaged', color: '#6AE7F7' }
+          ].map((item, i) => (
+            <div key={i} style={{ padding: '1.25rem', borderRadius: '16px', background: 'rgba(7, 17, 46, 0.75)', border: '1px solid rgba(46, 155, 248, 0.2)' }}>
+              <div style={{ fontSize: '0.72rem', color: 'rgba(246, 253, 255, 0.6)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>{item.label}</div>
+              <div style={{ fontSize: '1.6rem', fontWeight: 900, color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>{item.val}</div>
+              <div style={{ fontSize: '0.75rem', color: item.color, marginTop: '0.25rem', fontWeight: 700 }}>{item.note}</div>
+            </div>
+          ))}
+
+          {rolePerspective === 'hr' && [
+            { label: 'Staff Fatigue & Burnout Risk', val: '12% (Low)', note: '0 division alerts', color: '#6AE7F7' },
+            { label: 'Workforce Coverage Ratio', val: '96.4%', note: 'All shifts staffed', color: '#2E9BF8' },
+            { label: 'Retention Stability Index', val: '94.8 / 100', note: 'Top decile benchmark', color: '#8671F9' },
+            { label: 'Attendance Anomaly Delta', val: '0.4% Dev', note: 'Within normal variation', color: '#6AE7F7' }
+          ].map((item, i) => (
+            <div key={i} style={{ padding: '1.25rem', borderRadius: '16px', background: 'rgba(7, 17, 46, 0.75)', border: '1px solid rgba(46, 155, 248, 0.2)' }}>
+              <div style={{ fontSize: '0.72rem', color: 'rgba(246, 253, 255, 0.6)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>{item.label}</div>
+              <div style={{ fontSize: '1.6rem', fontWeight: 900, color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>{item.val}</div>
+              <div style={{ fontSize: '0.75rem', color: item.color, marginTop: '0.25rem', fontWeight: 700 }}>{item.note}</div>
+            </div>
+          ))}
+
+          {rolePerspective === 'finance' && [
+            { label: 'Value-at-Risk (VaR 99%)', val: '0.04%', note: 'Parametric 24h risk', color: '#6AE7F7' },
+            { label: 'Operating Capital Liquidity', val: '$48.2M', note: 'Optimal cash reserves', color: '#2E9BF8' },
+            { label: 'Anomalous Transaction Flags', val: '0 Active', note: 'Zero fraud ingress', color: '#6AE7F7' },
+            { label: 'Budget Variance Delta', val: '+0.6%', note: 'Favorable operational delta', color: '#8671F9' }
+          ].map((item, i) => (
+            <div key={i} style={{ padding: '1.25rem', borderRadius: '16px', background: 'rgba(7, 17, 46, 0.75)', border: '1px solid rgba(46, 155, 248, 0.2)' }}>
+              <div style={{ fontSize: '0.72rem', color: 'rgba(246, 253, 255, 0.6)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>{item.label}</div>
+              <div style={{ fontSize: '1.6rem', fontWeight: 900, color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>{item.val}</div>
+              <div style={{ fontSize: '0.75rem', color: item.color, marginTop: '0.25rem', fontWeight: 700 }}>{item.note}</div>
+            </div>
+          ))}
+
+          {rolePerspective === 'compliance' && [
+            { label: 'Regulatory Framework Score', val: '98.6%', note: 'SOC2 & HIPAA Compliant', color: '#6AE7F7' },
+            { label: 'Active Policy Violations', val: '0 Flags', note: 'Zero non-compliance issues', color: '#6AE7F7' },
+            { label: 'Continuous Control Evidence', val: '47 / 48', note: '1 awaiting sign-off', color: '#2E9BF8' },
+            { label: 'Upcoming Audit Countdown', val: '34 Days', note: 'Automated pack ready', color: '#8671F9' }
+          ].map((item, i) => (
+            <div key={i} style={{ padding: '1.25rem', borderRadius: '16px', background: 'rgba(7, 17, 46, 0.75)', border: '1px solid rgba(46, 155, 248, 0.2)' }}>
+              <div style={{ fontSize: '0.72rem', color: 'rgba(246, 253, 255, 0.6)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>{item.label}</div>
+              <div style={{ fontSize: '1.6rem', fontWeight: 900, color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>{item.val}</div>
+              <div style={{ fontSize: '0.75rem', color: item.color, marginTop: '0.25rem', fontWeight: 700 }}>{item.note}</div>
+            </div>
+          ))}
+
+          {rolePerspective === 'security' && [
+            { label: 'Lattice Cryptographic Posture', val: 'AES-256 HMAC', note: 'Session tokens signed', color: '#6AE7F7' },
+            { label: 'Zero-Day Vulnerability Score', val: 'A+ Rated', note: 'Zero open CVEs', color: '#6AE7F7' },
+            { label: 'Rate Limiter Quarantine', val: '0 Locked', note: '5 attempts / 45s gate active', color: '#2E9BF8' },
+            { label: 'Tamper-Evident Audit Trail', val: '100% Synced', note: 'Immutable security log', color: '#8671F9' }
+          ].map((item, i) => (
+            <div key={i} style={{ padding: '1.25rem', borderRadius: '16px', background: 'rgba(7, 17, 46, 0.75)', border: '1px solid rgba(46, 155, 248, 0.2)' }}>
+              <div style={{ fontSize: '0.72rem', color: 'rgba(246, 253, 255, 0.6)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>{item.label}</div>
+              <div style={{ fontSize: '1.6rem', fontWeight: 900, color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>{item.val}</div>
+              <div style={{ fontSize: '0.75rem', color: item.color, marginTop: '0.25rem', fontWeight: 700 }}>{item.note}</div>
+            </div>
+          ))}
+
+          {rolePerspective === 'operations' && [
+            { label: 'Operational Uptime SLA', val: '99.98%', note: 'Zero facility disruptions', color: '#6AE7F7' },
+            { label: 'Shift Directives Pending', val: '3 Directives', note: 'All supervisors notified', color: '#2E9BF8' },
+            { label: 'Safety Incidents Logged', val: '0 Critical', note: 'Safe operating window', color: '#6AE7F7' },
+            { label: 'Readiness Index', val: '100%', note: 'Equipment & staff calibrated', color: '#8671F9' }
+          ].map((item, i) => (
+            <div key={i} style={{ padding: '1.25rem', borderRadius: '16px', background: 'rgba(7, 17, 46, 0.75)', border: '1px solid rgba(46, 155, 248, 0.2)' }}>
+              <div style={{ fontSize: '0.72rem', color: 'rgba(246, 253, 255, 0.6)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>{item.label}</div>
+              <div style={{ fontSize: '1.6rem', fontWeight: 900, color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>{item.val}</div>
+              <div style={{ fontSize: '0.75rem', color: item.color, marginTop: '0.25rem', fontWeight: 700 }}>{item.note}</div>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Main Visualizations Row: 24-Hour Predictive Trajectory + Risk Distribution */}
@@ -528,7 +678,7 @@ export const Dashboard = () => {
               <p style={{ color: 'rgba(246, 253, 255, 0.65)', fontSize: '0.8rem' }}>Relative exposure & mitigation scores</p>
             </div>
             <button 
-              onClick={() => navigate('/dashboard/analytics/comparison')}
+              onClick={() => navigate('/dashboard/analytics?tab=heatmaps')}
               style={{ background: 'none', border: 'none', color: '#6AE7F7', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 700 }}
             >
               Full Heatmap &rarr;
@@ -582,7 +732,7 @@ export const Dashboard = () => {
             {currentOrg.industryModules.map((mod) => (
               <div 
                 key={mod.id}
-                onClick={() => navigate(`/dashboard/industry/${mod.id}`)}
+                onClick={() => navigate('/dashboard/organization?tab=industry')}
                 style={{
                   padding: '1rem',
                   borderRadius: '14px',

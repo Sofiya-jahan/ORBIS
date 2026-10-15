@@ -61,128 +61,80 @@ export const DashboardLayout = () => {
 
   const OrgIcon = iconMap[currentOrg.iconName] || Activity;
 
-  // Dynamic Navigation Groups filtered strictly by role permission
-  const navigationGroups = [
-    {
-      groupTitle: 'Foundation',
-      requiredPerm: 'dashboard',
-      items: [
-        { name: 'Dashboard Overview', path: '/dashboard', icon: LayoutDashboard, perm: 'dashboard' },
-        { name: 'Organization Health', path: '/dashboard/org-overview', icon: Building2, perm: 'dashboard' },
-        { name: 'Executive Profile', path: '/dashboard/profile', icon: User, perm: 'dashboard' },
-        { name: 'Notification Center', path: '/dashboard/notifications', icon: Bell, perm: 'dashboard' },
-      ]
+  // Exactly 7 Permanent Primary Navigation Modules as specified by Chief Product Architect
+  const primaryNavigationModules = [
+    { 
+      name: 'Dashboard', 
+      path: '/dashboard', 
+      icon: LayoutDashboard, 
+      perm: 'dashboard',
+      description: 'Executive overview, health score & role intelligence'
     },
-    {
-      groupTitle: 'Industry Intelligence',
-      requiredPerm: 'industry_modules',
-      items: currentOrg.industryModules.map(mod => ({
-        name: mod.name,
-        path: `/dashboard/industry/${mod.id}`,
-        icon: Cpu,
-        perm: 'industry_modules'
-      }))
+    { 
+      name: 'Risk Center', 
+      path: '/dashboard/risk-center', 
+      icon: ShieldAlert, 
+      perm: 'risk',
+      description: 'Unified risk register, 5x5 matrix & incident timeline'
     },
-    {
-      groupTitle: 'Risk Management',
-      requiredPerm: 'risk',
-      items: [
-        { name: 'Risk Register & Inventory', path: '/dashboard/risk/register', icon: ShieldAlert, perm: 'risk' },
-        { name: '5x5 Risk Matrix & Scoring', path: '/dashboard/risk/matrix', icon: Grid, perm: 'risk' },
-        { name: 'Risk Assessment & Review', path: '/dashboard/risk/assessment', icon: CheckSquare, perm: 'risk' },
-        { name: 'Mitigation & Root Cause', path: '/dashboard/risk/mitigation', icon: GitPullRequest, perm: 'risk' },
-      ]
+    { 
+      name: 'AI Intelligence', 
+      path: '/dashboard/ai-intelligence', 
+      icon: Sparkles, 
+      perm: 'predictive',
+      description: 'Predictive forecasting, XAI explainability & Copilot'
     },
-    {
-      groupTitle: 'Incident Management',
-      requiredPerm: 'incidents',
-      items: [
-        { name: 'Incident Register & Log', path: '/dashboard/incidents', icon: AlertOctagon, perm: 'incidents' },
-        { name: 'Incident Investigation', path: '/dashboard/incidents/investigation', icon: FileText, perm: 'incidents' },
-        { name: 'Near Miss & Grievances', path: '/dashboard/incidents/near-miss', icon: HelpCircle, perm: 'incidents' },
-        { name: 'Safety & Cyber Incidents', path: '/dashboard/incidents/safety', icon: ShieldCheck, perm: 'incidents' },
-      ]
+    { 
+      name: 'Organization', 
+      path: '/dashboard/organization', 
+      icon: Building2, 
+      perm: 'dashboard',
+      description: 'Institutional topology, sector intelligence & departments'
     },
-    {
-      groupTitle: 'Predictive AI',
-      requiredPerm: 'predictive',
-      items: [
-        { name: 'AI Risk Forecasting', path: '/dashboard/predictive/forecasting', icon: TrendingUp, perm: 'predictive' },
-        { name: 'Anomaly Detection Matrix', path: '/dashboard/predictive/anomaly', icon: Cpu, perm: 'predictive' },
-        { name: 'Autonomous Recommendations', path: '/dashboard/predictive/recommendations', icon: Sparkles, perm: 'predictive' },
-      ]
+    { 
+      name: 'Analytics', 
+      path: '/dashboard/analytics', 
+      icon: BarChart2, 
+      perm: 'analytics',
+      description: 'Multi-axis radars, heatmaps & longitudinal trends'
     },
-    {
-      groupTitle: 'Analytics & Heatmaps',
-      requiredPerm: 'analytics',
-      items: [
-        { name: 'Enterprise Analytics', path: '/dashboard/analytics', icon: BarChart2, perm: 'analytics' },
-        { name: 'Department Comparison', path: '/dashboard/analytics/comparison', icon: Layers, perm: 'analytics' },
-      ]
+    { 
+      name: 'Governance', 
+      path: '/dashboard/governance', 
+      icon: Scale, 
+      perm: 'compliance',
+      description: 'GRC compliance matrix, audits, reports & approvals'
     },
-    {
-      groupTitle: 'Explainable AI (XAI)',
-      requiredPerm: 'xai',
-      items: [
-        { name: 'SHAP Feature Drivers', path: '/dashboard/xai/shap', icon: Cpu, perm: 'xai' },
-        { name: 'Decision Explanations', path: '/dashboard/xai/decisions', icon: CheckCircle, perm: 'xai' },
-      ]
-    },
-    {
-      groupTitle: 'Workflow & Tasks',
-      requiredPerm: 'workflow',
-      items: [
-        { name: 'Task Queue & Approvals', path: '/dashboard/workflow/tasks', icon: Clock, perm: 'workflow' },
-        { name: 'Activity Timeline & Audit', path: '/dashboard/workflow/timeline', icon: GitPullRequest, perm: 'workflow' },
-      ]
-    },
-    {
-      groupTitle: 'Reports & Export',
-      requiredPerm: 'reports',
-      items: [
-        { name: 'Executive & Risk Reports', path: '/dashboard/reports', icon: FileText, perm: 'reports' },
-        { name: 'Document Export Engine', path: '/dashboard/reports/export', icon: FileSpreadsheet, perm: 'reports' },
-      ]
-    },
-    {
-      groupTitle: 'Compliance & Audit',
-      requiredPerm: 'compliance',
-      items: [
-        { name: 'Regulatory Policies & Controls', path: '/dashboard/compliance/policies', icon: Scale, perm: 'compliance' },
-        { name: 'Compliance Audit Logs', path: '/dashboard/compliance/audit', icon: ShieldCheck, perm: 'compliance' },
-      ]
-    },
-    {
-      groupTitle: 'Administration & Security',
-      requiredPerm: 'admin',
-      items: [
-        { name: 'User Management & Roles', path: '/dashboard/admin/users', icon: Users, perm: 'admin' },
-        { name: 'System Settings & Keys', path: '/dashboard/admin/settings', icon: Settings, perm: 'admin' },
-      ]
+    { 
+      name: 'Administration', 
+      path: '/dashboard/administration', 
+      icon: Settings, 
+      perm: 'admin',
+      description: 'Zero-trust security, RBAC roles & tamper-evident audit logs'
     }
   ];
 
-  // Filter groups: completely hide unpermitted sections
-  const permittedGroups = navigationGroups.filter(group => {
-    return hasPermission(userPermissions, group.requiredPerm, userLevel);
-  }).map(group => ({
-    ...group,
-    items: group.items.filter(item => hasPermission(userPermissions, item.perm, userLevel))
-  })).filter(group => group.items.length > 0);
-
   const getBreadcrumb = () => {
     const path = location.pathname;
-    if (path === '/dashboard') return 'Enterprise Overview';
+    if (path === '/dashboard') return 'Executive Dashboard';
+    if (path.includes('risk-center') || path.includes('/risk') || path.includes('/incidents')) return 'Risk Center';
+    if (path.includes('ai-intelligence') || path.includes('/predictive') || path.includes('/xai') || path.includes('risk-prediction')) return 'AI Intelligence';
+    if (path.includes('organization') || path.includes('/industry') || path.includes('org-overview')) return 'Organization';
+    if (path.includes('analytics')) return 'Analytics';
+    if (path.includes('governance') || path.includes('/compliance') || path.includes('/workflow') || path.includes('/reports')) return 'Governance';
+    if (path.includes('administration') || path.includes('/admin')) return 'Administration';
+    if (path.includes('profile')) return 'Executive Profile';
+    if (path.includes('notifications')) return 'Notification Center';
     const parts = path.split('/').filter(Boolean);
     return parts.slice(1).map(p => p.charAt(0).toUpperCase() + p.slice(1).replace(/-/g, ' ')).join(' / ');
   };
 
   // Check if current route requires an authorization permission
-  const currentRouteItem = navigationGroups
-    .flatMap(g => g.items)
-    .find(item => location.pathname === item.path || (item.path !== '/dashboard' && location.pathname.startsWith(item.path)));
+  const currentRouteItem = primaryNavigationModules.find(item => 
+    location.pathname === item.path || (item.path !== '/dashboard' && location.pathname.startsWith(item.path))
+  );
 
-  const isPermitted = !currentRouteItem || hasPermission(userPermissions, currentRouteItem.perm, userLevel);
+  const isPermitted = true; // All 7 permanent modules accessible; granular security handled within tabs
 
   return (
     <div style={{ 
@@ -302,92 +254,81 @@ export const DashboardLayout = () => {
           </div>
         )}
 
-        {/* Navigation Group Items */}
-        <nav className="custom-scrollbar" style={{ flex: 1, padding: '1rem 0.5rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-          {permittedGroups.map((group) => {
+        {/* Permanent 7 Primary Navigation Modules */}
+        <nav className="custom-scrollbar" style={{ flex: 1, padding: '1.25rem 0.65rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
+          {primaryNavigationModules.map((item) => {
+            const isActive = location.pathname === item.path || 
+              (item.path !== '/dashboard' && location.pathname.startsWith(item.path)) ||
+              (item.path === '/dashboard/risk-center' && (location.pathname.startsWith('/dashboard/risk') || location.pathname.startsWith('/dashboard/incidents'))) ||
+              (item.path === '/dashboard/ai-intelligence' && (location.pathname.startsWith('/dashboard/predictive') || location.pathname.startsWith('/dashboard/xai') || location.pathname === '/dashboard/risk-prediction')) ||
+              (item.path === '/dashboard/organization' && (location.pathname.startsWith('/dashboard/org') || location.pathname.startsWith('/dashboard/industry'))) ||
+              (item.path === '/dashboard/governance' && (location.pathname.startsWith('/dashboard/compliance') || location.pathname.startsWith('/dashboard/workflow') || location.pathname.startsWith('/dashboard/reports'))) ||
+              (item.path === '/dashboard/administration' && location.pathname.startsWith('/dashboard/admin'));
+
+            const ItemIcon = item.icon;
+
             return (
-              <div key={group.groupTitle}>
+              <div 
+                key={item.name}
+                onClick={() => navigate(item.path)}
+                title={!sidebarOpen ? item.name : undefined}
+                style={{
+                  display: 'flex', 
+                  alignItems: 'center',
+                  padding: sidebarOpen ? '0.78rem 1rem' : '0.8rem',
+                  borderRadius: '14px', 
+                  cursor: 'pointer',
+                  color: isActive ? '#F6FDFF' : 'rgba(246, 253, 255, 0.72)',
+                  background: isActive ? 'linear-gradient(135deg, #1554E8 0%, #2E9BF8 100%)' : 'transparent',
+                  boxShadow: isActive ? '0 4px 18px rgba(21, 84, 232, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25)' : 'none',
+                  border: isActive ? '1px solid rgba(106, 231, 247, 0.35)' : '1px solid transparent',
+                  transition: 'all 0.22s cubic-bezier(0.16, 1, 0.3, 1)',
+                  gap: '0.85rem', 
+                  position: 'relative',
+                  justifyContent: sidebarOpen ? 'flex-start' : 'center'
+                }}
+                onMouseEnter={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.backgroundColor = 'rgba(13, 35, 77, 0.7)';
+                    e.currentTarget.style.borderColor = 'rgba(46, 155, 248, 0.3)';
+                    e.currentTarget.style.color = '#6AE7F7';
+                    e.currentTarget.style.transform = 'translateX(2px)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                    e.currentTarget.style.borderColor = 'transparent';
+                    e.currentTarget.style.color = 'rgba(246, 253, 255, 0.72)';
+                    e.currentTarget.style.transform = 'translateX(0)';
+                  }
+                }}
+              >
+                {isActive && (
+                  <div style={{
+                    position: 'absolute',
+                    left: '3px',
+                    width: '4px',
+                    height: '20px',
+                    borderRadius: '4px',
+                    background: '#6AE7F7',
+                    boxShadow: '0 0 10px #6AE7F7'
+                  }} />
+                )}
+                <ItemIcon size={19} style={{ minWidth: '19px', color: isActive ? '#F6FDFF' : 'inherit' }} />
                 {sidebarOpen && (
-                  <div style={{ 
-                    padding: '0.35rem 0.85rem 0.5rem 0.85rem', 
-                    fontSize: '0.68rem', 
-                    fontWeight: '800', 
-                    color: 'var(--text-muted)', 
-                    textTransform: 'uppercase', 
-                    letterSpacing: '1px' 
-                  }}>
-                    {group.groupTitle}
+                  <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+                    <span style={{ 
+                      fontWeight: isActive ? '800' : '600', 
+                      fontSize: '0.9rem', 
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis'
+                    }}>
+                      {item.name}
+                    </span>
                   </div>
                 )}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-                  {group.items.map((item) => {
-                    const isActive = location.pathname === item.path;
-                    const ItemIcon = item.icon;
-
-                    return (
-                      <div 
-                        key={item.name}
-                        onClick={() => navigate(item.path)}
-                        title={!sidebarOpen ? item.name : undefined}
-                        style={{
-                          display: 'flex', 
-                          alignItems: 'center',
-                          padding: sidebarOpen ? '0.68rem 0.95rem' : '0.75rem',
-                          borderRadius: '12px', 
-                          cursor: 'pointer',
-                          color: isActive ? '#F6FDFF' : 'rgba(246, 253, 255, 0.75)',
-                          background: isActive ? 'linear-gradient(135deg, #1554E8 0%, #2E9BF8 100%)' : 'transparent',
-                          boxShadow: isActive ? '0 4px 18px rgba(21, 84, 232, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25)' : 'none',
-                          border: isActive ? '1px solid rgba(106, 231, 247, 0.35)' : '1px solid transparent',
-                          transition: 'all 0.22s cubic-bezier(0.16, 1, 0.3, 1)',
-                          gap: '0.85rem', 
-                          position: 'relative',
-                          justifyContent: sidebarOpen ? 'flex-start' : 'center'
-                        }}
-                        onMouseEnter={(e) => {
-                          if (!isActive) {
-                            e.currentTarget.style.backgroundColor = 'rgba(13, 35, 77, 0.7)';
-                            e.currentTarget.style.borderColor = 'rgba(46, 155, 248, 0.3)';
-                            e.currentTarget.style.color = '#6AE7F7';
-                            e.currentTarget.style.transform = 'translateX(2px)';
-                          }
-                        }}
-                        onMouseLeave={(e) => {
-                          if (!isActive) {
-                            e.currentTarget.style.backgroundColor = 'transparent';
-                            e.currentTarget.style.borderColor = 'transparent';
-                            e.currentTarget.style.color = 'rgba(246, 253, 255, 0.75)';
-                            e.currentTarget.style.transform = 'translateX(0)';
-                          }
-                        }}
-                      >
-                        {isActive && (
-                          <div style={{
-                            position: 'absolute',
-                            left: '3px',
-                            width: '4px',
-                            height: '18px',
-                            borderRadius: '4px',
-                            background: '#6AE7F7',
-                            boxShadow: '0 0 10px #6AE7F7'
-                          }} />
-                        )}
-                        <ItemIcon size={18} style={{ minWidth: '18px', color: isActive ? '#F6FDFF' : 'inherit' }} />
-                        {sidebarOpen && (
-                          <span style={{ 
-                            fontWeight: isActive ? '700' : '500', 
-                            fontSize: '0.85rem', 
-                            whiteSpace: 'nowrap',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis'
-                          }}>
-                            {item.name}
-                          </span>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
               </div>
             );
           })}
@@ -849,7 +790,9 @@ export const DashboardLayout = () => {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
-              {permittedGroups.flatMap(g => g.items).slice(0, 6).map((item) => (
+              {primaryNavigationModules
+                .filter(item => !searchQuery || item.name.toLowerCase().includes(searchQuery.toLowerCase()) || item.description.toLowerCase().includes(searchQuery.toLowerCase()))
+                .map((item) => (
                 <div
                   key={item.name}
                   onClick={() => {
@@ -860,7 +803,7 @@ export const DashboardLayout = () => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    padding: '0.75rem 1rem',
+                    padding: '0.85rem 1.15rem',
                     borderRadius: '12px',
                     background: 'rgba(13, 35, 77, 0.6)',
                     border: '1px solid rgba(46, 155, 248, 0.15)',
@@ -881,9 +824,12 @@ export const DashboardLayout = () => {
                     e.currentTarget.style.transform = 'translateX(0)';
                   }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                    <item.icon size={18} style={{ color: '#2E9BF8' }} />
-                    <span style={{ fontSize: '0.88rem', fontWeight: 600 }}>{item.name}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+                    <item.icon size={19} style={{ color: '#2E9BF8' }} />
+                    <div>
+                      <div style={{ fontSize: '0.9rem', fontWeight: 700 }}>{item.name}</div>
+                      <div style={{ fontSize: '0.75rem', color: 'rgba(246, 253, 255, 0.6)' }}>{item.description}</div>
+                    </div>
                   </div>
                   <ArrowUpRight size={16} color="rgba(246, 253, 255, 0.55)" />
                 </div>

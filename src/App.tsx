@@ -16,19 +16,13 @@ const DashboardLayout = React.lazy(() => import('./layouts/DashboardLayout'));
 const Dashboard = React.lazy(() => import('./pages/Dashboard'));
 const Profile = React.lazy(() => import('./pages/Profile'));
 
-// Master Module Components
-const RiskRegister = React.lazy(() => import('./pages/modules/RiskRegister'));
-const RiskMatrix = React.lazy(() => import('./pages/modules/RiskMatrix'));
-const IncidentManagement = React.lazy(() => import('./pages/modules/IncidentManagement'));
-const PredictiveAI = React.lazy(() => import('./pages/modules/PredictiveAI'));
-const ExplainableAI = React.lazy(() => import('./pages/modules/ExplainableAI'));
-const IndustryModule = React.lazy(() => import('./pages/modules/IndustryModule'));
-const EnterpriseAnalytics = React.lazy(() => import('./pages/modules/EnterpriseAnalytics'));
-const WorkflowTasks = React.lazy(() => import('./pages/modules/WorkflowTasks'));
-const ComplianceAudit = React.lazy(() => import('./pages/modules/ComplianceAudit'));
-const EnterpriseReports = React.lazy(() => import('./pages/modules/EnterpriseReports'));
-const AdminSecurity = React.lazy(() => import('./pages/modules/AdminSecurity'));
-const OrgOverview = React.lazy(() => import('./pages/modules/OrgOverview'));
+// The 7 Primary Enterprise Modules
+const RiskCenter = React.lazy(() => import('./pages/modules/RiskCenter'));
+const AIIntelligence = React.lazy(() => import('./pages/modules/AIIntelligence'));
+const OrganizationWorkspace = React.lazy(() => import('./pages/modules/OrganizationWorkspace'));
+const AnalyticsWorkspace = React.lazy(() => import('./pages/modules/AnalyticsWorkspace'));
+const GovernanceWorkspace = React.lazy(() => import('./pages/modules/GovernanceWorkspace'));
+const AdministrationWorkspace = React.lazy(() => import('./pages/modules/AdministrationWorkspace'));
 const NotificationsPage = React.lazy(() => import('./pages/modules/NotificationsPage'));
 
 const FullScreenLoader = () => (
@@ -192,57 +186,56 @@ export const App = () => {
 
           {/* Master Enterprise Dashboard Flow (Strictly Protected) */}
           <Route path="/dashboard" element={<RequireAuth><DashboardLayout /></RequireAuth>}>
+            {/* 1. Executive Dashboard */}
             <Route index element={<Dashboard />} />
             
-            {/* Foundation */}
-            <Route path="org-overview" element={<OrgOverview />} />
+            {/* 2. Risk Center (Unified Workspace) */}
+            <Route path="risk-center" element={<RiskCenter />} />
+
+            {/* 3. AI Intelligence (Unified Flagship AI Workspace) */}
+            <Route path="ai-intelligence" element={<AIIntelligence />} />
+
+            {/* 4. Organization (Dynamic Tenant Workspace) */}
+            <Route path="organization" element={<OrganizationWorkspace />} />
+
+            {/* 5. Analytics (Unified Insights Workspace) */}
+            <Route path="analytics" element={<AnalyticsWorkspace />} />
+
+            {/* 6. Governance (Centralized GRC Workspace) */}
+            <Route path="governance" element={<GovernanceWorkspace />} />
+
+            {/* 7. Administration (Platform Configuration Workspace) */}
+            <Route path="administration" element={<AdministrationWorkspace />} />
+
+            {/* Utility & Direct Profile routes */}
             <Route path="profile" element={<Profile />} />
             <Route path="notifications" element={<NotificationsPage />} />
 
-            {/* Dynamic Industry Modules */}
-            <Route path="industry/:moduleId" element={<IndustryModule />} />
-            
-            {/* Risk Management */}
-            <Route path="risk/register" element={<RiskRegister />} />
-            <Route path="risk/matrix" element={<RiskMatrix />} />
-            <Route path="risk/assessment" element={<RiskRegister />} />
-            <Route path="risk/mitigation" element={<RiskRegister />} />
+            {/* Backward-compatible redirect aliases for existing bookmarks & deep links */}
+            <Route path="risk/register" element={<Navigate to="/dashboard/risk-center?tab=register" replace />} />
+            <Route path="risk/matrix" element={<Navigate to="/dashboard/risk-center?tab=matrix" replace />} />
+            <Route path="risk/assessment" element={<Navigate to="/dashboard/risk-center?tab=assessment" replace />} />
+            <Route path="risk/mitigation" element={<Navigate to="/dashboard/risk-center?tab=mitigation" replace />} />
+            <Route path="risk/*" element={<Navigate to="/dashboard/risk-center" replace />} />
 
-            {/* Incident Management */}
-            <Route path="incidents" element={<IncidentManagement />} />
-            <Route path="incidents/investigation" element={<IncidentManagement />} />
-            <Route path="incidents/near-miss" element={<IncidentManagement />} />
-            <Route path="incidents/safety" element={<IncidentManagement />} />
+            <Route path="incidents/*" element={<Navigate to="/dashboard/risk-center?tab=timeline" replace />} />
+            <Route path="incidents" element={<Navigate to="/dashboard/risk-center?tab=timeline" replace />} />
 
-            {/* Predictive AI */}
-            <Route path="predictive/forecasting" element={<PredictiveAI />} />
-            <Route path="predictive/anomaly" element={<PredictiveAI />} />
-            <Route path="predictive/recommendations" element={<PredictiveAI />} />
-            <Route path="risk-prediction" element={<PredictiveAI />} />
+            <Route path="predictive/*" element={<Navigate to="/dashboard/ai-intelligence?tab=predictions" replace />} />
+            <Route path="risk-prediction" element={<Navigate to="/dashboard/ai-intelligence?tab=predictions" replace />} />
+            <Route path="xai/*" element={<Navigate to="/dashboard/ai-intelligence?tab=explainability" replace />} />
 
-            {/* Analytics & Heatmaps */}
-            <Route path="analytics" element={<EnterpriseAnalytics />} />
-            <Route path="analytics/comparison" element={<EnterpriseAnalytics />} />
+            <Route path="org-overview" element={<Navigate to="/dashboard/organization?tab=overview" replace />} />
+            <Route path="industry/:moduleId" element={<Navigate to="/dashboard/organization?tab=industry" replace />} />
 
-            {/* Explainable AI */}
-            <Route path="xai/shap" element={<ExplainableAI />} />
-            <Route path="xai/decisions" element={<ExplainableAI />} />
+            <Route path="analytics/comparison" element={<Navigate to="/dashboard/analytics?tab=heatmaps" replace />} />
 
-            {/* Workflow & Tasks */}
-            <Route path="workflow/tasks" element={<WorkflowTasks />} />
-            <Route path="workflow/timeline" element={<WorkflowTasks />} />
+            <Route path="workflow/*" element={<Navigate to="/dashboard/governance?tab=approvals" replace />} />
+            <Route path="reports/*" element={<Navigate to="/dashboard/governance?tab=reports" replace />} />
+            <Route path="reports" element={<Navigate to="/dashboard/governance?tab=reports" replace />} />
+            <Route path="compliance/*" element={<Navigate to="/dashboard/governance?tab=compliance" replace />} />
 
-            {/* Reports & Exports */}
-            <Route path="reports" element={<EnterpriseReports />} />
-            <Route path="reports/export" element={<EnterpriseReports />} />
-
-            {/* Compliance & Audit */}
-            <Route path="compliance/policies" element={<ComplianceAudit />} />
-            <Route path="compliance/audit" element={<ComplianceAudit />} />
-
-            {/* Admin & Security */}
-            <Route path="admin/users" element={<AdminSecurity />} />
-            <Route path="admin/settings" element={<AdminSecurity />} />
+            <Route path="admin/*" element={<Navigate to="/dashboard/administration?tab=users" replace />} />
 
             {/* Fallbacks */}
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
