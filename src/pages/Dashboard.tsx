@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuthStore } from '../store/useAuthStore';
 import { ORGANIZATIONS } from '../config/platformConfig';
+import { useOrganizationTheme } from '../hooks/useOrganizationTheme';
 import { 
   AreaChart, Area, BarChart, Bar, LineChart, Line, 
   PieChart, Pie, Cell, ResponsiveContainer, XAxis, YAxis, 
@@ -19,6 +20,7 @@ import { OrganizationalPortalBackdrop } from '../components/OrganizationalPortal
 
 export const Dashboard = () => {
   const { organization, role, user } = useAuthStore();
+  const { chartPalette, gridStroke, tooltipStyle, themeColors } = useOrganizationTheme();
   const navigate = useNavigate();
   const [activeTimeframe, setActiveTimeframe] = useState<'24h' | '7d' | '30d' | '90d'>('24h');
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -63,9 +65,9 @@ export const Dashboard = () => {
   }));
 
   const riskDistributionData = [
-    { name: 'Low Risk (Trivial)', value: 68, color: '#6AE7F7' },
-    { name: 'Moderate Exposure', value: 24, color: '#2E9BF8' },
-    { name: 'Critical Attention', value: 8, color: '#EF4444' }
+    { name: 'Low Risk (Trivial)', value: 68, color: chartPalette[0] },
+    { name: 'Moderate Exposure', value: 24, color: chartPalette[1] },
+    { name: 'Critical Attention', value: 8, color: chartPalette[2] || '#EF4444' }
   ];
 
   // 1. Employee / Specialist Minimal Focused Dashboard
@@ -549,16 +551,16 @@ export const Dashboard = () => {
           padding: '1.75rem', 
           display: 'flex', 
           flexDirection: 'column',
-          background: 'rgba(7, 17, 46, 0.92)',
-          border: '1px solid rgba(46, 155, 248, 0.22)',
+          background: 'var(--card-bg)',
+          border: '1px solid var(--border-color)',
           borderRadius: '20px'
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
             <div>
-              <h3 style={{ fontSize: '1.15rem', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#F6FDFF', fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)" }}>
-                <Clock size={18} color="#6AE7F7" /> Predictive Trajectory & Anomaly Curve
+              <h3 style={{ fontSize: '1.15rem', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-primary)', fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)" }}>
+                <Clock size={18} color={chartPalette[0]} /> Predictive Trajectory & Anomaly Curve
               </h3>
-              <p style={{ color: 'rgba(246, 253, 255, 0.65)', fontSize: '0.8rem' }}>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem' }}>
                 Forward-looking neural projection for {currentOrg.name}
               </p>
             </div>
@@ -567,9 +569,9 @@ export const Dashboard = () => {
               borderRadius: '100px',
               fontSize: '0.75rem',
               fontWeight: 700,
-              background: 'rgba(21, 84, 232, 0.2)',
-              color: '#6AE7F7',
-              border: '1px solid rgba(106, 231, 247, 0.4)',
+              background: 'var(--hover-bg)',
+              color: 'var(--accent)',
+              border: '1px solid var(--border-color)',
               fontFamily: "'JetBrains Mono', monospace"
             }}>
               Confidence: 98.4%
@@ -581,24 +583,24 @@ export const Dashboard = () => {
               <AreaChart data={trajectoryData}>
                 <defs>
                   <linearGradient id="riskGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#1554E8" stopOpacity={0.6}/>
-                    <stop offset="50%" stopColor="#2E9BF8" stopOpacity={0.25}/>
-                    <stop offset="95%" stopColor="#6AE7F7" stopOpacity={0}/>
+                    <stop offset="5%" stopColor={chartPalette[0]} stopOpacity={0.6}/>
+                    <stop offset="50%" stopColor={chartPalette[1]} stopOpacity={0.25}/>
+                    <stop offset="95%" stopColor={chartPalette[0]} stopOpacity={0}/>
                   </linearGradient>
                   <linearGradient id="anomalyGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#EF4444" stopOpacity={0.4}/>
-                    <stop offset="95%" stopColor="#EF4444" stopOpacity={0}/>
+                    <stop offset="5%" stopColor={chartPalette[2] || '#EF4444'} stopOpacity={0.4}/>
+                    <stop offset="95%" stopColor={chartPalette[2] || '#EF4444'} stopOpacity={0}/>
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(46, 155, 248, 0.12)" vertical={false} />
-                <XAxis dataKey="time" stroke="rgba(246, 253, 255, 0.55)" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis stroke="rgba(246, 253, 255, 0.55)" fontSize={12} tickLine={false} axisLine={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} vertical={false} />
+                <XAxis dataKey="time" stroke="var(--text-muted)" fontSize={12} tickLine={false} axisLine={false} />
+                <YAxis stroke="var(--text-muted)" fontSize={12} tickLine={false} axisLine={false} />
                 <RechartsTooltip 
-                  contentStyle={{ backgroundColor: 'rgba(7, 17, 46, 0.95)', border: '1px solid rgba(46, 155, 248, 0.3)', borderRadius: '12px', boxShadow: '0 20px 40px rgba(0, 0, 0, 0.8)', color: '#F6FDFF' }}
+                  contentStyle={tooltipStyle}
                   itemStyle={{ fontWeight: '700' }}
                 />
-                <Area type="monotone" dataKey="systemicRisk" stroke="#2E9BF8" strokeWidth={3} fillOpacity={1} fill="url(#riskGrad)" name="Systemic Risk %" />
-                <Area type="monotone" dataKey="anomalyIndex" stroke="#EF4444" strokeWidth={2} strokeDasharray="4 4" fillOpacity={1} fill="url(#anomalyGrad)" name="Anomaly Signals" />
+                <Area type="monotone" dataKey="systemicRisk" stroke={chartPalette[0]} strokeWidth={3} fillOpacity={1} fill="url(#riskGrad)" name="Systemic Risk %" />
+                <Area type="monotone" dataKey="anomalyIndex" stroke={chartPalette[2] || '#EF4444'} strokeWidth={2} strokeDasharray="4 4" fillOpacity={1} fill="url(#anomalyGrad)" name="Anomaly Signals" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -610,15 +612,15 @@ export const Dashboard = () => {
           display: 'flex', 
           flexDirection: 'column', 
           justifyContent: 'space-between',
-          background: 'rgba(7, 17, 46, 0.92)',
-          border: '1px solid rgba(46, 155, 248, 0.22)',
+          background: 'var(--card-bg)',
+          border: '1px solid var(--border-color)',
           borderRadius: '20px'
         }}>
           <div>
-            <h3 style={{ fontSize: '1.15rem', fontWeight: '800', marginBottom: '0.25rem', color: '#F6FDFF', fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)" }}>
+            <h3 style={{ fontSize: '1.15rem', fontWeight: '800', marginBottom: '0.25rem', color: 'var(--text-primary)', fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)" }}>
               Risk Exposure Distribution
             </h3>
-            <p style={{ color: 'rgba(246, 253, 255, 0.65)', fontSize: '0.8rem', marginBottom: '1rem' }}>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginBottom: '1rem' }}>
               Severity breakdown across active registers
             </p>
           </div>
@@ -641,7 +643,7 @@ export const Dashboard = () => {
                   ))}
                 </Pie>
                 <RechartsTooltip 
-                  contentStyle={{ backgroundColor: 'rgba(7, 17, 46, 0.95)', border: '1px solid rgba(46, 155, 248, 0.3)', borderRadius: '10px', color: '#F6FDFF' }}
+                  contentStyle={tooltipStyle}
                 />
               </PieChart>
             </ResponsiveContainer>
@@ -652,9 +654,9 @@ export const Dashboard = () => {
               <div key={item.name} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.82rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <div style={{ width: '10px', height: '10px', borderRadius: '3px', backgroundColor: item.color }} />
-                  <span style={{ color: 'rgba(246, 253, 255, 0.75)' }}>{item.name}</span>
+                  <span style={{ color: 'var(--text-secondary)' }}>{item.name}</span>
                 </div>
-                <span style={{ fontWeight: '800', color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>{item.value}%</span>
+                <span style={{ fontWeight: '800', color: 'var(--text-primary)', fontFamily: "'JetBrains Mono', monospace" }}>{item.value}%</span>
               </div>
             ))}
           </div>
@@ -668,20 +670,20 @@ export const Dashboard = () => {
         {/* Department Comparison */}
         <div className="neo-card" style={{ 
           padding: '1.75rem',
-          background: 'rgba(7, 17, 46, 0.92)',
-          border: '1px solid rgba(46, 155, 248, 0.22)',
+          background: 'var(--card-bg)',
+          border: '1px solid var(--border-color)',
           borderRadius: '20px'
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
             <div>
-              <h3 style={{ fontSize: '1.15rem', fontWeight: '800', color: '#F6FDFF', fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)" }}>
+              <h3 style={{ fontSize: '1.15rem', fontWeight: '800', color: 'var(--text-primary)', fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)" }}>
                 Department Risk Comparison
               </h3>
-              <p style={{ color: 'rgba(246, 253, 255, 0.65)', fontSize: '0.8rem' }}>Relative exposure & mitigation scores</p>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem' }}>Relative exposure & mitigation scores</p>
             </div>
             <button 
               onClick={() => navigate('/dashboard/analytics?tab=heatmaps')}
-              style={{ background: 'none', border: 'none', color: '#6AE7F7', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 700 }}
+              style={{ background: 'none', border: 'none', color: 'var(--accent)', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 700 }}
             >
               Full Heatmap &rarr;
             </button>
@@ -690,12 +692,12 @@ export const Dashboard = () => {
           <div style={{ height: '280px' }}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={departmentRiskData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(46, 155, 248, 0.12)" vertical={false} />
-                <XAxis dataKey="name" stroke="rgba(246, 253, 255, 0.55)" fontSize={11} tickLine={false} axisLine={false} />
-                <YAxis stroke="rgba(246, 253, 255, 0.55)" fontSize={11} tickLine={false} axisLine={false} />
-                <RechartsTooltip contentStyle={{ backgroundColor: 'rgba(7, 17, 46, 0.95)', border: '1px solid rgba(46, 155, 248, 0.3)', borderRadius: '10px', color: '#F6FDFF' }} />
-                <Bar dataKey="score" fill="#1554E8" radius={[6, 6, 0, 0]} name="Exposure Index" />
-                <Bar dataKey="mitigated" fill="#6AE7F7" radius={[6, 6, 0, 0]} name="Mitigation Readiness %" />
+                <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} vertical={false} />
+                <XAxis dataKey="name" stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} />
+                <YAxis stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} />
+                <RechartsTooltip contentStyle={tooltipStyle} />
+                <Bar dataKey="score" fill={chartPalette[0]} radius={[6, 6, 0, 0]} name="Exposure Index" />
+                <Bar dataKey="mitigated" fill={chartPalette[1]} radius={[6, 6, 0, 0]} name="Mitigation Readiness %" />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -706,25 +708,25 @@ export const Dashboard = () => {
           padding: '1.75rem', 
           display: 'flex', 
           flexDirection: 'column',
-          background: 'rgba(7, 17, 46, 0.92)',
-          border: '1px solid rgba(46, 155, 248, 0.22)',
+          background: 'var(--card-bg)',
+          border: '1px solid var(--border-color)',
           borderRadius: '20px'
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
             <div>
-              <h3 style={{ fontSize: '1.15rem', fontWeight: '800', color: '#F6FDFF', fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)" }}>
+              <h3 style={{ fontSize: '1.15rem', fontWeight: '800', color: 'var(--text-primary)', fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)" }}>
                 {currentOrg.name.split('&')[0]} Modules
               </h3>
-              <p style={{ color: 'rgba(246, 253, 255, 0.65)', fontSize: '0.8rem' }}>Dynamic sector modules enabled for {currentRole.title}</p>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem' }}>Dynamic sector modules enabled for {currentRole.title}</p>
             </div>
             <span style={{
               padding: '0.3rem 0.75rem',
               borderRadius: '100px',
               fontSize: '0.72rem',
               fontWeight: 700,
-              background: 'rgba(21, 84, 232, 0.2)',
-              color: '#6AE7F7',
-              border: '1px solid rgba(106, 231, 247, 0.4)'
+              background: 'var(--hover-bg)',
+              color: 'var(--accent)',
+              border: '1px solid var(--border-color)'
             }}>
               {currentOrg.industryModules.length} Modules Live
             </span>
@@ -738,8 +740,8 @@ export const Dashboard = () => {
                 style={{
                   padding: '1rem',
                   borderRadius: '14px',
-                  background: 'rgba(13, 35, 77, 0.55)',
-                  border: '1px solid rgba(46, 155, 248, 0.2)',
+                  background: 'var(--bg-secondary)',
+                  border: '1px solid var(--border-color)',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
@@ -747,25 +749,25 @@ export const Dashboard = () => {
                   transition: 'all 0.2s ease'
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = '#2E9BF8';
-                  e.currentTarget.style.background = 'rgba(21, 84, 232, 0.2)';
+                  e.currentTarget.style.borderColor = 'var(--primary)';
+                  e.currentTarget.style.background = 'var(--hover-bg)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(46, 155, 248, 0.2)';
-                  e.currentTarget.style.background = 'rgba(13, 35, 77, 0.55)';
+                  e.currentTarget.style.borderColor = 'var(--border-color)';
+                  e.currentTarget.style.background = 'var(--bg-secondary)';
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
                   <div style={{
                     width: '40px', height: '40px', borderRadius: '10px',
-                    background: 'rgba(21, 84, 232, 0.25)', color: '#6AE7F7',
+                    background: 'var(--hover-bg)', color: 'var(--accent)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center'
                   }}>
                     <Cpu size={20} />
                   </div>
                   <div>
-                    <div style={{ fontWeight: '700', fontSize: '0.92rem', color: '#F6FDFF' }}>{mod.name}</div>
-                    <div style={{ fontSize: '0.78rem', color: 'rgba(246, 253, 255, 0.65)' }}>{mod.kpi1.label}: <strong style={{ color: '#F6FDFF' }}>{mod.kpi1.value}</strong></div>
+                    <div style={{ fontWeight: '700', fontSize: '0.92rem', color: 'var(--text-primary)' }}>{mod.name}</div>
+                    <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>{mod.kpi1.label}: <strong style={{ color: 'var(--text-primary)' }}>{mod.kpi1.value}</strong></div>
                   </div>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -774,7 +776,7 @@ export const Dashboard = () => {
                       {mod.activeAlertsCount} Alerts
                     </span>
                   )}
-                  <ChevronRight size={18} color="rgba(246, 253, 255, 0.55)" />
+                  <ChevronRight size={18} color="var(--text-muted)" />
                 </div>
               </div>
             ))}

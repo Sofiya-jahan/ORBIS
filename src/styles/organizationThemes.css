@@ -1,0 +1,846 @@
+/* ==========================================================================
+   ORBIS DYNAMIC ORGANIZATION THEME ENGINE
+   Centralized Semantic Design Tokens for Organization-Specific Visual Identity
+   Supports Full Light Mode & Dark Mode for Every Industry
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   DEFAULT FALLBACKS: Universal Light & Dark Mode
+   -------------------------------------------------------------------------- */
+
+:root[data-theme="light"],
+[data-theme="light"] {
+  /* Surface & Background */
+  --bg-primary: #F8FAFC;
+  --bg-secondary: #FFFFFF;
+  --bg-tertiary: #F1F5F9;
+  --bg-elevated: #FFFFFF;
+  --bg-surface-tint: rgba(255, 255, 255, 0.85);
+  
+  --page-bg-gradient: radial-gradient(circle at 50% 0%, rgba(21, 84, 232, 0.04) 0%, transparent 60%),
+                      radial-gradient(circle at 100% 100%, rgba(46, 155, 248, 0.03) 0%, transparent 50%),
+                      #F8FAFC;
+
+  /* Typography */
+  --pure-white: #0F172A;
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #64748B;
+  --text-disabled: #94A3B8;
+  --text-inverse: #FFFFFF;
+
+  /* Brand Colors (Default Corporate) */
+  --primary: #1554E8;
+  --primary-rgb: 21, 84, 232;
+  --primary-hover: #1043C0;
+  --secondary: #0284C7;
+  --secondary-rgb: 2, 132, 199;
+  --accent: #0284C7;
+  --accent-rgb: 2, 132, 199;
+  --highlight-cyan: #0284C7;
+
+  /* Glassmorphism & Cards */
+  --glass-bg: rgba(255, 255, 255, 0.88);
+  --glass-bg-hover: rgba(255, 255, 255, 0.98);
+  --glass-border: rgba(226, 232, 240, 0.9);
+  --glass-border-hover: rgba(21, 84, 232, 0.35);
+  --glass-overlay: rgba(248, 250, 252, 0.92);
+
+  --card-gradient: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);
+  --border-gradient: linear-gradient(135deg, rgba(21, 84, 232, 0.25) 0%, rgba(2, 132, 199, 0.15) 100%);
+
+  /* Navigation & Chrome */
+  --sidebar-bg: rgba(255, 255, 255, 0.96);
+  --sidebar-border: rgba(226, 232, 240, 0.9);
+  --nav-bg: rgba(255, 255, 255, 0.94);
+  --nav-border: rgba(226, 232, 240, 0.9);
+  --nav-item-active-bg: linear-gradient(135deg, #1554E8 0%, #0284C7 100%);
+  --nav-item-hover-bg: rgba(21, 84, 232, 0.08);
+
+  /* Inputs & Form Elements */
+  --input-bg: #FFFFFF;
+  --input-border: #CBD5E1;
+  --input-focus-border: #1554E8;
+
+  /* Chart & Telemetry Tokens */
+  --chart-1: #1554E8;
+  --chart-2: #0284C7;
+  --chart-3: #10B981;
+  --chart-4: #8B5CF6;
+  --chart-grid: rgba(0, 0, 0, 0.06);
+  --chart-tooltip-bg: rgba(255, 255, 255, 0.98);
+  --chart-tooltip-border: rgba(226, 232, 240, 0.9);
+  --chart-tooltip-text: #0F172A;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.02);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
+  --shadow-glow: 0 0 25px rgba(21, 84, 232, 0.15);
+}
+
+:root[data-theme="dark"],
+[data-theme="dark"] {
+  /* Standard Sovereign Dark Fallback */
+  --sidebar-bg: rgba(7, 17, 46, 0.88);
+  --sidebar-border: rgba(46, 155, 248, 0.18);
+  --nav-bg: rgba(7, 17, 46, 0.85);
+  --nav-border: rgba(46, 155, 248, 0.18);
+  --nav-item-active-bg: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  --nav-item-hover-bg: rgba(255, 255, 255, 0.06);
+  --input-bg: rgba(13, 35, 77, 0.7);
+  --input-border: rgba(46, 155, 248, 0.25);
+  --input-focus-border: var(--secondary);
+
+  --chart-1: #6AE7F7;
+  --chart-2: #2E9BF8;
+  --chart-3: #1554E8;
+  --chart-4: #8671F9;
+  --chart-grid: rgba(255, 255, 255, 0.08);
+  --chart-tooltip-bg: rgba(7, 17, 46, 0.96);
+  --chart-tooltip-border: rgba(46, 155, 248, 0.3);
+  --chart-tooltip-text: #F6FDFF;
+}
+
+/* ==========================================================================
+   1. HOSPITAL & HEALTHCARE SYSTEM (hospital)
+   Identity: Calm, Trustworthy, Medical, Clean Aqua & Teal
+   ========================================================================== */
+
+:root[data-org="hospital"][data-theme="dark"],
+[data-org="hospital"][data-theme="dark"] {
+  --bg-primary: #051821;
+  --bg-secondary: #0A2633;
+  --bg-tertiary: #071E29;
+  --bg-elevated: #0E3547;
+  --bg-surface-tint: rgba(10, 38, 51, 0.75);
+
+  --page-bg-gradient: radial-gradient(ellipse at 50% -10%, #0A2633 0%, #051821 70%),
+                      radial-gradient(circle at 95% 15%, rgba(11, 110, 253, 0.12) 0%, transparent 45%),
+                      radial-gradient(circle at 5% 85%, rgba(0, 224, 255, 0.08) 0%, transparent 40%);
+
+  --primary: #0B6EFD;
+  --primary-rgb: 11, 110, 253;
+  --primary-hover: #0958CA;
+  --secondary: #0D9488;
+  --secondary-rgb: 13, 148, 136;
+  --accent: #00E0FF;
+  --accent-rgb: 0, 224, 255;
+  --highlight-cyan: #3EC6FF;
+
+  --primary-gradient: linear-gradient(135deg, #0B6EFD 0%, #00E0FF 100%);
+  --secondary-gradient: linear-gradient(135deg, #0D9488 0%, #3EC6FF 100%);
+  --ai-gradient: linear-gradient(135deg, #0B6EFD 0%, #0D9488 100%);
+  --card-gradient: linear-gradient(180deg, rgba(10, 38, 51, 0.75) 0%, rgba(5, 24, 33, 0.9) 100%);
+
+  --glass-bg: rgba(10, 38, 51, 0.65);
+  --glass-border: rgba(13, 148, 136, 0.22);
+  --glass-border-hover: rgba(0, 224, 255, 0.45);
+
+  --sidebar-bg: rgba(5, 24, 33, 0.92);
+  --sidebar-border: rgba(13, 148, 136, 0.2);
+  --nav-bg: rgba(5, 24, 33, 0.88);
+  --nav-border: rgba(13, 148, 136, 0.2);
+  --input-bg: rgba(10, 38, 51, 0.75);
+  --input-border: rgba(13, 148, 136, 0.25);
+
+  --chart-1: #00E0FF;
+  --chart-2: #0B6EFD;
+  --chart-3: #10B981;
+  --chart-4: #38BDF8;
+}
+
+:root[data-org="hospital"][data-theme="light"],
+[data-org="hospital"][data-theme="light"] {
+  --bg-primary: #F0FDF9;
+  --bg-secondary: #FFFFFF;
+  --bg-tertiary: #E6F7F2;
+  --bg-elevated: #FFFFFF;
+
+  --text-primary: #0F2F38;
+  --text-secondary: #335C67;
+  --text-muted: #52796F;
+
+  --primary: #0284C7;
+  --primary-rgb: 2, 132, 199;
+  --primary-hover: #0369A1;
+  --secondary: #0D9488;
+  --secondary-rgb: 13, 148, 136;
+  --accent: #0D9488;
+  --accent-rgb: 13, 148, 136;
+  --highlight-cyan: #0284C7;
+
+  --primary-gradient: linear-gradient(135deg, #0284C7 0%, #0D9488 100%);
+  --secondary-gradient: linear-gradient(135deg, #0D9488 0%, #06B6D4 100%);
+  --ai-gradient: linear-gradient(135deg, #0284C7 0%, #0D9488 100%);
+  --card-gradient: linear-gradient(180deg, #FFFFFF 0%, #F5FCFA 100%);
+
+  --glass-bg: rgba(255, 255, 255, 0.9);
+  --glass-border: rgba(13, 148, 136, 0.18);
+  --glass-border-hover: rgba(2, 132, 199, 0.4);
+
+  --sidebar-bg: rgba(255, 255, 255, 0.96);
+  --sidebar-border: rgba(13, 148, 136, 0.16);
+  --nav-bg: rgba(255, 255, 255, 0.94);
+  --nav-border: rgba(13, 148, 136, 0.16);
+  --input-bg: #FFFFFF;
+  --input-border: rgba(13, 148, 136, 0.3);
+
+  --chart-1: #0284C7;
+  --chart-2: #0D9488;
+  --chart-3: #10B981;
+  --chart-4: #0284C7;
+}
+
+/* ==========================================================================
+   2. BANKING & FINANCE (bank)
+   Identity: Security, Trust, Wealth, Premium Emerald & Sovereign Gold
+   ========================================================================== */
+
+:root[data-org="bank"][data-theme="dark"],
+[data-org="bank"][data-theme="dark"] {
+  --bg-primary: #05141D;
+  --bg-secondary: #09212E;
+  --bg-tertiary: #071923;
+  --bg-elevated: #0D2E40;
+
+  --primary: #059669;
+  --primary-rgb: 5, 150, 105;
+  --primary-hover: #047857;
+  --secondary: #0284C7;
+  --secondary-rgb: 2, 132, 199;
+  --accent: #F59E0B;
+  --accent-rgb: 245, 158, 11;
+  --highlight-cyan: #10B981;
+
+  --primary-gradient: linear-gradient(135deg, #059669 0%, #0284C7 100%);
+  --secondary-gradient: linear-gradient(135deg, #D97706 0%, #F59E0B 100%);
+  --ai-gradient: linear-gradient(135deg, #059669 0%, #D97706 100%);
+  --card-gradient: linear-gradient(180deg, rgba(9, 33, 46, 0.8) 0%, rgba(5, 20, 29, 0.95) 100%);
+
+  --glass-bg: rgba(9, 33, 46, 0.7);
+  --glass-border: rgba(5, 150, 105, 0.24);
+  --glass-border-hover: rgba(245, 158, 11, 0.45);
+
+  --sidebar-bg: rgba(5, 20, 29, 0.92);
+  --sidebar-border: rgba(5, 150, 105, 0.2);
+  --nav-bg: rgba(5, 20, 29, 0.88);
+  --nav-border: rgba(5, 150, 105, 0.2);
+
+  --chart-1: #10B981;
+  --chart-2: #0284C7;
+  --chart-3: #F59E0B;
+  --chart-4: #34D399;
+}
+
+:root[data-org="bank"][data-theme="light"],
+[data-org="bank"][data-theme="light"] {
+  --bg-primary: #F4FBF7;
+  --bg-secondary: #FFFFFF;
+  --bg-tertiary: #E6F5EC;
+  --bg-elevated: #FFFFFF;
+
+  --text-primary: #0F172A;
+  --text-secondary: #1E293B;
+  --text-muted: #475569;
+
+  --primary: #047857;
+  --primary-rgb: 4, 120, 87;
+  --primary-hover: #065F46;
+  --secondary: #0369A1;
+  --secondary-rgb: 3, 105, 161;
+  --accent: #D97706;
+  --accent-rgb: 217, 119, 6;
+  --highlight-cyan: #047857;
+
+  --primary-gradient: linear-gradient(135deg, #047857 0%, #0369A1 100%);
+  --secondary-gradient: linear-gradient(135deg, #D97706 0%, #F59E0B 100%);
+  --ai-gradient: linear-gradient(135deg, #047857 0%, #D97706 100%);
+  --card-gradient: linear-gradient(180deg, #FFFFFF 0%, #F6FAF7 100%);
+
+  --glass-bg: rgba(255, 255, 255, 0.92);
+  --glass-border: rgba(4, 120, 87, 0.18);
+  --glass-border-hover: rgba(217, 119, 6, 0.35);
+
+  --sidebar-bg: rgba(255, 255, 255, 0.96);
+  --sidebar-border: rgba(4, 120, 87, 0.16);
+  --nav-bg: rgba(255, 255, 255, 0.94);
+  --nav-border: rgba(4, 120, 87, 0.16);
+
+  --chart-1: #047857;
+  --chart-2: #0369A1;
+  --chart-3: #D97706;
+  --chart-4: #059669;
+}
+
+/* ==========================================================================
+   3. UNIVERSITY & HIGHER EDUCATION (university)
+   Identity: Knowledge, Innovation, Academic, Royal Purple & Deep Indigo
+   ========================================================================== */
+
+:root[data-org="university"][data-theme="dark"],
+[data-org="university"][data-theme="dark"] {
+  --bg-primary: #0F0C22;
+  --bg-secondary: #191438;
+  --bg-tertiary: #130F2D;
+  --bg-elevated: #231C4D;
+
+  --primary: #7C3AED;
+  --primary-rgb: 124, 58, 237;
+  --primary-hover: #6D28D9;
+  --secondary: #6366F1;
+  --secondary-rgb: 99, 102, 241;
+  --accent: #A78BFA;
+  --accent-rgb: 167, 139, 250;
+  --highlight-cyan: #C084FC;
+
+  --primary-gradient: linear-gradient(135deg, #7C3AED 0%, #6366F1 100%);
+  --secondary-gradient: linear-gradient(135deg, #6366F1 0%, #A78BFA 100%);
+  --ai-gradient: linear-gradient(135deg, #7C3AED 0%, #A855F7 100%);
+  --card-gradient: linear-gradient(180deg, rgba(25, 20, 56, 0.75) 0%, rgba(15, 12, 34, 0.92) 100%);
+
+  --glass-bg: rgba(25, 20, 56, 0.65);
+  --glass-border: rgba(124, 58, 237, 0.25);
+  --glass-border-hover: rgba(167, 139, 250, 0.5);
+
+  --sidebar-bg: rgba(15, 12, 34, 0.92);
+  --sidebar-border: rgba(124, 58, 237, 0.22);
+  --nav-bg: rgba(15, 12, 34, 0.88);
+  --nav-border: rgba(124, 58, 237, 0.22);
+
+  --chart-1: #A78BFA;
+  --chart-2: #6366F1;
+  --chart-3: #C084FC;
+  --chart-4: #38BDF8;
+}
+
+:root[data-org="university"][data-theme="light"],
+[data-org="university"][data-theme="light"] {
+  --bg-primary: #FBF8FF;
+  --bg-secondary: #FFFFFF;
+  --bg-tertiary: #F3E8FF;
+  --bg-elevated: #FFFFFF;
+
+  --text-primary: #1E1B4B;
+  --text-secondary: #4338CA;
+  --text-muted: #6B7280;
+
+  --primary: #6D28D9;
+  --primary-rgb: 109, 40, 217;
+  --primary-hover: #5B21B6;
+  --secondary: #4F46E5;
+  --secondary-rgb: 79, 70, 229;
+  --accent: #7C3AED;
+  --accent-rgb: 124, 58, 237;
+  --highlight-cyan: #6D28D9;
+
+  --primary-gradient: linear-gradient(135deg, #6D28D9 0%, #4F46E5 100%);
+  --secondary-gradient: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+  --ai-gradient: linear-gradient(135deg, #6D28D9 0%, #8B5CF6 100%);
+  --card-gradient: linear-gradient(180deg, #FFFFFF 0%, #FAF5FF 100%);
+
+  --glass-bg: rgba(255, 255, 255, 0.92);
+  --glass-border: rgba(109, 40, 217, 0.16);
+  --glass-border-hover: rgba(124, 58, 237, 0.35);
+
+  --sidebar-bg: rgba(255, 255, 255, 0.96);
+  --sidebar-border: rgba(109, 40, 217, 0.16);
+  --nav-bg: rgba(255, 255, 255, 0.94);
+  --nav-border: rgba(109, 40, 217, 0.16);
+
+  --chart-1: #6D28D9;
+  --chart-2: #4F46E5;
+  --chart-3: #8B5CF6;
+  --chart-4: #38BDF8;
+}
+
+/* ==========================================================================
+   4. GOVERNMENT & PUBLIC SECTOR (government)
+   Identity: Authority, Integrity, National Infrastructure, Steel & Muted Gold
+   ========================================================================== */
+
+:root[data-org="government"][data-theme="dark"],
+[data-org="government"][data-theme="dark"] {
+  --bg-primary: #0B121C;
+  --bg-secondary: #141E2E;
+  --bg-tertiary: #0F1825;
+  --bg-elevated: #1C293D;
+
+  --primary: #2563EB;
+  --primary-rgb: 37, 99, 235;
+  --primary-hover: #1D4ED8;
+  --secondary: #475569;
+  --secondary-rgb: 71, 85, 105;
+  --accent: #EAB308;
+  --accent-rgb: 234, 179, 8;
+  --highlight-cyan: #38BDF8;
+
+  --primary-gradient: linear-gradient(135deg, #2563EB 0%, #475569 100%);
+  --secondary-gradient: linear-gradient(135deg, #CA8A04 0%, #EAB308 100%);
+  --ai-gradient: linear-gradient(135deg, #1E40AF 0%, #EAB308 100%);
+  --card-gradient: linear-gradient(180deg, rgba(20, 30, 46, 0.75) 0%, rgba(11, 18, 28, 0.95) 100%);
+
+  --glass-bg: rgba(20, 30, 46, 0.7);
+  --glass-border: rgba(37, 99, 235, 0.22);
+  --glass-border-hover: rgba(234, 179, 8, 0.4);
+
+  --sidebar-bg: rgba(11, 18, 28, 0.92);
+  --sidebar-border: rgba(71, 85, 105, 0.2);
+  --nav-bg: rgba(11, 18, 28, 0.88);
+  --nav-border: rgba(71, 85, 105, 0.2);
+
+  --chart-1: #38BDF8;
+  --chart-2: #2563EB;
+  --chart-3: #EAB308;
+  --chart-4: #94A3B8;
+}
+
+:root[data-org="government"][data-theme="light"],
+[data-org="government"][data-theme="light"] {
+  --bg-primary: #F8FAFC;
+  --bg-secondary: #FFFFFF;
+  --bg-tertiary: #E2E8F0;
+  --bg-elevated: #FFFFFF;
+
+  --text-primary: #0F172A;
+  --text-secondary: #334155;
+  --text-muted: #64748B;
+
+  --primary: #1D4ED8;
+  --primary-rgb: 29, 78, 216;
+  --secondary: #334155;
+  --secondary-rgb: 51, 65, 85;
+  --accent: #B45309;
+  --accent-rgb: 180, 83, 9;
+  --highlight-cyan: #1D4ED8;
+
+  --primary-gradient: linear-gradient(135deg, #1D4ED8 0%, #334155 100%);
+  --ai-gradient: linear-gradient(135deg, #1D4ED8 0%, #B45309 100%);
+  --card-gradient: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);
+
+  --glass-bg: rgba(255, 255, 255, 0.92);
+  --glass-border: rgba(51, 65, 85, 0.16);
+
+  --sidebar-bg: rgba(255, 255, 255, 0.96);
+  --sidebar-border: rgba(51, 65, 85, 0.15);
+  --nav-bg: rgba(255, 255, 255, 0.94);
+  --nav-border: rgba(51, 65, 85, 0.15);
+
+  --chart-1: #1D4ED8;
+  --chart-2: #334155;
+  --chart-3: #B45309;
+  --chart-4: #0284C7;
+}
+
+/* ==========================================================================
+   5. INDUSTRIAL MANUFACTURING (manufacturing)
+   Identity: Engineering, Industrial, Efficiency, Steel & Orange
+   ========================================================================== */
+
+:root[data-org="manufacturing"][data-theme="dark"],
+[data-org="manufacturing"][data-theme="dark"] {
+  --bg-primary: #0D131C;
+  --bg-secondary: #151D2A;
+  --bg-tertiary: #101722;
+  --bg-elevated: #1D283A;
+
+  --primary: #EA580C;
+  --primary-rgb: 234, 88, 12;
+  --primary-hover: #C2410C;
+  --secondary: #0284C7;
+  --secondary-rgb: 2, 132, 199;
+  --accent: #F59E0B;
+  --accent-rgb: 245, 158, 11;
+  --highlight-cyan: #FB923C;
+
+  --primary-gradient: linear-gradient(135deg, #EA580C 0%, #F59E0B 100%);
+  --secondary-gradient: linear-gradient(135deg, #0284C7 0%, #38BDF8 100%);
+  --ai-gradient: linear-gradient(135deg, #EA580C 0%, #0284C7 100%);
+  --card-gradient: linear-gradient(180deg, rgba(21, 29, 42, 0.8) 0%, rgba(13, 19, 28, 0.95) 100%);
+
+  --glass-bg: rgba(21, 29, 42, 0.7);
+  --glass-border: rgba(234, 88, 12, 0.24);
+  --glass-border-hover: rgba(245, 158, 11, 0.45);
+
+  --sidebar-bg: rgba(13, 19, 28, 0.92);
+  --sidebar-border: rgba(234, 88, 12, 0.2);
+  --nav-bg: rgba(13, 19, 28, 0.88);
+  --nav-border: rgba(234, 88, 12, 0.2);
+
+  --chart-1: #EA580C;
+  --chart-2: #0284C7;
+  --chart-3: #F59E0B;
+  --chart-4: #64748B;
+}
+
+:root[data-org="manufacturing"][data-theme="light"],
+[data-org="manufacturing"][data-theme="light"] {
+  --bg-primary: #FFFBF5;
+  --bg-secondary: #FFFFFF;
+  --bg-tertiary: #FFEDD5;
+  --bg-elevated: #FFFFFF;
+
+  --text-primary: #1C1917;
+  --text-secondary: #44403C;
+  --text-muted: #78716C;
+
+  --primary: #C2410C;
+  --primary-rgb: 194, 65, 12;
+  --primary-hover: #9A3412;
+  --secondary: #0369A1;
+  --secondary-rgb: 3, 105, 161;
+  --accent: #D97706;
+  --accent-rgb: 217, 119, 6;
+  --highlight-cyan: #C2410C;
+
+  --primary-gradient: linear-gradient(135deg, #C2410C 0%, #D97706 100%);
+  --ai-gradient: linear-gradient(135deg, #C2410C 0%, #0369A1 100%);
+  --card-gradient: linear-gradient(180deg, #FFFFFF 0%, #FFF8F0 100%);
+
+  --glass-bg: rgba(255, 255, 255, 0.92);
+  --glass-border: rgba(194, 65, 12, 0.18);
+
+  --sidebar-bg: rgba(255, 255, 255, 0.96);
+  --sidebar-border: rgba(194, 65, 12, 0.16);
+  --nav-bg: rgba(255, 255, 255, 0.94);
+  --nav-border: rgba(194, 65, 12, 0.16);
+
+  --chart-1: #C2410C;
+  --chart-2: #0369A1;
+  --chart-3: #D97706;
+  --chart-4: #475569;
+}
+
+/* ==========================================================================
+   6. RETAIL & COMMERCE (retail)
+   Identity: Customer, Growth, Energy, Violet & Magenta/Pink
+   ========================================================================== */
+
+:root[data-org="retail"][data-theme="dark"],
+[data-org="retail"][data-theme="dark"] {
+  --bg-primary: #120A1C;
+  --bg-secondary: #1F1130;
+  --bg-tertiary: #180D26;
+  --bg-elevated: #2C1845;
+
+  --primary: #DB2777;
+  --primary-rgb: 219, 39, 119;
+  --primary-hover: #BE185D;
+  --secondary: #7C3AED;
+  --secondary-rgb: 124, 58, 237;
+  --accent: #F472B6;
+  --accent-rgb: 244, 114, 182;
+  --highlight-cyan: #F472B6;
+
+  --primary-gradient: linear-gradient(135deg, #DB2777 0%, #7C3AED 100%);
+  --secondary-gradient: linear-gradient(135deg, #7C3AED 0%, #F472B6 100%);
+  --ai-gradient: linear-gradient(135deg, #DB2777 0%, #9333EA 100%);
+  --card-gradient: linear-gradient(180deg, rgba(31, 17, 48, 0.75) 0%, rgba(18, 10, 28, 0.95) 100%);
+
+  --glass-bg: rgba(31, 17, 48, 0.7);
+  --glass-border: rgba(219, 39, 119, 0.24);
+
+  --sidebar-bg: rgba(18, 10, 28, 0.92);
+  --sidebar-border: rgba(219, 39, 119, 0.2);
+  --nav-bg: rgba(18, 10, 28, 0.88);
+  --nav-border: rgba(219, 39, 119, 0.2);
+
+  --chart-1: #F472B6;
+  --chart-2: #DB2777;
+  --chart-3: #7C3AED;
+  --chart-4: #38BDF8;
+}
+
+:root[data-org="retail"][data-theme="light"],
+[data-org="retail"][data-theme="light"] {
+  --bg-primary: #FDF4F8;
+  --bg-secondary: #FFFFFF;
+  --bg-tertiary: #FCE7F3;
+  --bg-elevated: #FFFFFF;
+
+  --text-primary: #1F102B;
+  --text-secondary: #4A1D4E;
+  --text-muted: #831843;
+
+  --primary: #BE185D;
+  --primary-rgb: 190, 24, 93;
+  --secondary: #6D28D9;
+  --secondary-rgb: 109, 40, 217;
+  --accent: #DB2777;
+  --accent-rgb: 219, 39, 119;
+  --highlight-cyan: #BE185D;
+
+  --primary-gradient: linear-gradient(135deg, #BE185D 0%, #6D28D9 100%);
+  --ai-gradient: linear-gradient(135deg, #BE185D 0%, #7C3AED 100%);
+  --card-gradient: linear-gradient(180deg, #FFFFFF 0%, #FDF2F8 100%);
+
+  --glass-bg: rgba(255, 255, 255, 0.92);
+  --glass-border: rgba(190, 24, 93, 0.16);
+
+  --sidebar-bg: rgba(255, 255, 255, 0.96);
+  --sidebar-border: rgba(190, 24, 93, 0.16);
+  --nav-bg: rgba(255, 255, 255, 0.94);
+  --nav-border: rgba(190, 24, 93, 0.16);
+
+  --chart-1: #BE185D;
+  --chart-2: #6D28D9;
+  --chart-3: #DB2777;
+  --chart-4: #2563EB;
+}
+
+/* ==========================================================================
+   7. TECHNOLOGY & CLOUD ENTERPRISE (it, startup)
+   Identity: Innovation, AI, Future, Electric Blue & Cyber Cyan
+   ========================================================================== */
+
+:root[data-org="it"][data-theme="dark"],
+:root[data-org="startup"][data-theme="dark"],
+[data-org="it"][data-theme="dark"],
+[data-org="startup"][data-theme="dark"] {
+  --bg-primary: #060A17;
+  --bg-secondary: #0D1429;
+  --bg-tertiary: #090E1E;
+  --bg-elevated: #131E3D;
+
+  --primary: #2563EB;
+  --primary-rgb: 37, 99, 235;
+  --primary-hover: #1D4ED8;
+  --secondary: #7C3AED;
+  --secondary-rgb: 124, 58, 237;
+  --accent: #06B6D4;
+  --accent-rgb: 6, 182, 212;
+  --highlight-cyan: #38BDF8;
+
+  --primary-gradient: linear-gradient(135deg, #2563EB 0%, #7C3AED 100%);
+  --secondary-gradient: linear-gradient(135deg, #7C3AED 0%, #06B6D4 100%);
+  --ai-gradient: linear-gradient(135deg, #2563EB 0%, #06B6D4 100%);
+  --card-gradient: linear-gradient(180deg, rgba(13, 20, 41, 0.78) 0%, rgba(6, 10, 23, 0.95) 100%);
+
+  --glass-bg: rgba(13, 20, 41, 0.7);
+  --glass-border: rgba(37, 99, 235, 0.25);
+  --glass-border-hover: rgba(6, 182, 212, 0.45);
+
+  --sidebar-bg: rgba(6, 10, 23, 0.92);
+  --sidebar-border: rgba(37, 99, 235, 0.2);
+  --nav-bg: rgba(6, 10, 23, 0.88);
+  --nav-border: rgba(37, 99, 235, 0.2);
+
+  --chart-1: #2563EB;
+  --chart-2: #7C3AED;
+  --chart-3: #06B6D4;
+  --chart-4: #60A5FA;
+}
+
+:root[data-org="it"][data-theme="light"],
+:root[data-org="startup"][data-theme="light"],
+[data-org="it"][data-theme="light"],
+[data-org="startup"][data-theme="light"] {
+  --bg-primary: #F8FAFC;
+  --bg-secondary: #FFFFFF;
+  --bg-tertiary: #F1F5F9;
+  --bg-elevated: #FFFFFF;
+
+  --text-primary: #0F172A;
+  --text-secondary: #334155;
+  --text-muted: #64748B;
+
+  --primary: #1D4ED8;
+  --primary-rgb: 29, 78, 216;
+  --secondary: #6D28D9;
+  --secondary-rgb: 109, 40, 217;
+  --accent: #0891B2;
+  --accent-rgb: 8, 145, 178;
+  --highlight-cyan: #1D4ED8;
+
+  --primary-gradient: linear-gradient(135deg, #1D4ED8 0%, #6D28D9 100%);
+  --ai-gradient: linear-gradient(135deg, #1D4ED8 0%, #0891B2 100%);
+  --card-gradient: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);
+
+  --glass-bg: rgba(255, 255, 255, 0.92);
+  --glass-border: rgba(29, 78, 216, 0.16);
+
+  --sidebar-bg: rgba(255, 255, 255, 0.96);
+  --sidebar-border: rgba(29, 78, 216, 0.15);
+  --nav-bg: rgba(255, 255, 255, 0.94);
+  --nav-border: rgba(29, 78, 216, 0.15);
+
+  --chart-1: #1D4ED8;
+  --chart-2: #6D28D9;
+  --chart-3: #0891B2;
+  --chart-4: #2563EB;
+}
+
+/* ==========================================================================
+   8. INSURANCE & ACTUARIAL (insurance)
+   Identity: Protection, Stability, Trust, Deep Navy, Turquoise & Sky Blue
+   ========================================================================== */
+
+:root[data-org="insurance"][data-theme="dark"],
+[data-org="insurance"][data-theme="dark"] {
+  --bg-primary: #051624;
+  --bg-secondary: #0A2338;
+  --bg-tertiary: #081B2B;
+  --primary: #0284C7;
+  --secondary: #0D9488;
+  --accent: #38BDF8;
+  --highlight-cyan: #38BDF8;
+  --primary-gradient: linear-gradient(135deg, #0284C7 0%, #0D9488 100%);
+  --ai-gradient: linear-gradient(135deg, #0284C7 0%, #38BDF8 100%);
+  --card-gradient: linear-gradient(180deg, rgba(10, 35, 56, 0.75) 0%, rgba(5, 22, 36, 0.95) 100%);
+  --glass-bg: rgba(10, 35, 56, 0.7);
+  --glass-border: rgba(2, 132, 199, 0.22);
+}
+
+:root[data-org="insurance"][data-theme="light"],
+[data-org="insurance"][data-theme="light"] {
+  --bg-primary: #F0F9FF;
+  --bg-secondary: #FFFFFF;
+  --bg-tertiary: #E0F2FE;
+  --primary: #0369A1;
+  --secondary: #0F766E;
+  --accent: #0284C7;
+  --text-primary: #0C4A6E;
+  --card-gradient: linear-gradient(180deg, #FFFFFF 0%, #F0F9FF 100%);
+  --glass-bg: rgba(255, 255, 255, 0.92);
+  --glass-border: rgba(3, 105, 161, 0.16);
+}
+
+/* ==========================================================================
+   9. CLEAN ENERGY & GRID UTILITIES (energy)
+   Identity: Sustainability, Power, Emerald Green & Solar Amber
+   ========================================================================== */
+
+:root[data-org="energy"][data-theme="dark"],
+[data-org="energy"][data-theme="dark"] {
+  --bg-primary: #051910;
+  --bg-secondary: #0B291B;
+  --bg-tertiary: #072115;
+  --primary: #15803D;
+  --secondary: #22C55E;
+  --accent: #86EFAC;
+  --highlight-cyan: #4ADE80;
+  --primary-gradient: linear-gradient(135deg, #15803D 0%, #22C55E 100%);
+  --ai-gradient: linear-gradient(135deg, #15803D 0%, #FACC15 100%);
+  --card-gradient: linear-gradient(180deg, rgba(11, 41, 27, 0.75) 0%, rgba(5, 25, 16, 0.95) 100%);
+  --glass-bg: rgba(11, 41, 27, 0.7);
+  --glass-border: rgba(34, 197, 94, 0.22);
+}
+
+:root[data-org="energy"][data-theme="light"],
+[data-org="energy"][data-theme="light"] {
+  --bg-primary: #F0FDF4;
+  --bg-secondary: #FFFFFF;
+  --bg-tertiary: #DCFCE7;
+  --primary: #166534;
+  --secondary: #15803D;
+  --accent: #16A34A;
+  --text-primary: #052E16;
+  --card-gradient: linear-gradient(180deg, #FFFFFF 0%, #F0FDF4 100%);
+  --glass-bg: rgba(255, 255, 255, 0.92);
+  --glass-border: rgba(22, 101, 52, 0.16);
+}
+
+/* ==========================================================================
+   10. CONSTRUCTION & INFRASTRUCTURE (construction)
+   Identity: Heavy Industry, Safety, Heavy Amber Gold & Steel
+   ========================================================================== */
+
+:root[data-org="construction"][data-theme="dark"],
+[data-org="construction"][data-theme="dark"] {
+  --bg-primary: #140E06;
+  --bg-secondary: #241A0B;
+  --bg-tertiary: #1C1408;
+  --primary: #D97706;
+  --secondary: #F59E0B;
+  --accent: #FCD34D;
+  --highlight-cyan: #FBBF24;
+  --primary-gradient: linear-gradient(135deg, #D97706 0%, #F59E0B 100%);
+  --ai-gradient: linear-gradient(135deg, #D97706 0%, #EAB308 100%);
+  --card-gradient: linear-gradient(180deg, rgba(36, 26, 11, 0.75) 0%, rgba(20, 14, 6, 0.95) 100%);
+  --glass-bg: rgba(36, 26, 11, 0.7);
+  --glass-border: rgba(217, 119, 6, 0.24);
+}
+
+:root[data-org="construction"][data-theme="light"],
+[data-org="construction"][data-theme="light"] {
+  --bg-primary: #FFFDF7;
+  --bg-secondary: #FFFFFF;
+  --bg-tertiary: #FEF3C7;
+  --primary: #B45309;
+  --secondary: #D97706;
+  --accent: #F59E0B;
+  --text-primary: #1C1917;
+  --card-gradient: linear-gradient(180deg, #FFFFFF 0%, #FFFBEB 100%);
+  --glass-bg: rgba(255, 255, 255, 0.92);
+  --glass-border: rgba(180, 83, 9, 0.16);
+}
+
+/* ==========================================================================
+   11. LOGISTICS & FREIGHT (logistics)
+   Identity: Global Freight, Route Precision, Royal Indigo & Fleet Blue
+   ========================================================================== */
+
+:root[data-org="logistics"][data-theme="dark"],
+[data-org="logistics"][data-theme="dark"] {
+  --bg-primary: #0A0F24;
+  --bg-secondary: #121A3B;
+  --bg-tertiary: #0E142F;
+  --primary: #4F46E5;
+  --secondary: #6366F1;
+  --accent: #A5B4FC;
+  --highlight-cyan: #818CF8;
+  --primary-gradient: linear-gradient(135deg, #4F46E5 0%, #6366F1 100%);
+  --ai-gradient: linear-gradient(135deg, #4F46E5 0%, #38BDF8 100%);
+  --card-gradient: linear-gradient(180deg, rgba(18, 26, 59, 0.75) 0%, rgba(10, 15, 36, 0.95) 100%);
+  --glass-bg: rgba(18, 26, 59, 0.7);
+  --glass-border: rgba(79, 70, 229, 0.24);
+}
+
+:root[data-org="logistics"][data-theme="light"],
+[data-org="logistics"][data-theme="light"] {
+  --bg-primary: #EEF2FF;
+  --bg-secondary: #FFFFFF;
+  --bg-tertiary: #E0E7FF;
+  --primary: #3730A3;
+  --secondary: #4F46E5;
+  --accent: #6366F1;
+  --text-primary: #1E1B4B;
+  --card-gradient: linear-gradient(180deg, #FFFFFF 0%, #EEF2FF 100%);
+  --glass-bg: rgba(255, 255, 255, 0.92);
+  --glass-border: rgba(55, 48, 163, 0.16);
+}
+
+/* ==========================================================================
+   12. LAW FIRM & REGULATORY (lawfirm)
+   Identity: Counsel, Integrity, Regal Burgundy & Gold
+   ========================================================================== */
+
+:root[data-org="lawfirm"][data-theme="dark"],
+[data-org="lawfirm"][data-theme="dark"] {
+  --bg-primary: #17070F;
+  --bg-secondary: #2B0F1C;
+  --bg-tertiary: #200B15;
+  --primary: #881337;
+  --secondary: #BE123C;
+  --accent: #FB7185;
+  --highlight-cyan: #FDA4AF;
+  --primary-gradient: linear-gradient(135deg, #881337 0%, #BE123C 100%);
+  --ai-gradient: linear-gradient(135deg, #881337 0%, #EAB308 100%);
+  --card-gradient: linear-gradient(180deg, rgba(43, 15, 28, 0.75) 0%, rgba(23, 7, 15, 0.95) 100%);
+  --glass-bg: rgba(43, 15, 28, 0.7);
+  --glass-border: rgba(190, 18, 60, 0.24);
+}
+
+:root[data-org="lawfirm"][data-theme="light"],
+[data-org="lawfirm"][data-theme="light"] {
+  --bg-primary: #FFF1F2;
+  --bg-secondary: #FFFFFF;
+  --bg-tertiary: #FFE4E6;
+  --primary: #9F1239;
+  --secondary: #BE123C;
+  --accent: #E11D48;
+  --text-primary: #2A0818;
+  --card-gradient: linear-gradient(180deg, #FFFFFF 0%, #FFF1F2 100%);
+  --glass-bg: rgba(255, 255, 255, 0.92);
+  --glass-border: rgba(159, 18, 57, 0.16);
+}

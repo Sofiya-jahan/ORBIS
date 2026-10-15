@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import './styles/organizationThemes.css';
 
 /* ==========================================================================
    ORBIS ENTERPRISE DESIGN SYSTEM v3.0
@@ -171,7 +172,7 @@ a:hover {
 }
 
 .neo-card {
-  background: linear-gradient(180deg, rgba(13, 35, 77, 0.75) 0%, rgba(7, 17, 46, 0.9) 100%);
+  background: var(--card-gradient);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);
@@ -180,8 +181,8 @@ a:hover {
   transition: all 0.3s ease;
 }
 .neo-card:hover {
-  border-color: rgba(46, 155, 248, 0.4);
-  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(46, 155, 248, 0.2);
+  border-color: var(--glass-border-hover);
+  box-shadow: var(--shadow-lg), 0 0 20px rgba(var(--primary-rgb), 0.2);
 }
 
 .card {
@@ -237,18 +238,18 @@ a:hover {
 }
 
 .btn-secondary {
-  background: rgba(13, 35, 77, 0.65);
+  background: var(--glass-bg);
   backdrop-filter: blur(12px);
   color: var(--text-primary);
   border: 1px solid var(--glass-border);
   box-shadow: var(--shadow-sm);
 }
 .btn-secondary:hover {
-  background: rgba(21, 84, 232, 0.2);
+  background: var(--glass-bg-hover);
   border-color: var(--secondary);
-  color: var(--pure-white);
+  color: var(--text-primary);
   transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  box-shadow: var(--shadow-md);
 }
 
 .btn-ai {
@@ -332,11 +333,11 @@ a:hover {
   display: block;
   width: 100%;
   padding: 0.85rem 1.25rem;
-  background: rgba(13, 35, 77, 0.65);
+  background: var(--input-bg);
   backdrop-filter: blur(16px);
-  border: 1px solid var(--glass-border);
+  border: 1px solid var(--input-border);
   border-radius: var(--radius-sm);
-  color: var(--pure-white);
+  color: var(--text-primary);
   font-size: 0.92rem;
   font-family: var(--font-family);
   transition: all 0.25s ease;
@@ -344,9 +345,9 @@ a:hover {
 }
 
 .input-field:focus {
-  border-color: var(--secondary);
-  background: rgba(17, 43, 92, 0.85);
-  box-shadow: 0 0 0 3px rgba(46, 155, 248, 0.25), 0 0 20px rgba(106, 231, 247, 0.15);
+  border-color: var(--input-focus-border);
+  background: var(--input-bg);
+  box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.2), 0 0 15px rgba(var(--secondary-rgb), 0.15);
 }
 
 .input-field::placeholder {
@@ -448,4 +449,53 @@ a:hover {
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: var(--secondary);
+}
+
+/* ==========================================================================
+   Universal Light Mode Polish
+   ========================================================================== */
+[data-theme="light"] {
+  color-scheme: light;
+}
+
+[data-theme="light"] body {
+  background-color: var(--bg-primary);
+  background-image: var(--page-bg-gradient);
+  color: var(--text-primary);
+}
+
+[data-theme="light"] h1,
+[data-theme="light"] h2,
+[data-theme="light"] h3,
+[data-theme="light"] h4,
+[data-theme="light"] h5,
+[data-theme="light"] h6 {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="light"] .glass-card,
+[data-theme="light"] .neo-card,
+[data-theme="light"] .card {
+  background: var(--card-gradient) !important;
+  border-color: var(--glass-border) !important;
+  box-shadow: var(--shadow-sm);
+}
+
+[data-theme="light"] .glass-card:hover,
+[data-theme="light"] .neo-card:hover,
+[data-theme="light"] .card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--glass-border-hover) !important;
+}
+
+[data-theme="light"] .glass-card::before {
+  background: linear-gradient(90deg, transparent 0%, rgba(var(--primary-rgb), 0.25) 50%, transparent 100%);
+}
+
+[data-theme="light"] .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.16);
+}
+
+[data-theme="light"] .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.28);
 }

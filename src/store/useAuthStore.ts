@@ -48,7 +48,7 @@ interface AuthState {
 export const useAuthStore = create<AuthState>((set, get) => ({
   isAuthenticated: false,
   isAuthLoaded: false,
-  theme: 'light',
+  theme: (typeof window !== 'undefined' && (localStorage.getItem('orbis_theme') as 'light' | 'dark')) || 'dark',
   organization: null,
   role: null,
   user: null,
@@ -205,6 +205,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   setTheme: (theme) => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('orbis_theme', theme);
+    }
     document.documentElement.setAttribute('data-theme', theme);
     set({ theme });
   },

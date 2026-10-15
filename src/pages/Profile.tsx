@@ -3,13 +3,14 @@ import { useAuthStore } from '../store/useAuthStore';
 import { ORGANIZATIONS } from '../config/platformConfig';
 import { 
   User, Mail, Building2, Briefcase, Hash, Phone, Clock, 
-  ShieldCheck, Upload, Loader2, Lock, CheckCircle2, Shield, Camera
+  ShieldCheck, Upload, Loader2, Lock, CheckCircle2, Shield, Camera,
+  Sun, Moon, Palette, Check
 } from 'lucide-react';
 import { uploadProfileAvatar } from '../services/supabaseStorage';
 import { validateFileUpload, sanitizeInput } from '../services/securityService';
 
 export const Profile = () => {
-  const { user, organization, role, updateUser } = useAuthStore();
+  const { user, organization, role, updateUser, theme, setTheme } = useAuthStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
   
   const currentOrg = organization && ORGANIZATIONS[organization] ? ORGANIZATIONS[organization] : ORGANIZATIONS.hospital;
@@ -75,7 +76,7 @@ export const Profile = () => {
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: currentOrg.themeColor, fontWeight: '700', fontSize: '0.8rem', textTransform: 'uppercase', marginBottom: '0.4rem' }}>
             <ShieldCheck size={16} /> Identity & Credential Governance
           </div>
-          <h1 style={{ fontSize: '2.2rem', fontWeight: '800', marginBottom: '0.35rem', color: '#FFFFFF' }}>
+          <h1 style={{ fontSize: '2.2rem', fontWeight: '800', marginBottom: '0.35rem', color: 'var(--text-primary)' }}>
             Executive Profile & Credentials
           </h1>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>
@@ -195,7 +196,7 @@ export const Profile = () => {
         
         <div style={{ flex: 1, minWidth: '260px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '0.35rem' }}>
-            <h2 style={{ fontSize: '1.75rem', fontWeight: '800', color: '#FFFFFF', margin: 0 }}>
+            <h2 style={{ fontSize: '1.75rem', fontWeight: '800', color: 'var(--text-primary)', margin: 0 }}>
               {user.name}
             </h2>
             <span className="badge badge-success" style={{ fontSize: '0.7rem' }}>
@@ -226,7 +227,7 @@ export const Profile = () => {
             <span style={{ 
               padding: '0.35rem 0.9rem', 
               backgroundColor: 'var(--bg-tertiary)', 
-              color: '#FFFFFF', 
+              color: 'var(--text-primary)', 
               border: '1px solid var(--border-color)',
               borderRadius: '999px',
               fontSize: '0.82rem',
@@ -255,13 +256,155 @@ export const Profile = () => {
         </div>
       </div>
 
+      {/* Organization Theme & Appearance Switcher Card */}
+      <div className="neo-card" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '20px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--accent)', fontWeight: '700', fontSize: '0.8rem', textTransform: 'uppercase', marginBottom: '0.35rem' }}>
+              <Palette size={16} /> Dynamic Visual Identity // {currentOrg.name}
+            </div>
+            <h3 style={{ fontSize: '1.4rem', fontWeight: '800', color: 'var(--text-primary)', margin: 0 }}>
+              Workspace Theme & Branding Mode
+            </h3>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', marginTop: '0.35rem' }}>
+              Every organization has its own visual identity with dedicated Dark and Light modes. Your selection persists across sessions.
+            </p>
+          </div>
+
+          {/* Active Org Branding Swatches */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.55rem 1rem', borderRadius: '12px', background: 'var(--card-bg)', border: '1px solid var(--border-color)' }}>
+            <span style={{ fontSize: '0.75rem', fontWeight: '700', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+              Brand Swatches:
+            </span>
+            <div style={{ display: 'flex', gap: '0.4rem' }}>
+              <div title={`Primary: ${currentOrg.themeColor}`} style={{ width: '18px', height: '18px', borderRadius: '50%', backgroundColor: currentOrg.themeColor, boxShadow: `0 0 8px ${currentOrg.themeColor}88` }} />
+              <div title={`Secondary: ${currentOrg.secondaryColor}`} style={{ width: '18px', height: '18px', borderRadius: '50%', backgroundColor: currentOrg.secondaryColor, boxShadow: `0 0 8px ${currentOrg.secondaryColor}88` }} />
+              <div title={`Accent: ${currentOrg.accentColor}`} style={{ width: '18px', height: '18px', borderRadius: '50%', backgroundColor: currentOrg.accentColor, boxShadow: `0 0 8px ${currentOrg.accentColor}88` }} />
+            </div>
+          </div>
+        </div>
+
+        {/* 2 Interactive Mode Cards */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.25rem' }}>
+          
+          {/* Dark Mode Card */}
+          <div 
+            onClick={() => setTheme('dark')}
+            style={{
+              padding: '1.5rem',
+              borderRadius: '16px',
+              cursor: 'pointer',
+              background: theme === 'dark' ? 'var(--hover-bg)' : 'var(--bg-tertiary)',
+              border: theme === 'dark' ? '2px solid var(--primary)' : '1px solid var(--border-color)',
+              boxShadow: theme === 'dark' ? 'var(--shadow-glow, 0 0 25px rgba(0, 0, 0, 0.4))' : 'none',
+              transition: 'all 0.25s ease',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '1rem',
+              position: 'relative'
+            }}
+          >
+            {theme === 'dark' && (
+              <span style={{
+                position: 'absolute', top: '1rem', right: '1rem',
+                display: 'flex', alignItems: 'center', gap: '4px',
+                padding: '0.2rem 0.6rem', borderRadius: '100px',
+                background: 'var(--primary-gradient)', color: '#FFFFFF',
+                fontSize: '0.72rem', fontWeight: 800
+              }}>
+                <Check size={12} /> Active
+              </span>
+            )}
+            
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <div style={{
+                width: '40px', height: '40px', borderRadius: '12px',
+                background: '#07112E', color: '#6AE7F7',
+                border: '1px solid rgba(106, 231, 247, 0.3)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                boxShadow: '0 0 14px rgba(21, 84, 232, 0.3)'
+              }}>
+                <Moon size={20} />
+              </div>
+              <div>
+                <div style={{ fontWeight: '800', fontSize: '1rem', color: 'var(--text-primary)' }}>
+                  Enterprise Dark
+                </div>
+                <div style={{ fontSize: '0.76rem', color: 'var(--text-muted)' }}>
+                  Deep Navy, Glowing Accents & Glass Surfaces
+                </div>
+              </div>
+            </div>
+
+            <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: 1.5, margin: 0 }}>
+              Deep, immersive cockpit experience designed for command centers, mission monitoring, and low-light executive environments.
+            </p>
+          </div>
+
+          {/* Light Mode Card */}
+          <div 
+            onClick={() => setTheme('light')}
+            style={{
+              padding: '1.5rem',
+              borderRadius: '16px',
+              cursor: 'pointer',
+              background: theme === 'light' ? 'var(--hover-bg)' : 'var(--bg-tertiary)',
+              border: theme === 'light' ? '2px solid var(--primary)' : '1px solid var(--border-color)',
+              boxShadow: theme === 'light' ? 'var(--shadow-glow, 0 0 25px rgba(0, 0, 0, 0.15))' : 'none',
+              transition: 'all 0.25s ease',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '1rem',
+              position: 'relative'
+            }}
+          >
+            {theme === 'light' && (
+              <span style={{
+                position: 'absolute', top: '1rem', right: '1rem',
+                display: 'flex', alignItems: 'center', gap: '4px',
+                padding: '0.2rem 0.6rem', borderRadius: '100px',
+                background: 'var(--primary-gradient)', color: '#FFFFFF',
+                fontSize: '0.72rem', fontWeight: 800
+              }}>
+                <Check size={12} /> Active
+              </span>
+            )}
+            
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <div style={{
+                width: '40px', height: '40px', borderRadius: '12px',
+                background: '#FFFFFF', color: '#1554E8',
+                border: '1px solid #CBD5E1',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)'
+              }}>
+                <Sun size={20} />
+              </div>
+              <div>
+                <div style={{ fontWeight: '800', fontSize: '1rem', color: 'var(--text-primary)' }}>
+                  Executive Light
+                </div>
+                <div style={{ fontSize: '0.76rem', color: 'var(--text-muted)' }}>
+                  Crisp White, Clean Contrast & Subtle Borders
+                </div>
+              </div>
+            </div>
+
+            <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: 1.5, margin: 0 }}>
+              High-contrast, paper-clean presentation tailored for boardroom presentations, daylight auditing, and compliance reviews.
+            </p>
+          </div>
+
+        </div>
+      </div>
+
       {/* Two Column Grid: Personal Details & Security Credentials */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '1.75rem' }}>
         
         {/* Column 1: Personal Details Form */}
         <form onSubmit={handleSaveProfile} className="neo-card" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem', background: 'var(--bg-secondary)' }}>
           <div>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#FFFFFF', marginBottom: '0.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: 'var(--text-primary)', marginBottom: '0.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <User size={20} color={currentOrg.themeColor} /> Personal Information
             </h3>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
@@ -289,7 +432,7 @@ export const Profile = () => {
                     background: 'var(--bg-tertiary)',
                     border: '1px solid var(--border-color)',
                     borderRadius: '12px',
-                    color: '#FFFFFF',
+                    color: 'var(--text-primary)',
                     fontSize: '0.92rem',
                     outline: 'none',
                     transition: 'all 0.2s',
@@ -324,7 +467,7 @@ export const Profile = () => {
                     background: 'var(--bg-tertiary)',
                     border: '1px solid var(--border-color)',
                     borderRadius: '12px',
-                    color: '#FFFFFF',
+                    color: 'var(--text-primary)',
                     fontSize: '0.92rem',
                     outline: 'none',
                     transition: 'all 0.2s',
@@ -408,8 +551,8 @@ export const Profile = () => {
         {/* Column 2: Professional Details (Read-only) */}
         <div className="neo-card" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem', background: 'var(--bg-secondary)' }}>
           <div>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#FFFFFF', marginBottom: '0.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <ShieldCheck size={20} color="#6AE7F7" /> Access & Security (Read Only)
+            <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: 'var(--text-primary)', marginBottom: '0.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <ShieldCheck size={20} color="var(--accent)" /> Access & Security (Read Only)
             </h3>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
               Active zero-trust permissions and session verification telemetry.
@@ -431,7 +574,7 @@ export const Profile = () => {
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
                 <Briefcase size={18} color="var(--text-muted)" /> <span>Assigned Role</span>
               </div>
-              <span style={{ fontWeight: '700', color: '#FFFFFF', fontSize: '0.95rem' }}>
+              <span style={{ fontWeight: '700', color: 'var(--text-primary)', fontSize: '0.95rem' }}>
                 {currentRole.title}
               </span>
             </div>
@@ -449,7 +592,7 @@ export const Profile = () => {
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
                 <Hash size={18} color="var(--text-muted)" /> <span>Operator Token ID</span>
               </div>
-              <span style={{ fontWeight: '700', color: '#FFFFFF', fontFamily: 'var(--font-mono)', fontSize: '0.9rem' }}>
+              <span style={{ fontWeight: '700', color: 'var(--text-primary)', fontFamily: 'var(--font-mono)', fontSize: '0.9rem' }}>
                 {user.id}
               </span>
             </div>
@@ -458,7 +601,7 @@ export const Profile = () => {
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
                 <User size={18} color="var(--text-muted)" /> <span>Department</span>
               </div>
-              <span style={{ fontWeight: '700', color: '#FFFFFF', fontSize: '0.9rem' }}>
+              <span style={{ fontWeight: '700', color: 'var(--text-primary)', fontSize: '0.9rem' }}>
                 {user.department || 'Executive Operations'}
               </span>
             </div>
@@ -476,7 +619,7 @@ export const Profile = () => {
           
           <div style={{ padding: '1.15rem', backgroundColor: 'var(--bg-tertiary)', borderRadius: '14px', border: '1px solid var(--border-color)' }}>
             <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: '1.6', margin: 0 }}>
-              <strong style={{ color: '#FFFFFF' }}>Zero-Trust Governance:</strong> Organization and clearance tier parameters are cryptographically sealed to this session. To switch operational sectors, use the header switcher or re-authenticate through the sovereign verification gate.
+              <strong style={{ color: 'var(--text-primary)' }}>Zero-Trust Governance:</strong> Organization and clearance tier parameters are cryptographically sealed to this session. To switch operational sectors, use the header switcher or re-authenticate through the sovereign verification gate.
             </p>
           </div>
         </div>
