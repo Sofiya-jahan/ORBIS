@@ -37,10 +37,10 @@ const CompanyDashboard = () => {
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem' }}>
         {[
-          { label: 'Total Revenue', value: '$24.5M', change: '+8%', icon: TrendingUp, color: '#10B981' },
-          { label: 'Operational Risks', value: '14', change: '-2', icon: AlertTriangle, color: '#ef4444' },
-          { label: 'Active Projects', value: '128', change: '+12%', icon: Briefcase, color: '#3b82f6' },
-          { label: 'Resource Efficiency', value: '92%', change: '+4%', icon: BarChart2, color: '#f59e0b' }
+          { label: 'Total Revenue', value: '$24.5M', change: '+8%', icon: TrendingUp, color: '#6AE7F7' },
+          { label: 'Operational Risks', value: '14', change: '-2', icon: AlertTriangle, color: '#EF4444' },
+          { label: 'Active Projects', value: '128', change: '+12%', icon: Briefcase, color: '#2E9BF8' },
+          { label: 'Resource Efficiency', value: '92%', change: '+4%', icon: BarChart2, color: '#8671F9' }
         ].map((kpi, i) => (
           <div key={i} className="glass-card animate-fade-in-delayed" style={{ padding: '1.5rem', animationDelay: `${i * 0.1}s`, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', borderTop: `2px solid ${kpi.color}` }}>
             <div>

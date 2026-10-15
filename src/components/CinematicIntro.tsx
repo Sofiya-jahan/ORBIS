@@ -196,21 +196,21 @@ export const CinematicIntro: React.FC<IntroProps> = ({ onComplete }) => {
       ctx.rect(portalLeft, portalTop, portalW, portalH);
       ctx.clip();
 
-      // Deep Golden Amber & Mint Volumetric Core
+      // Deep Electric Sapphire & Cyan Volumetric Core
       const innerGrad = ctx.createLinearGradient(cx, portalTop, cx, portalTop + portalH);
-      innerGrad.addColorStop(0, '#F59E0B');
-      innerGrad.addColorStop(0.4, '#E5C07B');
-      innerGrad.addColorStop(0.75, '#10B981');
-      innerGrad.addColorStop(1, '#059669');
+      innerGrad.addColorStop(0, '#1554E8');
+      innerGrad.addColorStop(0.35, '#4148F1');
+      innerGrad.addColorStop(0.7, '#7A48FF');
+      innerGrad.addColorStop(1, '#6AE7F7');
       ctx.fillStyle = innerGrad;
       ctx.fillRect(portalLeft, portalTop, portalW, portalH);
 
-      // Golden Volumetric Light Ray Beams
+      // Sapphire & Cyan Volumetric Light Ray Beams
       const beamSpread = doorOpenOffset * 2.2;
       const beamGrad = ctx.createRadialGradient(cx, cy, 10, cx, cy, beamSpread);
-      beamGrad.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
-      beamGrad.addColorStop(0.3, 'rgba(245, 158, 11, 0.8)');
-      beamGrad.addColorStop(0.7, 'rgba(16, 185, 129, 0.4)');
+      beamGrad.addColorStop(0, 'rgba(246, 253, 255, 0.95)');
+      beamGrad.addColorStop(0.3, 'rgba(46, 155, 248, 0.7)');
+      beamGrad.addColorStop(0.7, 'rgba(106, 231, 247, 0.35)');
       beamGrad.addColorStop(1, 'transparent');
       ctx.fillStyle = beamGrad;
       ctx.fillRect(portalLeft, portalTop, portalW, portalH);
@@ -311,9 +311,9 @@ export const CinematicIntro: React.FC<IntroProps> = ({ onComplete }) => {
     ctx.beginPath();
     ctx.arc(0, 0, lockRadius, Math.PI / 2, Math.PI * 1.5);
     ctx.closePath();
-    ctx.fillStyle = 'rgba(10, 22, 27, 0.95)';
+    ctx.fillStyle = 'rgba(7, 17, 46, 0.96)';
     ctx.fill();
-    ctx.strokeStyle = p < 0.25 ? '#10B981' : '#E5C07B';
+    ctx.strokeStyle = p < 0.25 ? '#6AE7F7' : '#2E9BF8';
     ctx.lineWidth = 2;
     ctx.stroke();
 
@@ -336,9 +336,9 @@ export const CinematicIntro: React.FC<IntroProps> = ({ onComplete }) => {
     ctx.beginPath();
     ctx.arc(0, 0, lockRadius, -Math.PI / 2, Math.PI / 2);
     ctx.closePath();
-    ctx.fillStyle = 'rgba(10, 22, 27, 0.95)';
+    ctx.fillStyle = 'rgba(7, 17, 46, 0.96)';
     ctx.fill();
-    ctx.strokeStyle = p < 0.25 ? '#10B981' : '#E5C07B';
+    ctx.strokeStyle = p < 0.25 ? '#6AE7F7' : '#2E9BF8';
     ctx.lineWidth = 2;
     ctx.stroke();
 
@@ -443,10 +443,10 @@ export const CinematicIntro: React.FC<IntroProps> = ({ onComplete }) => {
               <img src="/orbis-logo.png" alt="ORBIS Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
             <div>
-              <div style={{ fontSize: '1.4rem', fontWeight: 900, letterSpacing: '1px', color: '#FFFFFF', lineHeight: 1.1 }}>
-                ORBIS <span style={{ color: '#E5C07B', fontSize: '0.85rem', fontStyle: 'italic' }}>// SOVEREIGN GATE</span>
+              <div style={{ fontSize: '1.4rem', fontWeight: 900, letterSpacing: '1px', color: '#F6FDFF', lineHeight: 1.1 }}>
+                ORBIS <span style={{ color: '#2E9BF8', fontSize: '0.85rem', fontStyle: 'italic' }}>// SOVEREIGN GATE</span>
               </div>
-              <div style={{ fontSize: '0.65rem', color: '#34D399', letterSpacing: '1.5px', fontFamily: "'Space Mono', monospace", fontWeight: 700 }}>
+              <div style={{ fontSize: '0.65rem', color: '#6AE7F7', letterSpacing: '1.5px', fontFamily: "'Space Mono', monospace", fontWeight: 700 }}>
                 SCROLL REVEAL ENGINE • 300 FRAMES @ 30 FPS
               </div>
             </div>
@@ -460,29 +460,29 @@ export const CinematicIntro: React.FC<IntroProps> = ({ onComplete }) => {
               alignItems: 'center',
               gap: '0.5rem',
               padding: '0.65rem 1.3rem',
-              background: 'rgba(10, 22, 28, 0.85)',
-              border: '1px solid rgba(229, 192, 123, 0.35)',
+              background: 'rgba(7, 17, 46, 0.85)',
+              border: '1px solid rgba(46, 155, 248, 0.35)',
               borderRadius: '12px',
-              color: '#FFFFFF',
+              color: '#F6FDFF',
               fontSize: '0.82rem',
               fontWeight: 700,
-              fontFamily: "'Times New Roman', Times, serif",
+              fontFamily: "'Inter', sans-serif",
               cursor: 'pointer',
               backdropFilter: 'blur(15px)',
               transition: 'all 0.2s',
               boxShadow: '0 4px 15px rgba(0,0,0,0.5)'
             }}
             onMouseOver={e => {
-              e.currentTarget.style.borderColor = '#10B981';
-              e.currentTarget.style.boxShadow = '0 0 20px rgba(16, 185, 129, 0.4)';
+              e.currentTarget.style.borderColor = '#6AE7F7';
+              e.currentTarget.style.boxShadow = '0 0 20px rgba(106, 231, 247, 0.4)';
             }}
             onMouseOut={e => {
-              e.currentTarget.style.borderColor = 'rgba(229, 192, 123, 0.35)';
+              e.currentTarget.style.borderColor = 'rgba(46, 155, 248, 0.35)';
               e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.5)';
             }}
           >
             <span>Skip to Application</span>
-            <SkipForward size={14} color="#E5C07B" />
+            <SkipForward size={14} color="#6AE7F7" />
           </button>
         </header>
 
@@ -506,18 +506,18 @@ export const CinematicIntro: React.FC<IntroProps> = ({ onComplete }) => {
             }}
           >
             <div style={{
-              background: 'rgba(9, 20, 25, 0.88)',
-              border: '1px solid rgba(16, 185, 129, 0.4)',
+              background: 'rgba(7, 17, 46, 0.88)',
+              border: '1px solid rgba(106, 231, 247, 0.4)',
               borderRadius: '999px',
               padding: '0.55rem 1.4rem',
               backdropFilter: 'blur(15px)',
               display: 'flex',
               alignItems: 'center',
               gap: '0.6rem',
-              boxShadow: '0 0 25px rgba(16, 185, 129, 0.25)'
+              boxShadow: '0 0 25px rgba(21, 84, 232, 0.35)'
             }}>
-              <Compass size={14} color="#34D399" className="animate-spin" />
-              <span style={{ fontSize: '0.75rem', fontFamily: "'Space Mono', monospace", fontWeight: 700, color: '#FFFFFF', letterSpacing: '1px' }}>
+              <Compass size={14} color="#6AE7F7" className="animate-spin" />
+              <span style={{ fontSize: '0.75rem', fontFamily: "'Space Mono', monospace", fontWeight: 700, color: '#F6FDFF', letterSpacing: '1px' }}>
                 SCROLL TO UNSEAL PORTAL
               </span>
             </div>
@@ -525,7 +525,7 @@ export const CinematicIntro: React.FC<IntroProps> = ({ onComplete }) => {
               animate={{ y: [0, 6, 0] }}
               transition={{ repeat: Infinity, duration: 1.4 }}
             >
-              <ChevronDown size={20} color="#34D399" />
+              <ChevronDown size={20} color="#6AE7F7" />
             </motion.div>
           </motion.div>
         )}
@@ -546,10 +546,10 @@ export const CinematicIntro: React.FC<IntroProps> = ({ onComplete }) => {
         }}>
           {/* Left Milestone Status */}
           <div style={{ maxWidth: '400px' }}>
-            <div style={{ fontSize: '0.68rem', color: '#E5C07B', fontFamily: "'Space Mono', monospace", fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '0.2rem' }}>
+            <div style={{ fontSize: '0.68rem', color: '#6AE7F7', fontFamily: "'Space Mono', monospace", fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '0.2rem' }}>
               {phase.progress} // {phase.title}
             </div>
-            <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#FFFFFF', fontFamily: "'Times New Roman', Times, serif" }}>
+            <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#F6FDFF', fontFamily: "'Inter', sans-serif" }}>
               {phase.sub}
             </div>
           </div>
@@ -557,13 +557,13 @@ export const CinematicIntro: React.FC<IntroProps> = ({ onComplete }) => {
           {/* Right Frame Counter & Scrub Progress */}
           <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.4rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <div style={{ fontSize: '0.72rem', color: '#94A3B8', fontFamily: "'Space Mono', monospace" }}>
+              <div style={{ fontSize: '0.72rem', color: 'rgba(246, 253, 255, 0.65)', fontFamily: "'Space Mono', monospace" }}>
                 TC: 00:{String(Math.floor(currentFrame / FPS)).padStart(2, '0')}:{String(currentFrame % FPS).padStart(2, '0')}
               </div>
               <div style={{
                 fontSize: '1.35rem',
                 fontWeight: 900,
-                color: currentFrame >= 270 ? '#10B981' : '#FFFFFF',
+                color: currentFrame >= 270 ? '#6AE7F7' : '#F6FDFF',
                 fontFamily: "'Space Mono', monospace",
                 letterSpacing: '1px'
               }}>
@@ -575,21 +575,21 @@ export const CinematicIntro: React.FC<IntroProps> = ({ onComplete }) => {
             <div style={{
               width: '260px',
               height: '5px',
-              background: 'rgba(255, 255, 255, 0.1)',
+              background: 'rgba(246, 253, 255, 0.1)',
               borderRadius: '3px',
               overflow: 'hidden',
-              border: '1px solid rgba(16, 185, 129, 0.25)'
+              border: '1px solid rgba(46, 155, 248, 0.25)'
             }}>
               <div style={{
                 width: `${(currentFrame / TOTAL_FRAMES) * 100}%`,
                 height: '100%',
-                background: 'linear-gradient(90deg, #10B981 0%, #E5C07B 100%)',
-                boxShadow: '0 0 10px #10B981',
+                background: 'linear-gradient(90deg, #1554E8 0%, #2E9BF8 50%, #6AE7F7 100%)',
+                boxShadow: '0 0 10px #2E9BF8',
                 transition: 'width 0.05s ease-out'
               }} />
             </div>
 
-            <div style={{ fontSize: '0.65rem', color: '#34D399', fontFamily: "'Space Mono', monospace" }}>
+            <div style={{ fontSize: '0.65rem', color: '#6AE7F7', fontFamily: "'Space Mono', monospace" }}>
               {Math.round((currentFrame / TOTAL_FRAMES) * 100)}% UNSEALED • 30 FPS SCRUB
             </div>
           </div>
@@ -609,24 +609,24 @@ export const CinematicIntro: React.FC<IntroProps> = ({ onComplete }) => {
             }}
           >
             <motion.button
-              whileHover={{ scale: 1.05, boxShadow: '0 0 45px rgba(16, 185, 129, 0.7)' }}
+              whileHover={{ scale: 1.05, boxShadow: '0 0 45px rgba(46, 155, 248, 0.7)' }}
               whileTap={{ scale: 0.96 }}
               onClick={() => onComplete()}
               style={{
                 padding: '1.2rem 2.8rem',
                 borderRadius: '16px',
-                background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
-                color: '#FFFFFF',
-                border: '1px solid rgba(255, 255, 255, 0.4)',
+                background: 'linear-gradient(135deg, #1554E8 0%, #2E9BF8 100%)',
+                color: '#F6FDFF',
+                border: '1px solid rgba(246, 253, 255, 0.4)',
                 fontSize: '1.15rem',
                 fontWeight: 800,
                 letterSpacing: '1px',
-                fontFamily: "'Times New Roman', Times, serif",
+                fontFamily: "'Inter', sans-serif",
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.75rem',
-                boxShadow: '0 15px 40px rgba(16, 185, 129, 0.5)'
+                boxShadow: '0 15px 40px rgba(21, 84, 232, 0.5)'
               }}
             >
               <span>ENTER SOVEREIGN COMMAND PORTAL</span>

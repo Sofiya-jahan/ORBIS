@@ -54,24 +54,24 @@ export const NotificationsPage = () => {
               alignItems: 'center',
               justifyContent: 'space-between',
               gap: '1.5rem',
-              borderLeft: `4px solid ${notif.type === 'success' ? '#10B981' : notif.type === 'warning' ? '#F59E0B' : currentOrg.themeColor}`
+              borderLeft: `4px solid ${notif.type === 'success' ? '#6AE7F7' : notif.type === 'warning' ? '#F59E0B' : '#2E9BF8'}`
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
               <div style={{
                 width: '44px', height: '44px', borderRadius: '12px',
-                background: notif.type === 'success' ? 'rgba(16,185,129,0.15)' : notif.type === 'warning' ? 'rgba(245,158,11,0.15)' : `${currentOrg.themeColor}20`,
-                color: notif.type === 'success' ? '#10B981' : notif.type === 'warning' ? '#F59E0B' : currentOrg.themeColor,
+                background: notif.type === 'success' ? 'rgba(21, 84, 232, 0.2)' : notif.type === 'warning' ? 'rgba(245,158,11,0.15)' : 'rgba(21, 84, 232, 0.2)',
+                color: notif.type === 'success' ? '#6AE7F7' : notif.type === 'warning' ? '#F59E0B' : '#2E9BF8',
                 display: 'flex', alignItems: 'center', justifyContent: 'center'
               }}>
                 {notif.type === 'success' ? <CheckCircle2 size={22} /> : notif.type === 'warning' ? <AlertTriangle size={22} /> : <Info size={22} />}
               </div>
 
               <div>
-                <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#FFFFFF', marginBottom: '0.25rem' }}>
+                <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#F6FDFF', marginBottom: '0.25rem' }}>
                   {notif.title}
                 </h3>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem' }}>
+                <p style={{ color: 'rgba(246, 253, 255, 0.75)', fontSize: '0.88rem' }}>
                   {notif.desc}
                 </p>
               </div>

@@ -188,8 +188,9 @@ export const DashboardLayout = () => {
     <div style={{ 
       display: 'flex', 
       height: '100vh', 
-      backgroundColor: 'var(--bg-primary)', 
-      color: 'var(--text-primary)',
+      backgroundColor: '#07112E',
+      backgroundImage: 'radial-gradient(circle at 15% 10%, rgba(21, 84, 232, 0.12) 0%, transparent 45%), radial-gradient(circle at 85% 90%, rgba(122, 72, 255, 0.1) 0%, transparent 45%)',
+      color: '#F6FDFF',
       overflow: 'hidden',
       fontFamily: 'var(--font-family)'
     }}>
@@ -204,8 +205,11 @@ export const DashboardLayout = () => {
         display: 'flex', 
         flexDirection: 'column',
         height: '100vh',
-        backgroundColor: 'var(--bg-secondary)',
-        borderRight: '1px solid var(--border-color)',
+        backgroundColor: 'rgba(7, 17, 46, 0.85)',
+        backdropFilter: 'blur(24px)',
+        WebkitBackdropFilter: 'blur(24px)',
+        borderRight: '1px solid rgba(46, 155, 248, 0.16)',
+        boxShadow: '4px 0 24px rgba(0, 0, 0, 0.35)',
         zIndex: 50,
         flexShrink: 0
       }}>
@@ -216,25 +220,26 @@ export const DashboardLayout = () => {
           alignItems: 'center', 
           justifyContent: sidebarOpen ? 'space-between' : 'center', 
           padding: '0 1.25rem', 
-          borderBottom: '1px solid var(--border-color)' 
+          borderBottom: '1px solid rgba(46, 155, 248, 0.14)',
+          background: 'rgba(13, 35, 77, 0.3)'
         }}>
           {sidebarOpen ? (
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
               <div style={{
                 width: '42px', height: '42px', borderRadius: '12px',
-                background: 'rgba(10, 20, 38, 0.7)',
-                border: `1px solid ${currentOrg.themeColor}50`,
+                background: 'rgba(13, 35, 77, 0.8)',
+                border: '1px solid rgba(46, 155, 248, 0.4)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 overflow: 'hidden',
-                boxShadow: `0 0 20px ${currentOrg.themeColor}35`
+                boxShadow: '0 0 20px rgba(21, 84, 232, 0.35)'
               }}>
                 <img src="/orbis-logo.png" alt="ORBIS Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
               <div>
-                <div style={{ fontWeight: '900', fontSize: '1.2rem', letterSpacing: '-0.5px', fontFamily: 'var(--font-heading)' }}>
-                  ORBIS <span style={{ color: currentOrg.themeColor, fontSize: '0.8rem', fontWeight: '700' }}>AI</span>
+                <div style={{ fontWeight: '900', fontSize: '1.2rem', letterSpacing: '-0.5px', fontFamily: 'var(--font-heading)', color: '#F6FDFF' }}>
+                  ORBIS <span style={{ background: 'linear-gradient(135deg, #6AE7F7 0%, #2E9BF8 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', fontSize: '0.8rem', fontWeight: '800' }}>ENTERPRISE</span>
                 </div>
-                <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: 600 }}>
+                <div style={{ fontSize: '0.68rem', color: 'rgba(246, 253, 255, 0.55)', textTransform: 'uppercase', letterSpacing: '0.8px', fontWeight: 600 }}>
                   {currentOrg.sector.split('&')[0]}
                 </div>
               </div>
@@ -242,11 +247,11 @@ export const DashboardLayout = () => {
           ) : (
             <div style={{
               width: '42px', height: '42px', borderRadius: '12px',
-              background: 'rgba(10, 20, 38, 0.7)',
-              border: `1px solid ${currentOrg.themeColor}50`,
+              background: 'rgba(13, 35, 77, 0.8)',
+              border: '1px solid rgba(46, 155, 248, 0.4)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               overflow: 'hidden',
-              boxShadow: `0 0 15px ${currentOrg.themeColor}20`
+              boxShadow: '0 0 15px rgba(21, 84, 232, 0.25)'
             }}>
               <img src="/orbis-logo.png" alt="ORBIS Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
@@ -257,17 +262,17 @@ export const DashboardLayout = () => {
         {sidebarOpen && (
           <div style={{
             padding: '0.75rem 1.25rem',
-            background: 'var(--bg-tertiary)',
-            borderBottom: '1px solid var(--border-color)',
+            background: 'rgba(13, 35, 77, 0.45)',
+            borderBottom: '1px solid rgba(46, 155, 248, 0.14)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between'
           }}>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+              <span style={{ fontSize: '0.68rem', color: 'rgba(246, 253, 255, 0.55)', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: 600 }}>
                 Active Tenant
               </span>
-              <span style={{ fontSize: '0.85rem', fontWeight: '700', color: '#FFFFFF' }}>
+              <span style={{ fontSize: '0.85rem', fontWeight: '700', color: '#F6FDFF' }}>
                 {currentOrg.name.split('&')[0]}
               </span>
             </div>
@@ -275,11 +280,24 @@ export const DashboardLayout = () => {
               onClick={() => navigate('/organization')}
               title="Switch Organization"
               style={{
-                background: 'none', border: 'none', color: currentOrg.themeColor,
-                cursor: 'pointer', fontSize: '0.75rem', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '0.2rem'
+                background: 'rgba(21, 84, 232, 0.15)',
+                border: '1px solid rgba(46, 155, 248, 0.3)',
+                borderRadius: '8px',
+                padding: '0.25rem 0.55rem',
+                color: '#6AE7F7',
+                cursor: 'pointer', fontSize: '0.72rem', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '0.3rem',
+                transition: 'all 0.2s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'rgba(21, 84, 232, 0.3)';
+                e.currentTarget.style.boxShadow = '0 0 10px rgba(106, 231, 247, 0.3)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'rgba(21, 84, 232, 0.15)';
+                e.currentTarget.style.boxShadow = 'none';
               }}
             >
-              Switch <ExternalLink size={12} />
+              Switch <ExternalLink size={11} />
             </button>
           </div>
         )}
@@ -314,31 +332,47 @@ export const DashboardLayout = () => {
                         style={{
                           display: 'flex', 
                           alignItems: 'center',
-                          padding: sidebarOpen ? '0.65rem 0.9rem' : '0.75rem',
+                          padding: sidebarOpen ? '0.68rem 0.95rem' : '0.75rem',
                           borderRadius: '12px', 
                           cursor: 'pointer',
-                          color: isActive ? '#FFFFFF' : 'var(--text-secondary)',
-                          background: isActive ? currentOrg.themeColor : 'transparent',
-                          boxShadow: isActive ? `0 4px 15px ${currentOrg.themeColor}50` : 'none',
-                          transition: 'all 0.2s ease',
+                          color: isActive ? '#F6FDFF' : 'rgba(246, 253, 255, 0.75)',
+                          background: isActive ? 'linear-gradient(135deg, #1554E8 0%, #2E9BF8 100%)' : 'transparent',
+                          boxShadow: isActive ? '0 4px 18px rgba(21, 84, 232, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25)' : 'none',
+                          border: isActive ? '1px solid rgba(106, 231, 247, 0.35)' : '1px solid transparent',
+                          transition: 'all 0.22s cubic-bezier(0.16, 1, 0.3, 1)',
                           gap: '0.85rem', 
                           position: 'relative',
                           justifyContent: sidebarOpen ? 'flex-start' : 'center'
                         }}
                         onMouseEnter={(e) => {
                           if (!isActive) {
-                            e.currentTarget.style.backgroundColor = 'var(--bg-tertiary)';
-                            e.currentTarget.style.color = currentOrg.themeColor;
+                            e.currentTarget.style.backgroundColor = 'rgba(13, 35, 77, 0.7)';
+                            e.currentTarget.style.borderColor = 'rgba(46, 155, 248, 0.3)';
+                            e.currentTarget.style.color = '#6AE7F7';
+                            e.currentTarget.style.transform = 'translateX(2px)';
                           }
                         }}
                         onMouseLeave={(e) => {
                           if (!isActive) {
                             e.currentTarget.style.backgroundColor = 'transparent';
-                            e.currentTarget.style.color = 'var(--text-secondary)';
+                            e.currentTarget.style.borderColor = 'transparent';
+                            e.currentTarget.style.color = 'rgba(246, 253, 255, 0.75)';
+                            e.currentTarget.style.transform = 'translateX(0)';
                           }
                         }}
                       >
-                        <ItemIcon size={18} style={{ minWidth: '18px', color: isActive ? '#FFFFFF' : 'inherit' }} />
+                        {isActive && (
+                          <div style={{
+                            position: 'absolute',
+                            left: '3px',
+                            width: '4px',
+                            height: '18px',
+                            borderRadius: '4px',
+                            background: '#6AE7F7',
+                            boxShadow: '0 0 10px #6AE7F7'
+                          }} />
+                        )}
+                        <ItemIcon size={18} style={{ minWidth: '18px', color: isActive ? '#F6FDFF' : 'inherit' }} />
                         {sidebarOpen && (
                           <span style={{ 
                             fontWeight: isActive ? '700' : '500', 
@@ -362,8 +396,8 @@ export const DashboardLayout = () => {
         {/* Bottom User / Role Card & Logout */}
         <div style={{ 
           padding: '1rem', 
-          borderTop: '1px solid var(--border-color)', 
-          background: 'var(--bg-secondary)',
+          borderTop: '1px solid rgba(46, 155, 248, 0.14)', 
+          background: 'rgba(7, 17, 46, 0.95)',
           display: 'flex', 
           flexDirection: 'column', 
           gap: '0.5rem' 
@@ -375,20 +409,22 @@ export const DashboardLayout = () => {
               gap: '0.75rem',
               padding: '0.65rem 0.75rem',
               borderRadius: '12px',
-              background: 'var(--bg-tertiary)',
-              border: '1px solid var(--border-color)'
+              background: 'rgba(13, 35, 77, 0.65)',
+              border: '1px solid rgba(46, 155, 248, 0.2)',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)'
             }}>
               <div style={{
                 width: '34px', height: '34px', borderRadius: '10px',
-                background: currentOrg.themeColor,
-                color: '#FFFFFF',
+                background: 'linear-gradient(135deg, #1554E8 0%, #4148F1 100%)',
+                color: '#F6FDFF',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontWeight: '800', fontSize: '0.9rem'
+                fontWeight: '800', fontSize: '0.9rem',
+                boxShadow: '0 0 12px rgba(21, 84, 232, 0.4)'
               }}>
                 {user?.name?.charAt(0) || 'E'}
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>
-                <span style={{ fontSize: '0.82rem', fontWeight: '700', color: '#FFFFFF', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                <span style={{ fontSize: '0.82rem', fontWeight: '700', color: '#F6FDFF', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                   {user?.name || 'Authorized Executive'}
                 </span>
                 <select
@@ -397,7 +433,7 @@ export const DashboardLayout = () => {
                   title="Switch Role"
                   style={{
                     fontSize: '0.72rem',
-                    color: currentOrg.themeColor,
+                    color: '#6AE7F7',
                     background: 'transparent',
                     border: 'none',
                     fontWeight: '700',
@@ -409,7 +445,7 @@ export const DashboardLayout = () => {
                   }}
                 >
                   {currentOrg.roles.map(r => (
-                    <option key={r.id} value={r.id} style={{ background: '#0F172A', color: '#FFFFFF' }}>
+                    <option key={r.id} value={r.id} style={{ background: '#07112E', color: '#F6FDFF' }}>
                       {r.title.split('(')[0].trim()} ({r.accessLevel.split(' ')[0]})
                     </option>
                   ))}
@@ -428,11 +464,11 @@ export const DashboardLayout = () => {
               padding: '0.65rem 0.9rem', 
               cursor: 'pointer', 
               borderRadius: '12px', 
-              color: 'var(--text-muted)',
+              color: 'rgba(246, 253, 255, 0.55)',
               transition: 'all 0.2s ease'
             }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--danger)'; e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.1)'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-muted)'; e.currentTarget.style.backgroundColor = 'transparent'; }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = '#FF5C5C'; e.currentTarget.style.backgroundColor = 'rgba(255, 92, 92, 0.1)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(246, 253, 255, 0.55)'; e.currentTarget.style.backgroundColor = 'transparent'; }}
           >
             <LogOut size={18} style={{ minWidth: '18px' }} />
             {sidebarOpen && <span style={{ fontWeight: '600', fontSize: '0.85rem' }}>Secure Sign Out</span>}
@@ -452,14 +488,17 @@ export const DashboardLayout = () => {
         {/* Enterprise Topbar */}
         <header style={{ 
           height: '76px', 
-          backgroundColor: 'var(--bg-secondary)',
-          borderBottom: '1px solid var(--border-color)',
+          backgroundColor: 'rgba(7, 17, 46, 0.85)',
+          backdropFilter: 'blur(24px)',
+          WebkitBackdropFilter: 'blur(24px)',
+          borderBottom: '1px solid rgba(46, 155, 248, 0.16)',
           display: 'flex', 
           alignItems: 'center', 
           justifyContent: 'space-between',
           padding: '0 2rem', 
           zIndex: 40,
-          flexShrink: 0
+          flexShrink: 0,
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.25)'
         }}>
           
           {/* Left: Sidebar Toggle + Breadcrumb */}
@@ -467,23 +506,32 @@ export const DashboardLayout = () => {
             <button 
               onClick={() => setSidebarOpen(!sidebarOpen)} 
               style={{ 
-                background: 'var(--bg-tertiary)', 
-                border: '1px solid var(--border-color)', 
-                color: 'var(--text-primary)', 
+                background: 'rgba(13, 35, 77, 0.6)', 
+                border: '1px solid rgba(46, 155, 248, 0.25)', 
+                color: '#F6FDFF', 
                 cursor: 'pointer', 
                 display: 'flex',
-                padding: '0.5rem',
-                borderRadius: '10px'
+                padding: '0.55rem',
+                borderRadius: '10px',
+                transition: 'all 0.2s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = '#2E9BF8';
+                e.currentTarget.style.boxShadow = '0 0 10px rgba(46, 155, 248, 0.3)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(46, 155, 248, 0.25)';
+                e.currentTarget.style.boxShadow = 'none';
               }}
             >
-              <Menu size={20} />
+              <Menu size={18} />
             </button>
             
             {/* Breadcrumb path */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-muted)', fontSize: '0.88rem', fontWeight: '500' }}>
-              <span style={{ color: currentOrg.themeColor, fontWeight: '700' }}>{currentOrg.name.split('&')[0]}</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'rgba(246, 253, 255, 0.55)', fontSize: '0.88rem', fontWeight: '500' }}>
+              <span style={{ color: '#2E9BF8', fontWeight: '700' }}>{currentOrg.name.split('&')[0]}</span>
               <ChevronRight size={14} />
-              <span style={{ color: 'var(--text-primary)', fontWeight: '600' }}>{getBreadcrumb()}</span>
+              <span style={{ color: '#F6FDFF', fontWeight: '600' }}>{getBreadcrumb()}</span>
             </div>
           </div>
 
@@ -499,7 +547,7 @@ export const DashboardLayout = () => {
                 cursor: 'pointer'
               }}
             >
-              <Search size={16} style={{ position: 'absolute', left: '0.9rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+              <Search size={16} style={{ position: 'absolute', left: '0.9rem', top: '50%', transform: 'translateY(-50%)', color: 'rgba(246, 253, 255, 0.55)' }} />
               <input 
                 type="text" 
                 readOnly
@@ -509,18 +557,19 @@ export const DashboardLayout = () => {
                   padding: '0.55rem 1rem 0.55rem 2.4rem', 
                   height: '38px',
                   borderRadius: '12px', 
-                  border: '1px solid var(--border-color)',
-                  background: 'var(--bg-tertiary)', 
-                  color: 'var(--text-primary)',
+                  border: '1px solid rgba(46, 155, 248, 0.22)',
+                  background: 'rgba(13, 35, 77, 0.65)', 
+                  color: '#F6FDFF',
                   fontSize: '0.82rem', 
                   cursor: 'pointer',
-                  outline: 'none'
+                  outline: 'none',
+                  transition: 'all 0.2s ease'
                 }}
               />
               <span style={{
                 position: 'absolute', right: '0.75rem', top: '50%', transform: 'translateY(-50%)',
-                padding: '0.15rem 0.45rem', borderRadius: '6px', background: 'var(--bg-primary)',
-                fontSize: '0.68rem', color: 'var(--text-muted)', border: '1px solid var(--border-color)', fontWeight: 700
+                padding: '0.15rem 0.45rem', borderRadius: '6px', background: 'rgba(7, 17, 46, 0.9)',
+                fontSize: '0.68rem', color: 'rgba(246, 253, 255, 0.65)', border: '1px solid rgba(46, 155, 248, 0.25)', fontWeight: 700
               }}>
                 ⌘K
               </span>
@@ -533,16 +582,17 @@ export const DashboardLayout = () => {
               gap: '0.6rem',
               padding: '0.4rem 0.9rem',
               borderRadius: '100px',
-              background: 'var(--bg-tertiary)',
-              border: '1px solid var(--border-color)'
+              background: 'rgba(13, 35, 77, 0.65)',
+              border: '1px solid rgba(46, 155, 248, 0.25)',
+              boxShadow: '0 2px 10px rgba(0, 0, 0, 0.2)'
             }}>
               <div style={{
                 width: '10px', height: '10px', borderRadius: '50%',
-                backgroundColor: currentOrg.healthScore > 90 ? '#10B981' : '#F59E0B',
-                boxShadow: `0 0 8px ${currentOrg.healthScore > 90 ? '#10B981' : '#F59E0B'}`
+                backgroundColor: currentOrg.healthScore > 90 ? '#6AE7F7' : '#F59E0B',
+                boxShadow: `0 0 10px ${currentOrg.healthScore > 90 ? '#6AE7F7' : '#F59E0B'}`
               }} />
-              <div style={{ fontSize: '0.75rem', fontWeight: '700', color: 'var(--text-primary)' }}>
-                Health Score: <span style={{ color: '#10B981' }}>{currentOrg.healthScore}%</span>
+              <div style={{ fontSize: '0.75rem', fontWeight: '700', color: '#F6FDFF' }}>
+                Health Score: <span style={{ color: '#6AE7F7' }}>{currentOrg.healthScore}%</span>
               </div>
             </div>
 
@@ -553,10 +603,10 @@ export const DashboardLayout = () => {
               gap: '0.5rem',
               padding: '0.35rem 0.85rem',
               borderRadius: '10px',
-              background: 'var(--bg-tertiary)',
-              border: '1px solid var(--border-color)',
+              background: 'rgba(13, 35, 77, 0.65)',
+              border: '1px solid rgba(46, 155, 248, 0.25)',
             }}>
-              <ShieldCheck size={15} color={currentOrg.themeColor} />
+              <ShieldCheck size={15} color="#2E9BF8" />
               <select
                 value={role || currentRole.id}
                 onChange={(e) => setRole(e.target.value)}
@@ -564,7 +614,7 @@ export const DashboardLayout = () => {
                 style={{
                   background: 'transparent',
                   border: 'none',
-                  color: 'var(--text-primary)',
+                  color: '#F6FDFF',
                   fontWeight: 700,
                   fontSize: '0.78rem',
                   cursor: 'pointer',
@@ -573,7 +623,7 @@ export const DashboardLayout = () => {
                 }}
               >
                 {currentOrg.roles.map(r => (
-                  <option key={r.id} value={r.id} style={{ background: '#0F172A', color: '#FFFFFF' }}>
+                  <option key={r.id} value={r.id} style={{ background: '#07112E', color: '#F6FDFF' }}>
                     {r.title.split('(')[0].trim()} ({r.accessLevel.split(' ')[0]})
                   </option>
                 ))}
@@ -587,8 +637,8 @@ export const DashboardLayout = () => {
                 style={{ 
                   width: '38px', height: '38px', borderRadius: '10px', 
                   display: 'flex', alignItems: 'center', justifyContent: 'center', 
-                  background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', 
-                  color: 'var(--text-secondary)', cursor: 'pointer', transition: 'all 0.2s' 
+                  background: 'rgba(13, 35, 77, 0.65)', border: '1px solid rgba(46, 155, 248, 0.25)', 
+                  color: 'rgba(246, 253, 255, 0.75)', cursor: 'pointer', transition: 'all 0.2s' 
                 }}
               >
                 {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
@@ -599,15 +649,16 @@ export const DashboardLayout = () => {
                 style={{ 
                   position: 'relative', width: '38px', height: '38px', borderRadius: '10px', 
                   display: 'flex', alignItems: 'center', justifyContent: 'center', 
-                  background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', 
-                  color: 'var(--text-secondary)', cursor: 'pointer', transition: 'all 0.2s' 
+                  background: 'rgba(13, 35, 77, 0.65)', border: '1px solid rgba(46, 155, 248, 0.25)', 
+                  color: 'rgba(246, 253, 255, 0.75)', cursor: 'pointer', transition: 'all 0.2s' 
                 }}
               >
                 <Bell size={18} />
                 <span style={{ 
                   position: 'absolute', top: '7px', right: '7px', 
                   width: '8px', height: '8px', borderRadius: '50%', 
-                  backgroundColor: 'var(--danger)', border: '2px solid var(--bg-secondary)' 
+                  backgroundColor: '#FF5C5C', border: '2px solid #07112E',
+                  boxShadow: '0 0 8px rgba(255, 92, 92, 0.8)'
                 }} />
               </button>
             </div>
@@ -618,8 +669,17 @@ export const DashboardLayout = () => {
               style={{ 
                 display: 'flex', alignItems: 'center', gap: '0.75rem', 
                 padding: '0.4rem 0.75rem', borderRadius: '12px',
-                background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)',
-                cursor: 'pointer' 
+                background: 'rgba(13, 35, 77, 0.65)', border: '1px solid rgba(46, 155, 248, 0.25)',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = '#2E9BF8';
+                e.currentTarget.style.boxShadow = '0 0 14px rgba(46, 155, 248, 0.3)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(46, 155, 248, 0.25)';
+                e.currentTarget.style.boxShadow = 'none';
               }}
             >
               {user?.photoURL ? (
@@ -636,18 +696,19 @@ export const DashboardLayout = () => {
               ) : (
                 <div style={{ 
                   width: '32px', height: '32px', borderRadius: '8px', 
-                  background: currentOrg.themeColor, color: '#FFFFFF', 
+                  background: 'linear-gradient(135deg, #1554E8 0%, #4148F1 100%)', color: '#F6FDFF', 
                   display: 'flex', alignItems: 'center', justifyContent: 'center', 
-                  fontWeight: 'bold', fontSize: '0.9rem' 
+                  fontWeight: 'bold', fontSize: '0.9rem',
+                  boxShadow: '0 0 10px rgba(21, 84, 232, 0.4)'
                 }}>
                   {user?.name?.charAt(0) || 'E'}
                 </div>
               )}
               <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <span style={{ fontWeight: '700', fontSize: '0.82rem', color: 'var(--text-primary)' }}>
+                <span style={{ fontWeight: '700', fontSize: '0.82rem', color: '#F6FDFF' }}>
                   {user?.name || 'Executive User'}
                 </span>
-                <span style={{ color: currentOrg.themeColor, fontSize: '0.7rem', fontWeight: '600' }}>
+                <span style={{ color: '#6AE7F7', fontSize: '0.7rem', fontWeight: '600' }}>
                   {currentRole.accessLevel.split(' ')[0]} {currentRole.accessLevel.split(' ')[1]}
                 </span>
               </div>
@@ -663,7 +724,8 @@ export const DashboardLayout = () => {
             flex: 1, 
             overflowY: 'auto', 
             padding: '2rem',
-            backgroundColor: 'var(--bg-primary)'
+            backgroundColor: '#07112E',
+            backgroundImage: 'radial-gradient(circle at 50% 0%, rgba(13, 35, 77, 0.6) 0%, transparent 70%)'
           }}
         >
           {!isPermitted ? (
@@ -678,11 +740,11 @@ export const DashboardLayout = () => {
             }}>
               <div style={{
                 width: '74px', height: '74px', borderRadius: '22px',
-                background: 'rgba(239, 68, 68, 0.12)',
-                border: '1px solid rgba(239, 68, 68, 0.35)',
+                background: 'rgba(255, 92, 92, 0.12)',
+                border: '1px solid rgba(255, 92, 92, 0.35)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                color: '#EF4444', marginBottom: '1.5rem',
-                boxShadow: '0 0 30px rgba(239, 68, 68, 0.2)'
+                color: '#FF5C5C', marginBottom: '1.5rem',
+                boxShadow: '0 0 30px rgba(255, 92, 92, 0.25)'
               }}>
                 <ShieldAlert size={38} />
               </div>
@@ -693,10 +755,10 @@ export const DashboardLayout = () => {
               }}>
                 CLEARANCE RESTRICTED // ACCESS LEVEL {userLevel}
               </div>
-              <h2 style={{ fontSize: '1.9rem', fontWeight: 800, color: '#FFFFFF', marginBottom: '0.75rem' }}>
+              <h2 style={{ fontSize: '1.9rem', fontWeight: 800, color: '#F6FDFF', marginBottom: '0.75rem' }}>
                 Role Clearance Required
               </h2>
-              <p style={{ color: 'var(--text-secondary)', maxWidth: '540px', fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '2rem' }}>
+              <p style={{ color: 'rgba(246, 253, 255, 0.75)', maxWidth: '540px', fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '2rem' }}>
                 Your active role clearance as <strong>{currentRole.title}</strong> is restricted from accessing the <strong>{currentRouteItem?.name}</strong> module. Switch to an Executive or authorized specialist role to review this data.
               </p>
               <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
@@ -713,7 +775,7 @@ export const DashboardLayout = () => {
                     if (execRole) setRole(execRole.id);
                   }}
                   className="btn btn-primary"
-                  style={{ background: currentOrg.themeColor, padding: '0.65rem 1.4rem' }}
+                  style={{ padding: '0.65rem 1.4rem' }}
                 >
                   Elevate Clearance to Executive
                 </button>
@@ -730,8 +792,9 @@ export const DashboardLayout = () => {
         <div 
           style={{
             position: 'fixed', inset: 0,
-            background: 'rgba(0,0,0,0.7)',
-            backdropFilter: 'blur(10px)',
+            background: 'rgba(7, 17, 46, 0.75)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
             zIndex: 10000,
             display: 'flex',
             alignItems: 'flex-start',
@@ -746,14 +809,17 @@ export const DashboardLayout = () => {
               width: '100%',
               maxWidth: '640px',
               padding: '1.5rem',
-              backgroundColor: 'var(--bg-secondary)',
-              border: '1px solid var(--border-color)',
-              boxShadow: '0 30px 90px rgba(0,0,0,0.8)'
+              backgroundColor: 'rgba(7, 17, 46, 0.92)',
+              backdropFilter: 'blur(28px)',
+              WebkitBackdropFilter: 'blur(28px)',
+              border: '1px solid rgba(46, 155, 248, 0.3)',
+              boxShadow: '0 30px 90px rgba(0, 0, 0, 0.8), 0 0 40px rgba(21, 84, 232, 0.25)',
+              borderRadius: '20px'
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.75rem' }}>
-              <Search size={20} color="var(--primary)" />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem', borderBottom: '1px solid rgba(46, 155, 248, 0.18)', paddingBottom: '0.85rem' }}>
+              <Search size={20} color="#2E9BF8" />
               <input
                 type="text"
                 autoFocus
@@ -765,23 +831,24 @@ export const DashboardLayout = () => {
                   background: 'none',
                   border: 'none',
                   outline: 'none',
-                  color: 'var(--text-primary)',
-                  fontSize: '1.1rem'
+                  color: '#F6FDFF',
+                  fontSize: '1.05rem',
+                  fontWeight: 500
                 }}
               />
               <button 
                 onClick={() => setSearchModalOpen(false)}
-                style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}
+                style={{ background: 'none', border: 'none', color: 'rgba(246, 253, 255, 0.55)', cursor: 'pointer' }}
               >
                 <X size={20} />
               </button>
             </div>
 
-            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '0.75rem' }}>
+            <div style={{ fontSize: '0.72rem', fontWeight: 800, color: '#6AE7F7', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '0.85rem' }}>
               Quick Navigation
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
               {permittedGroups.flatMap(g => g.items).slice(0, 6).map((item) => (
                 <div
                   key={item.name}
@@ -794,25 +861,31 @@ export const DashboardLayout = () => {
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     padding: '0.75rem 1rem',
-                    borderRadius: '10px',
-                    background: 'var(--bg-tertiary)',
+                    borderRadius: '12px',
+                    background: 'rgba(13, 35, 77, 0.6)',
+                    border: '1px solid rgba(46, 155, 248, 0.15)',
                     cursor: 'pointer',
-                    transition: 'all 0.2s'
+                    transition: 'all 0.2s ease',
+                    color: '#F6FDFF'
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.background = 'var(--primary-light)';
-                    e.currentTarget.style.color = currentOrg.themeColor;
+                    e.currentTarget.style.background = 'rgba(21, 84, 232, 0.25)';
+                    e.currentTarget.style.borderColor = 'rgba(106, 231, 247, 0.4)';
+                    e.currentTarget.style.color = '#6AE7F7';
+                    e.currentTarget.style.transform = 'translateX(3px)';
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.background = 'var(--bg-tertiary)';
-                    e.currentTarget.style.color = 'var(--text-primary)';
+                    e.currentTarget.style.background = 'rgba(13, 35, 77, 0.6)';
+                    e.currentTarget.style.borderColor = 'rgba(46, 155, 248, 0.15)';
+                    e.currentTarget.style.color = '#F6FDFF';
+                    e.currentTarget.style.transform = 'translateX(0)';
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                    <item.icon size={18} />
-                    <span style={{ fontSize: '0.9rem', fontWeight: 600 }}>{item.name}</span>
+                    <item.icon size={18} style={{ color: '#2E9BF8' }} />
+                    <span style={{ fontSize: '0.88rem', fontWeight: 600 }}>{item.name}</span>
                   </div>
-                  <ArrowUpRight size={16} color="var(--text-muted)" />
+                  <ArrowUpRight size={16} color="rgba(246, 253, 255, 0.55)" />
                 </div>
               ))}
             </div>

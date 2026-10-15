@@ -56,10 +56,10 @@ const BankDashboard = () => {
       {/* KPI Row */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem' }}>
         {[
-          { label: 'Fraud Prevented', value: '$2.4M', change: '+14%', icon: ShieldCheck, color: '#10b981' },
-          { label: 'Active Threats', value: '12', change: '-3', icon: AlertTriangle, color: '#ef4444' },
-          { label: 'Transaction Vol', value: '142k/hr', change: '+5%', icon: Activity, color: '#0B6EFD' },
-          { label: 'Model Confidence', value: '99.2%', change: '+0.1%', icon: TrendingUp, color: '#FFD700' }
+          { label: 'Fraud Prevented', value: '$2.4M', change: '+14%', icon: ShieldCheck, color: '#6AE7F7' },
+          { label: 'Active Threats', value: '12', change: '-3', icon: AlertTriangle, color: '#EF4444' },
+          { label: 'Transaction Vol', value: '142k/hr', change: '+5%', icon: Activity, color: '#2E9BF8' },
+          { label: 'Model Confidence', value: '99.2%', change: '+0.1%', icon: TrendingUp, color: '#8671F9' }
         ].map((kpi, i) => (
           <div key={i} className="glass-card animate-fade-in-delayed" style={{ padding: '1.5rem', animationDelay: `${i * 0.1}s`, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', borderTop: `2px solid ${kpi.color}` }}>
             <div>

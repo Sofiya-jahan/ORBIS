@@ -43,10 +43,10 @@ export const ComplianceAudit = () => {
       {/* Compliance Overview KPIs */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.5rem' }}>
         <div className="glass-card" style={{ padding: '1.75rem' }}>
-          <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700, marginBottom: '0.4rem' }}>
+          <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700, marginBottom: '0.4rem', fontFamily: "'JetBrains Mono', monospace" }}>
             Overall Adherence Score
           </div>
-          <div style={{ fontSize: '2.4rem', fontWeight: 800, color: '#10B981', marginBottom: '0.4rem' }}>
+          <div style={{ fontSize: '2.4rem', fontWeight: 800, color: '#6AE7F7', marginBottom: '0.4rem', fontFamily: "'JetBrains Mono', monospace" }}>
             99.6%
           </div>
           <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
@@ -55,22 +55,22 @@ export const ComplianceAudit = () => {
         </div>
 
         <div className="glass-card" style={{ padding: '1.75rem' }}>
-          <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700, marginBottom: '0.4rem' }}>
+          <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700, marginBottom: '0.4rem', fontFamily: "'JetBrains Mono', monospace" }}>
             Open Violations
           </div>
-          <div style={{ fontSize: '2.4rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.4rem' }}>
+          <div style={{ fontSize: '2.4rem', fontWeight: 800, color: '#F6FDFF', marginBottom: '0.4rem', fontFamily: "'JetBrains Mono', monospace" }}>
             0 Critical
           </div>
-          <div style={{ fontSize: '0.85rem', color: '#10B981', fontWeight: 600 }}>
+          <div style={{ fontSize: '0.85rem', color: '#6AE7F7', fontWeight: 600 }}>
             Zero uncontained regulatory breaches
           </div>
         </div>
 
         <div className="glass-card" style={{ padding: '1.75rem' }}>
-          <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700, marginBottom: '0.4rem' }}>
+          <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700, marginBottom: '0.4rem', fontFamily: "'JetBrains Mono', monospace" }}>
             Next Scheduled External Audit
           </div>
-          <div style={{ fontSize: '2.4rem', fontWeight: 800, color: currentOrg.themeColor, marginBottom: '0.4rem' }}>
+          <div style={{ fontSize: '2.4rem', fontWeight: 800, color: '#2E9BF8', marginBottom: '0.4rem', fontFamily: "'JetBrains Mono', monospace" }}>
             42 Days
           </div>
           <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
@@ -107,7 +107,7 @@ export const ComplianceAudit = () => {
                 <td style={{ padding: '1.1rem 1.25rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
                   {p.standard}
                 </td>
-                <td style={{ padding: '1.1rem 1.25rem', fontSize: '0.9rem', fontWeight: 800, color: '#10B981', fontFamily: 'var(--font-mono)' }}>
+                <td style={{ padding: '1.1rem 1.25rem', fontSize: '0.9rem', fontWeight: 800, color: '#6AE7F7', fontFamily: 'var(--font-mono)' }}>
                   {p.adherence}
                 </td>
                 <td style={{ padding: '1.1rem 1.25rem' }}>

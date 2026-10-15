@@ -32,11 +32,77 @@ const OrgOverview = React.lazy(() => import('./pages/modules/OrgOverview'));
 const NotificationsPage = React.lazy(() => import('./pages/modules/NotificationsPage'));
 
 const FullScreenLoader = () => (
-  <div style={{ display: 'flex', height: '100vh', alignItems: 'center', justifyContent: 'center', backgroundColor: '#071424' }}>
-    <Loader2 size={48} className="animate-spin text-gradient" color="#00C8FF" />
+  <div style={{ 
+    display: 'flex', 
+    flexDirection: 'column',
+    height: '100vh', 
+    alignItems: 'center', 
+    justifyContent: 'center', 
+    background: 'radial-gradient(ellipse at 50% -20%, #0D234D 0%, #07112E 75%)',
+    position: 'relative',
+    overflow: 'hidden'
+  }}>
+    {/* Ambient glowing radial lights */}
+    <div style={{
+      position: 'absolute',
+      width: '320px',
+      height: '320px',
+      borderRadius: '50%',
+      background: 'radial-gradient(circle, rgba(21, 84, 232, 0.25) 0%, transparent 70%)',
+      filter: 'blur(40px)',
+      pointerEvents: 'none'
+    }} />
+
+    <div style={{
+      position: 'relative',
+      zIndex: 1,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      padding: '2.5rem 3rem',
+      borderRadius: '24px',
+      background: 'linear-gradient(180deg, rgba(13, 35, 77, 0.7) 0%, rgba(7, 17, 46, 0.85) 100%)',
+      border: '1px solid rgba(46, 155, 248, 0.25)',
+      backdropFilter: 'blur(24px)',
+      boxShadow: '0 20px 50px rgba(0, 0, 0, 0.6), 0 0 35px rgba(21, 84, 232, 0.3)'
+    }}>
+      <div style={{
+        width: '64px',
+        height: '64px',
+        borderRadius: '16px',
+        overflow: 'hidden',
+        boxShadow: '0 0 35px rgba(46, 155, 248, 0.55)',
+        border: '1px solid rgba(106, 231, 247, 0.35)',
+        marginBottom: '1.25rem',
+        animation: 'floatGentle 4s ease-in-out infinite'
+      }}>
+        <img src="/orbis-logo.png" alt="ORBIS" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+      </div>
+
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.6rem',
+        color: '#6AE7F7',
+        fontSize: '0.82rem',
+        fontFamily: "'Space Grotesk', sans-serif",
+        fontWeight: 700,
+        letterSpacing: '1.5px',
+        textTransform: 'uppercase'
+      }}>
+        <Loader2 size={16} className="animate-spin" color="#6AE7F7" />
+        <span>INITIALIZING ORBIS CORE...</span>
+      </div>
+    </div>
+
     <style>{`
       @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
       .animate-spin { animation: spin 1s linear infinite; }
+      @keyframes floatGentle {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-6px); }
+        100% { transform: translateY(0px); }
+      }
     `}</style>
   </div>
 );
@@ -93,17 +159,13 @@ export const App = () => {
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
     
-    // Company color palette is active inside the authenticated platform (/dashboard)
-    // Up to that endpoint (the entire onboarding & login session), the sovereign Emerald palette is preserved
+    // Enterprise color palette is active across the entire application
     const isDashboard = location.pathname.startsWith('/dashboard');
-
     if (isDashboard) {
       const activeOrg = (organization || 'hospital').toLowerCase();
       document.documentElement.setAttribute('data-org', activeOrg);
-      document.documentElement.removeAttribute('data-funnel');
     } else {
       document.documentElement.removeAttribute('data-org');
-      document.documentElement.setAttribute('data-funnel', 'emerald');
     }
   }, [theme, organization, location.pathname]);
 

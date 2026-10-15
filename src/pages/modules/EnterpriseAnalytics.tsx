@@ -84,19 +84,19 @@ export const EnterpriseAnalytics = () => {
                 <Tooltip contentStyle={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '12px' }} />
                 <Bar dataKey="riskScore" fill="#EF4444" radius={[6, 6, 0, 0]} name="Risk Index" />
                 <Bar dataKey="efficiency" fill={currentOrg.themeColor} radius={[6, 6, 0, 0]} name="Operational Efficiency %" />
-                <Line type="monotone" dataKey="compliance" stroke="#10B981" strokeWidth={3} name="Compliance Adherence %" />
+                <Line type="monotone" dataKey="compliance" stroke="#6AE7F7" strokeWidth={3} name="Compliance Adherence %" />
               </ComposedChart>
             </ResponsiveContainer>
           </div>
         </div>
 
         {/* Enterprise Radar */}
-        <div className="neo-card" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        <div className="neo-card" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', background: 'rgba(7, 17, 46, 0.92)', border: '1px solid rgba(46, 155, 248, 0.22)', borderRadius: '20px' }}>
           <div>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: '800', marginBottom: '0.25rem' }}>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: '800', marginBottom: '0.25rem', color: '#F6FDFF', fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)" }}>
               6-Pillar Resilience Radar
             </h2>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem' }}>
+            <p style={{ color: 'rgba(246, 253, 255, 0.65)', fontSize: '0.82rem' }}>
               Overall structural health breakdown
             </p>
           </div>
@@ -104,14 +104,14 @@ export const EnterpriseAnalytics = () => {
           <div style={{ height: '280px' }}>
             <ResponsiveContainer width="100%" height="100%">
               <RadarChart cx="50%" cy="50%" outerRadius="75%" data={radarData}>
-                <PolarGrid stroke="var(--border-color)" />
-                <PolarAngleAxis dataKey="metric" tick={{ fill: 'var(--text-secondary)', fontSize: 10 }} />
-                <Radar name="Pillar Health" dataKey="value" stroke={currentOrg.themeColor} fill={currentOrg.themeColor} fillOpacity={0.3} />
+                <PolarGrid stroke="rgba(46, 155, 248, 0.15)" />
+                <PolarAngleAxis dataKey="metric" tick={{ fill: 'rgba(246, 253, 255, 0.75)', fontSize: 10 }} />
+                <Radar name="Pillar Health" dataKey="value" stroke="#6AE7F7" fill="#1554E8" fillOpacity={0.35} />
               </RadarChart>
             </ResponsiveContainer>
           </div>
 
-          <div style={{ textAlign: 'center', fontSize: '0.85rem', color: '#10B981', fontWeight: '700' }}>
+          <div style={{ textAlign: 'center', fontSize: '0.85rem', color: '#6AE7F7', fontWeight: '700', fontFamily: "'JetBrains Mono', monospace" }}>
             Enterprise Resilience Index: 93.3% (Top 5th Percentile)
           </div>
         </div>

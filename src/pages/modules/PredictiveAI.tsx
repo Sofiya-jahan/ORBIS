@@ -163,14 +163,14 @@ export const PredictiveAI = () => {
                 justifyContent: 'space-between',
                 flexWrap: 'wrap',
                 gap: '1.5rem',
-                borderLeft: `6px solid ${rec.applied ? '#10B981' : currentOrg.themeColor}`
+                borderLeft: `6px solid ${rec.applied ? '#6AE7F7' : currentOrg.themeColor}`
               }}
             >
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1.25rem' }}>
                 <div style={{
                   width: '48px', height: '48px', borderRadius: '14px',
-                  background: rec.applied ? 'rgba(16,185,129,0.15)' : `${currentOrg.themeColor}20`,
-                  color: rec.applied ? '#10B981' : currentOrg.themeColor,
+                  background: rec.applied ? 'rgba(21, 84, 232, 0.2)' : `${currentOrg.themeColor}20`,
+                  color: rec.applied ? '#6AE7F7' : currentOrg.themeColor,
                   display: 'flex', alignItems: 'center', justifyContent: 'center'
                 }}>
                   {rec.applied ? <CheckCircle2 size={24} /> : <Sparkles size={24} />}
@@ -201,7 +201,7 @@ export const PredictiveAI = () => {
 
               <div>
                 {rec.applied ? (
-                  <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#10B981', fontWeight: 700, fontSize: '0.9rem' }}>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#6AE7F7', fontWeight: 700, fontSize: '0.9rem' }}>
                     <CheckCircle2 size={18} /> Mitigation Applied
                   </span>
                 ) : (

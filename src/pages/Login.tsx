@@ -203,13 +203,10 @@ export const Login = () => {
       maxHeight: '100vh',
       overflow: 'hidden',
       position: 'relative',
-      backgroundImage: 'url(/login-portal-bg.jpg)',
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat',
-      backgroundColor: '#050B0D',
-      fontFamily: "var(--font-family, 'Inter', sans-serif)",
-      color: '#FFFFFF',
+      backgroundColor: '#07112E',
+      backgroundImage: 'radial-gradient(circle at 80% 20%, rgba(21, 84, 232, 0.22) 0%, transparent 55%), radial-gradient(circle at 15% 85%, rgba(122, 72, 255, 0.16) 0%, transparent 55%)',
+      fontFamily: "var(--font-family, -apple-system, BlinkMacSystemFont, 'Inter', sans-serif)",
+      color: '#F6FDFF',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'space-between',
@@ -220,7 +217,7 @@ export const Login = () => {
       <div style={{
         position: 'absolute',
         inset: 0,
-        background: 'linear-gradient(90deg, rgba(5, 11, 13, 0.92) 0%, rgba(5, 11, 13, 0.72) 42%, rgba(5, 11, 13, 0.28) 65%, rgba(5, 11, 13, 0.82) 100%)',
+        background: 'linear-gradient(90deg, rgba(7, 17, 46, 0.95) 0%, rgba(7, 17, 46, 0.75) 45%, rgba(13, 35, 77, 0.4) 65%, rgba(7, 17, 46, 0.85) 100%)',
         pointerEvents: 'none',
         zIndex: 1
       }} />
@@ -233,7 +230,7 @@ export const Login = () => {
         width: '500px',
         height: '500px',
         borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(16, 185, 129, 0.14) 0%, transparent 70%)',
+        background: 'radial-gradient(circle, rgba(21, 84, 232, 0.18) 0%, transparent 70%)',
         filter: 'blur(80px)',
         pointerEvents: 'none',
         zIndex: 1
@@ -260,8 +257,9 @@ export const Login = () => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 0 20px rgba(59, 130, 246, 0.45)',
-            border: '1px solid rgba(59, 130, 246, 0.4)'
+            boxShadow: '0 0 20px rgba(21, 84, 232, 0.45)',
+            border: '1px solid rgba(46, 155, 248, 0.4)',
+            background: '#07112E'
           }}>
             <img src="/orbis-logo.png" alt="ORBIS Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
@@ -270,21 +268,21 @@ export const Login = () => {
               fontSize: '1.35rem',
               fontWeight: 900,
               letterSpacing: '1.2px',
-              fontFamily: "'Times New Roman', Times, serif",
-              color: '#FFFFFF',
+              fontFamily: 'var(--font-heading)',
+              color: '#F6FDFF',
               lineHeight: 1.1
             }}>
               ORBIS
             </div>
             <div style={{
               fontSize: '0.66rem',
-              color: '#34D399',
+              color: '#6AE7F7',
               letterSpacing: '1.8px',
               fontWeight: 700,
               textTransform: 'uppercase',
-              fontFamily: "'Space Mono', monospace"
+              fontFamily: "'JetBrains Mono', monospace"
             }}>
-              {currentOrg.sector || 'HEALTHCARE & LIFE SCIENCES'}
+              {currentOrg.sector || 'ENTERPRISE INTELLIGENCE'}
             </div>
           </div>
 
@@ -295,23 +293,26 @@ export const Login = () => {
               display: 'inline-flex',
               alignItems: 'center',
               gap: '0.3rem',
-              background: 'rgba(12, 28, 33, 0.65)',
-              border: '1px solid rgba(20, 184, 166, 0.25)',
+              background: 'rgba(13, 35, 77, 0.65)',
+              border: '1px solid rgba(46, 155, 248, 0.25)',
               borderRadius: '8px',
-              padding: '0.3rem 0.65rem',
-              color: '#94A3B8',
+              padding: '0.35rem 0.75rem',
+              color: 'rgba(246, 253, 255, 0.75)',
               cursor: 'pointer',
               fontSize: '0.72rem',
-              fontFamily: "'Space Mono', monospace",
+              fontWeight: 600,
+              fontFamily: 'var(--font-family)',
               transition: 'all 0.2s'
             }}
             onMouseOver={(e) => {
-              e.currentTarget.style.color = '#FFFFFF';
-              e.currentTarget.style.borderColor = '#10B981';
+              e.currentTarget.style.color = '#F6FDFF';
+              e.currentTarget.style.borderColor = '#2E9BF8';
+              e.currentTarget.style.background = 'rgba(21, 84, 232, 0.2)';
             }}
             onMouseOut={(e) => {
-              e.currentTarget.style.color = '#94A3B8';
-              e.currentTarget.style.borderColor = 'rgba(20, 184, 166, 0.25)';
+              e.currentTarget.style.color = 'rgba(246, 253, 255, 0.75)';
+              e.currentTarget.style.borderColor = 'rgba(46, 155, 248, 0.25)';
+              e.currentTarget.style.background = 'rgba(13, 35, 77, 0.65)';
             }}
           >
             <ChevronLeft size={13} /> Change Sector
@@ -320,27 +321,27 @@ export const Login = () => {
 
         {/* Top-Right Badge: Secure Institutional Access */}
         <div style={{
-          background: 'rgba(8, 20, 24, 0.85)',
-          border: '1px solid rgba(20, 184, 166, 0.35)',
+          background: 'rgba(13, 35, 77, 0.85)',
+          border: '1px solid rgba(46, 155, 248, 0.35)',
           borderRadius: '999px',
           padding: '0.45rem 1rem',
           backdropFilter: 'blur(15px)',
           display: 'flex',
           alignItems: 'center',
           gap: '8px',
-          boxShadow: '0 0 18px rgba(16, 185, 129, 0.18)'
+          boxShadow: '0 0 18px rgba(21, 84, 232, 0.2)'
         }}>
           <div style={{
             width: 7,
             height: 7,
             borderRadius: '50%',
-            backgroundColor: '#10B981',
-            boxShadow: '0 0 8px #10B981'
+            backgroundColor: '#6AE7F7',
+            boxShadow: '0 0 8px #6AE7F7'
           }} />
           <span style={{
             fontSize: '0.72rem',
-            color: '#E2E8F0',
-            fontFamily: "'Space Mono', monospace",
+            color: '#F6FDFF',
+            fontFamily: "'JetBrains Mono', monospace",
             fontWeight: 600,
             letterSpacing: '0.5px'
           }}>
@@ -378,15 +379,15 @@ export const Login = () => {
             alignItems: 'center',
             gap: '0.75rem',
             marginBottom: '0.75rem',
-            color: '#94A3B8',
+            color: '#6AE7F7',
             fontSize: '0.7rem',
             letterSpacing: '2.5px',
             textTransform: 'uppercase',
-            fontFamily: "'Space Mono', monospace",
+            fontFamily: "'JetBrains Mono', monospace",
             fontWeight: 700
           }}>
             <span>GLOBAL SOVEREIGN & CAPITAL DEFENSE</span>
-            <div style={{ width: '32px', height: '1px', background: 'rgba(255, 255, 255, 0.25)' }} />
+            <div style={{ width: '32px', height: '1px', background: 'rgba(46, 155, 248, 0.4)' }} />
           </div>
 
           {/* Majestic Hero Headline */}
@@ -395,14 +396,13 @@ export const Login = () => {
             fontWeight: 800,
             lineHeight: 1.05,
             letterSpacing: '-0.5px',
-            color: '#FFFFFF',
+            color: '#F6FDFF',
             margin: '0 0 0.8rem 0',
-            fontFamily: "'Times New Roman', Times, serif"
+            fontFamily: 'var(--font-heading)'
           }}>
             Autonomous<br />
             <span style={{
-              color: '#86EFAC',
-              background: 'linear-gradient(135deg, #A7F3D0 0%, #34D399 100%)',
+              background: 'linear-gradient(135deg, #F6FDFF 0%, #6AE7F7 50%, #2E9BF8 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               display: 'inline-block'
@@ -414,9 +414,9 @@ export const Login = () => {
 
           {/* Subtitle Description */}
           <p style={{
-            color: '#94A3B8',
+            color: 'rgba(246, 253, 255, 0.75)',
             fontSize: '0.88rem',
-            lineHeight: 1.5,
+            lineHeight: 1.55,
             maxWidth: '480px',
             margin: '0 0 1.25rem 0'
           }}>
@@ -435,36 +435,40 @@ export const Login = () => {
               <div key={i} style={{
                 display: 'flex',
                 alignItems: 'flex-start',
-                gap: '0.75rem'
+                gap: '0.75rem',
+                padding: '0.65rem',
+                borderRadius: '12px',
+                background: 'rgba(13, 35, 77, 0.55)',
+                border: '1px solid rgba(46, 155, 248, 0.16)'
               }}>
                 <div style={{
                   width: 36,
                   height: 36,
                   borderRadius: '10px',
-                  background: 'rgba(10, 24, 28, 0.75)',
-                  border: '1px solid rgba(16, 185, 129, 0.35)',
+                  background: 'rgba(21, 84, 232, 0.2)',
+                  border: '1px solid rgba(46, 155, 248, 0.35)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: '#34D399',
+                  color: '#6AE7F7',
                   flexShrink: 0,
-                  boxShadow: '0 0 14px rgba(16, 185, 129, 0.15)'
+                  boxShadow: '0 0 14px rgba(21, 84, 232, 0.25)'
                 }}>
                   <feat.icon size={17} strokeWidth={2.2} />
                 </div>
                 <div>
                   <div style={{
-                    fontSize: '0.9rem',
+                    fontSize: '0.88rem',
                     fontWeight: 700,
-                    color: '#FFFFFF',
+                    color: '#F6FDFF',
                     marginBottom: '0.15rem',
-                    fontFamily: "'Times New Roman', Times, serif"
+                    fontFamily: 'var(--font-heading)'
                   }}>
                     {feat.title}
                   </div>
                   <div style={{
                     fontSize: '0.72rem',
-                    color: '#94A3B8',
+                    color: 'rgba(246, 253, 255, 0.65)',
                     lineHeight: 1.32
                   }}>
                     {feat.desc}
@@ -482,28 +486,28 @@ export const Login = () => {
             paddingTop: '0.4rem'
           }}>
             <div>
-              <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#FFFFFF', fontFamily: "'Space Mono', monospace" }}>
+              <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>
                 180+
               </div>
-              <div style={{ fontSize: '0.6rem', color: '#94A3B8', letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: "'Space Mono', monospace" }}>
+              <div style={{ fontSize: '0.62rem', color: '#6AE7F7', letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: "'JetBrains Mono', monospace", fontWeight: 700 }}>
                 INSTITUTIONS
               </div>
             </div>
-            <div style={{ width: '1px', height: '22px', background: 'rgba(255, 255, 255, 0.15)' }} />
+            <div style={{ width: '1px', height: '22px', background: 'rgba(46, 155, 248, 0.25)' }} />
             <div>
-              <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#FFFFFF', fontFamily: "'Space Mono', monospace" }}>
+              <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>
                 24/7
               </div>
-              <div style={{ fontSize: '0.6rem', color: '#94A3B8', letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: "'Space Mono', monospace" }}>
+              <div style={{ fontSize: '0.62rem', color: '#6AE7F7', letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: "'JetBrains Mono', monospace", fontWeight: 700 }}>
                 SURVEILLANCE
               </div>
             </div>
-            <div style={{ width: '1px', height: '22px', background: 'rgba(255, 255, 255, 0.15)' }} />
+            <div style={{ width: '1px', height: '22px', background: 'rgba(46, 155, 248, 0.25)' }} />
             <div>
-              <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#FFFFFF', fontFamily: "'Space Mono', monospace" }}>
+              <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>
                 99.9%
               </div>
-              <div style={{ fontSize: '0.6rem', color: '#94A3B8', letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: "'Space Mono', monospace" }}>
+              <div style={{ fontSize: '0.62rem', color: '#6AE7F7', letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: "'JetBrains Mono', monospace", fontWeight: 700 }}>
                 SYSTEM UPTIME
               </div>
             </div>
@@ -521,11 +525,11 @@ export const Login = () => {
           flexDirection: 'column',
           gap: '0.35rem',
           pointerEvents: 'none',
-          opacity: 0.68,
-          fontFamily: "'Space Mono', monospace",
+          opacity: 0.55,
+          fontFamily: "'JetBrains Mono', monospace",
           fontSize: '0.68rem',
           letterSpacing: '3px',
-          color: '#94A3B8',
+          color: 'rgba(246, 253, 255, 0.45)',
           textTransform: 'uppercase',
           lineHeight: 1.45,
           zIndex: 3
@@ -535,7 +539,7 @@ export const Login = () => {
           <div>SYSTEMS</div>
           <div>SAFER</div>
           <div>TOGETHER</div>
-          <div style={{ width: '18px', height: '1px', background: 'rgba(255, 255, 255, 0.35)', marginTop: '0.3rem' }} />
+          <div style={{ width: '18px', height: '1px', background: 'rgba(46, 155, 248, 0.35)', marginTop: '0.3rem' }} />
         </div>
 
         {/* RIGHT COLUMN: ULTRA-PREMIUM GLASSMORPHIC LOGIN CARD */}
@@ -543,11 +547,12 @@ export const Login = () => {
           flex: '0 0 410px',
           width: '410px',
           zIndex: 10,
-          background: 'rgba(8, 20, 24, 0.84)',
-          backdropFilter: 'blur(30px)',
-          border: '1px solid rgba(20, 184, 166, 0.28)',
+          background: 'rgba(13, 35, 77, 0.78)',
+          backdropFilter: 'blur(32px)',
+          WebkitBackdropFilter: 'blur(32px)',
+          border: '1px solid rgba(46, 155, 248, 0.28)',
           borderRadius: '24px',
-          boxShadow: '0 25px 60px rgba(0, 0, 0, 0.85), 0 0 40px rgba(16, 185, 129, 0.15)',
+          boxShadow: '0 25px 60px rgba(0, 0, 0, 0.8), 0 0 35px rgba(21, 84, 232, 0.2)',
           padding: '1.75rem 2rem',
           boxSizing: 'border-box'
         }}>
@@ -555,63 +560,65 @@ export const Login = () => {
           {/* Card Header */}
           <div style={{ marginBottom: '0.9rem' }}>
             <div style={{
-              fontSize: '0.78rem',
-              color: '#86EFAC',
+              fontSize: '0.75rem',
+              color: '#6AE7F7',
               letterSpacing: '0.5px',
               marginBottom: '0.15rem',
-              fontFamily: "'Space Mono', monospace"
+              fontFamily: "'JetBrains Mono', monospace",
+              fontWeight: 700
             }}>
               Welcome to
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', marginTop: '0.2rem' }}>
-              <img src="/orbis-logo.png" alt="ORBIS Logo" style={{ width: '42px', height: '42px', borderRadius: '12px', boxShadow: '0 0 20px rgba(59, 130, 246, 0.4)', border: '1px solid rgba(59, 130, 246, 0.3)' }} />
+              <img src="/orbis-logo.png" alt="ORBIS Logo" style={{ width: '42px', height: '42px', borderRadius: '12px', boxShadow: '0 0 20px rgba(21, 84, 232, 0.45)', border: '1px solid rgba(46, 155, 248, 0.3)' }} />
               <h2 style={{
                 fontSize: '2.1rem',
                 fontWeight: 900,
-                color: '#FFFFFF',
+                color: '#F6FDFF',
                 lineHeight: 1.1,
                 letterSpacing: '1px',
                 margin: 0,
-                fontFamily: "'Space Grotesk', -apple-system, sans-serif"
+                fontFamily: 'var(--font-heading)'
               }}>
                 ORBIS
               </h2>
             </div>
             <div style={{
               fontSize: '0.74rem',
-              color: '#34D399',
+              color: 'rgba(246, 253, 255, 0.75)',
               letterSpacing: '0.8px',
-              fontFamily: "'Space Mono', monospace",
+              fontFamily: "'JetBrains Mono', monospace",
               marginTop: '0.2rem'
             }}>
-              {currentOrg.name ? `${currentOrg.name.split(' ')[0]} Command Portal` : 'Healthcare Command Portal'}
+              {currentOrg.name ? `${currentOrg.name.split(' ')[0]} Command Portal` : 'Enterprise Command Portal'}
             </div>
           </div>
 
           {/* Mode Switcher: Sign In vs Create Account */}
           <div style={{
             display: 'flex',
-            background: 'rgba(12, 28, 33, 0.9)',
-            padding: '3px',
-            borderRadius: '10px',
-            border: '1px solid rgba(20, 184, 166, 0.2)',
-            marginBottom: '0.85rem'
+            background: 'rgba(7, 17, 46, 0.75)',
+            padding: '4px',
+            borderRadius: '12px',
+            border: '1px solid rgba(46, 155, 248, 0.2)',
+            marginBottom: '0.95rem'
           }}>
             <button
               type="button"
               onClick={() => { setIsSignUp(false); setError(''); }}
               style={{
                 flex: 1,
-                padding: '0.36rem',
-                borderRadius: '7px',
+                padding: '0.45rem',
+                borderRadius: '8px',
                 border: 'none',
-                background: !isSignUp ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' : 'transparent',
-                color: !isSignUp ? '#FFFFFF' : '#94A3B8',
+                background: !isSignUp ? 'linear-gradient(135deg, #1554E8 0%, #2E9BF8 100%)' : 'transparent',
+                color: !isSignUp ? '#F6FDFF' : 'rgba(246, 253, 255, 0.65)',
                 fontWeight: 700,
-                fontSize: '0.78rem',
+                fontSize: '0.8rem',
                 cursor: 'pointer',
-                fontFamily: "'Times New Roman', Times, serif",
+                fontFamily: 'var(--font-family)',
                 transition: 'all 0.2s',
+                boxShadow: !isSignUp ? '0 2px 10px rgba(21, 84, 232, 0.35)' : 'none'
               }}
             >
               Sign In
@@ -621,16 +628,17 @@ export const Login = () => {
               onClick={() => { setIsSignUp(true); setError(''); }}
               style={{
                 flex: 1,
-                padding: '0.36rem',
-                borderRadius: '7px',
+                padding: '0.45rem',
+                borderRadius: '8px',
                 border: 'none',
-                background: isSignUp ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' : 'transparent',
-                color: isSignUp ? '#FFFFFF' : '#94A3B8',
+                background: isSignUp ? 'linear-gradient(135deg, #1554E8 0%, #2E9BF8 100%)' : 'transparent',
+                color: isSignUp ? '#F6FDFF' : 'rgba(246, 253, 255, 0.65)',
                 fontWeight: 700,
-                fontSize: '0.78rem',
+                fontSize: '0.8rem',
                 cursor: 'pointer',
-                fontFamily: "'Times New Roman', Times, serif",
+                fontFamily: 'var(--font-family)',
                 transition: 'all 0.2s',
+                boxShadow: isSignUp ? '0 2px 10px rgba(21, 84, 232, 0.35)' : 'none'
               }}
             >
               Create Account
@@ -643,15 +651,15 @@ export const Login = () => {
               initial={{ opacity: 0, y: -6 }}
               animate={{ opacity: 1, y: 0 }}
               style={{
-                backgroundColor: 'rgba(239, 68, 68, 0.15)',
-                border: '1px solid rgba(239, 68, 68, 0.45)',
-                color: '#FCA5A5',
+                backgroundColor: 'rgba(255, 92, 92, 0.15)',
+                border: '1px solid rgba(255, 92, 92, 0.45)',
+                color: '#FF8F8F',
                 padding: '0.45rem 0.75rem',
-                borderRadius: '8px',
-                marginBottom: '0.65rem',
+                borderRadius: '10px',
+                marginBottom: '0.75rem',
                 fontSize: '0.72rem',
                 fontWeight: 600,
-                fontFamily: "'Space Mono', monospace"
+                fontFamily: "'JetBrains Mono', monospace"
               }}
             >
               {error}
@@ -669,11 +677,11 @@ export const Login = () => {
                 gap: '0.75rem',
                 padding: '0.62rem 0.9rem',
                 borderRadius: '11px',
-                background: 'rgba(10, 24, 28, 0.65)',
-                border: '1px solid rgba(20, 184, 166, 0.25)',
-                marginBottom: '0.6rem'
+                background: 'rgba(7, 17, 46, 0.75)',
+                border: '1px solid rgba(46, 155, 248, 0.25)',
+                marginBottom: '0.65rem'
               }}>
-                <User size={16} color="#34D399" />
+                <User size={16} color="#6AE7F7" />
                 <input
                   type="text"
                   placeholder="Officer / Full Name"
@@ -683,10 +691,10 @@ export const Login = () => {
                     width: '100%',
                     background: 'transparent',
                     border: 'none',
-                    color: '#FFFFFF',
+                    color: '#F6FDFF',
                     fontSize: '0.85rem',
                     outline: 'none',
-                    fontFamily: "'Times New Roman', Times, serif"
+                    fontFamily: 'var(--font-family)'
                   }}
                 />
               </div>
@@ -699,11 +707,11 @@ export const Login = () => {
               gap: '0.75rem',
               padding: '0.62rem 0.9rem',
               borderRadius: '11px',
-              background: 'rgba(10, 24, 28, 0.65)',
-              border: '1px solid rgba(20, 184, 166, 0.25)',
-              marginBottom: '0.6rem'
+              background: 'rgba(7, 17, 46, 0.75)',
+              border: '1px solid rgba(46, 155, 248, 0.25)',
+              marginBottom: '0.65rem'
             }}>
-              <Mail size={16} color="#34D399" />
+              <Mail size={16} color="#6AE7F7" />
               <input
                 type="email"
                 placeholder="Institutional Email"
@@ -714,10 +722,10 @@ export const Login = () => {
                   width: '100%',
                   background: 'transparent',
                   border: 'none',
-                  color: '#FFFFFF',
+                  color: '#F6FDFF',
                   fontSize: '0.85rem',
                   outline: 'none',
-                  fontFamily: "'Times New Roman', Times, serif"
+                  fontFamily: 'var(--font-family)'
                 }}
               />
             </div>
@@ -729,11 +737,11 @@ export const Login = () => {
               gap: '0.75rem',
               padding: '0.62rem 0.9rem',
               borderRadius: '11px',
-              background: 'rgba(10, 24, 28, 0.65)',
-              border: '1px solid rgba(20, 184, 166, 0.25)',
-              marginBottom: isSignUp ? '0.6rem' : '0.75rem'
+              background: 'rgba(7, 17, 46, 0.75)',
+              border: '1px solid rgba(46, 155, 248, 0.25)',
+              marginBottom: isSignUp ? '0.65rem' : '0.75rem'
             }}>
-              <Lock size={16} color="#34D399" />
+              <Lock size={16} color="#6AE7F7" />
               <input
                 type={showPassword ? 'text' : 'password'}
                 placeholder="Password"
@@ -745,16 +753,16 @@ export const Login = () => {
                   width: '100%',
                   background: 'transparent',
                   border: 'none',
-                  color: '#FFFFFF',
+                  color: '#F6FDFF',
                   fontSize: '0.85rem',
                   outline: 'none',
-                  fontFamily: "'Times New Roman', Times, serif"
+                  fontFamily: 'var(--font-family)'
                 }}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#94A3B8', padding: 0, display: 'flex' }}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(246, 253, 255, 0.55)', padding: 0, display: 'flex' }}
               >
                 {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
@@ -768,11 +776,11 @@ export const Login = () => {
                 gap: '0.75rem',
                 padding: '0.62rem 0.9rem',
                 borderRadius: '11px',
-                background: 'rgba(10, 24, 28, 0.65)',
-                border: '1px solid rgba(20, 184, 166, 0.25)',
+                background: 'rgba(7, 17, 46, 0.75)',
+                border: '1px solid rgba(46, 155, 248, 0.25)',
                 marginBottom: '0.75rem'
               }}>
-                <Lock size={16} color="#34D399" />
+                <Lock size={16} color="#6AE7F7" />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   placeholder="Confirm Password"
@@ -784,10 +792,10 @@ export const Login = () => {
                     width: '100%',
                     background: 'transparent',
                     border: 'none',
-                    color: '#FFFFFF',
+                    color: '#F6FDFF',
                     fontSize: '0.85rem',
                     outline: 'none',
-                    fontFamily: "'Times New Roman', Times, serif"
+                    fontFamily: 'var(--font-family)'
                   }}
                 />
               </div>
@@ -801,12 +809,12 @@ export const Login = () => {
               marginBottom: '0.85rem',
               fontSize: '0.78rem'
             }}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', cursor: 'pointer', color: '#94A3B8' }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', cursor: 'pointer', color: 'rgba(246, 253, 255, 0.75)' }}>
                 <input
                   type="checkbox"
                   checked={rememberDevice}
                   onChange={(e) => setRememberDevice(e.target.checked)}
-                  style={{ accentColor: '#10B981', cursor: 'pointer' }}
+                  style={{ accentColor: '#1554E8', cursor: 'pointer' }}
                 />
                 <span>Remember this device</span>
               </label>
@@ -818,7 +826,7 @@ export const Login = () => {
                   style={{
                     background: 'none',
                     border: 'none',
-                    color: '#34D399',
+                    color: '#6AE7F7',
                     cursor: 'pointer',
                     fontWeight: 600,
                     padding: 0,
@@ -828,16 +836,16 @@ export const Login = () => {
                     gap: '0.2rem'
                   }}
                 >
-                  <Sparkles size={11} color="#34D399" /> Autofill demo?
+                  <Sparkles size={11} color="#6AE7F7" /> Autofill demo?
                 </button>
               ) : (
-                <span style={{ color: '#64748B', fontSize: '0.72rem' }}>Encrypted AES-256</span>
+                <span style={{ color: 'rgba(246, 253, 255, 0.55)', fontSize: '0.72rem' }}>Encrypted AES-256</span>
               )}
             </div>
 
             {/* Primary Submit Button */}
             <motion.button
-              whileHover={{ scale: lockoutSec > 0 ? 1 : 1.01, boxShadow: lockoutSec > 0 ? 'none' : '0 0 25px rgba(16, 185, 129, 0.55)' }}
+              whileHover={{ scale: lockoutSec > 0 ? 1 : 1.01, boxShadow: lockoutSec > 0 ? 'none' : '0 0 25px rgba(21, 84, 232, 0.55)' }}
               whileTap={{ scale: lockoutSec > 0 ? 1 : 0.99 }}
               type="submit"
               disabled={loading || lockoutSec > 0}
@@ -846,19 +854,19 @@ export const Login = () => {
                 padding: '0.72rem',
                 borderRadius: '11px',
                 background: lockoutSec > 0 
-                  ? 'rgba(239, 68, 68, 0.25)' 
-                  : 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
-                color: lockoutSec > 0 ? '#F87171' : '#FFFFFF',
-                border: lockoutSec > 0 ? '1px solid rgba(239, 68, 68, 0.4)' : 'none',
+                  ? 'rgba(255, 92, 92, 0.25)' 
+                  : 'linear-gradient(135deg, #1554E8 0%, #2E9BF8 100%)',
+                color: lockoutSec > 0 ? '#FF8F8F' : '#F6FDFF',
+                border: lockoutSec > 0 ? '1px solid rgba(255, 92, 92, 0.4)' : 'none',
                 fontSize: '0.92rem',
                 fontWeight: 700,
-                fontFamily: "'Times New Roman', Times, serif",
+                fontFamily: 'var(--font-family)',
                 cursor: (loading || lockoutSec > 0) ? 'not-allowed' : 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '0.5rem',
-                boxShadow: lockoutSec > 0 ? 'none' : '0 8px 25px rgba(16, 185, 129, 0.35)',
+                boxShadow: lockoutSec > 0 ? 'none' : '0 8px 25px rgba(21, 84, 232, 0.45)',
                 marginBottom: '0.85rem'
               }}
             >
@@ -885,19 +893,19 @@ export const Login = () => {
             gap: '0.75rem',
             marginBottom: '0.85rem'
           }}>
-            <div style={{ flex: 1, height: '1px', background: 'rgba(255, 255, 255, 0.1)' }} />
-            <span style={{ fontSize: '0.68rem', color: '#64748B', fontFamily: "'Space Mono', monospace" }}>
+            <div style={{ flex: 1, height: '1px', background: 'rgba(46, 155, 248, 0.16)' }} />
+            <span style={{ fontSize: '0.68rem', color: 'rgba(246, 253, 255, 0.45)', fontFamily: "'JetBrains Mono', monospace" }}>
               or continue with
             </span>
-            <div style={{ flex: 1, height: '1px', background: 'rgba(255, 255, 255, 0.1)' }} />
+            <div style={{ flex: 1, height: '1px', background: 'rgba(46, 155, 248, 0.16)' }} />
           </div>
 
-          {/* Social Sign In: ONLY Google (Microsoft removed as requested) */}
+          {/* Social Sign In: ONLY Google */}
           <motion.button
             whileHover={{
               scale: 1.01,
-              backgroundColor: 'rgba(15, 32, 38, 0.95)',
-              borderColor: 'rgba(16, 185, 129, 0.45)'
+              backgroundColor: 'rgba(21, 84, 232, 0.15)',
+              borderColor: '#2E9BF8'
             }}
             whileTap={{ scale: 0.99 }}
             type="button"
@@ -907,12 +915,12 @@ export const Login = () => {
               width: '100%',
               padding: '0.65rem',
               borderRadius: '11px',
-              background: 'rgba(10, 24, 28, 0.75)',
-              border: '1px solid rgba(20, 184, 166, 0.25)',
-              color: '#FFFFFF',
+              background: 'rgba(7, 17, 46, 0.8)',
+              border: '1px solid rgba(46, 155, 248, 0.25)',
+              color: '#F6FDFF',
               fontSize: '0.86rem',
               fontWeight: 600,
-              fontFamily: "'Times New Roman', Times, serif",
+              fontFamily: 'var(--font-family)',
               cursor: (loading || googleLoading) ? 'not-allowed' : 'pointer',
               display: 'flex',
               alignItems: 'center',
@@ -923,7 +931,7 @@ export const Login = () => {
             }}
           >
             {googleLoading ? (
-              <Loader2 size={16} className="animate-spin" color="#10B981" />
+              <Loader2 size={16} className="animate-spin" color="#2E9BF8" />
             ) : (
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -942,11 +950,11 @@ export const Login = () => {
             justifyContent: 'center',
             gap: '0.45rem',
             fontSize: '0.66rem',
-            color: '#64748B',
-            fontFamily: "'Space Mono', monospace",
+            color: 'rgba(246, 253, 255, 0.45)',
+            fontFamily: "'JetBrains Mono', monospace",
             letterSpacing: '0.4px'
           }}>
-            <Lock size={12} color="#64748B" />
+            <Lock size={12} color="#6AE7F7" />
             <span>Encrypted · Role-based Access · Institutional Security</span>
           </div>
 

@@ -104,16 +104,16 @@ const AnimatedMetric = ({ value, label, suffix = '', precision = 2 }: { value: s
         fontSize: 'clamp(2.4rem, 4vw, 3.4rem)',
         fontWeight: 800,
         fontFamily: "'Space Grotesk', -apple-system, sans-serif",
-        background: 'linear-gradient(180deg, #FFFFFF 0%, #34D399 55%, #10B981 100%)',
+        background: 'linear-gradient(180deg, #F6FDFF 0%, #6AE7F7 55%, #2E9BF8 100%)',
         WebkitBackgroundClip: 'text',
         WebkitTextFillColor: 'transparent',
-        textShadow: '0 0 35px rgba(16, 185, 129, 0.45)',
+        textShadow: '0 0 35px rgba(106, 231, 247, 0.45)',
         letterSpacing: '-1px',
       }}>
         {display}{suffix}
       </div>
       <div style={{
-        color: '#E5C07B',
+        color: '#6AE7F7',
         fontSize: '0.75rem',
         fontWeight: 700,
         fontFamily: "'JetBrains Mono', 'Space Mono', monospace",
@@ -173,8 +173,9 @@ export const Landing = () => {
     <div
       onMouseMove={handleMouseMove}
       style={{
-        backgroundColor: '#070A0E',
-        color: '#FFFFFF',
+        backgroundColor: '#07112E',
+        backgroundImage: 'radial-gradient(circle at 50% 10%, rgba(13, 35, 77, 0.8) 0%, transparent 60%)',
+        color: '#F6FDFF',
         overflowX: 'hidden',
         minHeight: '100vh',
         position: 'relative',
@@ -184,24 +185,24 @@ export const Landing = () => {
       {/* 4K Real-time 3D AI Product Experience Modal */}
       <DemoModal isOpen={showDemo} onClose={() => setShowDemo(false)} />
 
-      {/* Volumetric Scanlines & Dynamic Ambient Emerald + Gold Atmosphere */}
+      {/* Volumetric Scanlines & Dynamic Ambient Sapphire + Violet Atmosphere */}
       <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none' }}>
         <div style={{
           position: 'absolute',
           inset: 0,
-          background: 'radial-gradient(circle at 70% 35%, rgba(16, 185, 129, 0.22) 0%, transparent 60%)',
+          background: 'radial-gradient(circle at 70% 35%, rgba(21, 84, 232, 0.22) 0%, transparent 60%)',
           transform: `translate(${mousePos.x * 0.4}px, ${mousePos.y * 0.4}px)`,
           transition: 'transform 0.2s ease-out',
         }} />
         <div style={{
           position: 'absolute',
           inset: 0,
-          background: 'radial-gradient(circle at 20% 75%, rgba(245, 158, 11, 0.1) 0%, transparent 50%)',
+          background: 'radial-gradient(circle at 20% 75%, rgba(122, 72, 255, 0.14) 0%, transparent 50%)',
         }} />
         <div style={{
           position: 'absolute',
           inset: 0,
-          background: 'radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.15) 0%, transparent 70%)',
+          background: 'radial-gradient(circle at 50% 0%, rgba(46, 155, 248, 0.15) 0%, transparent 70%)',
         }} />
         <div className="command-grid" />
       </div>
@@ -225,8 +226,9 @@ export const Landing = () => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 0 25px rgba(59, 130, 246, 0.5)',
-            border: '1px solid rgba(59, 130, 246, 0.4)'
+            boxShadow: '0 0 25px rgba(21, 84, 232, 0.5)',
+            border: '1px solid rgba(46, 155, 248, 0.4)',
+            background: '#07112E'
           }}>
             <img src="/orbis-logo.png" alt="ORBIS Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
@@ -236,7 +238,7 @@ export const Landing = () => {
               fontWeight: 900,
               letterSpacing: '1.5px',
               fontFamily: "'Space Grotesk', -apple-system, sans-serif",
-              color: '#FFFFFF',
+              color: '#F6FDFF',
               lineHeight: 1
             }}>
               ORBIS
@@ -245,7 +247,7 @@ export const Landing = () => {
               fontSize: '0.65rem',
               fontWeight: 700,
               letterSpacing: '2px',
-              color: '#E5C07B',
+              color: '#6AE7F7',
               textTransform: 'uppercase',
               fontFamily: "'JetBrains Mono', monospace",
               marginTop: '4px'
@@ -258,8 +260,8 @@ export const Landing = () => {
         {/* Real-time Telemetry Status Pill & Direct Access */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
           <div style={{
-            background: 'rgba(10, 18, 23, 0.82)',
-            border: '1px solid rgba(16, 185, 129, 0.3)',
+            background: 'rgba(13, 35, 77, 0.8)',
+            border: '1px solid rgba(46, 155, 248, 0.3)',
             borderRadius: '24px',
             padding: '0.5rem 1.25rem',
             backdropFilter: 'blur(15px)',
@@ -268,8 +270,8 @@ export const Landing = () => {
             gap: '10px',
             boxShadow: '0 0 25px rgba(0, 0, 0, 0.6)'
           }}>
-            <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#34D399', boxShadow: '0 0 12px #34D399' }} className="pulse-beacon" />
-            <span style={{ fontSize: '0.72rem', fontFamily: "'JetBrains Mono', monospace", fontWeight: 700, color: '#34D399' }}>
+            <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#6AE7F7', boxShadow: '0 0 12px #6AE7F7' }} className="pulse-beacon" />
+            <span style={{ fontSize: '0.72rem', fontFamily: "'JetBrains Mono', monospace", fontWeight: 700, color: '#6AE7F7' }}>
               QKD 256-BIT LATTICE // NOMINAL
             </span>
           </div>
@@ -277,11 +279,11 @@ export const Landing = () => {
           <button
             onClick={() => setShowDemo(true)}
             style={{
-              background: 'rgba(10, 18, 23, 0.75)',
-              border: '1px solid rgba(229, 192, 123, 0.35)',
+              background: 'rgba(13, 35, 77, 0.75)',
+              border: '1px solid rgba(46, 155, 248, 0.35)',
               borderRadius: '10px',
               padding: '0.6rem 1.25rem',
-              color: '#FFFFFF',
+              color: '#F6FDFF',
               fontSize: '0.82rem',
               fontWeight: 700,
               fontFamily: "'Space Grotesk', sans-serif",
@@ -294,17 +296,17 @@ export const Landing = () => {
               transition: 'all 0.25s ease',
             }}
             onMouseEnter={e => {
-              e.currentTarget.style.borderColor = '#E5C07B';
-              e.currentTarget.style.background = 'rgba(245, 158, 11, 0.15)';
-              e.currentTarget.style.boxShadow = '0 0 20px rgba(229, 192, 123, 0.3)';
+              e.currentTarget.style.borderColor = '#6AE7F7';
+              e.currentTarget.style.background = 'rgba(21, 84, 232, 0.2)';
+              e.currentTarget.style.boxShadow = '0 0 20px rgba(106, 231, 247, 0.3)';
             }}
             onMouseLeave={e => {
-              e.currentTarget.style.borderColor = 'rgba(229, 192, 123, 0.35)';
-              e.currentTarget.style.background = 'rgba(10, 18, 23, 0.75)';
+              e.currentTarget.style.borderColor = 'rgba(46, 155, 248, 0.35)';
+              e.currentTarget.style.background = 'rgba(13, 35, 77, 0.75)';
               e.currentTarget.style.boxShadow = 'none';
             }}
           >
-            <Play size={12} fill="#E5C07B" color="#E5C07B" />
+            <Play size={12} fill="#6AE7F7" color="#6AE7F7" />
             Product Showcase
           </button>
 
@@ -312,10 +314,10 @@ export const Landing = () => {
             onClick={() => navigate('/organization')}
             style={{
               background: 'transparent',
-              border: '1px solid rgba(16, 185, 129, 0.35)',
+              border: '1px solid rgba(46, 155, 248, 0.35)',
               borderRadius: '10px',
               padding: '0.6rem 1.2rem',
-              color: '#34D399',
+              color: '#6AE7F7',
               fontSize: '0.82rem',
               fontWeight: 700,
               fontFamily: "'Space Grotesk', sans-serif",
@@ -323,13 +325,13 @@ export const Landing = () => {
               transition: 'all 0.2s',
             }}
             onMouseEnter={e => {
-              e.currentTarget.style.color = '#FFFFFF';
-              e.currentTarget.style.borderColor = '#10B981';
-              e.currentTarget.style.background = 'rgba(16, 185, 129, 0.15)';
+              e.currentTarget.style.color = '#F6FDFF';
+              e.currentTarget.style.borderColor = '#2E9BF8';
+              e.currentTarget.style.background = 'rgba(21, 84, 232, 0.2)';
             }}
             onMouseLeave={e => {
-              e.currentTarget.style.color = '#34D399';
-              e.currentTarget.style.borderColor = 'rgba(16, 185, 129, 0.35)';
+              e.currentTarget.style.color = '#6AE7F7';
+              e.currentTarget.style.borderColor = 'rgba(46, 155, 248, 0.35)';
               e.currentTarget.style.background = 'transparent';
             }}
           >
@@ -339,25 +341,25 @@ export const Landing = () => {
           <button
             onClick={() => navigate('/organization')}
             style={{
-              background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+              background: 'linear-gradient(135deg, #1554E8 0%, #2E9BF8 100%)',
               border: 'none',
               borderRadius: '10px',
               padding: '0.6rem 1.25rem',
-              color: '#FFFFFF',
+              color: '#F6FDFF',
               fontSize: '0.82rem',
               fontWeight: 800,
               fontFamily: "'Space Grotesk', sans-serif",
               cursor: 'pointer',
-              boxShadow: '0 4px 18px rgba(16, 185, 129, 0.4)',
+              boxShadow: '0 4px 18px rgba(21, 84, 232, 0.45)',
               transition: 'all 0.2s',
             }}
             onMouseEnter={e => {
               e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = '0 6px 22px rgba(16, 185, 129, 0.6)';
+              e.currentTarget.style.boxShadow = '0 6px 22px rgba(46, 155, 248, 0.6)';
             }}
             onMouseLeave={e => {
               e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 4px 18px rgba(16, 185, 129, 0.4)';
+              e.currentTarget.style.boxShadow = '0 4px 18px rgba(21, 84, 232, 0.45)';
             }}
           >
             Create Account
@@ -384,21 +386,21 @@ export const Landing = () => {
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
           >
             
-            {/* Mission Tag with Emerald Aura & Gold Accent */}
+            {/* Mission Tag with Sapphire Aura & Cyan Accent */}
             <div style={{
               display: 'inline-flex',
               alignItems: 'center',
               gap: '8px',
               padding: '6px 16px',
               borderRadius: '24px',
-              background: 'rgba(16, 185, 129, 0.12)',
-              border: '1px solid rgba(16, 185, 129, 0.35)',
-              boxShadow: '0 0 20px rgba(16, 185, 129, 0.15)',
+              background: 'rgba(21, 84, 232, 0.15)',
+              border: '1px solid rgba(46, 155, 248, 0.35)',
+              boxShadow: '0 0 20px rgba(21, 84, 232, 0.2)',
               marginBottom: '1.5rem'
             }}>
-              <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#F59E0B', boxShadow: '0 0 8px #F59E0B' }} />
+              <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#6AE7F7', boxShadow: '0 0 8px #6AE7F7' }} />
               <span style={{
-                color: '#34D399',
+                color: '#6AE7F7',
                 fontSize: '0.72rem',
                 fontWeight: 800,
                 letterSpacing: '1.5px',
@@ -417,15 +419,15 @@ export const Landing = () => {
               lineHeight: '1.06',
               letterSpacing: '-1.5px',
               margin: '0 0 1.25rem 0',
-              color: '#FFFFFF'
+              color: '#F6FDFF'
             }}>
               The Architecture of <br />
               Certainty in an Era of <br />
               <span style={{
-                background: 'linear-gradient(135deg, #FFFFFF 0%, #34D399 45%, #E5C07B 100%)',
+                background: 'linear-gradient(135deg, #F6FDFF 0%, #6AE7F7 45%, #2E9BF8 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
-                textShadow: '0 0 50px rgba(16, 185, 129, 0.4)',
+                textShadow: '0 0 50px rgba(106, 231, 247, 0.4)',
               }}>
                 Systemic Volatility.
               </span>
@@ -433,7 +435,7 @@ export const Landing = () => {
 
             <p style={{
               fontSize: '1.15rem',
-              color: '#CBD5E1',
+              color: 'rgba(246, 253, 255, 0.75)',
               maxWidth: '560px',
               lineHeight: '1.7',
               marginBottom: '2.25rem',
@@ -445,7 +447,7 @@ export const Landing = () => {
             {/* Action Directives */}
             <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
               <motion.button
-                whileHover={{ scale: 1.03, boxShadow: '0 0 35px rgba(16, 185, 129, 0.6)' }}
+                whileHover={{ scale: 1.03, boxShadow: '0 0 35px rgba(21, 84, 232, 0.6)' }}
                 whileTap={{ scale: 0.97 }}
                 onClick={handleInitialize}
                 style={{
@@ -453,12 +455,12 @@ export const Landing = () => {
                   fontSize: '0.95rem',
                   fontWeight: 800,
                   letterSpacing: '0.75px',
-                  borderRadius: '10px',
-                  background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
-                  color: '#FFFFFF',
+                  borderRadius: '12px',
+                  background: 'linear-gradient(135deg, #1554E8 0%, #2E9BF8 100%)',
+                  color: '#F6FDFF',
                   border: 'none',
                   cursor: 'pointer',
-                  boxShadow: '0 10px 25px rgba(16, 185, 129, 0.4)',
+                  boxShadow: '0 10px 25px rgba(21, 84, 232, 0.45)',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '8px',
@@ -469,7 +471,7 @@ export const Landing = () => {
               </motion.button>
 
               <motion.button
-                whileHover={{ scale: 1.03, borderColor: '#10B981', backgroundColor: 'rgba(16, 185, 129, 0.15)' }}
+                whileHover={{ scale: 1.03, borderColor: '#2E9BF8', backgroundColor: 'rgba(21, 84, 232, 0.2)' }}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => navigate('/organization')}
                 style={{
@@ -477,10 +479,10 @@ export const Landing = () => {
                   fontSize: '0.92rem',
                   fontWeight: 700,
                   letterSpacing: '0.5px',
-                  borderRadius: '10px',
-                  background: 'rgba(10, 18, 23, 0.85)',
-                  border: '1px solid rgba(16, 185, 129, 0.4)',
-                  color: '#FFFFFF',
+                  borderRadius: '12px',
+                  background: 'rgba(13, 35, 77, 0.85)',
+                  border: '1px solid rgba(46, 155, 248, 0.35)',
+                  color: '#F6FDFF',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
@@ -494,7 +496,7 @@ export const Landing = () => {
               </motion.button>
 
               <motion.button
-                whileHover={{ scale: 1.03, borderColor: '#E5C07B', backgroundColor: 'rgba(245, 158, 11, 0.15)' }}
+                whileHover={{ scale: 1.03, borderColor: '#8671F9', backgroundColor: 'rgba(122, 72, 255, 0.2)' }}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => setShowDemo(true)}
                 style={{
@@ -502,10 +504,10 @@ export const Landing = () => {
                   fontSize: '0.92rem',
                   fontWeight: 700,
                   letterSpacing: '0.5px',
-                  borderRadius: '10px',
-                  background: 'rgba(10, 18, 23, 0.8)',
-                  border: '1px solid rgba(229, 192, 123, 0.35)',
-                  color: '#CBD5E1',
+                  borderRadius: '12px',
+                  background: 'rgba(13, 35, 77, 0.8)',
+                  border: '1px solid rgba(122, 72, 255, 0.35)',
+                  color: '#F6FDFF',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
@@ -518,12 +520,12 @@ export const Landing = () => {
                   width: '24px',
                   height: '24px',
                   borderRadius: '50%',
-                  background: 'rgba(245, 158, 11, 0.2)',
+                  background: 'rgba(122, 72, 255, 0.25)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center'
                 }}>
-                  <Play size={11} fill="#E5C07B" color="#E5C07B" />
+                  <Play size={11} fill="#8671F9" color="#8671F9" />
                 </div>
                 Live 4K Simulation
               </motion.button>
@@ -534,7 +536,7 @@ export const Landing = () => {
               display: 'flex',
               gap: '3rem',
               marginTop: '3rem',
-              borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+              borderTop: '1px solid rgba(46, 155, 248, 0.16)',
               paddingTop: '2rem',
             }}>
               <AnimatedMetric value="99.98" suffix="%" label="Interception Velocity" />
@@ -573,26 +575,26 @@ export const Landing = () => {
         zIndex: 5
       }}>
         <div style={{
-          background: 'rgba(10, 18, 23, 0.88)',
-          border: isSectorSimulating ? '1px solid rgba(239, 68, 68, 0.5)' : '1px solid rgba(16, 185, 129, 0.3)',
+          background: 'rgba(13, 35, 77, 0.75)',
+          border: isSectorSimulating ? '1px solid rgba(255, 92, 92, 0.5)' : '1px solid rgba(46, 155, 248, 0.25)',
           borderRadius: '24px',
           padding: '2.25rem',
-          backdropFilter: 'blur(20px)',
+          backdropFilter: 'blur(24px)',
           boxShadow: isSectorSimulating 
-            ? '0 25px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(239, 68, 68, 0.2)' 
-            : '0 25px 60px rgba(0, 0, 0, 0.7), 0 0 35px rgba(16, 185, 129, 0.15)',
+            ? '0 25px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(255, 92, 92, 0.25)' 
+            : '0 25px 60px rgba(0, 0, 0, 0.7), 0 0 35px rgba(21, 84, 232, 0.2)',
           transition: 'all 0.4s ease'
         }}>
           {/* Header */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.75rem', flexWrap: 'wrap', gap: '1rem' }}>
             <div>
-              <div style={{ fontSize: '0.72rem', color: '#E5C07B', letterSpacing: '1.5px', fontWeight: 700, fontFamily: "'JetBrains Mono', monospace", textTransform: 'uppercase' }}>
+              <div style={{ fontSize: '0.72rem', color: '#6AE7F7', letterSpacing: '1.5px', fontWeight: 700, fontFamily: "'JetBrains Mono', monospace", textTransform: 'uppercase' }}>
                 LIVE SECTOR THREAT HARNESS // SELECT ACTIVE TENANT
               </div>
               <h3 style={{
                 fontSize: '1.85rem',
                 fontWeight: 800,
-                color: '#FFFFFF',
+                color: '#F6FDFF',
                 margin: '4px 0 0 0',
                 fontFamily: "'Space Grotesk', -apple-system, sans-serif"
               }}>
@@ -607,9 +609,9 @@ export const Landing = () => {
                 style={{
                   padding: '0.45rem 1rem',
                   borderRadius: '100px',
-                  background: isSectorSimulating ? 'rgba(239, 68, 68, 0.2)' : 'linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(0, 198, 255, 0.2) 100%)',
-                  border: isSectorSimulating ? '1px solid rgba(239, 68, 68, 0.5)' : '1px solid rgba(16, 185, 129, 0.4)',
-                  color: isSectorSimulating ? '#F87171' : '#34D399',
+                  background: isSectorSimulating ? 'rgba(255, 92, 92, 0.2)' : 'linear-gradient(135deg, rgba(21, 84, 232, 0.25) 0%, rgba(106, 231, 247, 0.25) 100%)',
+                  border: isSectorSimulating ? '1px solid rgba(255, 92, 92, 0.5)' : '1px solid rgba(106, 231, 247, 0.45)',
+                  color: isSectorSimulating ? '#FF8F8F' : '#6AE7F7',
                   fontFamily: "'JetBrains Mono', monospace",
                   fontSize: '0.74rem',
                   fontWeight: 700,
@@ -618,7 +620,7 @@ export const Landing = () => {
                   alignItems: 'center',
                   gap: '6px',
                   transition: 'all 0.2s',
-                  boxShadow: isSectorSimulating ? '0 0 15px rgba(239, 68, 68, 0.3)' : '0 0 15px rgba(16, 185, 129, 0.2)'
+                  boxShadow: isSectorSimulating ? '0 0 15px rgba(255, 92, 92, 0.3)' : '0 0 15px rgba(21, 84, 232, 0.25)'
                 }}
               >
                 <Zap size={13} className={isSectorSimulating ? 'animate-pulse' : ''} />
@@ -630,9 +632,9 @@ export const Landing = () => {
                 style={{
                   padding: '0.45rem 1rem',
                   borderRadius: '100px',
-                  background: 'rgba(245, 158, 11, 0.12)',
-                  border: '1px solid rgba(229, 192, 123, 0.35)',
-                  color: '#E5C07B',
+                  background: 'rgba(122, 72, 255, 0.15)',
+                  border: '1px solid rgba(134, 113, 249, 0.35)',
+                  color: '#8671F9',
                   fontFamily: "'JetBrains Mono', monospace",
                   fontSize: '0.74rem',
                   fontWeight: 700,
@@ -642,7 +644,7 @@ export const Landing = () => {
                   gap: '6px'
                 }}
               >
-                <Play size={12} fill="#E5C07B" />
+                <Play size={12} fill="#8671F9" />
                 4K REAL-TIME SIM
               </button>
             </div>
@@ -665,15 +667,15 @@ export const Landing = () => {
                   style={{
                     padding: '1rem 1.15rem',
                     borderRadius: '14px',
-                    background: isSelected ? 'linear-gradient(135deg, rgba(16, 185, 129, 0.25) 0%, rgba(5, 150, 105, 0.15) 100%)' : 'rgba(16, 26, 34, 0.5)',
-                    border: isSelected ? '1px solid #34D399' : '1px solid rgba(255, 255, 255, 0.08)',
-                    color: isSelected ? '#FFFFFF' : '#94A3B8',
+                    background: isSelected ? 'linear-gradient(135deg, #1554E8 0%, #2E9BF8 100%)' : 'rgba(7, 17, 46, 0.65)',
+                    border: isSelected ? '1px solid #6AE7F7' : '1px solid rgba(46, 155, 248, 0.15)',
+                    color: isSelected ? '#F6FDFF' : 'rgba(246, 253, 255, 0.65)',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
                     gap: '10px',
                     transition: 'all 0.25s ease',
-                    boxShadow: isSelected ? '0 8px 25px rgba(16, 185, 129, 0.3)' : 'none',
+                    boxShadow: isSelected ? '0 8px 25px rgba(21, 84, 232, 0.45)' : 'none',
                     textAlign: 'left'
                   }}
                 >
@@ -681,8 +683,8 @@ export const Landing = () => {
                     width: 34,
                     height: 34,
                     borderRadius: '8px',
-                    background: isSelected ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' : 'rgba(16, 185, 129, 0.12)',
-                    color: isSelected ? '#FFFFFF' : '#34D399',
+                    background: isSelected ? 'rgba(255, 255, 255, 0.2)' : 'rgba(21, 84, 232, 0.2)',
+                    color: isSelected ? '#F6FDFF' : '#6AE7F7',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -695,11 +697,11 @@ export const Landing = () => {
                       fontSize: '0.82rem',
                       fontWeight: 800,
                       fontFamily: "'Space Grotesk', -apple-system, sans-serif",
-                      color: isSelected ? '#FFFFFF' : '#CBD5E1'
+                      color: isSelected ? '#F6FDFF' : '#F6FDFF'
                     }}>
                       {sec.name}
                     </div>
-                    <div style={{ fontSize: '0.62rem', color: isSelected ? '#E5C07B' : '#64748B', fontFamily: "'JetBrains Mono', monospace" }}>
+                    <div style={{ fontSize: '0.62rem', color: isSelected ? '#D9FBFF' : 'rgba(246, 253, 255, 0.5)', fontFamily: "'JetBrains Mono', monospace" }}>
                       {sec.code}
                     </div>
                   </div>
@@ -717,8 +719,8 @@ export const Landing = () => {
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.3 }}
               style={{
-                background: 'rgba(7, 12, 16, 0.94)',
-                border: isSectorSimulating ? '1px solid rgba(239, 68, 68, 0.35)' : '1px solid rgba(16, 185, 129, 0.25)',
+                background: 'rgba(7, 17, 46, 0.95)',
+                border: isSectorSimulating ? '1px solid rgba(255, 92, 92, 0.4)' : '1px solid rgba(46, 155, 248, 0.25)',
                 borderRadius: '16px',
                 padding: '1.75rem',
                 display: 'grid',
@@ -729,21 +731,21 @@ export const Landing = () => {
             >
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '0.4rem' }}>
-                  <SectorIcon size={17} color="#34D399" />
-                  <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#34D399', fontFamily: "'JetBrains Mono', monospace" }}>
+                  <SectorIcon size={17} color="#6AE7F7" />
+                  <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#6AE7F7', fontFamily: "'JetBrains Mono', monospace" }}>
                     {activeSector.name.toUpperCase()} // ACTIVE HARNESS
                   </span>
                 </div>
                 <h4 style={{
                   fontSize: '1.3rem',
                   fontWeight: 800,
-                  color: '#FFFFFF',
+                  color: '#F6FDFF',
                   margin: '0 0 0.4rem 0',
                   fontFamily: "'Space Grotesk', -apple-system, sans-serif"
                 }}>
                   {activeSector.headline}
                 </h4>
-                <p style={{ fontSize: '0.88rem', color: '#94A3B8', margin: 0, lineHeight: 1.55 }}>
+                <p style={{ fontSize: '0.88rem', color: 'rgba(246, 253, 255, 0.7)', margin: 0, lineHeight: 1.55 }}>
                   {activeSector.details}
                 </p>
 
@@ -751,11 +753,11 @@ export const Landing = () => {
                   <div style={{
                     marginTop: '0.85rem',
                     padding: '0.4rem 0.8rem',
-                    borderRadius: '6px',
-                    background: 'rgba(239, 68, 68, 0.15)',
-                    border: '1px solid rgba(239, 68, 68, 0.35)',
+                    borderRadius: '8px',
+                    background: 'rgba(255, 92, 92, 0.15)',
+                    border: '1px solid rgba(255, 92, 92, 0.35)',
                     fontSize: '0.72rem',
-                    color: '#F87171',
+                    color: '#FF8F8F',
                     fontFamily: "'JetBrains Mono', monospace",
                     display: 'flex',
                     alignItems: 'center',
@@ -771,50 +773,50 @@ export const Landing = () => {
                 )}
               </div>
 
-              <div style={{ borderLeft: '1px solid rgba(255, 255, 255, 0.1)', paddingLeft: '1.25rem' }}>
-                <div style={{ fontSize: '0.68rem', color: '#E5C07B', fontFamily: "'JetBrains Mono', monospace", textTransform: 'uppercase' }}>
+              <div style={{ borderLeft: '1px solid rgba(46, 155, 248, 0.16)', paddingLeft: '1.25rem' }}>
+                <div style={{ fontSize: '0.68rem', color: '#6AE7F7', fontFamily: "'JetBrains Mono', monospace", textTransform: 'uppercase' }}>
                   Anomaly Vector
                 </div>
                 <div style={{
                   fontSize: '1.3rem',
                   fontWeight: 800,
-                  color: isSectorSimulating && simStage === 1 ? '#EF4444' : '#FFFFFF',
+                  color: isSectorSimulating && simStage === 1 ? '#FF5C5C' : '#F6FDFF',
                   fontFamily: "'JetBrains Mono', monospace",
                   marginTop: '2px'
                 }}>
                   {isSectorSimulating && simStage === 1 ? '+16.8% Surge' : activeSector.exposure}
                 </div>
-                <div style={{ fontSize: '0.62rem', color: '#94A3B8', marginTop: '2px' }}>
+                <div style={{ fontSize: '0.62rem', color: 'rgba(246, 253, 255, 0.55)', marginTop: '2px' }}>
                   {isSectorSimulating ? 'Variance Spike' : 'Variance Envelope'}
                 </div>
               </div>
 
-              <div style={{ borderLeft: '1px solid rgba(255, 255, 255, 0.1)', paddingLeft: '1.25rem' }}>
-                <div style={{ fontSize: '0.68rem', color: '#E5C07B', fontFamily: "'JetBrains Mono', monospace", textTransform: 'uppercase' }}>
+              <div style={{ borderLeft: '1px solid rgba(46, 155, 248, 0.16)', paddingLeft: '1.25rem' }}>
+                <div style={{ fontSize: '0.68rem', color: '#6AE7F7', fontFamily: "'JetBrains Mono', monospace", textTransform: 'uppercase' }}>
                   Inference Latency
                 </div>
-                <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#34D399', fontFamily: "'JetBrains Mono', monospace", marginTop: '2px' }}>
+                <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#6AE7F7', fontFamily: "'JetBrains Mono', monospace", marginTop: '2px' }}>
                   {activeSector.latency}
                 </div>
-                <div style={{ fontSize: '0.62rem', color: '#34D399', marginTop: '2px' }}>
+                <div style={{ fontSize: '0.62rem', color: '#6AE7F7', marginTop: '2px' }}>
                   Sub-second Neural Intercept
                 </div>
               </div>
 
-              <div style={{ borderLeft: '1px solid rgba(255, 255, 255, 0.1)', paddingLeft: '1.25rem' }}>
-                <div style={{ fontSize: '0.68rem', color: '#E5C07B', fontFamily: "'JetBrains Mono', monospace", textTransform: 'uppercase' }}>
+              <div style={{ borderLeft: '1px solid rgba(46, 155, 248, 0.16)', paddingLeft: '1.25rem' }}>
+                <div style={{ fontSize: '0.68rem', color: '#6AE7F7', fontFamily: "'JetBrains Mono', monospace", textTransform: 'uppercase' }}>
                   Containment Index
                 </div>
                 <div style={{
                   fontSize: '1.3rem',
                   fontWeight: 800,
-                  color: '#10B981',
+                  color: '#6AE7F7',
                   fontFamily: "'JetBrains Mono', monospace",
                   marginTop: '2px'
                 }}>
                   {isSectorSimulating && simStage === 3 ? '100.0%' : activeSector.containment}
                 </div>
-                <div style={{ fontSize: '0.62rem', color: '#10B981', marginTop: '2px' }}>
+                <div style={{ fontSize: '0.62rem', color: '#6AE7F7', marginTop: '2px' }}>
                   Autonomous Mitigation
                 </div>
               </div>
@@ -862,37 +864,37 @@ export const Landing = () => {
           <div
             key={pillar.num}
             style={{
-              background: 'rgba(10, 18, 23, 0.75)',
-              border: '1px solid rgba(255, 255, 255, 0.08)',
+              background: 'rgba(13, 35, 77, 0.65)',
+              border: '1px solid rgba(46, 155, 248, 0.16)',
               borderRadius: '18px',
               padding: '2rem',
               backdropFilter: 'blur(16px)',
               transition: 'all 0.3s ease'
             }}
             onMouseEnter={e => {
-              e.currentTarget.style.borderColor = 'rgba(16, 185, 129, 0.5)';
+              e.currentTarget.style.borderColor = 'rgba(106, 231, 247, 0.5)';
               e.currentTarget.style.transform = 'translateY(-3px)';
-              e.currentTarget.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.7), 0 0 25px rgba(16, 185, 129, 0.2)';
+              e.currentTarget.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.7), 0 0 25px rgba(21, 84, 232, 0.3)';
             }}
             onMouseLeave={e => {
-              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+              e.currentTarget.style.borderColor = 'rgba(46, 155, 248, 0.16)';
               e.currentTarget.style.transform = 'translateY(0)';
               e.currentTarget.style.boxShadow = 'none';
             }}
           >
-            <div style={{ fontSize: '0.8rem', fontWeight: 800, color: '#E5C07B', fontFamily: "'JetBrains Mono', monospace", marginBottom: '0.85rem' }}>
+            <div style={{ fontSize: '0.8rem', fontWeight: 800, color: '#6AE7F7', fontFamily: "'JetBrains Mono', monospace", marginBottom: '0.85rem' }}>
               // {pillar.num}
             </div>
             <h4 style={{
               fontSize: '1.35rem',
               fontWeight: 800,
-              color: '#FFFFFF',
+              color: '#F6FDFF',
               margin: '0 0 0.65rem 0',
               fontFamily: "'Space Grotesk', -apple-system, sans-serif"
             }}>
               {pillar.title}
             </h4>
-            <p style={{ fontSize: '0.88rem', color: '#94A3B8', lineHeight: 1.65, margin: 0 }}>
+            <p style={{ fontSize: '0.88rem', color: 'rgba(246, 253, 255, 0.75)', lineHeight: 1.65, margin: 0 }}>
               {pillar.desc}
             </p>
           </div>
@@ -901,20 +903,20 @@ export const Landing = () => {
 
       {/* Footer Branding Strip */}
       <footer style={{
-        borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+        borderTop: '1px solid rgba(46, 155, 248, 0.16)',
         padding: '2rem 4rem',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
         position: 'relative',
         zIndex: 5,
-        color: '#94A3B8',
+        color: 'rgba(246, 253, 255, 0.55)',
         fontSize: '0.82rem',
       }}>
         <div>
           &copy; {new Date().getFullYear()} ORBIS &bull; Organizational Risk and Business Intelligence System. Enterprise Neural Architecture.
         </div>
-        <div style={{ display: 'flex', gap: '2rem', fontFamily: "'JetBrains Mono', monospace", fontSize: '0.72rem', color: '#E5C07B' }}>
+        <div style={{ display: 'flex', gap: '2rem', fontFamily: "'JetBrains Mono', monospace", fontSize: '0.72rem', color: '#6AE7F7' }}>
           <span>ISO 31000</span>
           <span>NIST CSF 2.0</span>
           <span>BASEL III</span>
@@ -927,8 +929,8 @@ export const Landing = () => {
           position: absolute;
           inset: 0;
           background-image: 
-            linear-gradient(rgba(142, 182, 155, 0.04) 1px, transparent 1px), 
-            linear-gradient(90deg, rgba(142, 182, 155, 0.04) 1px, transparent 1px);
+            linear-gradient(rgba(46, 155, 248, 0.05) 1px, transparent 1px), 
+            linear-gradient(90deg, rgba(46, 155, 248, 0.05) 1px, transparent 1px);
           background-size: 60px 60px;
           mask-image: radial-gradient(circle at 60% 50%, black 0%, transparent 80%);
           -webkit-mask-image: radial-gradient(circle at 60% 50%, black 0%, transparent 80%);

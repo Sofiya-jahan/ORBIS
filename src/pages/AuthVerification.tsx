@@ -5,10 +5,10 @@ import { ShieldCheck, Fingerprint, Lock, CheckCircle2, Cpu, KeyRound, Sparkles }
 import { useAuthStore } from '../store/useAuthStore';
 
 const verificationSteps = [
-  { id: 1, text: 'Scanning Biometric Signature...', subtext: 'Capturing capacitive ridges & cryptographic seed', icon: Fingerprint, color: '#10B981' },
-  { id: 2, text: 'Executing Quantum Handshake...', subtext: 'Validating lattice-based key exchange protocol', icon: KeyRound, color: '#E5C07B' },
-  { id: 3, text: 'Neural Security Matrix Verification...', subtext: 'Analyzing session behavioral integrity', icon: Cpu, color: '#00F2FE' },
-  { id: 4, text: 'Access Clearance Authorized', subtext: 'Provisioning institutional workspace sandbox', icon: ShieldCheck, color: '#34D399' },
+  { id: 1, text: 'Scanning Biometric Signature...', subtext: 'Capturing capacitive ridges & cryptographic seed', icon: Fingerprint, color: '#6AE7F7' },
+  { id: 2, text: 'Executing Quantum Handshake...', subtext: 'Validating lattice-based key exchange protocol', icon: KeyRound, color: '#2E9BF8' },
+  { id: 3, text: 'Neural Security Matrix Verification...', subtext: 'Analyzing session behavioral integrity', icon: Cpu, color: '#8671F9' },
+  { id: 4, text: 'Access Clearance Authorized', subtext: 'Provisioning institutional workspace sandbox', icon: ShieldCheck, color: '#D9FBFF' },
 ];
 
 export const AuthVerification = () => {
@@ -46,8 +46,8 @@ export const AuthVerification = () => {
     <div style={{
       display: 'flex',
       minHeight: '100vh',
-      backgroundColor: '#070A0E',
-      color: '#FFFFFF',
+      backgroundColor: '#07112E',
+      color: '#F6FDFF',
       alignItems: 'center',
       justifyContent: 'center',
       position: 'relative',
@@ -57,8 +57,8 @@ export const AuthVerification = () => {
       
       {/* Background Animated Atmosphere */}
       <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none' }}>
-        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.18) 0%, transparent 65%)' }} />
-        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 70% 30%, rgba(229, 192, 123, 0.1) 0%, transparent 55%)' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 50% 50%, rgba(21, 84, 232, 0.22) 0%, transparent 65%)' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 70% 30%, rgba(106, 231, 247, 0.12) 0%, transparent 55%)' }} />
       </div>
 
       {/* Main Terminal Vault Card */}
@@ -71,12 +71,12 @@ export const AuthVerification = () => {
           zIndex: 10,
           width: '100%',
           maxWidth: '560px',
-          background: 'rgba(10, 18, 23, 0.94)',
-          border: '1px solid rgba(16, 185, 129, 0.3)',
+          background: 'rgba(7, 17, 46, 0.92)',
+          border: '1px solid rgba(46, 155, 248, 0.25)',
           borderRadius: '24px',
           padding: '3.5rem 3rem',
-          backdropFilter: 'blur(30px)',
-          boxShadow: '0 30px 80px rgba(0, 0, 0, 0.9), 0 0 50px rgba(16, 185, 129, 0.2)',
+          backdropFilter: 'blur(32px)',
+          boxShadow: '0 30px 80px rgba(7, 17, 46, 0.9), 0 0 50px rgba(21, 84, 232, 0.25)',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -104,8 +104,8 @@ export const AuthVerification = () => {
             position: 'absolute',
             inset: '10px',
             borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(16, 185, 129, 0.25) 0%, rgba(7, 10, 14, 0.9) 85%)',
-            border: '1px solid rgba(229, 192, 123, 0.4)',
+            background: 'radial-gradient(circle, rgba(21, 84, 232, 0.3) 0%, rgba(7, 17, 46, 0.95) 85%)',
+            border: '1px solid rgba(106, 231, 247, 0.35)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -123,8 +123,8 @@ export const AuthVerification = () => {
                   left: 0,
                   right: 0,
                   height: '2px',
-                  background: '#10B981',
-                  boxShadow: '0 0 10px #10B981, 0 0 20px #E5C07B',
+                  background: '#6AE7F7',
+                  boxShadow: '0 0 10px #6AE7F7, 0 0 20px #2E9BF8',
                 }}
               />
             )}
@@ -145,19 +145,19 @@ export const AuthVerification = () => {
               fontSize: '0.75rem',
               fontWeight: 800,
               letterSpacing: '2.5px',
-              color: '#E5C07B',
+              color: '#6AE7F7',
               textTransform: 'uppercase',
               marginBottom: '0.6rem',
-              fontFamily: "'Space Mono', monospace"
+              fontFamily: "'JetBrains Mono', monospace"
             }}>
               AUTHENTICATION PROTOCOL // 0{currentStep + 1}
             </div>
 
-            <h2 style={{ fontSize: '1.9rem', fontWeight: 800, marginBottom: '0.5rem', letterSpacing: '-0.5px', color: '#FFFFFF', fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)" }}>
+            <h2 style={{ fontSize: '1.9rem', fontWeight: 800, marginBottom: '0.5rem', letterSpacing: '-0.5px', color: '#F6FDFF', fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)" }}>
               {activeStep.text}
             </h2>
 
-            <p style={{ color: '#CBD5E1', fontSize: '0.95rem', maxWidth: '380px', margin: '0 auto', fontFamily: "var(--font-family, 'Inter', sans-serif)" }}>
+            <p style={{ color: 'rgba(246, 253, 255, 0.75)', fontSize: '0.95rem', maxWidth: '380px', margin: '0 auto', fontFamily: "var(--font-family, 'Inter', sans-serif)" }}>
               {activeStep.subtext}
             </p>
           </motion.div>
@@ -174,8 +174,8 @@ export const AuthVerification = () => {
                   width: idx === currentStep ? '32px' : '10px',
                   height: '6px',
                   borderRadius: '3px',
-                  background: isCompleted ? '#10B981' : 'rgba(255, 255, 255, 0.15)',
-                  boxShadow: isCompleted ? '0 0 12px rgba(16, 185, 129, 0.6)' : 'none',
+                  background: isCompleted ? '#2E9BF8' : 'rgba(246, 253, 255, 0.15)',
+                  boxShadow: isCompleted ? '0 0 12px rgba(46, 155, 248, 0.7)' : 'none',
                   transition: 'all 0.3s ease',
                 }}
               />
@@ -186,18 +186,18 @@ export const AuthVerification = () => {
         {/* Bottom Status Feed */}
         <div style={{
           width: '100%',
-          background: 'rgba(15, 23, 30, 0.9)',
-          border: '1px solid rgba(16, 185, 129, 0.25)',
+          background: 'rgba(13, 35, 77, 0.75)',
+          border: '1px solid rgba(46, 155, 248, 0.25)',
           borderRadius: '12px',
           padding: '0.75rem 1.25rem',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
           fontSize: '0.8rem',
-          fontFamily: "'Space Mono', monospace",
+          fontFamily: "'JetBrains Mono', monospace",
         }}>
-          <span style={{ color: '#94A3B8' }}>ENCRYPTION STATUS:</span>
-          <span style={{ color: '#E5C07B', fontWeight: 700 }}>256-BIT QUANTUM LATTICE</span>
+          <span style={{ color: 'rgba(246, 253, 255, 0.65)' }}>ENCRYPTION STATUS:</span>
+          <span style={{ color: '#6AE7F7', fontWeight: 700 }}>256-BIT QUANTUM LATTICE</span>
         </div>
 
       </motion.div>

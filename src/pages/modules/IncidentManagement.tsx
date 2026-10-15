@@ -224,8 +224,8 @@ export const IncidentManagement = () => {
           <div style={{
             display: 'flex', alignItems: 'center', gap: '6px',
             padding: '0.4rem 0.75rem', borderRadius: '12px',
-            background: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.25)',
-            fontSize: '0.75rem', color: '#10B981', fontWeight: 700
+            background: 'rgba(21, 84, 232, 0.15)', border: '1px solid rgba(46, 155, 248, 0.3)',
+            fontSize: '0.75rem', color: '#6AE7F7', fontWeight: 700
           }}>
             <Cloud size={13} />
             EVIDENCE VAULT // VERIFIED
@@ -269,12 +269,12 @@ export const IncidentManagement = () => {
                     <div style={{ fontSize: '0.75rem', color: currentOrg.themeColor, fontFamily: 'var(--font-mono)' }}>{inc.id} &bull; {inc.reporter}</div>
                     {inc.evidenceUrls && inc.evidenceUrls.length > 0 && (
                       <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '6px' }}>
-                        <span style={{ fontSize: '0.68rem', color: '#10B981', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                        <span style={{ fontSize: '0.68rem', color: '#6AE7F7', display: 'flex', alignItems: 'center', gap: '3px' }}>
                           <Cloud size={10} /> Cloud Evidence:
                         </span>
                         {inc.evidenceUrls.map((url: string, idx: number) => (
                           <a key={idx} href={url} target="_blank" rel="noopener noreferrer" title="View Encrypted Evidence Attachment">
-                            <img src={url} alt="Evidence" style={{ width: '22px', height: '22px', borderRadius: '4px', objectFit: 'cover', border: '1px solid #10B981' }} />
+                            <img src={url} alt="Evidence" style={{ width: '22px', height: '22px', borderRadius: '4px', objectFit: 'cover', border: '1px solid #6AE7F7' }} />
                           </a>
                         ))}
                       </div>
@@ -286,8 +286,8 @@ export const IncidentManagement = () => {
                   <td style={{ padding: '1.1rem 1.25rem' }}>
                     <span style={{
                       padding: '0.25rem 0.65rem', borderRadius: '100px', fontSize: '0.72rem', fontWeight: '800',
-                      background: inc.severity === 'High' ? 'rgba(239,68,68,0.15)' : inc.severity === 'Medium' ? 'rgba(245,158,11,0.15)' : 'rgba(16,185,129,0.15)',
-                      color: inc.severity === 'High' ? '#EF4444' : inc.severity === 'Medium' ? '#F59E0B' : '#10B981',
+                      background: inc.severity === 'High' ? 'rgba(239,68,68,0.15)' : inc.severity === 'Medium' ? 'rgba(245,158,11,0.15)' : 'rgba(106, 231, 247, 0.15)',
+                      color: inc.severity === 'High' ? '#EF4444' : inc.severity === 'Medium' ? '#F59E0B' : '#6AE7F7',
                       textTransform: 'uppercase'
                     }}>
                       {inc.severity}
@@ -325,7 +325,7 @@ export const IncidentManagement = () => {
           </p>
 
           {reportSuccess ? (
-            <div style={{ padding: '2rem', textAlign: 'center', color: '#10B981', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem' }}>
+            <div style={{ padding: '2rem', textAlign: 'center', color: '#6AE7F7', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem' }}>
               <CheckCircle2 size={48} />
               <h3 style={{ fontSize: '1.25rem', fontWeight: '800' }}>Incident Logged & Dispatched</h3>
               <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Returning to incident registry...</p>
@@ -387,7 +387,7 @@ export const IncidentManagement = () => {
 
               <div>
                 <label className="label" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <Cloud size={14} color="#10B981" />
+                  <Cloud size={14} color="#6AE7F7" />
                   Evidence Attachment / Screenshot (Encrypted Cloud)
                 </label>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginTop: '0.4rem', flexWrap: 'wrap' }}>
@@ -398,7 +398,7 @@ export const IncidentManagement = () => {
                     padding: '0.75rem 1.25rem',
                     borderRadius: '10px',
                     background: 'rgba(255,255,255,0.05)',
-                    border: '1px dashed rgba(255,255,255,0.25)',
+                    border: '1px dashed rgba(46, 155, 248, 0.35)',
                     color: 'white',
                     cursor: 'pointer',
                     fontSize: '0.85rem',
@@ -411,7 +411,7 @@ export const IncidentManagement = () => {
                   </label>
                   {evidencePreview && (
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <img src={evidencePreview} alt="Preview" style={{ width: '42px', height: '42px', borderRadius: '8px', objectFit: 'cover', border: '1px solid #10B981' }} />
+                      <img src={evidencePreview} alt="Preview" style={{ width: '42px', height: '42px', borderRadius: '8px', objectFit: 'cover', border: '1px solid #6AE7F7' }} />
                       <button 
                         type="button" 
                         onClick={() => { setEvidenceFile(null); setEvidencePreview(null); }} 

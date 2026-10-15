@@ -37,10 +37,10 @@ const CollegeDashboard = () => {
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem' }}>
         {[
-          { label: 'Enrolled Students', value: '45,210', change: '+2%', icon: Users, color: '#5B3DF5' },
-          { label: 'At-Risk Students', value: '1,240', change: '-15%', icon: Brain, color: '#ef4444' },
-          { label: 'Active Courses', value: '3,450', change: '+5%', icon: BookOpen, color: '#10b981' },
-          { label: 'Avg Graduation Prediction', value: '94%', change: '+1.2%', icon: TrendingUp, color: '#f59e0b' }
+          { label: 'Enrolled Students', value: '45,210', change: '+2%', icon: Users, color: '#4148F1' },
+          { label: 'At-Risk Students', value: '1,240', change: '-15%', icon: Brain, color: '#EF4444' },
+          { label: 'Active Courses', value: '3,450', change: '+5%', icon: BookOpen, color: '#6AE7F7' },
+          { label: 'Avg Graduation Prediction', value: '94%', change: '+1.2%', icon: TrendingUp, color: '#2E9BF8' }
         ].map((kpi, i) => (
           <div key={i} className="glass-card animate-fade-in-delayed" style={{ padding: '1.5rem', animationDelay: `${i * 0.1}s`, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', borderTop: `2px solid ${kpi.color}` }}>
             <div>

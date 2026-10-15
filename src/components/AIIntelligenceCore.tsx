@@ -19,11 +19,11 @@ interface SatelliteNode {
 }
 
 const SATELLITE_NODES: SatelliteNode[] = [
-  { name: 'Capital Liquidity', code: 'FIN-01', sector: 'Central Banking', radius: 3.2, speed: 0.45, yOffset: 0.8, color: '#E5C07B', status: 'Optimal', metric: 'VaR 0.04%' },
-  { name: 'Sovereign Power Grid', code: 'NRG-04', sector: 'Critical Infrastructure', radius: 3.8, speed: -0.35, yOffset: -0.6, color: '#10B981', status: 'Secured', metric: '99.999%' },
-  { name: 'Autonomous Defense', code: 'DEF-07', sector: 'Aerospace & Sovereignty', radius: 4.4, speed: 0.28, yOffset: 1.2, color: '#00F2FE', status: 'Armed', metric: '0 Threat Delta' },
-  { name: 'Bio-Clinical Matrix', code: 'MED-09', sector: 'Public Health', radius: 3.5, speed: -0.52, yOffset: -1.1, color: '#34D399', status: 'Calibrated', metric: '100% Ingress' },
-  { name: 'Global Supply Transit', code: 'LOG-12', sector: 'Maritime Logistics', radius: 4.1, speed: 0.38, yOffset: 0.2, color: '#F59E0B', status: 'Monitored', metric: '14.2m Latency' },
+  { name: 'Capital Liquidity', code: 'FIN-01', sector: 'Central Banking', radius: 3.2, speed: 0.45, yOffset: 0.8, color: '#2E9BF8', status: 'Optimal', metric: 'VaR 0.04%' },
+  { name: 'Sovereign Power Grid', code: 'NRG-04', sector: 'Critical Infrastructure', radius: 3.8, speed: -0.35, yOffset: -0.6, color: '#6AE7F7', status: 'Secured', metric: '99.999%' },
+  { name: 'Autonomous Defense', code: 'DEF-07', sector: 'Aerospace & Sovereignty', radius: 4.4, speed: 0.28, yOffset: 1.2, color: '#1554E8', status: 'Armed', metric: '0 Threat Delta' },
+  { name: 'Bio-Clinical Matrix', code: 'MED-09', sector: 'Public Health', radius: 3.5, speed: -0.52, yOffset: -1.1, color: '#7A48FF', status: 'Calibrated', metric: '100% Ingress' },
+  { name: 'Global Supply Transit', code: 'LOG-12', sector: 'Maritime Logistics', radius: 4.1, speed: 0.38, yOffset: 0.2, color: '#8671F9', status: 'Monitored', metric: '14.2m Latency' },
 ];
 
 // -------------------------------------------------------------
@@ -96,15 +96,15 @@ const OrbitingSatellite = ({ node, index }: { node: SatelliteNode; index: number
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <div style={{ width: 6, height: 6, borderRadius: '50%', background: node.color, boxShadow: `0 0 8px ${node.color}` }} />
-              <span style={{ fontSize: '0.72rem', fontWeight: 800, color: '#FFFFFF', fontFamily: "'Times New Roman', serif", letterSpacing: '0.5px' }}>
+              <span style={{ fontSize: '0.72rem', fontWeight: 800, color: '#F6FDFF', fontFamily: "'Inter', sans-serif", letterSpacing: '0.5px' }}>
                 {node.name}
               </span>
-              <span style={{ fontSize: '0.62rem', color: '#E5C07B', fontFamily: "'Space Mono', monospace" }}>
+              <span style={{ fontSize: '0.62rem', color: '#6AE7F7', fontFamily: "'Space Mono', monospace" }}>
                 [{node.code}]
               </span>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', gap: '10px', fontSize: '0.62rem', color: '#94A3B8', fontFamily: "'Space Mono', monospace" }}>
-              <span>STATUS: <span style={{ color: '#34D399', fontWeight: 700 }}>{node.status.toUpperCase()}</span></span>
+            <div style={{ display: 'flex', justifyContent: 'space-between', gap: '10px', fontSize: '0.62rem', color: 'rgba(246, 253, 255, 0.65)', fontFamily: "'Space Mono', monospace" }}>
+              <span>STATUS: <span style={{ color: '#6AE7F7', fontWeight: 700 }}>{node.status.toUpperCase()}</span></span>
               <span style={{ color: node.color, fontWeight: 700 }}>{node.metric}</span>
             </div>
           </div>
@@ -140,22 +140,22 @@ const GyroscopicManifold = () => {
 
   return (
     <group>
-      {/* Outer Gyroscopic Ring 1 - Imperial Emerald */}
+      {/* Outer Gyroscopic Ring 1 - Royal Electric Blue */}
       <mesh ref={ring1}>
         <torusGeometry args={[2.7, 0.016, 16, 120]} />
-        <meshStandardMaterial color="#10B981" emissive="#059669" emissiveIntensity={0.9} metalness={0.9} roughness={0.1} />
+        <meshStandardMaterial color="#1554E8" emissive="#2E9BF8" emissiveIntensity={0.9} metalness={0.9} roughness={0.1} />
       </mesh>
 
-      {/* Intermediate Telemetry Ring 2 - Sovereign Champagne Gold */}
+      {/* Intermediate Telemetry Ring 2 - Primary Purple */}
       <mesh ref={ring2}>
         <torusGeometry args={[2.3, 0.014, 16, 120]} />
-        <meshStandardMaterial color="#E5C07B" emissive="#D97706" emissiveIntensity={0.85} metalness={0.95} roughness={0.1} />
+        <meshStandardMaterial color="#4148F1" emissive="#7A48FF" emissiveIntensity={0.85} metalness={0.95} roughness={0.1} />
       </mesh>
 
-      {/* Inner Accelerator Ring 3 - Electric Cyan */}
+      {/* Inner Accelerator Ring 3 - Highlight Cyan */}
       <mesh ref={ring3}>
         <torusGeometry args={[1.9, 0.012, 16, 100]} />
-        <meshStandardMaterial color="#00F2FE" emissive="#0284C7" emissiveIntensity={0.8} metalness={0.9} roughness={0.15} />
+        <meshStandardMaterial color="#6AE7F7" emissive="#2E9BF8" emissiveIntensity={0.8} metalness={0.9} roughness={0.15} />
       </mesh>
     </group>
   );
@@ -183,12 +183,12 @@ const QuantumCore = () => {
 
   return (
     <group ref={coreRef}>
-      {/* Outer Faceted Geometric Cage (Icosahedron) - Radiant Emerald */}
+      {/* Outer Faceted Geometric Cage (Icosahedron) - Electric Sapphire */}
       <mesh>
         <icosahedronGeometry args={[1.35, 1]} />
         <meshStandardMaterial
-          color="#10B981"
-          emissive="#059669"
+          color="#1554E8"
+          emissive="#2E9BF8"
           emissiveIntensity={1.3}
           wireframe
           transparent
@@ -196,11 +196,11 @@ const QuantumCore = () => {
         />
       </mesh>
 
-      {/* Intermediate Glass Lattice (Octahedron) - Champagne Gold */}
+      {/* Intermediate Glass Lattice (Octahedron) - Vivid Electric Violet */}
       <mesh>
         <octahedronGeometry args={[1.05, 0]} />
         <meshPhysicalMaterial
-          color="#E5C07B"
+          color="#7A48FF"
           transmission={0.82}
           opacity={0.75}
           transparent
@@ -210,12 +210,12 @@ const QuantumCore = () => {
         />
       </mesh>
 
-      {/* Inner Glowing Quantum Nucleus - Pure Platinum Luster */}
+      {/* Inner Glowing Quantum Nucleus - Pure White Luster with Cyan Emissive */}
       <mesh ref={innerNucleusRef}>
         <dodecahedronGeometry args={[0.65, 0]} />
         <meshStandardMaterial
-          color="#FFFFFF"
-          emissive="#34D399"
+          color="#F6FDFF"
+          emissive="#6AE7F7"
           emissiveIntensity={2.8}
           roughness={0.05}
           metalness={0.95}
@@ -223,7 +223,7 @@ const QuantumCore = () => {
       </mesh>
 
       {/* Radiant Point Light Emitter */}
-      <pointLight color="#34D399" intensity={3.5} distance={7} decay={2} />
+      <pointLight color="#6AE7F7" intensity={3.5} distance={7} decay={2} />
     </group>
   );
 };
@@ -239,10 +239,10 @@ const VectorRiskParticles = () => {
     const pos = new Float32Array(count * 3);
     const col = new Float32Array(count * 3);
 
-    const cEmerald = new THREE.Color('#10B981');
-    const cGold = new THREE.Color('#E5C07B');
-    const cCyan = new THREE.Color('#00F2FE');
-    const cWhite = new THREE.Color('#FFFFFF');
+    const cSapphire = new THREE.Color('#1554E8');
+    const cSky = new THREE.Color('#2E9BF8');
+    const cCyan = new THREE.Color('#6AE7F7');
+    const cViolet = new THREE.Color('#7A48FF');
 
     for (let i = 0; i < count; i++) {
       const radius = 1.6 + Math.random() * 4.2;
@@ -254,7 +254,7 @@ const VectorRiskParticles = () => {
       pos[i * 3 + 2] = radius * Math.cos(phi);
 
       const rand = Math.random();
-      const chosen = rand > 0.6 ? cEmerald : (rand > 0.35 ? cGold : (rand > 0.15 ? cCyan : cWhite));
+      const chosen = rand > 0.6 ? cSapphire : (rand > 0.35 ? cSky : (rand > 0.15 ? cCyan : cViolet));
       col[i * 3] = chosen.r;
       col[i * 3 + 1] = chosen.g;
       col[i * 3 + 2] = chosen.b;
@@ -295,8 +295,8 @@ export const AIIntelligenceCore: React.FC = () => {
         style={{ background: 'transparent' }}
       >
         <ambientLight intensity={0.4} />
-        <directionalLight position={[8, 8, 8]} intensity={2.2} color="#FFFFFF" />
-        <directionalLight position={[-8, -6, -6]} intensity={1.8} color="#10B981" />
+        <directionalLight position={[8, 8, 8]} intensity={2.2} color="#F6FDFF" />
+        <directionalLight position={[-8, -6, -6]} intensity={1.8} color="#2E9BF8" />
 
         <Stars radius={100} depth={50} count={2500} factor={3} fade speed={0.6} />
 
@@ -329,29 +329,29 @@ export const AIIntelligenceCore: React.FC = () => {
         zIndex: 5
       }}>
         <div style={{
-          background: 'rgba(8, 14, 18, 0.94)',
-          border: '1px solid rgba(229, 192, 123, 0.35)',
+          background: 'rgba(7, 17, 46, 0.94)',
+          border: '1px solid rgba(46, 155, 248, 0.35)',
           borderRadius: '14px',
           padding: '0.85rem 1.35rem',
           backdropFilter: 'blur(16px)',
-          boxShadow: '0 12px 35px rgba(0, 0, 0, 0.8), 0 0 20px rgba(16, 185, 129, 0.15)',
+          boxShadow: '0 12px 35px rgba(0, 0, 0, 0.8), 0 0 20px rgba(21, 84, 232, 0.25)',
           display: 'flex',
           flexDirection: 'column',
           gap: '4px'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1.5rem' }}>
-            <span style={{ fontSize: '0.68rem', fontWeight: 800, color: '#E5C07B', letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: "'Space Mono', monospace" }}>
+            <span style={{ fontSize: '0.68rem', fontWeight: 800, color: '#2E9BF8', letterSpacing: '1.5px', textTransform: 'uppercase', fontFamily: "'Space Mono', monospace" }}>
               ORBIS NEURAL RISK ENGINE
             </span>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#10B981', boxShadow: '0 0 10px #10B981' }} />
-              <span style={{ fontSize: '0.65rem', color: '#10B981', fontFamily: "'Space Mono', monospace", fontWeight: 700 }}>
+              <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#6AE7F7', boxShadow: '0 0 10px #6AE7F7' }} />
+              <span style={{ fontSize: '0.65rem', color: '#6AE7F7', fontFamily: "'Space Mono', monospace", fontWeight: 700 }}>
                 SYNAPSE LIVE
               </span>
             </div>
           </div>
 
-          <div style={{ fontSize: '0.82rem', color: '#FFFFFF', fontFamily: "'Times New Roman', serif", fontWeight: 700 }}>
+          <div style={{ fontSize: '0.82rem', color: '#F6FDFF', fontFamily: "'Inter', sans-serif", fontWeight: 700 }}>
             Quantum Entropy Index: 0.014 bits &bull; Lattice Armed
           </div>
         </div>

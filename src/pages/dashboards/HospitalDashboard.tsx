@@ -69,9 +69,9 @@ const HospitalDashboard = () => {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem' }}>
         {[
           { label: 'Active Patients', value: '1,432', change: '+12%', icon: Users, color: '#0B6EFD' },
-          { label: 'Critical Cases', value: '45', change: '-5%', icon: AlertCircle, color: '#ef4444' },
-          { label: "Today's Admissions", value: '128', change: '+24%', icon: HeartPulse, color: '#10b981' },
-          { label: 'Avg System AI Risk', value: '14.2%', change: '-2.1%', icon: TrendingUp, color: '#f59e0b' }
+          { label: 'Critical Cases', value: '45', change: '-5%', icon: AlertCircle, color: '#EF4444' },
+          { label: "Today's Admissions", value: '128', change: '+24%', icon: HeartPulse, color: '#6AE7F7' },
+          { label: 'Avg System AI Risk', value: '14.2%', change: '-2.1%', icon: TrendingUp, color: '#2E9BF8' }
         ].map((kpi, i) => (
           <div key={i} className="glass-card animate-fade-in-delayed" style={{ padding: '1.5rem', animationDelay: `${i * 0.1}s`, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
             <div>

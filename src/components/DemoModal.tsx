@@ -431,30 +431,30 @@ const Chapter4ForesightScene = () => {
 
   return (
     <group>
-      {/* Outer Gyro Ring 1 - Emerald (Radius 1.95: never clips header) */}
+      {/* Outer Gyro Ring 1 - Royal Electric Blue */}
       <mesh ref={ring1}>
         <torusGeometry args={[1.95, 0.018, 16, 120]} />
-        <meshStandardMaterial color="#10B981" emissive="#059669" emissiveIntensity={0.85} metalness={0.92} roughness={0.12} />
+        <meshStandardMaterial color="#1554E8" emissive="#2E9BF8" emissiveIntensity={0.85} metalness={0.92} roughness={0.12} />
       </mesh>
 
-      {/* Intermediate Telemetry Ring 2 - Champagne Gold */}
+      {/* Intermediate Telemetry Ring 2 - Primary Purple */}
       <mesh ref={ring2}>
         <torusGeometry args={[1.62, 0.016, 16, 120]} />
-        <meshStandardMaterial color="#F59E0B" emissive="#D97706" emissiveIntensity={0.8} metalness={0.95} roughness={0.1} />
+        <meshStandardMaterial color="#4148F1" emissive="#7A48FF" emissiveIntensity={0.8} metalness={0.95} roughness={0.1} />
       </mesh>
 
-      {/* Inner Accelerator Ring 3 - Electric Cyan */}
+      {/* Inner Accelerator Ring 3 - Highlight Cyan */}
       <mesh ref={ring3}>
         <torusGeometry args={[1.32, 0.014, 16, 100]} />
-        <meshStandardMaterial color="#00F2FE" emissive="#0284C7" emissiveIntensity={0.75} metalness={0.9} roughness={0.15} />
+        <meshStandardMaterial color="#6AE7F7" emissive="#2E9BF8" emissiveIntensity={0.75} metalness={0.9} roughness={0.15} />
       </mesh>
 
-      {/* Center Faceted Diamond Core */}
+      {/* Center Faceted Diamond Core - Radiant Sky Blue */}
       <mesh ref={coreRef}>
         <octahedronGeometry args={[0.92, 0]} />
         <meshStandardMaterial
-          color="#00C6FF"
-          emissive="#0284C7"
+          color="#2E9BF8"
+          emissive="#1554E8"
           emissiveIntensity={0.75}
           roughness={0.15}
           metalness={0.92}
@@ -551,10 +551,10 @@ export const DemoModal: React.FC<DemoModalProps> = ({ isOpen, onClose }) => {
   }, [currentTime]);
 
   const chapters = [
-    { id: 0, time: 0, title: 'Autonomous Ingestion', subtitle: 'Global Telemetry & 1.8B Stream Processing', icon: Database, color: '#00C6FF' },
-    { id: 1, time: 15, title: 'Neural Risk Topology', subtitle: 'Deep Bayesian Prediction & Graph Anomaly Engine', icon: Brain, color: '#7A5CFF' },
-    { id: 2, time: 30, title: 'Autonomous Shield', subtitle: 'Quantum Cryptographic Threat Quarantine', icon: Shield, color: '#00FFB2' },
-    { id: 3, time: 45, title: 'Executive Foresight', subtitle: 'Enterprise Resilience & Compliance Verification', icon: Activity, color: '#E5C07B' },
+    { id: 0, time: 0, title: 'Autonomous Ingestion', subtitle: 'Global Telemetry & 1.8B Stream Processing', icon: Database, color: '#2E9BF8' },
+    { id: 1, time: 15, title: 'Neural Risk Topology', subtitle: 'Deep Bayesian Prediction & Graph Anomaly Engine', icon: Brain, color: '#7A48FF' },
+    { id: 2, time: 30, title: 'Autonomous Shield', subtitle: 'Quantum Cryptographic Threat Quarantine', icon: Shield, color: '#6AE7F7' },
+    { id: 3, time: 45, title: 'Executive Foresight', subtitle: 'Enterprise Resilience & Compliance Verification', icon: Activity, color: '#8671F9' },
   ];
 
   const handleSeek = (time: number) => {

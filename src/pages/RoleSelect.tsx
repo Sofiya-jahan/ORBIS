@@ -42,8 +42,9 @@ export const RoleSelect = () => {
   return (
     <div style={{ 
       minHeight: '100vh', 
-      backgroundColor: '#070A0E',
-      color: '#FFFFFF',
+      backgroundColor: '#07112E',
+      backgroundImage: 'radial-gradient(circle at 50% 15%, rgba(13, 35, 77, 0.8) 0%, transparent 65%), radial-gradient(circle at 10% 90%, rgba(21, 84, 232, 0.15) 0%, transparent 55%)',
+      color: '#F6FDFF',
       padding: '3rem 2rem 5rem 2rem',
       display: 'flex', 
       flexDirection: 'column', 
@@ -55,11 +56,11 @@ export const RoleSelect = () => {
       fontFamily: "var(--font-family, 'Inter', sans-serif)"
     }}>
       
-      {/* Background glow tailored with obsidian velvet, emerald radiance, and gold auras */}
+      {/* Background ambient lighting */}
       <div style={{
         position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)',
         width: '90vw', height: '480px',
-        background: `radial-gradient(ellipse at center, rgba(16, 185, 129, 0.2) 0%, rgba(229, 192, 123, 0.08) 40%, transparent 70%)`,
+        background: `radial-gradient(ellipse at center, rgba(21, 84, 232, 0.22) 0%, rgba(122, 72, 255, 0.1) 40%, transparent 70%)`,
         zIndex: 0, pointerEvents: 'none'
       }} />
 
@@ -71,11 +72,11 @@ export const RoleSelect = () => {
             display: 'inline-flex',
             alignItems: 'center',
             gap: '0.5rem',
-            background: 'rgba(10, 18, 23, 0.85)',
-            border: '1px solid rgba(229, 192, 123, 0.35)',
+            background: 'rgba(13, 35, 77, 0.75)',
+            border: '1px solid rgba(46, 155, 248, 0.3)',
             borderRadius: '12px',
             padding: '0.65rem 1.3rem',
-            color: '#E5C07B',
+            color: '#6AE7F7',
             cursor: 'pointer',
             fontSize: '0.88rem',
             fontWeight: 700,
@@ -84,14 +85,16 @@ export const RoleSelect = () => {
             boxShadow: '0 4px 15px rgba(0,0,0,0.5)'
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.color = '#FFFFFF';
-            e.currentTarget.style.borderColor = '#10B981';
-            e.currentTarget.style.background = 'rgba(16, 185, 129, 0.15)';
+            e.currentTarget.style.color = '#F6FDFF';
+            e.currentTarget.style.borderColor = '#2E9BF8';
+            e.currentTarget.style.background = 'rgba(21, 84, 232, 0.2)';
+            e.currentTarget.style.boxShadow = '0 0 15px rgba(46, 155, 248, 0.35)';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.color = '#E5C07B';
-            e.currentTarget.style.borderColor = 'rgba(229, 192, 123, 0.35)';
-            e.currentTarget.style.background = 'rgba(10, 18, 23, 0.85)';
+            e.currentTarget.style.color = '#6AE7F7';
+            e.currentTarget.style.borderColor = 'rgba(46, 155, 248, 0.3)';
+            e.currentTarget.style.background = 'rgba(13, 35, 77, 0.75)';
+            e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.5)';
           }}
         >
           <ChevronLeft size={16} /> Switch Organization ({currentOrg.name})
@@ -103,15 +106,15 @@ export const RoleSelect = () => {
         <div style={{ 
           display: 'inline-flex', alignItems: 'center', gap: '0.5rem', 
           padding: '0.5rem 1.3rem', borderRadius: '100px', 
-          backgroundColor: 'rgba(16, 185, 129, 0.12)', 
-          border: '1px solid rgba(229, 192, 123, 0.35)',
-          marginBottom: '1.25rem', color: '#E5C07B', 
+          backgroundColor: 'rgba(21, 84, 232, 0.15)', 
+          border: '1px solid rgba(106, 231, 247, 0.35)',
+          marginBottom: '1.25rem', color: '#6AE7F7', 
           fontSize: '0.8rem', fontWeight: '800',
           letterSpacing: '1.5px',
-          fontFamily: "'Space Mono', monospace",
-          boxShadow: '0 0 20px rgba(16, 185, 129, 0.15)'
+          fontFamily: "'JetBrains Mono', monospace",
+          boxShadow: '0 0 20px rgba(21, 84, 232, 0.2)'
         }}>
-          <Lock size={14} color="#E5C07B" /> PHASE 02: ROLE-BASED ACCESS PROTOCOL
+          <Lock size={14} color="#6AE7F7" /> PHASE 02: ROLE-BASED ACCESS PROTOCOL
         </div>
 
         <h1 style={{ 
@@ -120,13 +123,13 @@ export const RoleSelect = () => {
           marginBottom: '0.75rem', 
           letterSpacing: '-1px', 
           fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)",
-          color: '#FFFFFF'
+          color: '#F6FDFF'
         }}>
           Select Your Access Role
         </h1>
 
-        <p style={{ color: '#CBD5E1', fontSize: '1.18rem', maxWidth: '640px', margin: '0 auto', lineHeight: 1.6, fontFamily: "var(--font-family, 'Inter', sans-serif)" }}>
-          Only roles authenticated for <span style={{ color: '#E5C07B', fontWeight: 700, textDecoration: 'underline', textDecorationColor: '#10B981' }}>{currentOrg.name}</span> are available. Permissions dynamically dictate your dashboard modules.
+        <p style={{ color: 'rgba(246, 253, 255, 0.75)', fontSize: '1.18rem', maxWidth: '640px', margin: '0 auto', lineHeight: 1.6, fontFamily: "var(--font-family, 'Inter', sans-serif)" }}>
+          Only roles authenticated for <span style={{ color: '#2E9BF8', fontWeight: 700, textDecoration: 'underline', textDecorationColor: '#6AE7F7' }}>{currentOrg.name}</span> are available. Permissions dynamically dictate your dashboard modules.
         </p>
       </div>
 
@@ -156,16 +159,17 @@ export const RoleSelect = () => {
                 overflow: 'hidden',
                 borderRadius: '20px',
                 background: isHovered 
-                  ? 'linear-gradient(145deg, rgba(14, 25, 32, 0.96), rgba(16, 185, 129, 0.18))' 
-                  : 'rgba(10, 18, 23, 0.85)',
-                backdropFilter: 'blur(20px)',
+                  ? 'linear-gradient(145deg, rgba(13, 35, 77, 0.95), rgba(21, 84, 232, 0.25))' 
+                  : 'rgba(13, 35, 77, 0.7)',
+                backdropFilter: 'blur(24px)',
+                WebkitBackdropFilter: 'blur(24px)',
                 border: isHovered 
-                  ? '1px solid #10B981' 
-                  : '1px solid rgba(16, 185, 129, 0.22)',
+                  ? '1px solid #6AE7F7' 
+                  : '1px solid rgba(46, 155, 248, 0.22)',
                 transform: isHovered ? 'translateY(-6px)' : 'translateY(0)',
                 boxShadow: isHovered 
-                  ? '0 24px 48px rgba(0, 0, 0, 0.8), 0 0 35px rgba(16, 185, 129, 0.25)' 
-                  : '0 8px 32px rgba(0, 0, 0, 0.6)',
+                  ? '0 24px 48px rgba(0, 0, 0, 0.8), 0 0 35px rgba(21, 84, 232, 0.35)' 
+                  : '0 8px 32px rgba(0, 0, 0, 0.5)',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
@@ -179,7 +183,7 @@ export const RoleSelect = () => {
               {/* Top accent line on hover */}
               <div style={{
                 position: 'absolute', top: 0, left: 0, right: 0, height: '3px',
-                background: 'linear-gradient(90deg, #10B981, #E5C07B, #00F2FE)',
+                background: 'linear-gradient(90deg, #1554E8, #2E9BF8, #6AE7F7)',
                 opacity: isHovered ? 1 : 0,
                 transition: 'opacity 0.3s ease'
               }} />
@@ -189,23 +193,23 @@ export const RoleSelect = () => {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
                   <div style={{ 
                     width: '60px', height: '60px', borderRadius: '16px', 
-                    backgroundColor: isHovered ? 'rgba(16, 185, 129, 0.25)' : 'rgba(15, 23, 30, 0.9)',
-                    color: isHovered ? '#10B981' : '#E5C07B',
+                    backgroundColor: isHovered ? 'rgba(21, 84, 232, 0.3)' : 'rgba(7, 17, 46, 0.85)',
+                    color: '#6AE7F7',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     transition: 'all 0.3s ease',
-                    boxShadow: isHovered ? '0 0 24px rgba(16, 185, 129, 0.4)' : 'none',
-                    border: `1px solid ${isHovered ? '#10B981' : 'rgba(229, 192, 123, 0.3)'}`
+                    boxShadow: isHovered ? '0 0 24px rgba(21, 84, 232, 0.5)' : 'none',
+                    border: `1px solid ${isHovered ? '#6AE7F7' : 'rgba(46, 155, 248, 0.3)'}`
                   }}>
                     <RoleIcon size={28} />
                   </div>
 
                   <div style={{ 
                     padding: '0.4rem 0.95rem', borderRadius: '100px', fontSize: '0.75rem', fontWeight: '700',
-                    backgroundColor: 'rgba(16, 185, 129, 0.1)', 
-                    color: '#E5C07B',
-                    border: '1px solid rgba(229, 192, 123, 0.35)',
+                    backgroundColor: 'rgba(21, 84, 232, 0.15)', 
+                    color: '#6AE7F7',
+                    border: '1px solid rgba(106, 231, 247, 0.35)',
                     letterSpacing: '1px',
-                    fontFamily: "'Space Mono', monospace"
+                    fontFamily: "'JetBrains Mono', monospace"
                   }}>
                     {role.accessLevel}
                   </div>
@@ -215,14 +219,14 @@ export const RoleSelect = () => {
                   fontSize: '1.55rem', 
                   fontWeight: '800', 
                   marginBottom: '0.6rem', 
-                  color: '#FFFFFF', 
+                  color: '#F6FDFF', 
                   lineHeight: 1.25,
                   fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)"
                 }}>
                   {role.title}
                 </h2>
 
-                <p style={{ color: '#CBD5E1', fontSize: '0.94rem', lineHeight: '1.6', marginBottom: '1.5rem', fontFamily: "var(--font-family, 'Inter', sans-serif)" }}>
+                <p style={{ color: 'rgba(246, 253, 255, 0.72)', fontSize: '0.94rem', lineHeight: '1.6', marginBottom: '1.5rem', fontFamily: "var(--font-family, 'Inter', sans-serif)" }}>
                   {role.desc}
                 </p>
               </div>
@@ -230,14 +234,14 @@ export const RoleSelect = () => {
               {/* Bottom Modules Allowed & Action Bar */}
               <div>
                 <div style={{ 
-                  borderTop: '1px solid rgba(16, 185, 129, 0.2)', 
+                  borderTop: '1px solid rgba(46, 155, 248, 0.16)', 
                   paddingTop: '1.1rem', 
                   display: 'flex', 
                   alignItems: 'center', 
                   justifyContent: 'space-between' 
                 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontSize: '0.8rem', color: '#10B981', fontFamily: "'Space Mono', monospace" }}>
-                    <ShieldCheck size={16} color="#10B981" />
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontSize: '0.8rem', color: '#6AE7F7', fontFamily: "'JetBrains Mono', monospace" }}>
+                    <ShieldCheck size={16} color="#6AE7F7" />
                     <span>{role.permissions.includes('all') ? 'Full Platform Clearance' : `${role.permissions.length} Modules Authorized`}</span>
                   </div>
 
@@ -247,7 +251,7 @@ export const RoleSelect = () => {
                     gap: '0.4rem',
                     fontSize: '0.88rem',
                     fontWeight: '700',
-                    color: isHovered ? '#E5C07B' : '#FFFFFF',
+                    color: isHovered ? '#6AE7F7' : '#F6FDFF',
                     fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)",
                     letterSpacing: '0.5px',
                     transition: 'color 0.2s ease'

@@ -65,8 +65,8 @@ export const EnterpriseReports = () => {
       </div>
 
       {downloadSuccess && (
-        <div className="glass-card animate-fade-in" style={{ padding: '1rem 1.5rem', background: 'rgba(16,185,129,0.15)', border: '1px solid #10B981', color: '#10B981', display: 'flex', alignItems: 'center', gap: '0.75rem', fontWeight: 700, borderRadius: '14px' }}>
-          <CheckCircle2 size={20} />
+        <div className="glass-card animate-fade-in" style={{ padding: '1rem 1.5rem', background: 'rgba(21, 84, 232, 0.15)', border: '1px solid rgba(106, 231, 247, 0.4)', color: '#6AE7F7', display: 'flex', alignItems: 'center', gap: '0.75rem', fontWeight: 700, borderRadius: '14px' }}>
+          <CheckCircle2 size={20} color="#6AE7F7" />
           <span>{downloadSuccess}</span>
         </div>
       )}

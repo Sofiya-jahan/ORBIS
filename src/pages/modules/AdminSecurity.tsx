@@ -123,36 +123,36 @@ export const AdminSecurity = () => {
           
           {/* Security Posture Defense Grid */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.25rem' }}>
-            <div className="neo-card" style={{ padding: '1.5rem', borderLeft: '4px solid #10B981' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#10B981', fontWeight: 800, marginBottom: '0.5rem' }}>
+            <div className="neo-card" style={{ padding: '1.5rem', borderLeft: '4px solid #6AE7F7', background: 'rgba(7, 17, 46, 0.92)', border: '1px solid rgba(46, 155, 248, 0.22)', borderRadius: '16px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#6AE7F7', fontWeight: 800, marginBottom: '0.5rem', fontFamily: "'JetBrains Mono', monospace" }}>
                 <ShieldCheck size={20} /> Lattice AES-256 HMAC
               </div>
-              <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#FFFFFF', marginBottom: '0.25rem' }}>Active & Signed</div>
-              <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Tamper-evident 8-hour cryptographic session token validation.</div>
+              <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#F6FDFF', marginBottom: '0.25rem' }}>Active & Signed</div>
+              <div style={{ fontSize: '0.8rem', color: 'rgba(246, 253, 255, 0.75)' }}>Tamper-evident 8-hour cryptographic session token validation.</div>
             </div>
 
-            <div className="neo-card" style={{ padding: '1.5rem', borderLeft: '4px solid #00C8FF' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#00C8FF', fontWeight: 800, marginBottom: '0.5rem' }}>
+            <div className="neo-card" style={{ padding: '1.5rem', borderLeft: '4px solid #2E9BF8', background: 'rgba(7, 17, 46, 0.92)', border: '1px solid rgba(46, 155, 248, 0.22)', borderRadius: '16px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#2E9BF8', fontWeight: 800, marginBottom: '0.5rem', fontFamily: "'JetBrains Mono', monospace" }}>
                 <Clock size={20} /> Adaptive Rate Limiter
               </div>
-              <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#FFFFFF', marginBottom: '0.25rem' }}>5 Attempts / 45s</div>
-              <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Automated brute-force lockdown active on key entry gates.</div>
+              <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#F6FDFF', marginBottom: '0.25rem' }}>5 Attempts / 45s</div>
+              <div style={{ fontSize: '0.8rem', color: 'rgba(246, 253, 255, 0.75)' }}>Automated brute-force lockdown active on key entry gates.</div>
             </div>
 
-            <div className="neo-card" style={{ padding: '1.5rem', borderLeft: '4px solid #E5C07B' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#E5C07B', fontWeight: 800, marginBottom: '0.5rem' }}>
+            <div className="neo-card" style={{ padding: '1.5rem', borderLeft: '4px solid #6AE7F7', background: 'rgba(7, 17, 46, 0.92)', border: '1px solid rgba(106, 231, 247, 0.22)', borderRadius: '16px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#6AE7F7', fontWeight: 800, marginBottom: '0.5rem', fontFamily: "'JetBrains Mono', monospace" }}>
                 <Shield size={20} /> Safe Evidence Sieve
               </div>
-              <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#FFFFFF', marginBottom: '0.25rem' }}>MIME & 10MB Bound</div>
-              <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Blocks executable attachments (.exe, .sh, scripts) with filename sanitization.</div>
+              <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#F6FDFF', marginBottom: '0.25rem' }}>MIME & 10MB Bound</div>
+              <div style={{ fontSize: '0.8rem', color: 'rgba(246, 253, 255, 0.75)' }}>Blocks executable attachments (.exe, .sh, scripts) with filename sanitization.</div>
             </div>
 
-            <div className="neo-card" style={{ padding: '1.5rem', borderLeft: '4px solid #EC4899' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#EC4899', fontWeight: 800, marginBottom: '0.5rem' }}>
+            <div className="neo-card" style={{ padding: '1.5rem', borderLeft: '4px solid #8671F9', background: 'rgba(7, 17, 46, 0.92)', border: '1px solid rgba(134, 113, 249, 0.22)', borderRadius: '16px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#8671F9', fontWeight: 800, marginBottom: '0.5rem', fontFamily: "'JetBrains Mono', monospace" }}>
                 <Lock size={20} /> Strict RBAC Isolation
               </div>
-              <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#FFFFFF', marginBottom: '0.25rem' }}>Zero-Trust Routes</div>
-              <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Sub-tier clearance gates enforced across all institutional modules.</div>
+              <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#F6FDFF', marginBottom: '0.25rem' }}>Zero-Trust Routes</div>
+              <div style={{ fontSize: '0.8rem', color: 'rgba(246, 253, 255, 0.75)' }}>Sub-tier clearance gates enforced across all institutional modules.</div>
             </div>
           </div>
 
@@ -235,19 +235,19 @@ export const AdminSecurity = () => {
                         ? { background: 'rgba(239, 68, 68, 0.15)', color: '#EF4444', border: '1px solid rgba(239, 68, 68, 0.3)' }
                         : log.severity === 'WARNING'
                         ? { background: 'rgba(234, 179, 8, 0.15)', color: '#EAB308', border: '1px solid rgba(234, 179, 8, 0.3)' }
-                        : { background: 'rgba(16, 185, 129, 0.15)', color: '#10B981', border: '1px solid rgba(16, 185, 129, 0.3)' };
+                        : { background: 'rgba(21, 84, 232, 0.15)', color: '#6AE7F7', border: '1px solid rgba(46, 155, 248, 0.3)' };
 
                       return (
                         <tr key={log.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
-                          <td style={{ padding: '0.85rem 1rem', fontSize: '0.78rem', color: 'var(--text-secondary)', fontFamily: "'Space Mono', monospace" }}>
+                          <td style={{ padding: '0.85rem 1rem', fontSize: '0.78rem', color: 'var(--text-secondary)', fontFamily: "'JetBrains Mono', monospace" }}>
                             {new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                           </td>
                           <td style={{ padding: '0.85rem 1rem' }}>
-                            <span style={{ ...sevBadgeStyle, padding: '2px 8px', borderRadius: '4px', fontSize: '0.68rem', fontWeight: 800, textTransform: 'uppercase' }}>
+                            <span style={{ ...sevBadgeStyle, padding: '2px 8px', borderRadius: '4px', fontSize: '0.68rem', fontWeight: 800, textTransform: 'uppercase', fontFamily: "'JetBrains Mono', monospace" }}>
                               {log.severity}
                             </span>
                           </td>
-                          <td style={{ padding: '0.85rem 1rem', fontSize: '0.82rem', fontWeight: 700, color: '#FFFFFF', fontFamily: "'Space Mono', monospace" }}>
+                          <td style={{ padding: '0.85rem 1rem', fontSize: '0.82rem', fontWeight: 700, color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>
                             {log.eventType}
                           </td>
                           <td style={{ padding: '0.85rem 1rem', fontSize: '0.82rem', color: currentOrg.themeColor }}>
@@ -269,26 +269,26 @@ export const AdminSecurity = () => {
 
       {/* Tab 2: Security Keys */}
       {activeTab === 'keys' && (
-        <div className="glass-card" style={{ padding: '2.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-          <h2 style={{ fontSize: '1.4rem', fontWeight: 800 }}>Institutional Encryption Tokens & Tenant Keys</h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.5 }}>
+        <div className="glass-card" style={{ padding: '2.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem', background: 'rgba(7, 17, 46, 0.92)', border: '1px solid rgba(46, 155, 248, 0.25)', borderRadius: '24px' }}>
+          <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#F6FDFF', fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)" }}>Institutional Encryption Tokens & Tenant Keys</h2>
+          <p style={{ color: 'rgba(246, 253, 255, 0.75)', fontSize: '0.9rem', lineHeight: 1.5 }}>
             Zero-knowledge authorization keys used to verify operator sessions and protect sensitive telemetry for {currentOrg.name}.
           </p>
 
-          <div style={{ padding: '1.75rem', borderRadius: '14px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+          <div style={{ padding: '1.75rem', borderRadius: '14px', background: 'rgba(13, 35, 77, 0.65)', border: '1px solid rgba(46, 155, 248, 0.25)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
             <div>
-              <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase' }}>Active Tenant Authorization Key</div>
-              <div style={{ fontSize: '1.5rem', fontWeight: 800, color: '#FFFFFF', fontFamily: "'Space Mono', monospace", letterSpacing: '2px', marginTop: '4px' }}>
+              <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'rgba(246, 253, 255, 0.6)', textTransform: 'uppercase', fontFamily: "'JetBrains Mono', monospace" }}>Active Tenant Authorization Key</div>
+              <div style={{ fontSize: '1.5rem', fontWeight: 800, color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace", letterSpacing: '2px', marginTop: '4px' }}>
                 {tenantPin}
               </div>
-              <div style={{ fontSize: '0.78rem', color: '#10B981', marginTop: '4px' }}>
+              <div style={{ fontSize: '0.78rem', color: '#6AE7F7', marginTop: '4px' }}>
                 &bull; Default institutional fallback key (123456) is honored for demo evaluation.
               </div>
             </div>
             
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
               {rotatedSuccess && (
-                <span style={{ color: '#10B981', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 600 }}>
+                <span style={{ color: '#6AE7F7', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 600 }}>
                   <CheckCircle2 size={16} /> Key Rotated & Logged
                 </span>
               )}

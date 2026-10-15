@@ -39,34 +39,34 @@ export const ExplainableAI = () => {
           </p>
         </div>
 
-        <div style={{ padding: '0.75rem 1.25rem', borderRadius: '14px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <ShieldCheck size={24} color="#10B981" />
+        <div style={{ padding: '0.75rem 1.25rem', borderRadius: '14px', background: 'rgba(13, 35, 77, 0.75)', border: '1px solid rgba(46, 155, 248, 0.25)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <ShieldCheck size={24} color="#6AE7F7" />
           <div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Model Trust Index</div>
-            <div style={{ fontSize: '1.1rem', fontWeight: 800, color: '#FFFFFF' }}>99.2% Explainable</div>
+            <div style={{ fontSize: '0.75rem', color: 'rgba(246, 253, 255, 0.65)', textTransform: 'uppercase', fontFamily: "'JetBrains Mono', monospace" }}>Model Trust Index</div>
+            <div style={{ fontSize: '1.1rem', fontWeight: 800, color: '#F6FDFF' }}>99.2% Explainable</div>
           </div>
         </div>
       </div>
 
       {/* Main SHAP Bar Chart */}
-      <div className="neo-card" style={{ padding: '2rem' }}>
+      <div className="neo-card" style={{ padding: '2rem', background: 'rgba(7, 17, 46, 0.92)', border: '1px solid rgba(46, 155, 248, 0.22)', borderRadius: '20px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
           <div>
-            <h2 style={{ fontSize: '1.3rem', fontWeight: '800' }}>
+            <h2 style={{ fontSize: '1.3rem', fontWeight: '800', color: '#F6FDFF', fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)" }}>
               Shapley Value Contribution (SHAP Waterfall)
             </h2>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+            <p style={{ color: 'rgba(246, 253, 255, 0.65)', fontSize: '0.85rem' }}>
               Positive values push risk higher; negative values dampen systemic risk.
             </p>
           </div>
           <div style={{ display: 'flex', gap: '1rem', fontSize: '0.82rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
               <div style={{ width: '12px', height: '12px', borderRadius: '3px', backgroundColor: '#EF4444' }} />
-              <span style={{ color: 'var(--text-secondary)' }}>Risk Driver (+)</span>
+              <span style={{ color: 'rgba(246, 253, 255, 0.75)' }}>Risk Driver (+)</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-              <div style={{ width: '12px', height: '12px', borderRadius: '3px', backgroundColor: '#10B981' }} />
-              <span style={{ color: 'var(--text-secondary)' }}>Risk Reducer (-)</span>
+              <div style={{ width: '12px', height: '12px', borderRadius: '3px', backgroundColor: '#6AE7F7' }} />
+              <span style={{ color: 'rgba(246, 253, 255, 0.75)' }}>Risk Reducer (-)</span>
             </div>
           </div>
         </div>
@@ -78,17 +78,17 @@ export const ExplainableAI = () => {
               layout="vertical"
               margin={{ top: 10, right: 30, left: 180, bottom: 10 }}
             >
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" horizontal={false} />
-              <XAxis type="number" stroke="var(--text-muted)" fontSize={12} tickLine={false} />
-              <YAxis dataKey="feature" type="category" stroke="var(--text-secondary)" fontSize={12} tickLine={false} width={170} />
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(46, 155, 248, 0.12)" horizontal={false} />
+              <XAxis type="number" stroke="rgba(246, 253, 255, 0.55)" fontSize={12} tickLine={false} />
+              <YAxis dataKey="feature" type="category" stroke="rgba(246, 253, 255, 0.75)" fontSize={12} tickLine={false} width={170} />
               <Tooltip 
-                contentStyle={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '12px' }}
+                contentStyle={{ backgroundColor: 'rgba(7, 17, 46, 0.95)', border: '1px solid rgba(46, 155, 248, 0.3)', borderRadius: '12px', color: '#F6FDFF' }}
                 formatter={(val: any) => [`${val > 0 ? '+' : ''}${val} SHAP Score`, 'Attribution Weight']}
               />
               <ReferenceLine x={0} stroke="rgba(255,255,255,0.3)" />
               <Bar dataKey="value" radius={[4, 4, 4, 4]}>
                 {shapFeatures.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.value > 0 ? '#EF4444' : '#10B981'} />
+                  <Cell key={`cell-${index}`} fill={entry.value > 0 ? '#EF4444' : '#6AE7F7'} />
                 ))}
               </Bar>
             </BarChart>
@@ -99,20 +99,21 @@ export const ExplainableAI = () => {
       {/* Feature Interpretation Grid */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
         {shapFeatures.slice(0, 3).map((feat, idx) => (
-          <div key={idx} className="glass-card" style={{ padding: '1.5rem' }}>
+          <div key={idx} className="glass-card" style={{ padding: '1.5rem', background: 'rgba(7, 17, 46, 0.92)', border: '1px solid rgba(46, 155, 248, 0.22)', borderRadius: '18px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
-              <span style={{ fontSize: '0.75rem', fontWeight: 700, color: currentOrg.themeColor, textTransform: 'uppercase' }}>
+              <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#6AE7F7', textTransform: 'uppercase', fontFamily: "'JetBrains Mono', monospace" }}>
                 {feat.category} Factor
               </span>
               <span style={{
                 padding: '0.2rem 0.6rem', borderRadius: '100px', fontSize: '0.75rem', fontWeight: 800,
-                background: feat.value > 0 ? 'rgba(239,68,68,0.15)' : 'rgba(16,185,129,0.15)',
-                color: feat.value > 0 ? '#EF4444' : '#10B981'
+                background: feat.value > 0 ? 'rgba(239,68,68,0.15)' : 'rgba(106, 231, 247, 0.15)',
+                color: feat.value > 0 ? '#EF4444' : '#6AE7F7',
+                fontFamily: "'JetBrains Mono', monospace"
               }}>
                 {feat.value > 0 ? `+${feat.value}` : feat.value}
               </span>
             </div>
-            <h3 style={{ fontSize: '1.1rem', fontWeight: 800, marginBottom: '0.5rem' }}>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: 800, marginBottom: '0.5rem', color: '#F6FDFF' }}>
               {feat.feature}
             </h3>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', lineHeight: 1.5 }}>

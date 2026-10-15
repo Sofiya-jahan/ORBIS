@@ -41,10 +41,10 @@ export const OrgOverview = () => {
       {/* 4 Tenant KPIs */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.5rem' }}>
         <div className="glass-card" style={{ padding: '1.75rem' }}>
-          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700, marginBottom: '0.4rem' }}>
+          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700, marginBottom: '0.4rem', fontFamily: "'JetBrains Mono', monospace" }}>
             Overall Health Score
           </div>
-          <div style={{ fontSize: '2.4rem', fontWeight: 800, color: '#10B981', marginBottom: '0.4rem' }}>
+          <div style={{ fontSize: '2.4rem', fontWeight: 800, color: '#6AE7F7', marginBottom: '0.4rem', fontFamily: "'JetBrains Mono', monospace" }}>
             {currentOrg.healthScore}%
           </div>
           <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
@@ -53,10 +53,10 @@ export const OrgOverview = () => {
         </div>
 
         <div className="glass-card" style={{ padding: '1.75rem' }}>
-          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700, marginBottom: '0.4rem' }}>
+          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700, marginBottom: '0.4rem', fontFamily: "'JetBrains Mono', monospace" }}>
             AI Risk Probability
           </div>
-          <div style={{ fontSize: '2.4rem', fontWeight: 800, color: currentOrg.themeColor, marginBottom: '0.4rem' }}>
+          <div style={{ fontSize: '2.4rem', fontWeight: 800, color: '#2E9BF8', marginBottom: '0.4rem', fontFamily: "'JetBrains Mono', monospace" }}>
             {currentOrg.aiRiskScore}%
           </div>
           <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
@@ -65,10 +65,10 @@ export const OrgOverview = () => {
         </div>
 
         <div className="glass-card" style={{ padding: '1.75rem' }}>
-          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700, marginBottom: '0.4rem' }}>
+          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700, marginBottom: '0.4rem', fontFamily: "'JetBrains Mono', monospace" }}>
             Sector Modules
           </div>
-          <div style={{ fontSize: '2.4rem', fontWeight: 800, color: '#FFFFFF', marginBottom: '0.4rem' }}>
+          <div style={{ fontSize: '2.4rem', fontWeight: 800, color: '#FFFFFF', marginBottom: '0.4rem', fontFamily: "'JetBrains Mono', monospace" }}>
             {currentOrg.industryModules.length} Modules
           </div>
           <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
@@ -77,10 +77,10 @@ export const OrgOverview = () => {
         </div>
 
         <div className="glass-card" style={{ padding: '1.75rem' }}>
-          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700, marginBottom: '0.4rem' }}>
+          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700, marginBottom: '0.4rem', fontFamily: "'JetBrains Mono', monospace" }}>
             Authorized Access Roles
           </div>
-          <div style={{ fontSize: '2.4rem', fontWeight: 800, color: '#FFFFFF', marginBottom: '0.4rem' }}>
+          <div style={{ fontSize: '2.4rem', fontWeight: 800, color: '#FFFFFF', marginBottom: '0.4rem', fontFamily: "'JetBrains Mono', monospace" }}>
             {currentOrg.roles.length} Roles
           </div>
           <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
@@ -98,10 +98,10 @@ export const OrgOverview = () => {
           {currentOrg.departments.map((dept) => (
             <div key={dept} style={{ padding: '1.25rem', borderRadius: '14px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#10B981' }} />
+                <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#6AE7F7', boxShadow: '0 0 10px #6AE7F7' }} />
                 <span style={{ fontWeight: 700, fontSize: '0.95rem' }}>{dept}</span>
               </div>
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Nominal</span>
+              <span style={{ fontSize: '0.75rem', color: '#6AE7F7' }}>Nominal</span>
             </div>
           ))}
         </div>

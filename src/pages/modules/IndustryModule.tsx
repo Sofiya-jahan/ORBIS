@@ -48,7 +48,7 @@ export const IndustryModule = () => {
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             <div style={{ padding: '0.75rem 1.25rem', borderRadius: '14px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', textAlign: 'right' }}>
               <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Active Alert Status</div>
-              <div style={{ fontSize: '1.1rem', fontWeight: 800, color: currentModule.activeAlertsCount > 0 ? '#EF4444' : '#10B981' }}>
+              <div style={{ fontSize: '1.1rem', fontWeight: 800, color: currentModule.activeAlertsCount > 0 ? '#EF4444' : '#6AE7F7' }}>
                 {currentModule.activeAlertsCount > 0 ? `${currentModule.activeAlertsCount} Priority Signals` : 'Nominal (0 Alerts)'}
               </div>
             </div>

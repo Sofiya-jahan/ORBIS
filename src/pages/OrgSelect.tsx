@@ -58,8 +58,9 @@ export const OrgSelect = () => {
   return (
     <div style={{ 
       minHeight: '100vh', 
-      backgroundColor: '#070A0E', 
-      color: '#FFFFFF',
+      backgroundColor: '#07112E', 
+      backgroundImage: 'radial-gradient(circle at 50% 15%, rgba(13, 35, 77, 0.8) 0%, transparent 65%), radial-gradient(circle at 10% 90%, rgba(21, 84, 232, 0.15) 0%, transparent 55%)',
+      color: '#F6FDFF',
       padding: '3.5rem 2rem 5rem 2rem',
       position: 'relative',
       overflow: 'hidden',
@@ -73,8 +74,8 @@ export const OrgSelect = () => {
       <div style={{
         position: 'absolute', inset: 0,
         background: hoveredOrg && ORGANIZATIONS[hoveredOrg]
-          ? `radial-gradient(circle at center 20%, ${ORGANIZATIONS[hoveredOrg].themeColor}22 0%, transparent 65%)`
-          : 'radial-gradient(circle at center 15%, rgba(16, 185, 129, 0.18) 0%, rgba(229, 192, 123, 0.08) 40%, transparent 70%)',
+          ? `radial-gradient(circle at center 20%, ${ORGANIZATIONS[hoveredOrg].themeColor}25 0%, transparent 65%)`
+          : 'radial-gradient(circle at center 15%, rgba(21, 84, 232, 0.18) 0%, rgba(122, 72, 255, 0.1) 40%, transparent 70%)',
         transition: 'background 0.5s ease',
         zIndex: 0,
         pointerEvents: 'none'
@@ -90,8 +91,9 @@ export const OrgSelect = () => {
               height: 64,
               borderRadius: '16px',
               overflow: 'hidden',
-              boxShadow: '0 0 35px rgba(59, 130, 246, 0.55)',
-              border: '1px solid rgba(59, 130, 246, 0.4)'
+              boxShadow: '0 0 35px rgba(21, 84, 232, 0.55)',
+              border: '1px solid rgba(46, 155, 248, 0.4)',
+              background: '#07112E'
             }}>
               <img src="/orbis-logo.png" alt="ORBIS Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
@@ -103,18 +105,18 @@ export const OrgSelect = () => {
             gap: '0.6rem',
             padding: '0.5rem 1.25rem',
             borderRadius: '24px',
-            background: 'rgba(16, 185, 129, 0.12)',
-            border: '1px solid rgba(229, 192, 123, 0.35)',
-            color: '#E5C07B',
+            background: 'rgba(21, 84, 232, 0.15)',
+            border: '1px solid rgba(106, 231, 247, 0.35)',
+            color: '#6AE7F7',
             fontSize: '0.78rem',
             fontWeight: '800',
             letterSpacing: '1.5px',
             textTransform: 'uppercase',
-            fontFamily: "'Space Mono', monospace",
+            fontFamily: "'JetBrains Mono', monospace",
             marginBottom: '1.25rem',
-            boxShadow: '0 0 20px rgba(16, 185, 129, 0.15)'
+            boxShadow: '0 0 20px rgba(21, 84, 232, 0.2)'
           }}>
-            <Sparkles size={14} color="#E5C07B" /> PHASE 1: ENTERPRISE TENANT SELECTION
+            <Sparkles size={14} color="#6AE7F7" /> PHASE 1: ENTERPRISE TENANT SELECTION
           </div>
           
           <h1 style={{ 
@@ -124,12 +126,12 @@ export const OrgSelect = () => {
             letterSpacing: '-1px', 
             fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)",
             lineHeight: 1.15,
-            color: '#FFFFFF'
+            color: '#F6FDFF'
           }}>
             Select Organization Workspace
           </h1>
           
-          <p style={{ color: '#CBD5E1', fontSize: '1.18rem', maxWidth: '680px', margin: '0 auto', lineHeight: 1.6, fontFamily: "var(--font-family, 'Inter', sans-serif)" }}>
+          <p style={{ color: 'rgba(246, 253, 255, 0.75)', fontSize: '1.18rem', maxWidth: '680px', margin: '0 auto', lineHeight: 1.6, fontFamily: "var(--font-family, 'Inter', sans-serif)" }}>
             ORBIS dynamically configures neural risk models, compliance frameworks, telemetry pipelines, and access tiers for your specific sector.
           </p>
         </div>
@@ -146,7 +148,7 @@ export const OrgSelect = () => {
         }}>
           {/* Search Input */}
           <div style={{ position: 'relative', width: '100%' }}>
-            <Search size={20} style={{ position: 'absolute', left: '1.25rem', top: '50%', transform: 'translateY(-50%)', color: '#10B981' }} />
+            <Search size={20} style={{ position: 'absolute', left: '1.25rem', top: '50%', transform: 'translateY(-50%)', color: '#6AE7F7' }} />
             <input
               type="text"
               placeholder="Search by industry name, risk sector, or keywords (e.g. Hospital, Bank, SCADA, Fraud, HIPAA)..."
@@ -156,9 +158,9 @@ export const OrgSelect = () => {
                 width: '100%',
                 padding: '1.1rem 1.25rem 1.1rem 3.25rem',
                 borderRadius: '16px',
-                background: 'rgba(10, 18, 23, 0.88)',
-                border: '1px solid rgba(16, 185, 129, 0.3)',
-                color: '#FFFFFF',
+                background: 'rgba(13, 35, 77, 0.75)',
+                border: '1px solid rgba(46, 155, 248, 0.28)',
+                color: '#F6FDFF',
                 fontSize: '1rem',
                 fontFamily: "var(--font-family, 'Inter', sans-serif)",
                 outline: 'none',
@@ -166,11 +168,11 @@ export const OrgSelect = () => {
                 transition: 'border-color 0.2s, box-shadow 0.2s'
               }}
               onFocus={(e) => {
-                e.target.style.borderColor = '#10B981';
-                e.target.style.boxShadow = '0 0 25px rgba(16, 185, 129, 0.35)';
+                e.target.style.borderColor = '#2E9BF8';
+                e.target.style.boxShadow = '0 0 25px rgba(46, 155, 248, 0.35)';
               }}
               onBlur={(e) => {
-                e.target.style.borderColor = 'rgba(16, 185, 129, 0.3)';
+                e.target.style.borderColor = 'rgba(46, 155, 248, 0.28)';
                 e.target.style.boxShadow = '0 8px 24px rgba(0,0,0,0.6)';
               }}
             />
@@ -190,10 +192,10 @@ export const OrgSelect = () => {
                   fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)",
                   cursor: 'pointer',
                   border: '1px solid',
-                  borderColor: selectedCategory === cat.id ? '#10B981' : 'rgba(16, 185, 129, 0.25)',
-                  background: selectedCategory === cat.id ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' : 'rgba(10, 18, 23, 0.8)',
-                  color: selectedCategory === cat.id ? '#FFFFFF' : '#CBD5E1',
-                  boxShadow: selectedCategory === cat.id ? '0 0 20px rgba(16, 185, 129, 0.4)' : 'none',
+                  borderColor: selectedCategory === cat.id ? '#6AE7F7' : 'rgba(46, 155, 248, 0.25)',
+                  background: selectedCategory === cat.id ? 'linear-gradient(135deg, #1554E8 0%, #2E9BF8 100%)' : 'rgba(13, 35, 77, 0.65)',
+                  color: selectedCategory === cat.id ? '#F6FDFF' : 'rgba(246, 253, 255, 0.75)',
+                  boxShadow: selectedCategory === cat.id ? '0 0 20px rgba(21, 84, 232, 0.45)' : 'none',
                   transition: 'all 0.2s ease'
                 }}
               >
@@ -249,12 +251,12 @@ export const OrgSelect = () => {
                     zIndex: 0
                   }} />
 
-                  {/* Obsidian Glass Overlay */}
+                  {/* Dark Navy Glass Overlay */}
                   <div style={{
                     position: 'absolute', inset: 0,
                     background: isHovered 
-                      ? 'linear-gradient(to top, rgba(7,10,14,0.98) 0%, rgba(10,18,23,0.85) 45%, rgba(7,10,14,0.6) 100%)'
-                      : 'linear-gradient(to top, rgba(7,10,14,0.95) 0%, rgba(10,18,23,0.8) 50%, rgba(7,10,14,0.7) 100%)',
+                      ? 'linear-gradient(to top, rgba(7,17,46,0.98) 0%, rgba(13,35,77,0.85) 45%, rgba(7,17,46,0.6) 100%)'
+                      : 'linear-gradient(to top, rgba(7,17,46,0.95) 0%, rgba(13,35,77,0.8) 50%, rgba(7,17,46,0.7) 100%)',
                     backdropFilter: 'blur(8px)',
                     transition: 'all 0.3s ease',
                     zIndex: 1
@@ -273,13 +275,13 @@ export const OrgSelect = () => {
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                       <div style={{
                         width: '56px', height: '56px', borderRadius: '16px',
-                        background: 'rgba(10,18,23,0.8)',
+                        background: 'rgba(7,17,46,0.85)',
                         backdropFilter: 'blur(12px)',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        border: `1px solid ${isHovered ? org.themeColor : 'rgba(16,185,129,0.3)'}`,
+                        border: `1px solid ${isHovered ? '#6AE7F7' : 'rgba(46,155,248,0.3)'}`,
                         color: org.themeColor,
                         transition: 'all 0.3s ease',
-                        boxShadow: isHovered ? `0 0 25px ${org.themeColor}60` : 'none'
+                        boxShadow: isHovered ? `0 0 25px rgba(21, 84, 232, 0.5)` : 'none'
                       }}>
                         <IconComponent size={28} />
                       </div>
@@ -287,12 +289,12 @@ export const OrgSelect = () => {
                       <div style={{
                         padding: '0.4rem 0.95rem',
                         borderRadius: '100px',
-                        background: 'rgba(16,185,129,0.1)',
-                        border: '1px solid rgba(229,192,123,0.4)',
-                        color: '#E5C07B',
+                        background: 'rgba(21, 84, 232, 0.15)',
+                        border: '1px solid rgba(106, 231, 247, 0.35)',
+                        color: '#6AE7F7',
                         fontSize: '0.75rem',
                         fontWeight: '700',
-                        fontFamily: "'Space Mono', monospace",
+                        fontFamily: "'JetBrains Mono', monospace",
                         letterSpacing: '0.5px'
                       }}>
                         {org.roles.length} Access Roles
@@ -303,22 +305,22 @@ export const OrgSelect = () => {
                     <div>
                       <div style={{ 
                         fontSize: '0.75rem', 
-                        color: org.themeColor, 
+                        color: '#6AE7F7', 
                         fontWeight: '800', 
                         textTransform: 'uppercase', 
                         letterSpacing: '1.5px',
-                        fontFamily: "'Space Mono', monospace",
+                        fontFamily: "'JetBrains Mono', monospace",
                         marginBottom: '0.35rem' 
                       }}>
                         {org.sector}
                       </div>
 
-                      <h2 style={{ fontSize: '1.65rem', fontWeight: '800', marginBottom: '0.6rem', color: '#FFFFFF', lineHeight: 1.2, fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)" }}>
+                      <h2 style={{ fontSize: '1.65rem', fontWeight: '800', marginBottom: '0.6rem', color: '#F6FDFF', lineHeight: 1.2, fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)" }}>
                         {org.name}
                       </h2>
 
                       <p style={{ 
-                        color: '#CBD5E1', 
+                        color: 'rgba(246, 253, 255, 0.72)', 
                         fontSize: '0.92rem', 
                         lineHeight: '1.55', 
                         fontFamily: "var(--font-family, 'Inter', sans-serif)",
@@ -338,17 +340,17 @@ export const OrgSelect = () => {
                         justifyContent: 'space-between',
                         padding: '0.75rem 1rem',
                         borderRadius: '14px',
-                        background: isHovered ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.04)',
-                        border: `1px solid ${isHovered ? org.themeColor + '40' : 'rgba(255,255,255,0.08)'}`,
+                        background: isHovered ? 'rgba(21, 84, 232, 0.2)' : 'rgba(13, 35, 77, 0.65)',
+                        border: `1px solid ${isHovered ? 'rgba(106, 231, 247, 0.45)' : 'rgba(46, 155, 248, 0.18)'}`,
                         transition: 'all 0.3s ease'
                       }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                          <TrendingUp size={16} color={org.themeColor} />
+                          <TrendingUp size={16} color="#6AE7F7" />
                           <div>
-                            <div style={{ fontSize: '0.65rem', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                            <div style={{ fontSize: '0.65rem', color: 'rgba(246, 253, 255, 0.55)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                               {org.statLabel}
                             </div>
-                            <div style={{ fontSize: '0.95rem', fontWeight: '700', color: '#FFFFFF' }}>
+                            <div style={{ fontSize: '0.95rem', fontWeight: '700', color: '#F6FDFF' }}>
                               {org.statValue}
                             </div>
                           </div>
@@ -356,11 +358,12 @@ export const OrgSelect = () => {
 
                         <div style={{
                           width: '32px', height: '32px', borderRadius: '50%',
-                          background: isHovered ? org.themeColor : 'rgba(255,255,255,0.08)',
-                          color: isHovered ? '#FFFFFF' : '#94A3B8',
+                          background: isHovered ? 'linear-gradient(135deg, #1554E8 0%, #2E9BF8 100%)' : 'rgba(46, 155, 248, 0.15)',
+                          color: '#F6FDFF',
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
                           transition: 'all 0.3s ease',
-                          transform: isHovered ? 'translateX(3px)' : 'translateX(0)'
+                          transform: isHovered ? 'translateX(3px)' : 'translateX(0)',
+                          boxShadow: isHovered ? '0 0 12px rgba(46, 155, 248, 0.5)' : 'none'
                         }}>
                           <ArrowRight size={16} />
                         </div>

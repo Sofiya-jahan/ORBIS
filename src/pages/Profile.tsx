@@ -87,8 +87,9 @@ export const Profile = () => {
           <div style={{
             display: 'flex', alignItems: 'center', gap: '6px',
             padding: '0.45rem 0.9rem', borderRadius: '12px',
-            background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.3)',
-            fontSize: '0.75rem', color: '#10B981', fontWeight: 800, letterSpacing: '0.5px'
+            background: 'rgba(21, 84, 232, 0.15)', border: '1px solid rgba(46, 155, 248, 0.3)',
+            fontSize: '0.75rem', color: '#6AE7F7', fontWeight: 800, letterSpacing: '0.5px',
+            fontFamily: "'JetBrains Mono', monospace"
           }}>
             <Shield size={14} />
             SOVEREIGN VAULT // ENCRYPTED
@@ -96,8 +97,9 @@ export const Profile = () => {
           <div style={{
             display: 'flex', alignItems: 'center', gap: '6px',
             padding: '0.45rem 0.9rem', borderRadius: '12px',
-            background: 'rgba(0, 200, 255, 0.1)', border: '1px solid rgba(0, 200, 255, 0.3)',
-            fontSize: '0.75rem', color: '#00C8FF', fontWeight: 800, letterSpacing: '0.5px'
+            background: 'rgba(21, 84, 232, 0.15)', border: '1px solid rgba(46, 155, 248, 0.3)',
+            fontSize: '0.75rem', color: '#2E9BF8', fontWeight: 800, letterSpacing: '0.5px',
+            fontFamily: "'JetBrains Mono', monospace"
           }}>
             <Lock size={14} />
             ZERO-TRUST CLEARANCE
@@ -109,16 +111,16 @@ export const Profile = () => {
         <div style={{
           padding: '0.95rem 1.35rem',
           borderRadius: '12px',
-          background: 'rgba(16, 185, 129, 0.12)',
-          border: '1px solid rgba(16, 185, 129, 0.35)',
-          color: '#10B981',
+          background: 'rgba(21, 84, 232, 0.15)',
+          border: '1px solid rgba(106, 231, 247, 0.4)',
+          color: '#6AE7F7',
           fontSize: '0.88rem',
           fontWeight: 600,
           display: 'flex',
           alignItems: 'center',
           gap: '10px'
         }}>
-          <CheckCircle2 size={18} />
+          <CheckCircle2 size={18} color="#6AE7F7" />
           {uploadStatus}
         </div>
       )}
@@ -371,9 +373,9 @@ export const Profile = () => {
             <div style={{ 
               padding: '0.75rem 1rem', 
               borderRadius: '10px', 
-              background: 'rgba(16, 185, 129, 0.12)', 
-              border: '1px solid rgba(16, 185, 129, 0.35)', 
-              color: '#10B981', 
+              background: 'rgba(106, 231, 247, 0.12)', 
+              border: '1px solid rgba(106, 231, 247, 0.35)', 
+              color: '#6AE7F7', 
               fontSize: '0.85rem', 
               fontWeight: 700, 
               display: 'flex', 
@@ -407,7 +409,7 @@ export const Profile = () => {
         <div className="neo-card" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem', background: 'var(--bg-secondary)' }}>
           <div>
             <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#FFFFFF', marginBottom: '0.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <ShieldCheck size={20} color="#10B981" /> Access & Security (Read Only)
+              <ShieldCheck size={20} color="#6AE7F7" /> Access & Security (Read Only)
             </h3>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
               Active zero-trust permissions and session verification telemetry.
@@ -438,7 +440,7 @@ export const Profile = () => {
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
                 <Shield size={18} color="var(--text-muted)" /> <span>Clearance Tier</span>
               </div>
-              <span style={{ fontWeight: '700', color: '#10B981', fontSize: '0.9rem' }}>
+              <span style={{ fontWeight: '700', color: '#6AE7F7', fontSize: '0.9rem' }}>
                 {currentRole.accessLevel}
               </span>
             </div>

@@ -191,8 +191,8 @@ export const RiskRegister = () => {
                 <td style={{ padding: '1.1rem 1.25rem' }}>
                   <span style={{
                     padding: '0.25rem 0.65rem', borderRadius: '100px', fontSize: '0.72rem', fontWeight: '800',
-                    background: risk.severity === 'Critical' ? 'rgba(239,68,68,0.15)' : risk.severity === 'High' ? 'rgba(245,158,11,0.15)' : 'rgba(16,185,129,0.15)',
-                    color: risk.severity === 'Critical' ? '#EF4444' : risk.severity === 'High' ? '#F59E0B' : '#10B981',
+                    background: risk.severity === 'Critical' ? 'rgba(239,68,68,0.15)' : risk.severity === 'High' ? 'rgba(245,158,11,0.15)' : 'rgba(106, 231, 247, 0.15)',
+                    color: risk.severity === 'Critical' ? '#EF4444' : risk.severity === 'High' ? '#F59E0B' : '#6AE7F7',
                     textTransform: 'uppercase'
                   }}>
                     {risk.severity}

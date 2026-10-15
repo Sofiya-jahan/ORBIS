@@ -111,8 +111,8 @@ export const WorkflowTasks = () => {
             <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
               <div style={{
                 width: '42px', height: '42px', borderRadius: '12px',
-                background: task.status === 'Approved' ? 'rgba(16,185,129,0.15)' : `${currentOrg.themeColor}20`,
-                color: task.status === 'Approved' ? '#10B981' : currentOrg.themeColor,
+                background: task.status === 'Approved' ? 'rgba(21, 84, 232, 0.2)' : `${currentOrg.themeColor}20`,
+                color: task.status === 'Approved' ? '#6AE7F7' : currentOrg.themeColor,
                 display: 'flex', alignItems: 'center', justifyContent: 'center'
               }}>
                 {task.status === 'Approved' ? <CheckCircle2 size={22} /> : <Clock size={22} />}
@@ -151,7 +151,7 @@ export const WorkflowTasks = () => {
                   <button
                     onClick={() => handleApprove(task.id)}
                     className="btn btn-primary"
-                    style={{ background: '#10B981', padding: '0.5rem 1rem', fontSize: '0.82rem' }}
+                    style={{ background: 'linear-gradient(135deg, #1554E8 0%, #2E9BF8 100%)', padding: '0.5rem 1rem', fontSize: '0.82rem', boxShadow: '0 0 12px rgba(21, 84, 232, 0.4)' }}
                   >
                     <Check size={16} /> Approve
                   </button>
@@ -169,9 +169,9 @@ export const WorkflowTasks = () => {
               ) : (
                 <span style={{
                   padding: '0.4rem 0.9rem', borderRadius: '100px', fontSize: '0.8rem', fontWeight: 700,
-                  background: task.status === 'Approved' || task.status === 'Completed' ? 'rgba(16,185,129,0.15)' : 'var(--bg-secondary)',
-                  color: task.status === 'Approved' || task.status === 'Completed' ? '#10B981' : 'var(--text-secondary)',
-                  border: '1px solid var(--border-color)'
+                  background: task.status === 'Approved' || task.status === 'Completed' ? 'rgba(21, 84, 232, 0.18)' : 'var(--bg-secondary)',
+                  color: task.status === 'Approved' || task.status === 'Completed' ? '#6AE7F7' : 'var(--text-secondary)',
+                  border: task.status === 'Approved' || task.status === 'Completed' ? '1px solid rgba(106, 231, 247, 0.35)' : '1px solid var(--border-color)'
                 }}>
                   {task.status}
                 </span>
