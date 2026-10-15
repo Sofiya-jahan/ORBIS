@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { EnterpriseCommandPreview, type SectorSimulationConfig } from '../components/EnterpriseCommandPreview';
-import { DemoModal } from '../components/DemoModal';
 import { 
-  Play, Shield, Activity, Cpu, ArrowUpRight, Lock, 
+  Shield, Activity, Cpu, ArrowUpRight, Lock, 
   Zap, CheckCircle2, ChevronRight, Layers,
   ShieldCheck, Landmark, HeartPulse, Truck, RefreshCw, AlertTriangle
 } from 'lucide-react';
@@ -127,7 +126,6 @@ const AnimatedMetric = ({ value, label, suffix = '', precision = 2 }: { value: s
 };
 
 export const Landing = () => {
-  const [showDemo, setShowDemo] = useState(false);
   const [activeSectorIdx, setActiveSectorIdx] = useState(0);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isSectorSimulating, setIsSectorSimulating] = useState(false);
@@ -182,8 +180,6 @@ export const Landing = () => {
         fontFamily: "-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif",
       }}
     >
-      {/* 4K Real-time 3D AI Product Experience Modal */}
-      <DemoModal isOpen={showDemo} onClose={() => setShowDemo(false)} />
 
       {/* Volumetric Scanlines & Dynamic Ambient Sapphire + Violet Atmosphere */}
       <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none' }}>
@@ -275,40 +271,6 @@ export const Landing = () => {
               QKD 256-BIT LATTICE // NOMINAL
             </span>
           </div>
-
-          <button
-            onClick={() => setShowDemo(true)}
-            style={{
-              background: 'rgba(13, 35, 77, 0.75)',
-              border: '1px solid rgba(46, 155, 248, 0.35)',
-              borderRadius: '10px',
-              padding: '0.6rem 1.25rem',
-              color: '#F6FDFF',
-              fontSize: '0.82rem',
-              fontWeight: 700,
-              fontFamily: "'Space Grotesk', sans-serif",
-              letterSpacing: '0.5px',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              backdropFilter: 'blur(10px)',
-              transition: 'all 0.25s ease',
-            }}
-            onMouseEnter={e => {
-              e.currentTarget.style.borderColor = '#6AE7F7';
-              e.currentTarget.style.background = 'rgba(21, 84, 232, 0.2)';
-              e.currentTarget.style.boxShadow = '0 0 20px rgba(106, 231, 247, 0.3)';
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.borderColor = 'rgba(46, 155, 248, 0.35)';
-              e.currentTarget.style.background = 'rgba(13, 35, 77, 0.75)';
-              e.currentTarget.style.boxShadow = 'none';
-            }}
-          >
-            <Play size={12} fill="#6AE7F7" color="#6AE7F7" />
-            Product Showcase
-          </button>
 
           <button
             onClick={() => navigate('/organization')}
@@ -494,41 +456,6 @@ export const Landing = () => {
               >
                 Create Account
               </motion.button>
-
-              <motion.button
-                whileHover={{ scale: 1.03, borderColor: '#8671F9', backgroundColor: 'rgba(122, 72, 255, 0.2)' }}
-                whileTap={{ scale: 0.97 }}
-                onClick={() => setShowDemo(true)}
-                style={{
-                  padding: '1.15rem 2rem',
-                  fontSize: '0.92rem',
-                  fontWeight: 700,
-                  letterSpacing: '0.5px',
-                  borderRadius: '12px',
-                  background: 'rgba(13, 35, 77, 0.8)',
-                  border: '1px solid rgba(122, 72, 255, 0.35)',
-                  color: '#F6FDFF',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  backdropFilter: 'blur(15px)',
-                  fontFamily: "'Space Grotesk', sans-serif"
-                }}
-              >
-                <div style={{
-                  width: '24px',
-                  height: '24px',
-                  borderRadius: '50%',
-                  background: 'rgba(122, 72, 255, 0.25)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}>
-                  <Play size={11} fill="#8671F9" color="#8671F9" />
-                </div>
-                Live 4K Simulation
-              </motion.button>
             </div>
 
             {/* Live Real-time Telemetry Metrics */}
@@ -625,27 +552,6 @@ export const Landing = () => {
               >
                 <Zap size={13} className={isSectorSimulating ? 'animate-pulse' : ''} />
                 {isSectorSimulating ? 'SIMULATING SURGE...' : 'RUN LIVE STRESS SIMULATION'}
-              </button>
-
-              <button
-                onClick={() => setShowDemo(true)}
-                style={{
-                  padding: '0.45rem 1rem',
-                  borderRadius: '100px',
-                  background: 'rgba(122, 72, 255, 0.15)',
-                  border: '1px solid rgba(134, 113, 249, 0.35)',
-                  color: '#8671F9',
-                  fontFamily: "'JetBrains Mono', monospace",
-                  fontSize: '0.74rem',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px'
-                }}
-              >
-                <Play size={12} fill="#8671F9" />
-                4K REAL-TIME SIM
               </button>
             </div>
           </div>
