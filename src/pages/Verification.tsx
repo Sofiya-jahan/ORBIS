@@ -165,6 +165,64 @@ export const Verification = () => {
       fontFamily: "var(--font-family, 'Inter', sans-serif)"
     }}>
       
+      {/* Realistic Architectural Vault Corridor Background */}
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        backgroundImage: "url('/corridor-portal.png')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center 40%',
+        backgroundRepeat: 'no-repeat',
+        filter: 'contrast(1.1) brightness(0.72) saturate(1.15)',
+        opacity: 0.55,
+        zIndex: 0,
+        pointerEvents: 'none'
+      }} />
+
+      {/* Organization Dynamic Color Harmony Blend */}
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        background: `radial-gradient(circle at 50% 50%, ${currentOrg.themeColor}33 0%, ${currentOrg.accentColor}1A 50%, rgba(7, 17, 46, 0.95) 90%)`,
+        mixBlendMode: 'color-dodge',
+        opacity: 0.65,
+        zIndex: 0,
+        pointerEvents: 'none'
+      }} />
+
+      {/* Synchronized Doorway Perimeter Light Column */}
+      <div style={{
+        position: 'absolute',
+        top: '12%',
+        left: '58.4%',
+        width: '6px',
+        height: '60%',
+        background: success 
+          ? 'linear-gradient(180deg, #6AE7F7 0%, #2E9BF8 50%, #6AE7F7 100%)' 
+          : error 
+          ? 'linear-gradient(180deg, #EF4444 0%, #DC2626 100%)' 
+          : `linear-gradient(180deg, ${currentOrg.accentColor} 0%, #F59E0B 50%, ${currentOrg.themeColor} 100%)`,
+        boxShadow: success
+          ? '0 0 35px 8px rgba(106, 231, 247, 0.7)'
+          : error
+          ? '0 0 35px 8px rgba(239, 68, 68, 0.7)'
+          : `0 0 25px 6px ${currentOrg.accentColor}66`,
+        opacity: 0.75,
+        borderRadius: '4px',
+        zIndex: 0,
+        pointerEvents: 'none',
+        transition: 'all 0.5s ease'
+      }} />
+
+      {/* Platform Dark Navy Vignette to smoothly melt into #07112E */}
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        background: 'radial-gradient(circle at 50% 50%, rgba(7, 17, 46, 0.65) 0%, rgba(7, 17, 46, 0.92) 70%, #07112E 100%)',
+        zIndex: 0,
+        pointerEvents: 'none'
+      }} />
+
       {/* Background ambient glow matching sovereign sapphire and cyan funnel */}
       <div style={{
         position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',

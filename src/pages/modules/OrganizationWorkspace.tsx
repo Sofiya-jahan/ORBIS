@@ -11,6 +11,7 @@ import {
 
 import OrgOverview from './OrgOverview';
 import IndustryModule from './IndustryModule';
+import { OrganizationalPortalBackdrop } from '../../components/OrganizationalPortalBackdrop';
 
 export const OrganizationWorkspace = () => {
   const { organization, role, user } = useAuthStore();
@@ -35,42 +36,46 @@ export const OrganizationWorkspace = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       
-      {/* Page Header */}
-      <div className="glass-card" style={{
-        padding: '2rem 2.5rem',
-        background: 'rgba(7, 17, 46, 0.92)',
-        border: '1px solid rgba(46, 155, 248, 0.25)',
-        borderRadius: '24px',
-        boxShadow: '0 20px 50px rgba(0, 0, 0, 0.5)',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flexWrap: 'wrap',
-        gap: '1.5rem'
-      }}>
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: '#6AE7F7', fontWeight: 700, fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '0.4rem' }}>
-            <Building2 size={16} /> Institutional Topology &bull; {currentOrg.sector}
+      {/* Page Header with Realistic Blended Architectural Command Node */}
+      <OrganizationalPortalBackdrop
+        themeColor={currentOrg.themeColor}
+        secondaryColor={currentOrg.secondaryColor}
+        accentColor={currentOrg.accentColor}
+        nodeBadgeText={`${currentOrg.sector} • COMMAND NODE`}
+        variant="banner"
+      >
+        <div style={{
+          padding: '2rem 2.5rem',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '1.5rem'
+        }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: '#6AE7F7', fontWeight: 700, fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '0.4rem' }}>
+              <Building2 size={16} /> Institutional Topology &bull; {currentOrg.sector}
+            </div>
+            <h1 style={{ fontSize: '2.2rem', fontWeight: 900, color: '#F6FDFF', margin: 0, letterSpacing: '-0.5px' }}>
+              {currentOrg.name}
+            </h1>
+            <p style={{ color: 'rgba(246, 253, 255, 0.75)', fontSize: '0.95rem', margin: '0.4rem 0 0', maxWidth: '720px' }}>
+              {currentOrg.description}
+            </p>
           </div>
-          <h1 style={{ fontSize: '2.2rem', fontWeight: 900, color: '#F6FDFF', margin: 0, letterSpacing: '-0.5px' }}>
-            {currentOrg.name}
-          </h1>
-          <p style={{ color: 'rgba(246, 253, 255, 0.75)', fontSize: '0.95rem', margin: '0.4rem 0 0', maxWidth: '720px' }}>
-            {currentOrg.description}
-          </p>
-        </div>
 
-        {/* Global Actions */}
-        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-          <div style={{ padding: '0.75rem 1.25rem', borderRadius: '14px', background: 'rgba(13, 35, 77, 0.6)', border: '1px solid rgba(46, 155, 248, 0.25)', textAlign: 'right' }}>
-            <div style={{ fontSize: '0.72rem', color: 'rgba(246, 253, 255, 0.55)', textTransform: 'uppercase' }}>Tenant Status</div>
-            <div style={{ fontSize: '0.95rem', fontWeight: 800, color: '#6AE7F7', display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#6AE7F7', boxShadow: '0 0 8px #6AE7F7' }} />
-              Active Enterprise License
+          {/* Global Actions */}
+          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+            <div style={{ padding: '0.75rem 1.25rem', borderRadius: '14px', background: 'rgba(13, 35, 77, 0.6)', border: '1px solid rgba(46, 155, 248, 0.25)', textAlign: 'right' }}>
+              <div style={{ fontSize: '0.72rem', color: 'rgba(246, 253, 255, 0.55)', textTransform: 'uppercase' }}>Tenant Status</div>
+              <div style={{ fontSize: '0.95rem', fontWeight: 800, color: '#6AE7F7', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#6AE7F7', boxShadow: '0 0 8px #6AE7F7' }} />
+                Active Enterprise License
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </OrganizationalPortalBackdrop>
 
       {/* Primary KPIs Row */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem' }}>

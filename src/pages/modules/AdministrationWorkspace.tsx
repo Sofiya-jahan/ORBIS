@@ -10,6 +10,7 @@ import {
 
 import AdminSecurity from './AdminSecurity';
 import NotificationsPage from './NotificationsPage';
+import { OrganizationalPortalBackdrop } from '../../components/OrganizationalPortalBackdrop';
 
 export const AdministrationWorkspace = () => {
   const { organization, role, user, theme, setTheme } = useAuthStore();
@@ -33,42 +34,46 @@ export const AdministrationWorkspace = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       
-      {/* Page Header */}
-      <div className="glass-card" style={{
-        padding: '2rem 2.5rem',
-        background: 'rgba(7, 17, 46, 0.92)',
-        border: '1px solid rgba(46, 155, 248, 0.25)',
-        borderRadius: '24px',
-        boxShadow: '0 20px 50px rgba(0, 0, 0, 0.5)',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flexWrap: 'wrap',
-        gap: '1.5rem'
-      }}>
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: '#6AE7F7', fontWeight: 700, fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '0.4rem' }}>
-            <Settings size={16} /> Enterprise Administration &bull; {currentOrg.name}
+      {/* Page Header with Realistic Blended Zero-Trust Architectural Security Gateway */}
+      <OrganizationalPortalBackdrop
+        themeColor={currentOrg.themeColor}
+        secondaryColor={currentOrg.secondaryColor}
+        accentColor={currentOrg.accentColor}
+        nodeBadgeText="ZERO-TRUST HARDWARE HSM ONLINE"
+        variant="banner"
+      >
+        <div style={{
+          padding: '2rem 2.5rem',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '1.5rem'
+        }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: '#6AE7F7', fontWeight: 700, fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '0.4rem' }}>
+              <Settings size={16} /> Enterprise Administration &bull; {currentOrg.name}
+            </div>
+            <h1 style={{ fontSize: '2.2rem', fontWeight: 900, color: '#F6FDFF', margin: 0, letterSpacing: '-0.5px' }}>
+              Platform Administration
+            </h1>
+            <p style={{ color: 'rgba(246, 253, 255, 0.75)', fontSize: '0.95rem', margin: '0.4rem 0 0', maxWidth: '720px' }}>
+              Centralized platform configuration, cryptographic zero-trust posture, institutional user roles, and tamper-evident audit logging.
+            </p>
           </div>
-          <h1 style={{ fontSize: '2.2rem', fontWeight: 900, color: '#F6FDFF', margin: 0, letterSpacing: '-0.5px' }}>
-            Platform Administration
-          </h1>
-          <p style={{ color: 'rgba(246, 253, 255, 0.75)', fontSize: '0.95rem', margin: '0.4rem 0 0', maxWidth: '720px' }}>
-            Centralized platform configuration, cryptographic zero-trust posture, institutional user roles, and tamper-evident audit logging.
-          </p>
-        </div>
 
-        {/* Global Actions */}
-        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-          <button 
-            onClick={() => setTab('security')}
-            className="btn btn-primary"
-            style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '0.8rem 1.4rem', fontSize: '0.88rem' }}
-          >
-            <ShieldCheck size={16} /> Security Posture
-          </button>
+          {/* Global Actions */}
+          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+            <button 
+              onClick={() => setTab('security')}
+              className="btn btn-primary"
+              style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '0.8rem 1.4rem', fontSize: '0.88rem' }}
+            >
+              <ShieldCheck size={16} /> Security Posture
+            </button>
+          </div>
         </div>
-      </div>
+      </OrganizationalPortalBackdrop>
 
       {/* Primary KPIs Row */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem' }}>
