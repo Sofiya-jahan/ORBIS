@@ -15,6 +15,7 @@ import {
 import { queryNemotron } from '../services/nvidiaNemotronService';
 import { sanitizeInput } from '../services/securityService';
 import { formatUserName } from '../utils/userUtils';
+import { renderFormattedMessage } from '../utils/messageFormatter';
 
 
 interface ChatMessage {
@@ -60,21 +61,19 @@ export const AICopilot = () => {
 
         if (savedMessages && savedMessages.length > 0) {
           setMessages(savedMessages.map(m => {
-            // Defensively clean any legacy references to IPRAP or raw email handles
             let sanitizedText = m.text
               .replace(/IPRAP\s+Enterprise\s+Sentinel/gi, 'ORBIS Risk Intelligence Copilot')
               .replace(/IPRAP/gi, 'ORBIS')
               .replace(/iprap/gi, 'orbis')
               .replace(/sofiyajahan215/gi, cleanDisplayName);
 
-            // If greeting message, ensure clean display name and active ORBIS copilot title
-            if (m.id.startsWith('msg-init') || sanitizedText.startsWith('Greetings')) {
-              sanitizedText = sanitizedText.replace(/Greetings\s+[^.]+\./, `Greetings ${cleanDisplayName}.`);
-              sanitizedText = sanitizedText.replace(/\*\*IPRAP Enterprise Sentinel\*\*/gi, '**ORBIS Risk Intelligence Copilot**');
-            }
-
             let actionCard = m.action_card;
-            if (actionCard && typeof actionCard === 'object') {
+
+            // If greeting message, format with clean name, bold organization/role, and minimal assistant question
+            if (m.id.startsWith('msg-init') || sanitizedText.startsWith('Greetings')) {
+              sanitizedText = `Greetings **${cleanDisplayName}**. Welcome to **${currentOrg.name}** for your role as **${currentRole?.title || role || 'Officer'}**.\n\nHow can I assist you today?`;
+              actionCard = undefined; // Minimal, simple greeting without extra clutter cards
+            } else if (actionCard && typeof actionCard === 'object') {
               actionCard = {
                 ...actionCard,
                 title: actionCard.title ? actionCard.title.replace(/IPRAP/gi, 'ORBIS').replace(/iprap/gi, 'orbis') : actionCard.title,
@@ -92,18 +91,12 @@ export const AICopilot = () => {
             };
           }));
         } else {
-          // Initialize fresh greeting and persist into Neon DB
+          // Initialize fresh simple minimal greeting and persist into Neon DB
           const initialGreeting: ChatMessage = {
             id: `msg-init-${organization || 'default'}`,
             sender: 'ai',
-            text: `Greetings ${cleanDisplayName}. I am **ORBIS Risk Intelligence Copilot**, your autonomous Enterprise Risk Analytics Assistant.\n\nI am synchronized with **${currentOrg.name}** for your role as **${currentRole?.title || role || 'Officer'}** (${currentRole?.accessLevel || 'Authorized Clearance'}). Multi-modal risk surveillance, SHAP interpretability metrics, and real-time telemetry analytics are active.\n\nHow can I assist your operational risk analysis today?`,
-            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-            actionCard: {
-              title: `AI Risk Exposure: ${currentOrg.aiRiskScore}% (Real-time Monitored)`,
-              description: `Systemic Health Score is at ${currentOrg.healthScore} / 100 with active neural surveillance across ${currentOrg.industryModules.length} sector modules.`,
-              metric: 'ORBIS Neural Engine Active',
-              status: currentOrg.aiRiskScore > 15 ? 'warning' : 'optimal'
-            }
+            text: `Greetings **${cleanDisplayName}**. Welcome to **${currentOrg.name}** for your role as **${currentRole?.title || role || 'Officer'}**.\n\nHow can I assist you today?`,
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
           };
           setMessages([initialGreeting]);
           saveMessageToNeon({
@@ -237,14 +230,8 @@ export const AICopilot = () => {
         const freshGreeting: ChatMessage = {
           id: `msg-init-${organization || 'default'}-${Date.now()}`,
           sender: 'ai',
-          text: `Greetings ${cleanDisplayName}. I am **ORBIS Risk Intelligence Copilot**, your autonomous Enterprise Risk Analytics Assistant.\n\nI am synchronized with **${currentOrg.name}** for your role as **${currentRole?.title || role || 'Officer'}** (${currentRole?.accessLevel || 'Authorized Clearance'}). Multi-modal risk surveillance, SHAP interpretability metrics, and real-time telemetry analytics are active.\n\nHow can I assist your operational risk analysis today?`,
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          actionCard: {
-            title: `AI Risk Exposure: ${currentOrg.aiRiskScore}% (Real-time Monitored)`,
-            description: `Systemic Health Score is at ${currentOrg.healthScore} / 100 with active neural surveillance across ${currentOrg.industryModules.length} sector modules.`,
-            metric: 'ORBIS Neural Engine Active',
-            status: currentOrg.aiRiskScore > 15 ? 'warning' : 'optimal'
-          }
+          text: `Greetings **${cleanDisplayName}**. Welcome to **${currentOrg.name}** for your role as **${currentRole?.title || role || 'Officer'}**.\n\nHow can I assist you today?`,
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         };
         setMessages([freshGreeting]);
         saveMessageToNeon({
@@ -485,10 +472,9 @@ export const AICopilot = () => {
                     ? '0 4px 20px rgba(0, 0, 0, 0.25)' 
                     : 'var(--shadow-md, 0 4px 20px rgba(0, 0, 0, 0.15))',
                   fontSize: '0.88rem',
-                  lineHeight: '1.6',
-                  whiteSpace: 'pre-line'
+                  lineHeight: '1.6'
                 }}>
-                  {msg.text}
+                  {renderFormattedMessage(msg.text, msg.sender === 'user')}
 
                   {/* Action Card inside AI message */}
                   {msg.actionCard && (

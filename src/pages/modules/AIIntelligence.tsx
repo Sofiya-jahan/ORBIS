@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { useAuthStore } from '../../store/useAuthStore';
 import { ORGANIZATIONS } from '../../config/platformConfig';
 import { formatUserName } from '../../utils/userUtils';
+import { renderFormattedMessage } from '../../utils/messageFormatter';
 import { 
   Sparkles, Brain, TrendingUp, Cpu, Bot, 
   Layers, CheckCircle2, AlertTriangle, ArrowUpRight, 
@@ -34,7 +35,7 @@ export const AIIntelligence = () => {
     {
       id: '1',
       sender: 'assistant',
-      text: `Hello ${formatUserName(user?.name, user?.email)}. I am the ORBIS Neural Reasoning Copilot. I have synthesized telemetry from all ${currentOrg.departments.length} departments. How can I assist your organizational risk management today?`,
+      text: `Greetings **${formatUserName(user?.name, user?.email)}**. Welcome to **${currentOrg.name}**.\n\nHow can I assist you today?`,
       time: 'Just now'
     }
   ]);
@@ -394,7 +395,7 @@ export const AIIntelligence = () => {
                     lineHeight: 1.6,
                     boxShadow: '0 8px 24px rgba(0, 0, 0, 0.3)'
                   }}>
-                    {msg.text}
+                    {renderFormattedMessage(msg.text, msg.sender === 'user')}
                     <div style={{ fontSize: '0.68rem', color: 'rgba(246, 253, 255, 0.55)', marginTop: '6px', textAlign: 'right' }}>
                       {msg.time}
                     </div>
