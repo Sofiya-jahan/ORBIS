@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useAuthStore } from '../../store/useAuthStore';
 import { ORGANIZATIONS } from '../../config/platformConfig';
+import { formatUserName } from '../../utils/userUtils';
 import { 
   Sparkles, Brain, TrendingUp, Cpu, Bot, 
   Layers, CheckCircle2, AlertTriangle, ArrowUpRight, 
@@ -33,7 +34,7 @@ export const AIIntelligence = () => {
     {
       id: '1',
       sender: 'assistant',
-      text: `Hello ${user?.name || 'Executive'}. I am the ORBIS Neural Reasoning Copilot. I have synthesized telemetry from all ${currentOrg.departments.length} departments. How can I assist your organizational risk management today?`,
+      text: `Hello ${formatUserName(user?.name, user?.email)}. I am the ORBIS Neural Reasoning Copilot. I have synthesized telemetry from all ${currentOrg.departments.length} departments. How can I assist your organizational risk management today?`,
       time: 'Just now'
     }
   ]);

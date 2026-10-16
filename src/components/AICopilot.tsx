@@ -14,6 +14,7 @@ import {
 } from '../services/neonService';
 import { queryNemotron } from '../services/nvidiaNemotronService';
 import { sanitizeInput } from '../services/securityService';
+import { formatUserName } from '../utils/userUtils';
 
 
 interface ChatMessage {
@@ -55,20 +56,47 @@ export const AICopilot = () => {
         const savedMessages = await loadMessagesFromNeon(organization || undefined);
         if (!isMounted) return;
 
+        const cleanDisplayName = formatUserName(user?.name, user?.email);
+
         if (savedMessages && savedMessages.length > 0) {
-          setMessages(savedMessages.map(m => ({
-            id: m.id,
-            sender: m.sender,
-            text: m.text,
-            timestamp: m.timestamp,
-            actionCard: m.action_card
-          })));
+          setMessages(savedMessages.map(m => {
+            // Defensively clean any legacy references to IPRAP or raw email handles
+            let sanitizedText = m.text
+              .replace(/IPRAP\s+Enterprise\s+Sentinel/gi, 'ORBIS Risk Intelligence Copilot')
+              .replace(/IPRAP/gi, 'ORBIS')
+              .replace(/iprap/gi, 'orbis')
+              .replace(/sofiyajahan215/gi, cleanDisplayName);
+
+            // If greeting message, ensure clean display name and active ORBIS copilot title
+            if (m.id.startsWith('msg-init') || sanitizedText.startsWith('Greetings')) {
+              sanitizedText = sanitizedText.replace(/Greetings\s+[^.]+\./, `Greetings ${cleanDisplayName}.`);
+              sanitizedText = sanitizedText.replace(/\*\*IPRAP Enterprise Sentinel\*\*/gi, '**ORBIS Risk Intelligence Copilot**');
+            }
+
+            let actionCard = m.action_card;
+            if (actionCard && typeof actionCard === 'object') {
+              actionCard = {
+                ...actionCard,
+                title: actionCard.title ? actionCard.title.replace(/IPRAP/gi, 'ORBIS').replace(/iprap/gi, 'orbis') : actionCard.title,
+                description: actionCard.description ? actionCard.description.replace(/IPRAP/gi, 'ORBIS').replace(/iprap/gi, 'orbis') : actionCard.description,
+                metric: actionCard.metric ? actionCard.metric.replace(/IPRAP/gi, 'ORBIS').replace(/iprap/gi, 'orbis') : actionCard.metric,
+              };
+            }
+
+            return {
+              id: m.id,
+              sender: m.sender,
+              text: sanitizedText,
+              timestamp: m.timestamp,
+              actionCard
+            };
+          }));
         } else {
           // Initialize fresh greeting and persist into Neon DB
           const initialGreeting: ChatMessage = {
             id: `msg-init-${organization || 'default'}`,
             sender: 'ai',
-            text: `Greetings ${user?.name || 'Commander'}. I am **ORBIS Risk Intelligence Copilot**, your autonomous Enterprise Risk Analytics Assistant.\n\nI am synchronized with **${currentOrg.name}** for your role as **${currentRole?.title || role || 'Officer'}** (${currentRole?.accessLevel || 'Authorized Clearance'}). Multi-modal risk surveillance, SHAP interpretability metrics, and real-time telemetry analytics are active.\n\nHow can I assist your operational risk analysis today?`,
+            text: `Greetings ${cleanDisplayName}. I am **ORBIS Risk Intelligence Copilot**, your autonomous Enterprise Risk Analytics Assistant.\n\nI am synchronized with **${currentOrg.name}** for your role as **${currentRole?.title || role || 'Officer'}** (${currentRole?.accessLevel || 'Authorized Clearance'}). Multi-modal risk surveillance, SHAP interpretability metrics, and real-time telemetry analytics are active.\n\nHow can I assist your operational risk analysis today?`,
             timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
             actionCard: {
               title: `AI Risk Exposure: ${currentOrg.aiRiskScore}% (Real-time Monitored)`,
@@ -97,7 +125,7 @@ export const AICopilot = () => {
     return () => {
       isMounted = false;
     };
-  }, [organization, role, user?.name]);
+  }, [organization, role, user?.name, user?.email]);
 
   useEffect(() => {
     if (isOpen) {
@@ -152,7 +180,7 @@ export const AICopilot = () => {
           organization: currentOrg,
           roleTitle: currentRole?.title,
           accessLevel: currentRole?.accessLevel,
-          userName: user?.name,
+          userName: formatUserName(user?.name, user?.email),
           activeModules: currentOrg?.industryModules?.map(m => m.name),
           healthScore: currentOrg?.healthScore,
           aiRiskScore: currentOrg?.aiRiskScore
@@ -204,7 +232,30 @@ export const AICopilot = () => {
   const handleClearChat = async () => {
     if (window.confirm('Clear copilot conversation session history?')) {
       await clearMessagesFromNeon(organization || undefined);
-      setMessages([]);
+      if (currentOrg) {
+        const cleanDisplayName = formatUserName(user?.name, user?.email);
+        const freshGreeting: ChatMessage = {
+          id: `msg-init-${organization || 'default'}-${Date.now()}`,
+          sender: 'ai',
+          text: `Greetings ${cleanDisplayName}. I am **ORBIS Risk Intelligence Copilot**, your autonomous Enterprise Risk Analytics Assistant.\n\nI am synchronized with **${currentOrg.name}** for your role as **${currentRole?.title || role || 'Officer'}** (${currentRole?.accessLevel || 'Authorized Clearance'}). Multi-modal risk surveillance, SHAP interpretability metrics, and real-time telemetry analytics are active.\n\nHow can I assist your operational risk analysis today?`,
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          actionCard: {
+            title: `AI Risk Exposure: ${currentOrg.aiRiskScore}% (Real-time Monitored)`,
+            description: `Systemic Health Score is at ${currentOrg.healthScore} / 100 with active neural surveillance across ${currentOrg.industryModules.length} sector modules.`,
+            metric: 'ORBIS Neural Engine Active',
+            status: currentOrg.aiRiskScore > 15 ? 'warning' : 'optimal'
+          }
+        };
+        setMessages([freshGreeting]);
+        saveMessageToNeon({
+          ...freshGreeting,
+          userId: user?.id,
+          organization: organization || undefined,
+          role: role || undefined
+        });
+      } else {
+        setMessages([]);
+      }
     }
   };
 

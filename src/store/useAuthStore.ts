@@ -12,6 +12,7 @@ import {
   sanitizeInput
 } from '../services/securityService';
 import { ORGANIZATIONS } from '../config/platformConfig';
+import { formatUserName } from '../utils/userUtils';
 
 interface UserProfile {
   name: string;
@@ -68,7 +69,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
               isAuthenticated: true,
               firebaseUser: user,
               user: {
-                name: data.name || user.displayName || user.email?.split('@')[0] || 'User',
+                name: formatUserName(data.name || user.displayName, user.email),
                 email: user.email || '',
                 id: data.id || user.uid.substring(0, 8).toUpperCase(),
                 department: data.department || 'General',
@@ -86,7 +87,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
               isAuthenticated: true,
               firebaseUser: user,
               user: {
-                name: user.displayName || user.email?.split('@')[0] || 'User',
+                name: formatUserName(user.displayName, user.email),
                 email: user.email || '',
                 id: user.uid.substring(0, 8).toUpperCase(),
                 department: 'General',
@@ -103,7 +104,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
             isAuthenticated: true, 
             firebaseUser: user, 
             user: {
-              name: user.displayName || user.email?.split('@')[0] || 'User',
+              name: formatUserName(user.displayName, user.email),
               email: user.email || '',
               id: user.uid.substring(0, 8).toUpperCase(),
               department: 'General',
@@ -184,7 +185,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       const userDoc = await getDoc(userDocRef);
       if (!userDoc.exists()) {
         await setDoc(userDocRef, {
-          name: user.displayName || user.email?.split('@')[0] || 'User',
+          name: formatUserName(user.displayName, user.email),
           email: user.email || '',
           id: user.uid.substring(0, 8).toUpperCase(),
           department: 'General',
@@ -306,7 +307,11 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   updateUser: (partial) => {
     const { user, organization, role, firebaseUser } = get();
     if (user) {
-      const updatedUser = { ...user, ...partial };
+      const updatedUser = { 
+        ...user, 
+        ...partial,
+        name: partial.name !== undefined ? formatUserName(partial.name, user.email) : user.name
+      };
       set({ user: updatedUser });
 
       // Synchronize updated user profile directly to Neon PostgreSQL DB

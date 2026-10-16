@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { uploadProfileAvatar } from '../services/supabaseStorage';
 import { validateFileUpload, sanitizeInput } from '../services/securityService';
+import { formatUserName } from '../utils/userUtils';
 
 export const Profile = () => {
   const { user, organization, role, updateUser, theme, setTheme } = useAuthStore();
@@ -18,9 +19,15 @@ export const Profile = () => {
 
   const [isUploading, setIsUploading] = useState(false);
   const [uploadStatus, setUploadStatus] = useState<string | null>(null);
-  const [nameInput, setNameInput] = useState(user?.name || '');
+  const [nameInput, setNameInput] = useState(formatUserName(user?.name, user?.email));
   const [contactInput, setContactInput] = useState(user?.contact || '');
   const [saveSuccess, setSaveSuccess] = useState(false);
+
+  React.useEffect(() => {
+    if (user?.name || user?.email) {
+      setNameInput(formatUserName(user?.name, user?.email));
+    }
+  }, [user?.name, user?.email]);
 
   if (!user) return null;
 

@@ -3,6 +3,7 @@ import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
 import { ORGANIZATIONS, hasPermission } from '../config/platformConfig';
 import { AICopilot } from '../components/AICopilot';
+import { formatUserName } from '../utils/userUtils';
 import { 
   LayoutDashboard, Building2, User, Bell, Search, 
   ShieldAlert, Grid, CheckSquare, GitPullRequest, 
@@ -37,6 +38,7 @@ export const DashboardLayout = () => {
   const currentRole = currentOrg.roles.find(r => r.id === role) || currentOrg.roles[0];
   const userPermissions = currentRole?.permissions || ['dashboard'];
   const userLevel = currentRole?.levelNumber || 1;
+  const displayName = formatUserName(user?.name, user?.email);
 
   // Keybindings
   useEffect(() => {
@@ -364,11 +366,11 @@ export const DashboardLayout = () => {
                 fontWeight: '800', fontSize: '0.9rem',
                 boxShadow: '0 0 12px rgba(var(--primary-rgb, 21, 84, 232), 0.35)'
               }}>
-                {user?.name?.charAt(0) || 'E'}
+                {displayName.charAt(0) || 'S'}
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>
                 <span style={{ fontSize: '0.82rem', fontWeight: '700', color: 'var(--text-primary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                  {user?.name || 'Authorized Executive'}
+                  {displayName}
                 </span>
                 <select
                   value={role || currentRole.id}
@@ -645,12 +647,12 @@ export const DashboardLayout = () => {
                   fontWeight: 'bold', fontSize: '0.9rem',
                   boxShadow: '0 0 10px rgba(var(--primary-rgb, 21, 84, 232), 0.35)'
                 }}>
-                  {user?.name?.charAt(0) || 'E'}
+                  {displayName.charAt(0) || 'S'}
                 </div>
               )}
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <span style={{ fontWeight: '700', fontSize: '0.82rem', color: 'var(--text-primary)' }}>
-                  {user?.name || 'Executive User'}
+                  {displayName}
                 </span>
                 <span style={{ color: 'var(--accent)', fontSize: '0.7rem', fontWeight: '600' }}>
                   {currentRole.accessLevel.split(' ')[0]} {currentRole.accessLevel.split(' ')[1]}

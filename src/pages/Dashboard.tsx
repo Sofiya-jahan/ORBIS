@@ -16,6 +16,7 @@ import {
   Wrench, Building2, Landmark, Factory, Scale
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { formatUserName } from '../utils/userUtils';
 
 export const Dashboard = () => {
   const { organization, role, user } = useAuthStore();
@@ -89,7 +90,7 @@ export const Dashboard = () => {
               <ShieldCheck size={18} /> {currentOrg.name} &bull; Operational Portal
             </div>
             <h1 style={{ fontSize: '2rem', fontWeight: '800', marginBottom: '0.5rem', color: 'var(--text-primary)', fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)" }}>
-              Welcome, {user?.name || 'Specialist'}
+              Welcome, {formatUserName(user?.name, user?.email)}
             </h1>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>
               Your workspace is filtered to show your assigned active tasks, departmental alerts, and direct incident filings.
