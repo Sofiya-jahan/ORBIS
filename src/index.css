@@ -526,3 +526,23 @@ a:hover {
   background: rgba(0, 0, 0, 0.28);
 }
 
+/* Light Mode Tab Strips & Pill Bars */
+[data-theme="light"] div[style*="rgba(7, 17, 46, 0.95)"],
+[data-theme="light"] div[style*="rgba(7, 17, 46, 0.9)"] {
+  background: var(--bg-secondary) !important;
+  border-color: var(--border-color) !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+[data-theme="light"] div[style*="rgba(7, 17, 46, 0.95)"] button:not([style*="linear-gradient"]),
+[data-theme="light"] div[style*="rgba(7, 17, 46, 0.9)"] button:not([style*="linear-gradient"]) {
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="light"] div[style*="rgba(7, 17, 46, 0.95)"] button:not([style*="linear-gradient"]):hover,
+[data-theme="light"] div[style*="rgba(7, 17, 46, 0.9)"] button:not([style*="linear-gradient"]):hover {
+  color: var(--text-primary) !important;
+  background: var(--hover-bg) !important;
+}
+
+
