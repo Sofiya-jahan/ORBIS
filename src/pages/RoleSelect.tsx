@@ -7,7 +7,7 @@ import {
   HeartPulse, Activity, ShieldAlert, Scale, Server, UserCheck,
   Wrench, Factory, Cpu, Terminal, Landmark, TrendingUp,
   Building2, GraduationCap, HardHat, Zap, Truck, FileText,
-  ShoppingBag, Flame, Lock, ChevronLeft
+  ShoppingBag, Flame, Lock, ChevronLeft, Sun, Moon
 } from 'lucide-react';
 
 const iconMap: Record<string, React.ComponentType<{ size?: number; color?: string; className?: string }>> = {
@@ -18,10 +18,12 @@ const iconMap: Record<string, React.ComponentType<{ size?: number; color?: strin
 };
 
 export const RoleSelect = () => {
-  const { organization, setRole } = useAuthStore();
+  const { organization, setRole, theme, setTheme } = useAuthStore();
   const navigate = useNavigate();
   const [hoveredRole, setHoveredRole] = useState<string | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
+
+  const isLight = theme === 'light';
 
   // If no organization selected, redirect back to organization selection
   if (!organization || !ORGANIZATIONS[organization]) {
@@ -42,10 +44,12 @@ export const RoleSelect = () => {
   return (
     <div style={{ 
       minHeight: '100vh', 
-      backgroundColor: '#07112E',
-      backgroundImage: 'radial-gradient(circle at 50% 15%, rgba(13, 35, 77, 0.8) 0%, transparent 65%), radial-gradient(circle at 10% 90%, rgba(21, 84, 232, 0.15) 0%, transparent 55%)',
-      color: '#F6FDFF',
-      padding: '3rem 2rem 5rem 2rem',
+      backgroundColor: isLight ? '#F8FAFC' : '#07112E',
+      backgroundImage: isLight
+        ? 'radial-gradient(circle at 50% 15%, rgba(21, 84, 232, 0.05) 0%, transparent 65%), radial-gradient(circle at 10% 90%, rgba(46, 155, 248, 0.04) 0%, transparent 55%)'
+        : 'radial-gradient(circle at 50% 15%, rgba(13, 35, 77, 0.8) 0%, transparent 65%), radial-gradient(circle at 10% 90%, rgba(21, 84, 232, 0.15) 0%, transparent 55%)',
+      color: isLight ? '#0F172A' : '#F6FDFF',
+      padding: '2.5rem 2rem 5rem 2rem',
       display: 'flex', 
       flexDirection: 'column', 
       alignItems: 'center',
@@ -60,44 +64,73 @@ export const RoleSelect = () => {
       <div style={{
         position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)',
         width: '90vw', height: '480px',
-        background: `radial-gradient(ellipse at center, rgba(21, 84, 232, 0.22) 0%, rgba(122, 72, 255, 0.1) 40%, transparent 70%)`,
+        background: `radial-gradient(ellipse at center, ${currentOrg.themeColor}${isLight ? '12' : '22'} 0%, rgba(122, 72, 255, ${isLight ? '0.04' : '0.1'}) 40%, transparent 70%)`,
         zIndex: 0, pointerEvents: 'none'
       }} />
 
-      {/* Top Breadcrumb / Back Button */}
-      <div style={{ width: '100%', maxWidth: '1280px', marginBottom: '2rem', position: 'relative', zIndex: 2 }}>
+      {/* Top Header Actions */}
+      <div style={{
+        width: '100%',
+        maxWidth: '1280px',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '2.5rem',
+        position: 'relative',
+        zIndex: 2
+      }}>
         <button
           onClick={() => navigate('/organization')}
           style={{
             display: 'inline-flex',
             alignItems: 'center',
             gap: '0.5rem',
-            background: 'rgba(13, 35, 77, 0.75)',
-            border: '1px solid rgba(46, 155, 248, 0.3)',
+            background: isLight ? '#FFFFFF' : 'rgba(13, 35, 77, 0.75)',
+            border: isLight ? '1px solid #CBD5E1' : '1px solid rgba(46, 155, 248, 0.3)',
             borderRadius: '12px',
             padding: '0.65rem 1.3rem',
-            color: '#6AE7F7',
+            color: isLight ? '#1554E8' : '#6AE7F7',
             cursor: 'pointer',
             fontSize: '0.88rem',
             fontWeight: 700,
             transition: 'all 0.2s ease',
             fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)",
-            boxShadow: '0 4px 15px rgba(0,0,0,0.5)'
+            boxShadow: isLight ? '0 2px 6px rgba(0,0,0,0.05)' : '0 4px 15px rgba(0,0,0,0.5)'
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.color = '#F6FDFF';
-            e.currentTarget.style.borderColor = '#2E9BF8';
-            e.currentTarget.style.background = 'rgba(21, 84, 232, 0.2)';
-            e.currentTarget.style.boxShadow = '0 0 15px rgba(46, 155, 248, 0.35)';
+            e.currentTarget.style.borderColor = isLight ? '#1554E8' : '#2E9BF8';
+            e.currentTarget.style.transform = 'translateX(-2px)';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.color = '#6AE7F7';
-            e.currentTarget.style.borderColor = 'rgba(46, 155, 248, 0.3)';
-            e.currentTarget.style.background = 'rgba(13, 35, 77, 0.75)';
-            e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.5)';
+            e.currentTarget.style.borderColor = isLight ? '#CBD5E1' : 'rgba(46, 155, 248, 0.3)';
+            e.currentTarget.style.transform = 'translateX(0)';
           }}
         >
           <ChevronLeft size={16} /> Switch Organization ({currentOrg.name})
+        </button>
+
+        <button
+          onClick={() => setTheme(isLight ? 'dark' : 'light')}
+          aria-label="Toggle Theme"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.6rem',
+            background: isLight ? '#FFFFFF' : 'rgba(13, 35, 77, 0.75)',
+            border: isLight ? '1px solid #CBD5E1' : '1px solid rgba(46, 155, 248, 0.3)',
+            borderRadius: '12px',
+            padding: '0.6rem 1.15rem',
+            color: isLight ? '#0F172A' : '#F6FDFF',
+            cursor: 'pointer',
+            fontSize: '0.82rem',
+            fontWeight: 700,
+            fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)",
+            boxShadow: isLight ? '0 2px 6px rgba(0,0,0,0.05)' : '0 4px 15px rgba(0,0,0,0.5)',
+            transition: 'all 0.2s ease'
+          }}
+        >
+          {isLight ? <Moon size={15} color="#1554E8" /> : <Sun size={15} color="#F59E0B" />}
+          <span>{isLight ? 'Dark Mode' : 'Light Mode'}</span>
         </button>
       </div>
 
@@ -106,15 +139,16 @@ export const RoleSelect = () => {
         <div style={{ 
           display: 'inline-flex', alignItems: 'center', gap: '0.5rem', 
           padding: '0.5rem 1.3rem', borderRadius: '100px', 
-          backgroundColor: 'rgba(21, 84, 232, 0.15)', 
-          border: '1px solid rgba(106, 231, 247, 0.35)',
-          marginBottom: '1.25rem', color: '#6AE7F7', 
+          backgroundColor: isLight ? 'rgba(21, 84, 232, 0.08)' : 'rgba(21, 84, 232, 0.15)', 
+          border: isLight ? '1px solid rgba(21, 84, 232, 0.22)' : '1px solid rgba(106, 231, 247, 0.35)',
+          marginBottom: '1.25rem', 
+          color: isLight ? '#1554E8' : '#6AE7F7', 
           fontSize: '0.8rem', fontWeight: '800',
           letterSpacing: '1.5px',
           fontFamily: "'JetBrains Mono', monospace",
-          boxShadow: '0 0 20px rgba(21, 84, 232, 0.2)'
+          boxShadow: isLight ? '0 2px 10px rgba(21, 84, 232, 0.08)' : '0 0 20px rgba(21, 84, 232, 0.2)'
         }}>
-          <Lock size={14} color="#6AE7F7" /> PHASE 02: ROLE-BASED ACCESS PROTOCOL
+          <Lock size={14} color={isLight ? '#1554E8' : '#6AE7F7'} /> PHASE 02: ROLE-BASED ACCESS PROTOCOL
         </div>
 
         <h1 style={{ 
@@ -123,13 +157,20 @@ export const RoleSelect = () => {
           marginBottom: '0.75rem', 
           letterSpacing: '-1px', 
           fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)",
-          color: '#F6FDFF'
+          color: isLight ? '#0F172A' : '#F6FDFF'
         }}>
           Select Your Access Role
         </h1>
 
-        <p style={{ color: 'rgba(246, 253, 255, 0.75)', fontSize: '1.18rem', maxWidth: '640px', margin: '0 auto', lineHeight: 1.6, fontFamily: "var(--font-family, 'Inter', sans-serif)" }}>
-          Only roles authenticated for <span style={{ color: '#2E9BF8', fontWeight: 700, textDecoration: 'underline', textDecorationColor: '#6AE7F7' }}>{currentOrg.name}</span> are available. Permissions dynamically dictate your dashboard modules.
+        <p style={{ 
+          color: isLight ? '#475569' : 'rgba(246, 253, 255, 0.75)', 
+          fontSize: '1.18rem', 
+          maxWidth: '640px', 
+          margin: '0 auto', 
+          lineHeight: 1.6, 
+          fontFamily: "var(--font-family, 'Inter', sans-serif)" 
+        }}>
+          Only roles authenticated for <span style={{ color: currentOrg.themeColor, fontWeight: 700, textDecoration: 'underline', textDecorationColor: currentOrg.secondaryColor }}>{currentOrg.name}</span> are available. Permissions dynamically dictate your dashboard modules.
         </p>
       </div>
 
@@ -158,18 +199,26 @@ export const RoleSelect = () => {
                 position: 'relative',
                 overflow: 'hidden',
                 borderRadius: '20px',
-                background: isHovered 
-                  ? 'linear-gradient(145deg, rgba(13, 35, 77, 0.95), rgba(21, 84, 232, 0.25))' 
-                  : 'rgba(13, 35, 77, 0.7)',
+                background: isLight
+                  ? '#FFFFFF'
+                  : isHovered 
+                    ? 'linear-gradient(145deg, rgba(13, 35, 77, 0.95), rgba(21, 84, 232, 0.25))' 
+                    : 'rgba(13, 35, 77, 0.7)',
                 backdropFilter: 'blur(24px)',
                 WebkitBackdropFilter: 'blur(24px)',
-                border: isHovered 
-                  ? '1px solid #6AE7F7' 
-                  : '1px solid rgba(46, 155, 248, 0.22)',
+                border: isLight
+                  ? `1.5px solid ${isHovered ? currentOrg.themeColor : '#E2E8F0'}`
+                  : isHovered 
+                    ? '1px solid #6AE7F7' 
+                    : '1px solid rgba(46, 155, 248, 0.22)',
                 transform: isHovered ? 'translateY(-6px)' : 'translateY(0)',
                 boxShadow: isHovered 
-                  ? '0 24px 48px rgba(0, 0, 0, 0.8), 0 0 35px rgba(21, 84, 232, 0.35)' 
-                  : '0 8px 32px rgba(0, 0, 0, 0.5)',
+                  ? isLight
+                    ? `0 20px 40px rgba(0, 0, 0, 0.08), 0 0 25px ${currentOrg.themeColor}25`
+                    : '0 24px 48px rgba(0, 0, 0, 0.8), 0 0 35px rgba(21, 84, 232, 0.35)' 
+                  : isLight
+                    ? '0 4px 18px rgba(0, 0, 0, 0.05)'
+                    : '0 8px 32px rgba(0, 0, 0, 0.5)',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
@@ -183,7 +232,7 @@ export const RoleSelect = () => {
               {/* Top accent line on hover */}
               <div style={{
                 position: 'absolute', top: 0, left: 0, right: 0, height: '3px',
-                background: 'linear-gradient(90deg, #1554E8, #2E9BF8, #6AE7F7)',
+                background: `linear-gradient(90deg, ${currentOrg.themeColor}, ${currentOrg.secondaryColor}, ${currentOrg.accentColor})`,
                 opacity: isHovered ? 1 : 0,
                 transition: 'opacity 0.3s ease'
               }} />
@@ -193,21 +242,23 @@ export const RoleSelect = () => {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
                   <div style={{ 
                     width: '60px', height: '60px', borderRadius: '16px', 
-                    backgroundColor: isHovered ? 'rgba(21, 84, 232, 0.3)' : 'rgba(7, 17, 46, 0.85)',
-                    color: '#6AE7F7',
+                    backgroundColor: isLight ? '#F1F5F9' : (isHovered ? 'rgba(21, 84, 232, 0.3)' : 'rgba(7, 17, 46, 0.85)'),
+                    color: currentOrg.themeColor,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     transition: 'all 0.3s ease',
-                    boxShadow: isHovered ? '0 0 24px rgba(21, 84, 232, 0.5)' : 'none',
-                    border: `1px solid ${isHovered ? '#6AE7F7' : 'rgba(46, 155, 248, 0.3)'}`
+                    boxShadow: isHovered ? `0 0 24px ${currentOrg.themeColor}40` : 'none',
+                    border: isLight 
+                      ? `1.5px solid ${isHovered ? currentOrg.themeColor : '#E2E8F0'}`
+                      : `1px solid ${isHovered ? '#6AE7F7' : 'rgba(46, 155, 248, 0.3)'}`
                   }}>
                     <RoleIcon size={28} />
                   </div>
 
                   <div style={{ 
                     padding: '0.4rem 0.95rem', borderRadius: '100px', fontSize: '0.75rem', fontWeight: '700',
-                    backgroundColor: 'rgba(21, 84, 232, 0.15)', 
-                    color: '#6AE7F7',
-                    border: '1px solid rgba(106, 231, 247, 0.35)',
+                    backgroundColor: isLight ? 'rgba(21, 84, 232, 0.08)' : 'rgba(21, 84, 232, 0.15)', 
+                    color: isLight ? '#1554E8' : '#6AE7F7',
+                    border: isLight ? '1px solid rgba(21, 84, 232, 0.22)' : '1px solid rgba(106, 231, 247, 0.35)',
                     letterSpacing: '1px',
                     fontFamily: "'JetBrains Mono', monospace"
                   }}>
@@ -219,14 +270,20 @@ export const RoleSelect = () => {
                   fontSize: '1.55rem', 
                   fontWeight: '800', 
                   marginBottom: '0.6rem', 
-                  color: '#F6FDFF', 
+                  color: isLight ? '#0F172A' : '#F6FDFF', 
                   lineHeight: 1.25,
                   fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)"
                 }}>
                   {role.title}
                 </h2>
 
-                <p style={{ color: 'rgba(246, 253, 255, 0.72)', fontSize: '0.94rem', lineHeight: '1.6', marginBottom: '1.5rem', fontFamily: "var(--font-family, 'Inter', sans-serif)" }}>
+                <p style={{ 
+                  color: isLight ? '#475569' : 'rgba(246, 253, 255, 0.75)', 
+                  fontSize: '0.94rem', 
+                  lineHeight: '1.6', 
+                  marginBottom: '1.5rem', 
+                  fontFamily: "var(--font-family, 'Inter', sans-serif)" 
+                }}>
                   {role.desc}
                 </p>
               </div>
@@ -234,14 +291,21 @@ export const RoleSelect = () => {
               {/* Bottom Modules Allowed & Action Bar */}
               <div>
                 <div style={{ 
-                  borderTop: '1px solid rgba(46, 155, 248, 0.16)', 
+                  borderTop: isLight ? '1px solid #E2E8F0' : '1px solid rgba(46, 155, 248, 0.16)', 
                   paddingTop: '1.1rem', 
                   display: 'flex', 
                   alignItems: 'center', 
                   justifyContent: 'space-between' 
                 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontSize: '0.8rem', color: '#6AE7F7', fontFamily: "'JetBrains Mono', monospace" }}>
-                    <ShieldCheck size={16} color="#6AE7F7" />
+                  <div style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: '0.45rem', 
+                    fontSize: '0.8rem', 
+                    color: isLight ? '#1554E8' : '#6AE7F7', 
+                    fontFamily: "'JetBrains Mono', monospace" 
+                  }}>
+                    <ShieldCheck size={16} color={isLight ? '#1554E8' : '#6AE7F7'} />
                     <span>{role.permissions.includes('all') ? 'Full Platform Clearance' : `${role.permissions.length} Modules Authorized`}</span>
                   </div>
 
@@ -251,7 +315,7 @@ export const RoleSelect = () => {
                     gap: '0.4rem',
                     fontSize: '0.88rem',
                     fontWeight: '700',
-                    color: isHovered ? '#6AE7F7' : '#F6FDFF',
+                    color: isHovered ? currentOrg.themeColor : (isLight ? '#0F172A' : '#F6FDFF'),
                     fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)",
                     letterSpacing: '0.5px',
                     transition: 'color 0.2s ease'
