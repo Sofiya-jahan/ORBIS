@@ -46,6 +46,11 @@
   --glass-border-hover: rgba(21, 84, 232, 0.35);
   --glass-overlay: rgba(248, 250, 252, 0.92);
 
+  --card-bg: #FFFFFF;
+  --hover-bg: rgba(21, 84, 232, 0.08);
+  --border-color: rgba(226, 232, 240, 0.9);
+  --primary-light: rgba(21, 84, 232, 0.10);
+
   --card-gradient: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);
   --border-gradient: linear-gradient(135deg, rgba(21, 84, 232, 0.25) 0%, rgba(2, 132, 199, 0.15) 100%);
 
@@ -91,6 +96,11 @@
   --input-bg: rgba(13, 35, 77, 0.7);
   --input-border: rgba(46, 155, 248, 0.25);
   --input-focus-border: var(--secondary);
+
+  --card-bg: rgba(13, 35, 77, 0.65);
+  --hover-bg: rgba(255, 255, 255, 0.06);
+  --border-color: rgba(46, 155, 248, 0.20);
+  --primary-light: rgba(21, 84, 232, 0.20);
 
   --chart-1: #6AE7F7;
   --chart-2: #2E9BF8;

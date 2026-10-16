@@ -420,7 +420,7 @@ export const DashboardLayout = () => {
       </aside>
 
       {/* Main App Content Area */}
-      <main style={{ 
+      <main className="dashboard-main" style={{ 
         flex: 1, 
         display: 'flex', 
         flexDirection: 'column', 
@@ -663,7 +663,7 @@ export const DashboardLayout = () => {
 
         {/* Main Routed Content Area */}
         <div 
-          className="custom-scrollbar" 
+          className="custom-scrollbar dashboard-content-scroll" 
           style={{ 
             flex: 1, 
             overflowY: 'auto', 

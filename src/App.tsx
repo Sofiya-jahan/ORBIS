@@ -151,7 +151,18 @@ export const App = () => {
   }, [initAuthListener]);
 
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
+    // Public showcase and authentication portals maintain the signature sovereign dark command aesthetic
+    const isPublicAuthPage = location.pathname === '/' || 
+                             location.pathname === '/intro' || 
+                             location.pathname === '/landing' || 
+                             location.pathname === '/login' || 
+                             location.pathname === '/register' || 
+                             location.pathname === '/auth-verification' ||
+                             location.pathname === '/security-key' ||
+                             location.pathname === '/verification';
+
+    const activeTheme = isPublicAuthPage ? 'dark' : theme;
+    document.documentElement.setAttribute('data-theme', activeTheme);
     
     // Enterprise color palette is active across the entire application
     const isDashboard = location.pathname.startsWith('/dashboard');
