@@ -25,12 +25,12 @@ export const OrgSelect = () => {
   const orgList = Object.values(ORGANIZATIONS);
 
   const categories = [
-    { id: 'all', label: 'All Industries (13)' },
+    { id: 'all', label: 'All Industries (7)' },
     { id: 'healthcare', label: 'Healthcare' },
     { id: 'finance', label: 'Finance & Banking' },
     { id: 'tech', label: 'Tech & Cloud' },
     { id: 'industrial', label: 'Industrial & Energy' },
-    { id: 'public', label: 'Public Sector & Legal' }
+    { id: 'public', label: 'Public Sector & Academics' }
   ];
 
   const filteredOrgs = orgList.filter(org => {
@@ -41,10 +41,10 @@ export const OrgSelect = () => {
     if (!matchesSearch) return false;
     if (selectedCategory === 'all') return true;
     if (selectedCategory === 'healthcare') return org.id === 'hospital';
-    if (selectedCategory === 'finance') return org.id === 'bank' || org.id === 'insurance';
-    if (selectedCategory === 'tech') return org.id === 'it' || org.id === 'startup';
-    if (selectedCategory === 'industrial') return ['manufacturing', 'energy', 'construction', 'logistics'].includes(org.id);
-    if (selectedCategory === 'public') return ['government', 'university', 'lawfirm', 'retail'].includes(org.id);
+    if (selectedCategory === 'finance') return org.id === 'bank';
+    if (selectedCategory === 'tech') return org.id === 'it';
+    if (selectedCategory === 'industrial') return org.id === 'manufacturing' || org.id === 'energy';
+    if (selectedCategory === 'public') return org.id === 'government' || org.id === 'university';
     return true;
   });
 
@@ -290,7 +290,7 @@ export const OrgSelect = () => {
           </div>
         </div>
 
-        {/* 13 Industry Grid */}
+        {/* 7 Flagship Enterprise Grid */}
         <div style={{ 
           display: 'grid', 
           gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', 

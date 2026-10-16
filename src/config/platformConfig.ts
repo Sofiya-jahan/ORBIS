@@ -785,6 +785,84 @@ export const ORGANIZATIONS: Record<string, OrganizationConfig> = {
     ]
   },
 
+  energy: {
+    id: 'energy',
+    name: 'Energy, Grid & Utilities',
+    sector: 'Clean Energy & Power Grids',
+    iconName: 'Zap',
+    themeColor: '#15803D',
+    secondaryColor: '#22C55E',
+    accentColor: '#86EFAC',
+    bgImage: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?q=80&w=2000&auto=format&fit=crop',
+    description: 'Grid frequency load balancing, wind turbine blade vibration diagnostics, pipeline leak detection, and EPA emissions.',
+    statLabel: 'Megawatts Clean Energy Output',
+    statValue: '8,400 MW',
+    healthScore: 95,
+    aiRiskScore: 10.1,
+    departments: ['Grid Operations', 'Renewable Farms', 'Nuclear & Hydro', 'Transmission', 'EHS & EPA', 'Trading Desk'],
+    industryModules: [
+      {
+        id: 'grid-stability',
+        name: 'Grid Frequency & Demand Peak Forecasting',
+        iconName: 'Zap',
+        description: 'Weather-based solar/wind intermittency predictions, battery storage dispatch, and blackout prevention.',
+        kpi1: { label: 'Grid Frequency', value: '60.00 Hz', change: 'Nominal (+-0.01)', positive: true },
+        kpi2: { label: 'Renewable Mix', value: '74.2%', change: '+8% vs benchmark', positive: true },
+        kpi3: { label: 'Peak Load Reserve', value: '28% Buffer', change: 'Optimal', positive: true },
+        activeAlertsCount: 0
+      },
+      {
+        id: 'pipeline-telemetry',
+        name: 'Pipeline Integrity & Turbine Diagnostics',
+        iconName: 'Cpu',
+        description: 'Acoustic wave leak detection, turbine gearbox oil viscosity breakdown, and thermal hotspot alerts.',
+        kpi1: { label: 'Turbine Fleet Health', value: '98.4%', change: '320 Turbines', positive: true },
+        kpi2: { label: 'Pipeline Pressure', value: 'Normal (850 PSI)', change: '0 leaks detected', positive: true },
+        kpi3: { label: 'MTBF Forecast', value: '4,200 hrs', change: '+20%', positive: true },
+        activeAlertsCount: 1
+      }
+    ],
+    roles: [
+      {
+        id: 'ceo',
+        title: 'Chief Operating Officer / CEO',
+        iconName: 'Award',
+        accessLevel: 'Level 5 (Super Admin)',
+        levelNumber: 5,
+        desc: 'Grid reliability index, FERC / NERC compliance, capital expansion risk, and commodity price hedging.',
+        roleCategory: 'executive',
+        permissions: ['all']
+      },
+      {
+        id: 'risk-manager',
+        title: 'Grid Reliability & EHS Risk Manager',
+        iconName: 'ShieldAlert',
+        accessLevel: 'Level 4 (Executive)',
+        levelNumber: 4,
+        desc: 'Blackout probability simulations, environmental impact audits, and cybersecurity on SCADA networks.',
+        roleCategory: 'risk',
+        permissions: ['risk', 'incidents', 'predictive', 'analytics', 'xai', 'reports', 'workflow', 'compliance', 'industry_modules']
+      },
+      {
+        id: 'employee',
+        title: 'Control Room Operator / Field Tech',
+        iconName: 'Zap',
+        accessLevel: 'Level 2 (Specialist)',
+        levelNumber: 2,
+        desc: 'Substation alarm queues, transformer temperature tracking, and safety work orders.',
+        roleCategory: 'operations',
+        permissions: ['dashboard', 'industry_modules', 'incidents', 'workflow']
+      }
+    ]
+  }
+};
+
+/**
+ * RESERVED_ORGANIZATIONS
+ * Inactive industry profiles preserved for future platform expansion.
+ * Easily re-enabled into active ORGANIZATIONS when required.
+ */
+export const RESERVED_ORGANIZATIONS: Record<string, OrganizationConfig> = {
   insurance: {
     id: 'insurance',
     name: 'Insurance & Actuarial Enterprise',
@@ -1008,76 +1086,6 @@ export const ORGANIZATIONS: Record<string, OrganizationConfig> = {
     ]
   },
 
-  energy: {
-    id: 'energy',
-    name: 'Energy, Grid & Utilities',
-    sector: 'Clean Energy & Power Grids',
-    iconName: 'Zap',
-    themeColor: '#15803D',
-    secondaryColor: '#22C55E',
-    accentColor: '#86EFAC',
-    bgImage: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?q=80&w=2000&auto=format&fit=crop',
-    description: 'Grid frequency load balancing, wind turbine blade vibration diagnostics, pipeline leak detection, and EPA emissions.',
-    statLabel: 'Megawatts Clean Energy Output',
-    statValue: '8,400 MW',
-    healthScore: 95,
-    aiRiskScore: 10.1,
-    departments: ['Grid Operations', 'Renewable Farms', 'Nuclear & Hydro', 'Transmission', 'EHS & EPA', 'Trading Desk'],
-    industryModules: [
-      {
-        id: 'grid-stability',
-        name: 'Grid Frequency & Demand Peak Forecasting',
-        iconName: 'Zap',
-        description: 'Weather-based solar/wind intermittency predictions, battery storage dispatch, and blackout prevention.',
-        kpi1: { label: 'Grid Frequency', value: '60.00 Hz', change: 'Nominal (+-0.01)', positive: true },
-        kpi2: { label: 'Renewable Mix', value: '74.2%', change: '+8% vs benchmark', positive: true },
-        kpi3: { label: 'Peak Load Reserve', value: '28% Buffer', change: 'Optimal', positive: true },
-        activeAlertsCount: 0
-      },
-      {
-        id: 'pipeline-telemetry',
-        name: 'Pipeline Integrity & Turbine Diagnostics',
-        iconName: 'Cpu',
-        description: 'Acoustic wave leak detection, turbine gearbox oil viscosity breakdown, and thermal hotspot alerts.',
-        kpi1: { label: 'Turbine Fleet Health', value: '98.4%', change: '320 Turbines', positive: true },
-        kpi2: { label: 'Pipeline Pressure', value: 'Normal (850 PSI)', change: '0 leaks detected', positive: true },
-        kpi3: { label: 'MTBF Forecast', value: '4,200 hrs', change: '+20%', positive: true },
-        activeAlertsCount: 1
-      }
-    ],
-    roles: [
-      {
-        id: 'ceo',
-        title: 'Chief Operating Officer / CEO',
-        iconName: 'Award',
-        accessLevel: 'Level 5 (Super Admin)',
-        levelNumber: 5,
-        desc: 'Grid reliability index, FERC / NERC compliance, capital expansion risk, and commodity price hedging.',
-        roleCategory: 'executive',
-        permissions: ['all']
-      },
-      {
-        id: 'risk-manager',
-        title: 'Grid Reliability & EHS Risk Manager',
-        iconName: 'ShieldAlert',
-        accessLevel: 'Level 4 (Executive)',
-        levelNumber: 4,
-        desc: 'Blackout probability simulations, environmental impact audits, and cybersecurity on SCADA networks.',
-        roleCategory: 'risk',
-        permissions: ['risk', 'incidents', 'predictive', 'analytics', 'xai', 'reports', 'workflow', 'compliance', 'industry_modules']
-      },
-      {
-        id: 'employee',
-        title: 'Control Room Operator / Field Tech',
-        iconName: 'Zap',
-        accessLevel: 'Level 2 (Specialist)',
-        levelNumber: 2,
-        desc: 'Substation alarm queues, transformer temperature tracking, and safety work orders.',
-        roleCategory: 'operations',
-        permissions: ['dashboard', 'industry_modules', 'incidents', 'workflow']
-      }
-    ]
-  },
 
   logistics: {
     id: 'logistics',
