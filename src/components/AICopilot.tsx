@@ -40,7 +40,7 @@ export const AICopilot = () => {
   const { organization, role, user } = useAuthStore();
   
   const currentOrg = organization && ORGANIZATIONS[organization] ? ORGANIZATIONS[organization] : null;
-  const currentRole = currentOrg?.roles.find(r => r.id === role);
+  const currentRole = currentOrg?.roles.find(r => r.id === role) || currentOrg?.roles[0];
 
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -58,6 +58,8 @@ export const AICopilot = () => {
         if (!isMounted) return;
 
         const cleanDisplayName = formatUserName(user?.name, user?.email);
+        const resolvedRoleTitle = currentRole?.title || 'Officer';
+        const greetingText = `Greetings **${cleanDisplayName}**. Welcome to **${currentOrg.name}** for your role as **${resolvedRoleTitle}**.\n\nHow can I assist you today?`;
 
         if (savedMessages && savedMessages.length > 0) {
           setMessages(savedMessages.map(m => {
@@ -71,7 +73,7 @@ export const AICopilot = () => {
 
             // If greeting message, format with clean name, bold organization/role, and minimal assistant question
             if (m.id.startsWith('msg-init') || sanitizedText.startsWith('Greetings')) {
-              sanitizedText = `Greetings **${cleanDisplayName}**. Welcome to **${currentOrg.name}** for your role as **${currentRole?.title || role || 'Officer'}**.\n\nHow can I assist you today?`;
+              sanitizedText = greetingText;
               actionCard = undefined; // Minimal, simple greeting without extra clutter cards
             } else if (actionCard && typeof actionCard === 'object') {
               actionCard = {
@@ -90,12 +92,23 @@ export const AICopilot = () => {
               actionCard
             };
           }));
+
+          // Synchronize active role & minimal greeting into Neon DB
+          saveMessageToNeon({
+            id: `msg-init-${organization || 'default'}`,
+            sender: 'ai',
+            text: greetingText,
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            userId: user?.id,
+            organization: organization || undefined,
+            role: role || undefined
+          });
         } else {
           // Initialize fresh simple minimal greeting and persist into Neon DB
           const initialGreeting: ChatMessage = {
             id: `msg-init-${organization || 'default'}`,
             sender: 'ai',
-            text: `Greetings **${cleanDisplayName}**. Welcome to **${currentOrg.name}** for your role as **${currentRole?.title || role || 'Officer'}**.\n\nHow can I assist you today?`,
+            text: greetingText,
             timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
           };
           setMessages([initialGreeting]);
@@ -227,10 +240,11 @@ export const AICopilot = () => {
       await clearMessagesFromNeon(organization || undefined);
       if (currentOrg) {
         const cleanDisplayName = formatUserName(user?.name, user?.email);
+        const resolvedRoleTitle = currentRole?.title || 'Officer';
         const freshGreeting: ChatMessage = {
           id: `msg-init-${organization || 'default'}-${Date.now()}`,
           sender: 'ai',
-          text: `Greetings **${cleanDisplayName}**. Welcome to **${currentOrg.name}** for your role as **${currentRole?.title || role || 'Officer'}**.\n\nHow can I assist you today?`,
+          text: `Greetings **${cleanDisplayName}**. Welcome to **${currentOrg.name}** for your role as **${resolvedRoleTitle}**.\n\nHow can I assist you today?`,
           timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         };
         setMessages([freshGreeting]);

@@ -146,6 +146,7 @@ export async function saveMessageToNeon(msg: {
       )
       ON CONFLICT (id) DO UPDATE SET
         text = EXCLUDED.text,
+        role = EXCLUDED.role,
         action_card = EXCLUDED.action_card;
     `;
     return true;

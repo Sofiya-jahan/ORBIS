@@ -16,8 +16,13 @@ import PredictiveAI from './PredictiveAI';
 import ExplainableAI from './ExplainableAI';
 
 export const AIIntelligence = () => {
-  const { organization, user } = useAuthStore();
+  const { organization, role, user } = useAuthStore();
   const currentOrg = organization && ORGANIZATIONS[organization] ? ORGANIZATIONS[organization] : ORGANIZATIONS.hospital;
+  const currentRole = currentOrg?.roles.find(r => r.id === role) || currentOrg?.roles[0];
+  const cleanDisplayName = formatUserName(user?.name, user?.email);
+  const resolvedRoleTitle = currentRole?.title || 'Officer';
+  const greetingText = `Greetings **${cleanDisplayName}**. Welcome to **${currentOrg.name}** for your role as **${resolvedRoleTitle}**.\n\nHow can I assist you today?`;
+
   const [searchParams, setSearchParams] = useSearchParams();
 
   const activeTab = searchParams.get('tab') || 'overview';
@@ -35,12 +40,30 @@ export const AIIntelligence = () => {
     {
       id: '1',
       sender: 'assistant',
-      text: `Greetings **${formatUserName(user?.name, user?.email)}**. Welcome to **${currentOrg.name}**.\n\nHow can I assist you today?`,
+      text: greetingText,
       time: 'Just now'
     }
   ]);
   const [inputMessage, setInputMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+
+  // Synchronize greeting whenever user changes organization or role
+  useEffect(() => {
+    setMessages(prev => {
+      if (prev.length <= 1 || prev[0]?.text.startsWith('Greetings')) {
+        return [
+          {
+            id: '1',
+            sender: 'assistant',
+            text: greetingText,
+            time: 'Just now'
+          },
+          ...prev.slice(1)
+        ];
+      }
+      return prev;
+    });
+  }, [organization, role, cleanDisplayName, resolvedRoleTitle, greetingText]);
 
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
@@ -331,11 +354,11 @@ export const AIIntelligence = () => {
                 </div>
                 <div>
                   <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#F6FDFF', margin: 0 }}>
-                    ORBIS Neural Copilot &bull; NVIDIA Nemotron-3
+                    ORBIS Risk Intelligence Copilot
                   </h3>
                   <div style={{ fontSize: '0.78rem', color: '#6AE7F7', display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#6AE7F7', boxShadow: '0 0 8px #6AE7F7' }} />
-                    Active Enterprise Context &bull; {currentOrg.name} Telemetry Linked
+                    Active Enterprise Context &bull; {currentOrg.name} &bull; {resolvedRoleTitle}
                   </div>
                 </div>
               </div>
@@ -346,7 +369,7 @@ export const AIIntelligence = () => {
                     {
                       id: '1',
                       sender: 'assistant',
-                      text: `Conversation memory refreshed. How can I assist you with ${currentOrg.name} operational intelligence?`,
+                      text: greetingText,
                       time: 'Just now'
                     }
                   ])}
