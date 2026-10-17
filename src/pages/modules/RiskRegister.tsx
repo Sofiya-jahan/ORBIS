@@ -1,85 +1,58 @@
 import React, { useState } from 'react';
 import { useAuthStore } from '../../store/useAuthStore';
 import { ORGANIZATIONS } from '../../config/platformConfig';
+import { useOrganizationalIntelligence } from '../../intelligence/useOrganizationalIntelligence';
 import { 
   ShieldAlert, Grid, CheckSquare, GitPullRequest, 
   Search, Filter, Plus, ArrowUpRight, CheckCircle2, 
-  AlertTriangle, Clock, Sliders, Shield, Zap
+  AlertTriangle, Clock, Sliders, Shield, Zap, X
 } from 'lucide-react';
 
 export const RiskRegister = () => {
-  const { organization } = useAuthStore();
+  const { organization, user } = useAuthStore();
   const currentOrg = organization && ORGANIZATIONS[organization] ? ORGANIZATIONS[organization] : ORGANIZATIONS.hospital;
+  const { data: orgData, createRisk, applyRiskMitigation, closeRisk } = useOrganizationalIntelligence();
   
   const [filterSeverity, setFilterSeverity] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedRisk, setSelectedRisk] = useState<number | null>(null);
 
-  const mockRisks = [
-    {
-      id: 'RSK-104',
-      title: 'High-Frequency Ingress Volatility Spike',
-      department: currentOrg.departments[0] || 'Core Operations',
-      category: 'Operational / Cyber',
-      probability: 4, // 1-5
-      impact: 4, // 1-5
-      score: 16,
-      severity: 'Critical',
-      owner: 'Lead Risk Analyst',
-      status: 'Active Mitigation',
-      mitigation: 'Implement dynamic buffer queues and isolate secondary ingress clusters.',
-      lastReviewed: 'Today, 09:30 AM'
-    },
-    {
-      id: 'RSK-108',
-      title: 'Regulatory Audit Compliance Gap on Policy v4',
-      department: currentOrg.departments[1] || 'Compliance',
-      category: 'Regulatory / Legal',
-      probability: 2,
-      impact: 5,
-      score: 10,
-      severity: 'High',
-      owner: 'Chief Compliance Officer',
-      status: 'Under Review',
-      mitigation: 'Automate weekly SOC2 / HIPAA evidence collection pipelines.',
-      lastReviewed: 'Yesterday'
-    },
-    {
-      id: 'RSK-112',
-      title: 'Third-Party Vendor API Latency Degradation',
-      department: currentOrg.departments[2] || 'Infrastructure',
-      category: 'Vendor / Supply',
-      probability: 3,
-      impact: 3,
-      score: 9,
-      severity: 'Medium',
-      owner: 'Infrastructure Lead',
-      status: 'Monitored',
-      mitigation: 'Failover route activated across multi-region standby endpoints.',
-      lastReviewed: '2 days ago'
-    },
-    {
-      id: 'RSK-119',
-      title: 'Operator Fatigue Variance in Shift Rotation',
-      department: currentOrg.departments[3] || 'Operations',
-      category: 'Human Factors',
-      probability: 3,
-      impact: 2,
-      score: 6,
-      severity: 'Low',
-      owner: 'HR / Operations Lead',
-      status: 'Scheduled',
-      mitigation: 'Introduce automated shift pacing and mandatory rest intervals.',
-      lastReviewed: '4 days ago'
-    }
-  ];
+  // New Risk Form State
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [newTitle, setNewTitle] = useState('');
+  const [newDept, setNewDept] = useState(currentOrg.departments[0] || 'Core');
+  const [newCategory, setNewCategory] = useState('Operational / Cyber');
+  const [newProbability, setNewProbability] = useState<number>(3);
+  const [newImpact, setNewImpact] = useState<number>(3);
+  const [newMitigation, setNewMitigation] = useState('');
 
-  const filteredRisks = mockRisks.filter(r => {
+  const risksList = orgData?.risks || [];
+
+  const filteredRisks = risksList.filter(r => {
     const matchesSearch = r.title.toLowerCase().includes(searchQuery.toLowerCase()) || r.id.toLowerCase().includes(searchQuery.toLowerCase());
     if (!matchesSearch) return false;
     if (filterSeverity === 'all') return true;
     return r.severity.toLowerCase() === filterSeverity.toLowerCase();
   });
+
+  const handleCreateRisk = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newTitle.trim()) return;
+
+    createRisk({
+      title: newTitle,
+      department: newDept,
+      probability: newProbability,
+      impact: newImpact,
+      category: newCategory,
+      mitigation: newMitigation || 'Mitigation work order dispatched.',
+      userName: user?.name
+    });
+
+    setNewTitle('');
+    setNewMitigation('');
+    setShowAddModal(false);
+  };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
@@ -101,7 +74,7 @@ export const RiskRegister = () => {
         <button 
           className="btn btn-primary"
           style={{ background: currentOrg.themeColor, padding: '0.75rem 1.4rem' }}
-          onClick={() => alert('New Risk Assessment Wizard opened.')}
+          onClick={() => setShowAddModal(true)}
         >
           <Plus size={18} /> Register New Risk
         </button>
@@ -213,13 +186,28 @@ export const RiskRegister = () => {
       {/* Expandable Selected Risk Detail Panel */}
       {selectedRisk !== null && filteredRisks[selectedRisk] && (
         <div className="glass-card animate-fade-in" style={{ padding: '1.75rem', borderLeft: `6px solid ${currentOrg.themeColor}` }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: '800' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.75rem' }}>
+            <h3 style={{ fontSize: '1.2rem', fontWeight: '800', margin: 0 }}>
               Root Cause & Active Mitigation Plan for {filteredRisks[selectedRisk].id}
             </h3>
-            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-              Last Review: {filteredRisks[selectedRisk].lastReviewed}
-            </span>
+            <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center' }}>
+              <button 
+                onClick={() => applyRiskMitigation(filteredRisks[selectedRisk].id, 'Preemptive buffer allocation deployed and verified.')}
+                className="btn btn-secondary"
+                style={{ fontSize: '0.78rem', padding: '0.45rem 0.85rem' }}
+              >
+                Apply Mitigation
+              </button>
+              {filteredRisks[selectedRisk].status !== 'closed' && (
+                <button 
+                  onClick={() => closeRisk(filteredRisks[selectedRisk].id)}
+                  className="btn btn-primary"
+                  style={{ fontSize: '0.78rem', padding: '0.45rem 0.85rem' }}
+                >
+                  Close Risk
+                </button>
+              )}
+            </div>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.25rem' }}>
             <div style={{ padding: '1rem', borderRadius: '12px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
@@ -238,6 +226,90 @@ export const RiskRegister = () => {
                 {filteredRisks[selectedRisk].mitigation}
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* New Risk Modal Dialog */}
+      {showAddModal && (
+        <div style={{
+          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.75)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000,
+          backdropFilter: 'blur(8px)'
+        }}>
+          <div className="neo-card" style={{ width: '520px', maxWidth: '90vw', padding: '2rem', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '20px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+              <h3 style={{ fontSize: '1.3rem', fontWeight: 800, margin: 0 }}>Register New Risk Event</h3>
+              <button onClick={() => setShowAddModal(false)} style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}><X size={20} /></button>
+            </div>
+            <form onSubmit={handleCreateRisk} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div>
+                <label style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-muted)' }}>Risk Title</label>
+                <input 
+                  type="text" 
+                  value={newTitle} 
+                  onChange={e => setNewTitle(e.target.value)}
+                  placeholder="e.g. Ingress Telemetry Node Congestion Spike"
+                  required
+                  style={{ width: '100%', padding: '0.7rem 1rem', borderRadius: '10px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', marginTop: '0.3rem' }}
+                />
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div>
+                  <label style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-muted)' }}>Department</label>
+                  <select 
+                    value={newDept} 
+                    onChange={e => setNewDept(e.target.value)}
+                    style={{ width: '100%', padding: '0.7rem 1rem', borderRadius: '10px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', marginTop: '0.3rem' }}
+                  >
+                    {currentOrg.departments.map(d => <option key={d} value={d}>{d}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-muted)' }}>Category</label>
+                  <input 
+                    type="text" 
+                    value={newCategory} 
+                    onChange={e => setNewCategory(e.target.value)}
+                    style={{ width: '100%', padding: '0.7rem 1rem', borderRadius: '10px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', marginTop: '0.3rem' }}
+                  />
+                </div>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div>
+                  <label style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-muted)' }}>Probability (1-5): {newProbability}</label>
+                  <input 
+                    type="range" min="1" max="5" 
+                    value={newProbability} 
+                    onChange={e => setNewProbability(Number(e.target.value))}
+                    style={{ width: '100%', marginTop: '0.5rem' }}
+                  />
+                </div>
+                <div>
+                  <label style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-muted)' }}>Impact (1-5): {newImpact}</label>
+                  <input 
+                    type="range" min="1" max="5" 
+                    value={newImpact} 
+                    onChange={e => setNewImpact(Number(e.target.value))}
+                    style={{ width: '100%', marginTop: '0.5rem' }}
+                  />
+                </div>
+              </div>
+              <div>
+                <label style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-muted)' }}>Mitigation Plan</label>
+                <textarea 
+                  value={newMitigation} 
+                  onChange={e => setNewMitigation(e.target.value)}
+                  placeholder="Outline preventive actions or automated controls..."
+                  rows={3}
+                  style={{ width: '100%', padding: '0.7rem 1rem', borderRadius: '10px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', marginTop: '0.3rem' }}
+                />
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '0.5rem' }}>
+                <button type="button" onClick={() => setShowAddModal(false)} className="btn btn-secondary">Cancel</button>
+                <button type="submit" className="btn btn-primary" style={{ background: currentOrg.themeColor }}>Publish to Hub</button>
+              </div>
+            </form>
           </div>
         </div>
       )}

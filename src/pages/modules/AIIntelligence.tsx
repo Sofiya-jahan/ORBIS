@@ -4,6 +4,7 @@ import { useAuthStore } from '../../store/useAuthStore';
 import { ORGANIZATIONS } from '../../config/platformConfig';
 import { formatUserName } from '../../utils/userUtils';
 import { renderFormattedMessage } from '../../utils/messageFormatter';
+import { queryNemotron } from '../../services/nvidiaNemotronService';
 import { 
   Sparkles, Brain, TrendingUp, Cpu, Bot, 
   Layers, CheckCircle2, AlertTriangle, ArrowUpRight, 
@@ -65,7 +66,7 @@ export const AIIntelligence = () => {
     });
   }, [organization, role, cleanDisplayName, resolvedRoleTitle, greetingText]);
 
-  const handleSendMessage = (e: React.FormEvent) => {
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputMessage.trim() || isTyping) return;
 
@@ -76,25 +77,48 @@ export const AIIntelligence = () => {
       text: userMsg,
       time: 'Just now'
     };
-    setMessages(prev => [...prev, newMsg]);
+    const updatedMessages = [...messages, newMsg];
+    setMessages(updatedMessages);
     setInputMessage('');
     setIsTyping(true);
 
-    setTimeout(() => {
-      let reply = `Based on current 24-hour predictive trajectory, systemic risk for ${currentOrg.name} is measured at 14.2% (Nominal). All priority containment protocols remain within ISO 31000 parameters.`;
-      if (userMsg.toLowerCase().includes('recommend') || userMsg.toLowerCase().includes('action')) {
-        reply = `Top Neural Recommendation: Rebalance workload allocations in ${currentOrg.departments[0]} and apply the cryptographic session key rotation. This yields an estimated -4.1% risk reduction.`;
-      } else if (userMsg.toLowerCase().includes('critical') || userMsg.toLowerCase().includes('alert')) {
-        reply = `There are currently 2 active risks under critical monitoring. Neither has caused SLA degradation. Automated mitigation MP-021 has already been triggered.`;
-      }
+    try {
+      const nemotronResult = await queryNemotron(
+        userMsg,
+        {
+          organization: currentOrg,
+          roleTitle: currentRole?.title,
+          accessLevel: currentRole?.accessLevel,
+          userName: cleanDisplayName,
+          activeModules: currentOrg?.industryModules?.map(m => m.name),
+          healthScore: currentOrg?.healthScore,
+          aiRiskScore: currentOrg?.aiRiskScore
+        },
+        updatedMessages.map(m => ({
+          id: m.id,
+          sender: m.sender === 'user' ? 'user' : 'ai',
+          text: m.text,
+          timestamp: m.time
+        }))
+      );
+
       setMessages(prev => [...prev, {
         id: (Date.now() + 1).toString(),
         sender: 'assistant',
-        text: reply,
+        text: nemotronResult.text,
         time: 'Just now'
       }]);
+    } catch (err) {
+      console.error('Error querying AI:', err);
+      setMessages(prev => [...prev, {
+        id: (Date.now() + 1).toString(),
+        sender: 'assistant',
+        text: `Based on current organizational telemetry, systemic risk for ${currentOrg.name} is measured at ${currentOrg.aiRiskScore}%. Containment protocols active.`,
+        time: 'Just now'
+      }]);
+    } finally {
       setIsTyping(false);
-    }, 900);
+    }
   };
 
   const tabs = [
@@ -437,10 +461,12 @@ export const AIIntelligence = () => {
             {/* Suggested Prompts */}
             <div style={{ display: 'flex', gap: '0.5rem', overflowX: 'auto', paddingBottom: '0.75rem' }}>
               {[
-                'Analyze systemic risk trend',
-                'What are our top critical vulnerabilities?',
-                'Generate board-ready risk summary',
-                'Recommend mitigation plan'
+                'Show departments with highest operational risk',
+                'Why did compliance decrease?',
+                'Generate executive summary',
+                'Summarize incidents this month',
+                'Predict next month\'s organizational health',
+                'Suggest mitigation priorities'
               ].map((prompt, i) => (
                 <button
                   key={i}

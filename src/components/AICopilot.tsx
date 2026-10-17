@@ -140,10 +140,11 @@ export const AICopilot = () => {
   }, [messages, isOpen, isThinking]);
 
   const quickPrompts = [
+    { label: '🏛️ Operational Risk by Dept', prompt: 'Show departments with highest operational risk and key drivers.' },
+    { label: '📉 Why did Compliance shift?', prompt: 'Why did compliance decrease or what controls require immediate attention?' },
+    { label: '🔮 Predict Next Month Health', prompt: 'Predict next month\'s organizational health and incident trajectory.' },
     { label: '🔍 Explain Critical Risks', prompt: 'Analyze and explain the top critical risk drivers in our sector right now.' },
     { label: '📊 Summarize Executive Dashboard', prompt: 'Provide a concise executive summary of the current dashboard and telemetry.' },
-    { label: '🔮 Run 30-Day Predictive Forecast', prompt: 'What is the 30-day failure/incident probability forecast based on current trends?' },
-    { label: '⚖️ Explain SHAP Model Weights', prompt: 'Explain the explainable AI (SHAP) feature importance factors influencing our risk score.' },
     { label: '🛡️ Recommend Mitigation Actions', prompt: 'Generate 3 high-impact immediate corrective mitigation actions for this department.' }
   ];
 

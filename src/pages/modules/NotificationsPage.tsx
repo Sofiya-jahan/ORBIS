@@ -1,21 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useAuthStore } from '../../store/useAuthStore';
 import { ORGANIZATIONS } from '../../config/platformConfig';
+import { useOrganizationalIntelligence } from '../../intelligence/useOrganizationalIntelligence';
 import { Bell, AlertTriangle, CheckCircle2, Info, ShieldCheck, Clock } from 'lucide-react';
 
 export const NotificationsPage = () => {
   const { organization } = useAuthStore();
   const currentOrg = organization && ORGANIZATIONS[organization] ? ORGANIZATIONS[organization] : ORGANIZATIONS.hospital;
+  const { data: orgData, markNotificationRead, markAllNotificationsRead } = useOrganizationalIntelligence();
 
-  const [notifications, setNotifications] = useState([
-    { id: 1, title: 'Autonomous Mitigation Triggered', desc: 'Load rebalanced on primary telemetry pipelines. Risk mitigated by 3.8%.', time: '14 mins ago', type: 'success', read: false },
-    { id: 2, title: 'Near Miss Incident Logged', desc: 'Supervisor filed incident report INC-2026-081 for secondary route congestion.', time: '2 hours ago', type: 'warning', read: false },
-    { id: 3, title: 'Weekly Regulatory Audit Passed', desc: '100% adherence confirmed across all active SOC2 / HIPAA control evidence.', time: 'Yesterday', type: 'info', read: true },
-  ]);
-
-  const markAllAsRead = () => {
-    setNotifications(notifications.map(n => ({ ...n, read: true })));
-  };
+  const notifications = orgData?.notifications || [];
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
@@ -35,7 +29,7 @@ export const NotificationsPage = () => {
         </div>
 
         <button 
-          onClick={markAllAsRead}
+          onClick={markAllNotificationsRead}
           className="btn btn-secondary"
         >
           Mark All As Read

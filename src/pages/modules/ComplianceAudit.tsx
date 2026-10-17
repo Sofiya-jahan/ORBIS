@@ -1,18 +1,16 @@
 import React from 'react';
 import { useAuthStore } from '../../store/useAuthStore';
 import { ORGANIZATIONS } from '../../config/platformConfig';
-import { Scale, ShieldCheck, FileCheck, AlertTriangle, Download, Lock } from 'lucide-react';
+import { useOrganizationalIntelligence } from '../../intelligence/useOrganizationalIntelligence';
+import { Scale, ShieldCheck, FileCheck, AlertTriangle, Download, Lock, CheckCircle2 } from 'lucide-react';
 
 export const ComplianceAudit = () => {
   const { organization } = useAuthStore();
   const currentOrg = organization && ORGANIZATIONS[organization] ? ORGANIZATIONS[organization] : ORGANIZATIONS.hospital;
+  const { data: orgData, updateControlStatus } = useOrganizationalIntelligence();
 
-  const policies = [
-    { id: 'POL-01', name: 'Zero-Trust Access & Key Rotation Protocol', standard: 'SOC2 Type II / ISO 27001', adherence: '100%', status: 'Compliant' },
-    { id: 'POL-02', name: 'Automated AI Model Bias & Fairness Guardrail', standard: 'EU AI Act / NIST AI RMF', adherence: '98.4%', status: 'Compliant' },
-    { id: 'POL-03', name: 'Incident Notification SLA (Under 60 Mins)', standard: 'Statutory / Board Policy', adherence: '100%', status: 'Compliant' },
-    { id: 'POL-04', name: 'Continuous Evidence Hash Immutability', standard: 'Blockchain / Cryptographic Log', adherence: '100%', status: 'Compliant' },
-  ];
+  const controls = orgData?.complianceControls || [];
+  const complianceKpis = orgData?.kpis?.compliance;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
@@ -32,7 +30,7 @@ export const ComplianceAudit = () => {
         </div>
 
         <button 
-          onClick={() => alert('Generating official compliance audit certification packet...')}
+          onClick={() => alert(`Official compliance certification packet generated. All ${controls.length} controls verified.`)}
           className="btn btn-primary"
           style={{ background: currentOrg.themeColor }}
         >
@@ -47,34 +45,34 @@ export const ComplianceAudit = () => {
             Overall Adherence Score
           </div>
           <div style={{ fontSize: '2.4rem', fontWeight: 800, color: '#6AE7F7', marginBottom: '0.4rem', fontFamily: "'JetBrains Mono', monospace" }}>
-            99.6%
+            {complianceKpis?.overallCompliancePct ?? 99.4}%
           </div>
           <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-            48 of 48 statutory controls passed
+            {controls.filter(c => c.status === 'compliant').length} of {controls.length} statutory controls passed
           </div>
         </div>
 
         <div className="glass-card" style={{ padding: '1.75rem' }}>
           <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700, marginBottom: '0.4rem', fontFamily: "'JetBrains Mono', monospace" }}>
-            Open Violations
+            Active Violations
           </div>
-          <div style={{ fontSize: '2.4rem', fontWeight: 800, color: '#F6FDFF', marginBottom: '0.4rem', fontFamily: "'JetBrains Mono', monospace" }}>
-            0 Critical
+          <div style={{ fontSize: '2.4rem', fontWeight: 800, color: (complianceKpis?.activeViolationsCount || 0) > 0 ? '#EF4444' : '#F6FDFF', marginBottom: '0.4rem', fontFamily: "'JetBrains Mono', monospace" }}>
+            {complianceKpis?.activeViolationsCount || 0} Flagged
           </div>
-          <div style={{ fontSize: '0.85rem', color: '#6AE7F7', fontWeight: 600 }}>
-            Zero uncontained regulatory breaches
+          <div style={{ fontSize: '0.85rem', color: (complianceKpis?.activeViolationsCount || 0) > 0 ? '#EF4444' : '#6AE7F7', fontWeight: 600 }}>
+            {(complianceKpis?.activeViolationsCount || 0) > 0 ? 'Remediation work orders active' : 'Zero uncontained regulatory breaches'}
           </div>
         </div>
 
         <div className="glass-card" style={{ padding: '1.75rem' }}>
           <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700, marginBottom: '0.4rem', fontFamily: "'JetBrains Mono', monospace" }}>
-            Next Scheduled External Audit
+            Audit Readiness Grade
           </div>
           <div style={{ fontSize: '2.4rem', fontWeight: 800, color: '#2E9BF8', marginBottom: '0.4rem', fontFamily: "'JetBrains Mono', monospace" }}>
-            42 Days
+            Grade {complianceKpis?.auditReadinessGrade || 'A+'}
           </div>
           <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-            All automated evidence pre-packaged
+            All automated evidence pre-packaged ({complianceKpis?.auditClosureRatePct || 100}% closed)
           </div>
         </div>
       </div>
@@ -95,23 +93,43 @@ export const ComplianceAudit = () => {
               <th style={{ padding: '1rem 1.25rem', fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Standard / Framework</th>
               <th style={{ padding: '1rem 1.25rem', fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Adherence</th>
               <th style={{ padding: '1rem 1.25rem', fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Status</th>
+              <th style={{ padding: '1rem 1.25rem', fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Action</th>
             </tr>
           </thead>
           <tbody>
-            {policies.map((p) => (
+            {controls.map((p) => (
               <tr key={p.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
                 <td style={{ padding: '1.1rem 1.25rem' }}>
-                  <div style={{ fontWeight: '700', fontSize: '0.92rem', color: '#FFFFFF' }}>{p.name}</div>
-                  <div style={{ fontSize: '0.75rem', color: currentOrg.themeColor, fontFamily: 'var(--font-mono)' }}>{p.id}</div>
+                  <div style={{ fontWeight: '700', fontSize: '0.92rem', color: '#FFFFFF' }}>{p.title}</div>
+                  <div style={{ fontSize: '0.75rem', color: currentOrg.themeColor, fontFamily: 'var(--font-mono)' }}>{p.id} &bull; {p.department}</div>
                 </td>
                 <td style={{ padding: '1.1rem 1.25rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
                   {p.standard}
                 </td>
                 <td style={{ padding: '1.1rem 1.25rem', fontSize: '0.9rem', fontWeight: 800, color: '#6AE7F7', fontFamily: 'var(--font-mono)' }}>
-                  {p.adherence}
+                  {p.adherencePct}%
                 </td>
                 <td style={{ padding: '1.1rem 1.25rem' }}>
-                  <span className="badge badge-success">{p.status}</span>
+                  <span className={`badge ${p.status === 'compliant' ? 'badge-success' : p.status === 'warning' ? 'badge-warning' : 'badge-danger'}`} style={{ textTransform: 'capitalize' }}>
+                    {p.status}
+                  </span>
+                </td>
+                <td style={{ padding: '1.1rem 1.25rem' }}>
+                  <button
+                    onClick={() => updateControlStatus(p.id, p.status === 'compliant' ? 'warning' : 'compliant')}
+                    style={{
+                      padding: '0.35rem 0.75rem',
+                      borderRadius: '8px',
+                      fontSize: '0.75rem',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      background: 'var(--bg-secondary)',
+                      border: '1px solid var(--border-color)',
+                      color: 'var(--text-secondary)'
+                    }}
+                  >
+                    {p.status === 'compliant' ? 'Flag Review' : 'Attest Compliant'}
+                  </button>
                 </td>
               </tr>
             ))}

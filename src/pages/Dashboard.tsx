@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuthStore } from '../store/useAuthStore';
 import { ORGANIZATIONS } from '../config/platformConfig';
 import { useOrganizationTheme } from '../hooks/useOrganizationTheme';
+import { useOrganizationalIntelligence } from '../intelligence/useOrganizationalIntelligence';
 import { 
   AreaChart, Area, BarChart, Bar, LineChart, Line, 
   PieChart, Pie, Cell, ResponsiveContainer, XAxis, YAxis, 
@@ -20,10 +21,17 @@ import { formatUserName } from '../utils/userUtils';
 
 export const Dashboard = () => {
   const { organization, role, user } = useAuthStore();
+  const { data: orgData, initializeOrg } = useOrganizationalIntelligence();
   const { chartPalette, gridStroke, tooltipStyle, themeColors } = useOrganizationTheme();
   const navigate = useNavigate();
   const [activeTimeframe, setActiveTimeframe] = useState<'24h' | '7d' | '30d' | '90d'>('24h');
   const [isRefreshing, setIsRefreshing] = useState(false);
+
+  useEffect(() => {
+    if (organization) {
+      initializeOrg(organization);
+    }
+  }, [organization, initializeOrg]);
 
   const currentOrg = organization && ORGANIZATIONS[organization] ? ORGANIZATIONS[organization] : ORGANIZATIONS.hospital;
   const currentRole = currentOrg.roles.find(r => r.id === role) || currentOrg.roles[0];
@@ -47,27 +55,24 @@ export const Dashboard = () => {
     setTimeout(() => setIsRefreshing(false), 600);
   };
 
-  // Mock Dynamic Telemetry Data based on timeframe
-  const trajectoryData = [
-    { time: '00:00', systemicRisk: 12, anomalyIndex: 8, confidence: 98 },
-    { time: '04:00', systemicRisk: 10, anomalyIndex: 6, confidence: 97 },
-    { time: '08:00', systemicRisk: 28, anomalyIndex: 22, confidence: 95 },
-    { time: '12:00', systemicRisk: 34, anomalyIndex: 29, confidence: 94 },
-    { time: '16:00', systemicRisk: 22, anomalyIndex: 18, confidence: 96 },
-    { time: '20:00', systemicRisk: 18, anomalyIndex: 14, confidence: 98 },
-    { time: '24:00', systemicRisk: 14, anomalyIndex: 9, confidence: 99 },
-  ];
+  // Dynamic Telemetry Data from Prediction Engine & Central Hub
+  const trajectoryData = (orgData?.predictions?.incidentForecast?.riskTrajectory || []).map(pt => ({
+    time: pt.period,
+    systemicRisk: pt.projectedValue,
+    anomalyIndex: Math.max(2, Math.round(pt.projectedValue * 0.65)),
+    confidence: Math.round(orgData?.predictions?.incidentForecast?.confidenceLevelPct || 98)
+  }));
 
-  const departmentRiskData = currentOrg.departments.map((dept, idx) => ({
-    name: dept,
-    score: Math.round(15 + (idx * 11) % 45),
-    mitigated: Math.round(75 + (idx * 7) % 25)
+  const departmentRiskData = (orgData?.analytics?.departmentComparisons || []).map(dept => ({
+    name: dept.department,
+    score: dept.riskScore,
+    mitigated: Math.max(0, 100 - Math.round(dept.riskScore * 1.5))
   }));
 
   const riskDistributionData = [
-    { name: 'Low Risk (Trivial)', value: 68, color: chartPalette[0] },
-    { name: 'Moderate Exposure', value: 24, color: chartPalette[1] },
-    { name: 'Critical Attention', value: 8, color: chartPalette[2] || '#EF4444' }
+    { name: 'Low Risk (Trivial)', value: Math.max(20, 100 - (orgData?.kpis?.risk?.systemicRiskIndex || 15) - ((orgData?.kpis?.risk?.criticalRisksCount || 1) * 6)), color: chartPalette[0] },
+    { name: 'Moderate Exposure', value: Math.min(55, orgData?.kpis?.risk?.systemicRiskIndex || 20), color: chartPalette[1] },
+    { name: 'Critical Attention', value: Math.max(5, (orgData?.kpis?.risk?.criticalRisksCount || 1) * 7), color: chartPalette[2] || '#EF4444' }
   ];
 
   // 1. Employee / Specialist Minimal Focused Dashboard
@@ -238,7 +243,7 @@ export const Dashboard = () => {
             </h1>
 
             <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: 1.6 }}>
-              Autonomous telemetry correlating <strong style={{ color: currentOrg.themeColor || 'var(--primary)' }}>{currentOrg.statValue}</strong> across {currentOrg.departments.length} key departments. Systemic vulnerability index evaluated at <strong style={{ color: currentOrg.secondaryColor || 'var(--secondary)' }}>{currentOrg.aiRiskScore}%</strong> with high algorithmic stability.
+              Autonomous telemetry correlating <strong style={{ color: currentOrg.themeColor || 'var(--primary)' }}>{currentOrg.statValue}</strong> across {currentOrg.departments.length} key departments. Systemic vulnerability index evaluated at <strong style={{ color: currentOrg.secondaryColor || 'var(--secondary)' }}>{orgData?.kpis?.risk?.systemicRiskIndex ?? currentOrg.aiRiskScore}%</strong> with high algorithmic stability.
             </p>
           </div>
 
@@ -266,13 +271,13 @@ export const Dashboard = () => {
                   fill="none"
                   stroke={currentOrg.themeColor || 'var(--primary)'}
                   strokeWidth="3.2"
-                  strokeDasharray={`${currentOrg.healthScore}, 100`}
+                  strokeDasharray={`${orgData?.kpis?.health?.overallScore ?? currentOrg.healthScore}, 100`}
                   strokeLinecap="round"
                   style={{ filter: `drop-shadow(0 0 6px ${currentOrg.themeColor || 'var(--primary)'})` }}
                 />
               </svg>
               <div style={{ position: 'absolute', fontSize: '1.1rem', fontWeight: '800', color: 'var(--text-primary)', fontFamily: "'JetBrains Mono', monospace" }}>
-                {currentOrg.healthScore}%
+                {orgData?.kpis?.health?.overallScore ?? currentOrg.healthScore}%
               </div>
             </div>
 
@@ -280,11 +285,11 @@ export const Dashboard = () => {
               <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: 700, fontFamily: "'JetBrains Mono', monospace" }}>
                 Organizational Health
               </span>
-              <span style={{ fontSize: '1.15rem', fontWeight: '800', color: currentOrg.themeColor || 'var(--primary)' }}>
-                Nominal Condition
+              <span style={{ fontSize: '1.15rem', fontWeight: '800', color: orgData?.kpis?.health?.statusColor || currentOrg.themeColor || 'var(--primary)' }}>
+                {orgData?.kpis?.health?.status ? `${orgData.kpis.health.status} Condition` : 'Nominal Condition'}
               </span>
               <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-                Confidence: 99.4%
+                Confidence: {orgData?.kpis?.health?.confidencePct || 99.4}%
               </span>
             </div>
           </div>
@@ -360,10 +365,10 @@ export const Dashboard = () => {
       {/* KPI Cards Row (4 Primary Metrics) */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.5rem' }}>
         {[
-          { label: 'Systemic AI Risk Score', value: `${currentOrg.aiRiskScore}%`, change: '-2.4%', positive: true, icon: TrendingUp, color: currentOrg.themeColor || 'var(--primary)' },
+          { label: 'Systemic AI Risk Score', value: `${orgData?.kpis?.risk?.systemicRiskIndex ?? currentOrg.aiRiskScore}%`, change: orgData?.kpis?.risk?.riskTrend === 'escalating' ? '+3.2%' : '-2.4%', positive: orgData?.kpis?.risk?.riskTrend !== 'escalating', icon: TrendingUp, color: currentOrg.themeColor || 'var(--primary)' },
           { label: 'Active Sector Telemetry', value: currentOrg.statValue, change: '+14%', positive: true, icon: Activity, color: currentOrg.secondaryColor || 'var(--secondary)' },
-          { label: 'Unmitigated Anomalies', value: '3 Active', change: '-4 today', positive: true, icon: AlertTriangle, color: 'var(--accent)' },
-          { label: 'Regulatory Adherence', value: '100% Compliant', change: '0 Flags', positive: true, icon: ShieldCheck, color: '#10B981' }
+          { label: 'Unmitigated Anomalies', value: `${orgData?.kpis?.risk?.criticalRisksCount || 0} Critical`, change: `${orgData?.kpis?.risk?.totalOpenRisks || 0} Open Risks`, positive: (orgData?.kpis?.risk?.criticalRisksCount || 0) === 0, icon: AlertTriangle, color: 'var(--accent)' },
+          { label: 'Regulatory Adherence', value: `${orgData?.kpis?.compliance?.overallCompliancePct ?? 100}%`, change: `${orgData?.kpis?.compliance?.activeViolationsCount || 0} Flags`, positive: (orgData?.kpis?.compliance?.activeViolationsCount || 0) === 0, icon: ShieldCheck, color: '#10B981' }
         ].map((kpi, idx) => (
           <div 
             key={idx} 
@@ -450,10 +455,10 @@ export const Dashboard = () => {
         {/* 4 Role-Specific Tactical KPIs */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem' }}>
           {rolePerspective === 'ceo' && [
-            { label: 'Strategic Risk Delta', val: 'Low (-2.8%)', note: 'Within Board bounds', color: '#10B981' },
-            { label: 'Capital Exposure At Risk', val: '$2.4M Safe', note: '100% hedged / insured', color: currentOrg.secondaryColor || 'var(--secondary)' },
-            { label: 'Board Foresight Index', val: '94.2 / 100', note: 'Algorithmic stability', color: 'var(--accent)' },
-            { label: 'Operating Margin Integrity', val: '99.2%', note: '0 critical escalations', color: '#10B981' }
+            { label: 'Systemic Risk Index', val: `${orgData?.kpis?.risk?.systemicRiskIndex ?? 12}%`, note: `Trend: ${orgData?.kpis?.risk?.riskTrend || 'stable'}`, color: '#10B981' },
+            { label: 'Operating Margin Integrity', val: `${orgData?.kpis?.finance?.profitMarginPct ?? 18.2}%`, note: `Cash Flow: ${orgData?.kpis?.finance?.cashFlowCondition || 'Optimal'}`, color: currentOrg.secondaryColor || 'var(--secondary)' },
+            { label: 'Organizational Health', val: `${orgData?.kpis?.health?.overallScore ?? 94} / 100`, note: `${orgData?.kpis?.health?.status || 'Nominal'} Condition`, color: 'var(--accent)' },
+            { label: 'Regulatory Adherence', val: `${orgData?.kpis?.compliance?.overallCompliancePct ?? 99.4}%`, note: `Grade: ${orgData?.kpis?.compliance?.auditReadinessGrade || 'A'}`, color: '#10B981' }
           ].map((item, i) => (
             <div key={i} style={{ padding: '1.25rem', borderRadius: '16px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-sm)' }}>
               <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem', fontFamily: "'JetBrains Mono', monospace" }}>{item.label}</div>
@@ -463,10 +468,10 @@ export const Dashboard = () => {
           ))}
 
           {rolePerspective === 'risk_manager' && [
-            { label: '5x5 Matrix Peak Cell', val: '2 Critical', note: 'Score >= 16 (Tier 1)', color: '#EF4444' },
-            { label: 'Mitigation Progress Rate', val: '87.5%', note: '21 of 24 risks controlled', color: '#10B981' },
-            { label: 'Residual Risk Index', val: '14.2 / 100', note: 'Within ISO-31000 tolerance', color: currentOrg.secondaryColor || 'var(--secondary)' },
-            { label: 'Open Incidents Triage', val: '0 Uncontained', note: 'All incidents triaged', color: '#10B981' }
+            { label: 'Critical Risks Count', val: `${orgData?.kpis?.risk?.criticalRisksCount || 0} Critical`, note: `${orgData?.kpis?.risk?.totalOpenRisks || 0} open risks in register`, color: (orgData?.kpis?.risk?.criticalRisksCount || 0) > 0 ? '#EF4444' : '#10B981' },
+            { label: 'Mitigation Progress Rate', val: `${orgData?.kpis?.risk?.mitigationProgressPct ?? 87}%`, note: 'Mitigated / closed progress', color: '#10B981' },
+            { label: 'Average Risk Exposure', val: `${orgData?.kpis?.risk?.averageRiskScore ?? 10.5} / 25`, note: 'Likelihood x Impact', color: currentOrg.secondaryColor || 'var(--secondary)' },
+            { label: 'Active Incidents Triage', val: `${orgData?.incidents?.filter(i => i.status !== 'Resolved').length || 0} Active`, note: 'Under investigation', color: (orgData?.incidents?.filter(i => i.status !== 'Resolved').length || 0) > 2 ? '#F59E0B' : '#10B981' }
           ].map((item, i) => (
             <div key={i} style={{ padding: '1.25rem', borderRadius: '16px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-sm)' }}>
               <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem', fontFamily: "'JetBrains Mono', monospace" }}>{item.label}</div>
@@ -476,10 +481,10 @@ export const Dashboard = () => {
           ))}
 
           {rolePerspective === 'hr' && [
-            { label: 'Staff Fatigue & Burnout Risk', val: '12% (Low)', note: '0 division alerts', color: '#10B981' },
-            { label: 'Workforce Coverage Ratio', val: '96.4%', note: 'All shifts staffed', color: currentOrg.secondaryColor || 'var(--secondary)' },
-            { label: 'Retention Stability Index', val: '94.8 / 100', note: 'Top decile benchmark', color: 'var(--accent)' },
-            { label: 'Attendance Anomaly Delta', val: '0.4% Dev', note: 'Within normal variation', color: '#10B981' }
+            { label: 'Employee Turnover Rate', val: `${orgData?.kpis?.hr?.employeeTurnoverPct ?? 8}%`, note: `${orgData?.kpis?.hr?.recentResignationsCount || 0} recent resignations`, color: (orgData?.kpis?.hr?.employeeTurnoverPct || 0) > 10 ? '#EF4444' : '#10B981' },
+            { label: 'Retention Rate', val: `${orgData?.kpis?.hr?.retentionRatePct ?? 92}%`, note: `${orgData?.kpis?.hr?.totalActiveEmployees || 0} active employees`, color: currentOrg.secondaryColor || 'var(--secondary)' },
+            { label: 'Training Completion Rate', val: `${orgData?.kpis?.hr?.trainingCompletionPct ?? 95}%`, note: 'Compliance certification', color: 'var(--accent)' },
+            { label: 'Average Attendance', val: `${orgData?.kpis?.hr?.averageAttendancePct ?? 98}%`, note: 'Shift coverage optimal', color: '#10B981' }
           ].map((item, i) => (
             <div key={i} style={{ padding: '1.25rem', borderRadius: '16px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-sm)' }}>
               <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem', fontFamily: "'JetBrains Mono', monospace" }}>{item.label}</div>
@@ -489,10 +494,10 @@ export const Dashboard = () => {
           ))}
 
           {rolePerspective === 'finance' && [
-            { label: 'Value-at-Risk (VaR 99%)', val: '0.04%', note: 'Parametric 24h risk', color: '#10B981' },
-            { label: 'Operating Capital Liquidity', val: '$48.2M', note: 'Optimal cash reserves', color: currentOrg.secondaryColor || 'var(--secondary)' },
-            { label: 'Anomalous Transaction Flags', val: '0 Active', note: 'Zero fraud ingress', color: '#10B981' },
-            { label: 'Budget Variance Delta', val: '+0.6%', note: 'Favorable operational delta', color: 'var(--accent)' }
+            { label: 'Total Enterprise Revenue', val: `$${((orgData?.kpis?.finance?.totalRevenue || 5200000) / 1000000).toFixed(2)}M`, note: 'Top-line departmental volume', color: '#10B981' },
+            { label: 'Operating Profit Margin', val: `${orgData?.kpis?.finance?.profitMarginPct ?? 18.5}%`, note: `Cash Flow: ${orgData?.kpis?.finance?.cashFlowCondition || 'Optimal'}`, color: currentOrg.secondaryColor || 'var(--secondary)' },
+            { label: 'Budget Utilization', val: `${orgData?.kpis?.finance?.budgetUtilizationPct ?? 82}%`, note: 'Against planned envelope', color: (orgData?.kpis?.finance?.budgetUtilizationPct || 0) > 90 ? '#F59E0B' : '#10B981' },
+            { label: 'Budget Variance Delta', val: `${(orgData?.kpis?.finance?.budgetVariancePct || 0) > 0 ? '+' : ''}${orgData?.kpis?.finance?.budgetVariancePct ?? -2.4}%`, note: 'Operational variance', color: 'var(--accent)' }
           ].map((item, i) => (
             <div key={i} style={{ padding: '1.25rem', borderRadius: '16px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-sm)' }}>
               <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem', fontFamily: "'JetBrains Mono', monospace" }}>{item.label}</div>
@@ -502,10 +507,10 @@ export const Dashboard = () => {
           ))}
 
           {rolePerspective === 'compliance' && [
-            { label: 'Regulatory Framework Score', val: '98.6%', note: 'SOC2 & HIPAA Compliant', color: '#10B981' },
-            { label: 'Active Policy Violations', val: '0 Flags', note: 'Zero non-compliance issues', color: '#10B981' },
-            { label: 'Continuous Control Evidence', val: '47 / 48', note: '1 awaiting sign-off', color: currentOrg.secondaryColor || 'var(--secondary)' },
-            { label: 'Upcoming Audit Countdown', val: '34 Days', note: 'Automated pack ready', color: 'var(--accent)' }
+            { label: 'Regulatory Framework Score', val: `${orgData?.kpis?.compliance?.overallCompliancePct ?? 99.4}%`, note: `Grade: ${orgData?.kpis?.compliance?.auditReadinessGrade || 'A'}`, color: '#10B981' },
+            { label: 'Active Control Violations', val: `${orgData?.kpis?.compliance?.activeViolationsCount || 0} Flags`, note: 'Non-compliant controls', color: (orgData?.kpis?.compliance?.activeViolationsCount || 0) > 0 ? '#EF4444' : '#10B981' },
+            { label: 'Overdue Controls', val: `${orgData?.kpis?.compliance?.overdueControlsCount || 0} Overdue`, note: 'Statutory verification SLA', color: currentOrg.secondaryColor || 'var(--secondary)' },
+            { label: 'Audit Closure Rate', val: `${orgData?.kpis?.compliance?.auditClosureRatePct ?? 100}%`, note: 'Audit certificates verified', color: 'var(--accent)' }
           ].map((item, i) => (
             <div key={i} style={{ padding: '1.25rem', borderRadius: '16px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-sm)' }}>
               <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem', fontFamily: "'JetBrains Mono', monospace" }}>{item.label}</div>
@@ -517,7 +522,7 @@ export const Dashboard = () => {
           {rolePerspective === 'security' && [
             { label: 'Lattice Cryptographic Posture', val: 'AES-256 HMAC', note: 'Session tokens signed', color: '#10B981' },
             { label: 'Zero-Day Vulnerability Score', val: 'A+ Rated', note: 'Zero open CVEs', color: '#10B981' },
-            { label: 'Rate Limiter Quarantine', val: '0 Locked', note: '5 attempts / 45s gate active', color: currentOrg.secondaryColor || 'var(--secondary)' },
+            { label: 'Systemic Risk Exposure', val: `${orgData?.kpis?.risk?.systemicRiskIndex ?? 12}%`, note: 'Active threat telemetry', color: currentOrg.secondaryColor || 'var(--secondary)' },
             { label: 'Tamper-Evident Audit Trail', val: '100% Synced', note: 'Immutable security log', color: 'var(--accent)' }
           ].map((item, i) => (
             <div key={i} style={{ padding: '1.25rem', borderRadius: '16px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-sm)' }}>
@@ -528,10 +533,10 @@ export const Dashboard = () => {
           ))}
 
           {rolePerspective === 'operations' && [
-            { label: 'Operational Uptime SLA', val: '99.98%', note: 'Zero facility disruptions', color: '#10B981' },
-            { label: 'Shift Directives Pending', val: '3 Directives', note: 'All supervisors notified', color: currentOrg.secondaryColor || 'var(--secondary)' },
-            { label: 'Safety Incidents Logged', val: '0 Critical', note: 'Safe operating window', color: '#10B981' },
-            { label: 'Readiness Index', val: '100%', note: 'Equipment & staff calibrated', color: 'var(--accent)' }
+            { label: 'Operational Efficiency', val: `${orgData?.kpis?.operations?.operationalEfficiencyPct ?? 94}%`, note: 'Overall asset uptime', color: '#10B981' },
+            { label: 'Average Asset MTBF', val: `${orgData?.kpis?.operations?.averageMTBFHours ?? 1420} hrs`, note: 'Mean Time Between Failures', color: currentOrg.secondaryColor || 'var(--secondary)' },
+            { label: 'Total Downtime Hours', val: `${orgData?.kpis?.operations?.totalDowntimeHours ?? 3.4} hrs`, note: 'Cumulative maintenance log', color: (orgData?.kpis?.operations?.totalDowntimeHours || 0) > 10 ? '#F59E0B' : '#10B981' },
+            { label: 'Incident Frequency Rate', val: `${orgData?.kpis?.operations?.incidentFrequencyPerWeek ?? 1.2} / wk`, note: 'Weekly operational filings', color: 'var(--accent)' }
           ].map((item, i) => (
             <div key={i} style={{ padding: '1.25rem', borderRadius: '16px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-sm)' }}>
               <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem', fontFamily: "'JetBrains Mono', monospace" }}>{item.label}</div>

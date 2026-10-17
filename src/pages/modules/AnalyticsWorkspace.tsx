@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useAuthStore } from '../../store/useAuthStore';
 import { ORGANIZATIONS } from '../../config/platformConfig';
+import { useOrganizationalIntelligence } from '../../intelligence/useOrganizationalIntelligence';
 import { 
   BarChart2, TrendingUp, Grid, Activity, Award, 
   ArrowUpRight, ArrowDownRight, Layers, Download, 
-  Calendar, CheckCircle2, ChevronRight, Sliders
+  Calendar, CheckCircle2, ChevronRight, Sliders,
+  HelpCircle, ShieldAlert, AlertTriangle, ArrowRight
 } from 'lucide-react';
 import { 
   ResponsiveContainer, AreaChart, Area, XAxis, YAxis, 
@@ -19,6 +21,7 @@ import EnterpriseAnalytics from './EnterpriseAnalytics';
 export const AnalyticsWorkspace = () => {
   const { organization } = useAuthStore();
   const currentOrg = organization && ORGANIZATIONS[organization] ? ORGANIZATIONS[organization] : ORGANIZATIONS.hospital;
+  const orgData = useOrganizationalIntelligence();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const activeTab = searchParams.get('tab') || 'overview';
@@ -28,23 +31,30 @@ export const AnalyticsWorkspace = () => {
 
   const tabs = [
     { id: 'overview', label: 'Overview & Radar', icon: BarChart2 },
+    { id: 'questions', label: 'Executive Questions & Answers', icon: HelpCircle },
     { id: 'heatmaps', label: 'Heatmaps & Density', icon: Grid },
     { id: 'forecasts', label: 'Bayesian Forecasts', icon: TrendingUp },
     { id: 'performance', label: 'Performance & SLAs', icon: Award },
     { id: 'trends', label: 'Historical Trends', icon: Activity }
   ];
 
-  // 12-Month Forecast Trend Data
-  const forecastTrendData = [
-    { month: 'Nov 2025', observedRisk: 22, projectedRisk: 21, costReduction: 12 },
-    { month: 'Dec 2025', observedRisk: 20, projectedRisk: 19, costReduction: 15 },
-    { month: 'Jan 2026', observedRisk: 18, projectedRisk: 17, costReduction: 18 },
-    { month: 'Feb 2026', observedRisk: 15, projectedRisk: 15, costReduction: 24 },
-    { month: 'Mar 2026', observedRisk: 14, projectedRisk: 13, costReduction: 32 },
-    { month: 'Apr 2026', observedRisk: null, projectedRisk: 11, costReduction: 38 },
-    { month: 'May 2026', observedRisk: null, projectedRisk: 10, costReduction: 42 },
-    { month: 'Jun 2026', observedRisk: null, projectedRisk: 8, costReduction: 48 },
-  ];
+  // Dynamic forecast trajectory from Prediction Engine
+  const forecastTrendData = orgData.predictions?.incidentForecast?.riskTrajectory?.length > 0
+    ? orgData.predictions.incidentForecast.riskTrajectory.map(item => ({
+        month: item.period,
+        observedRisk: item.isProjected ? null : item.projectedValue,
+        projectedRisk: item.projectedValue,
+        costReduction: Math.round(item.projectedValue * 1.6)
+      }))
+    : [
+        { month: 'Day 1', observedRisk: 22, projectedRisk: 21, costReduction: 12 },
+        { month: 'Day 5', observedRisk: 20, projectedRisk: 19, costReduction: 15 },
+        { month: 'Day 10', observedRisk: 18, projectedRisk: 17, costReduction: 18 },
+        { month: 'Day 15', observedRisk: null, projectedRisk: 15, costReduction: 24 },
+        { month: 'Day 20', observedRisk: null, projectedRisk: 13, costReduction: 32 },
+        { month: 'Day 25', observedRisk: null, projectedRisk: 11, costReduction: 38 },
+        { month: 'Day 30', observedRisk: null, projectedRisk: 10, costReduction: 42 },
+      ];
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
@@ -89,34 +99,36 @@ export const AnalyticsWorkspace = () => {
       {/* Primary KPIs Row */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem' }}>
         <div className="glass-card" style={{ padding: '1.5rem', background: 'rgba(7, 17, 46, 0.88)', border: '1px solid rgba(46, 155, 248, 0.2)', borderRadius: '18px' }}>
-          <div style={{ color: 'rgba(246, 253, 255, 0.55)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Resilience Index</div>
-          <div style={{ fontSize: '2.1rem', fontWeight: 900, color: '#6AE7F7', fontFamily: "'JetBrains Mono', monospace" }}>91.4%</div>
+          <div style={{ color: 'rgba(246, 253, 255, 0.55)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Organization Health</div>
+          <div style={{ fontSize: '2.1rem', fontWeight: 900, color: '#6AE7F7', fontFamily: "'JetBrains Mono', monospace" }}>{orgData.kpis?.health?.overallScore || 90}%</div>
           <div style={{ fontSize: '0.8rem', color: 'rgba(246, 253, 255, 0.75)', marginTop: '0.25rem' }}>
-            6-pillar geometric mean
+            Weighted multi-pillar &bull; {orgData.kpis?.health?.status || 'Nominal'}
           </div>
         </div>
 
         <div className="glass-card" style={{ padding: '1.5rem', background: 'rgba(7, 17, 46, 0.88)', border: '1px solid rgba(46, 155, 248, 0.2)', borderRadius: '18px' }}>
-          <div style={{ color: 'rgba(246, 253, 255, 0.55)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Forecast Precision</div>
-          <div style={{ fontSize: '2.1rem', fontWeight: 900, color: '#2E9BF8', fontFamily: "'JetBrains Mono', monospace" }}>96.2%</div>
+          <div style={{ color: 'rgba(246, 253, 255, 0.55)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Average Risk Score</div>
+          <div style={{ fontSize: '2.1rem', fontWeight: 900, color: '#2E9BF8', fontFamily: "'JetBrains Mono', monospace" }}>{orgData.kpis?.risk?.averageRiskScore || 14.5}</div>
           <div style={{ fontSize: '0.8rem', color: 'rgba(246, 253, 255, 0.75)', marginTop: '0.25rem' }}>
-            Bayesian back-tested accuracy
+            {orgData.kpis?.risk?.totalOpenRisks || 0} open ({orgData.kpis?.risk?.criticalRisksCount || 0} critical)
           </div>
         </div>
 
         <div className="glass-card" style={{ padding: '1.5rem', background: 'rgba(7, 17, 46, 0.88)', border: '1px solid rgba(46, 155, 248, 0.2)', borderRadius: '18px' }}>
-          <div style={{ color: 'rgba(246, 253, 255, 0.55)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Cost-Mitigation ROI</div>
-          <div style={{ fontSize: '2.1rem', fontWeight: 900, color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>1 : 8.4</div>
+          <div style={{ color: 'rgba(246, 253, 255, 0.55)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Next Month Forecast</div>
+          <div style={{ fontSize: '2.1rem', fontWeight: 900, color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>
+            {orgData.predictions?.incidentForecast?.projectionNextMonth || 8} Incidents
+          </div>
           <div style={{ fontSize: '0.8rem', color: '#6AE7F7', marginTop: '0.25rem' }}>
-            $8.40 saved per $1 control deployed
+            Linear trajectory ({orgData.predictions?.incidentForecast?.confidenceLevelPct || 94.6}% confidence)
           </div>
         </div>
 
         <div className="glass-card" style={{ padding: '1.5rem', background: 'rgba(7, 17, 46, 0.88)', border: '1px solid rgba(46, 155, 248, 0.2)', borderRadius: '18px' }}>
-          <div style={{ color: 'rgba(246, 253, 255, 0.55)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Longitudinal Trend</div>
-          <div style={{ fontSize: '2.1rem', fontWeight: 900, color: '#6AE7F7', fontFamily: "'JetBrains Mono', monospace" }}>-12.8%</div>
+          <div style={{ color: 'rgba(246, 253, 255, 0.55)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Compliance Adherence</div>
+          <div style={{ fontSize: '2.1rem', fontWeight: 900, color: '#6AE7F7', fontFamily: "'JetBrains Mono', monospace" }}>{orgData.kpis?.compliance?.overallCompliancePct || 95}%</div>
           <div style={{ fontSize: '0.8rem', color: 'rgba(246, 253, 255, 0.75)', marginTop: '0.25rem' }}>
-            Net risk reduction over 90 days
+            Grade {orgData.kpis?.compliance?.auditReadinessGrade || 'A'} &bull; {orgData.kpis?.compliance?.overdueControlsCount || 0} overdue controls
           </div>
         </div>
       </div>
@@ -174,14 +186,92 @@ export const AnalyticsWorkspace = () => {
           </div>
         )}
 
-        {/* TAB 2: HEATMAPS & CONCENTRATION */}
+        {/* TAB 2: EXECUTIVE BUSINESS QUESTIONS (6 Drivers) */}
+        {activeTab === 'questions' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            <div className="glass-card" style={{ padding: '2rem', background: 'rgba(7, 17, 46, 0.92)', border: '1px solid rgba(46, 155, 248, 0.25)', borderRadius: '24px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: '#6AE7F7', fontWeight: 700, fontSize: '0.82rem', textTransform: 'uppercase', marginBottom: '0.4rem' }}>
+                <HelpCircle size={16} /> Central Analytics Engine &bull; Explainable Drivers
+              </div>
+              <h2 style={{ fontSize: '1.6rem', fontWeight: 900, color: '#F6FDFF', margin: '0 0 0.5rem' }}>
+                6 Core Business Questions Answered
+              </h2>
+              <p style={{ color: 'rgba(246, 253, 255, 0.75)', fontSize: '0.92rem', margin: 0, maxWidth: '850px' }}>
+                Every chart in ORBIS answers a specific operational question. These explanations are continuously computed from underlying organizational events and telemetry.
+              </p>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(380px, 1fr))', gap: '1.5rem' }}>
+              {(orgData.analytics?.topQuestions || []).map((q, idx) => (
+                <div 
+                  key={q.questionId || idx}
+                  className="glass-card"
+                  style={{
+                    padding: '1.8rem',
+                    background: 'rgba(7, 17, 46, 0.9)',
+                    border: '1px solid rgba(46, 155, 248, 0.22)',
+                    borderRadius: '20px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    gap: '1.25rem'
+                  }}
+                >
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem', marginBottom: '0.75rem' }}>
+                      <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#6AE7F7', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                        Question {idx + 1}
+                      </span>
+                      <span style={{ 
+                        fontSize: '0.75rem', 
+                        fontWeight: 800, 
+                        padding: '0.2rem 0.6rem', 
+                        borderRadius: '6px',
+                        background: 'rgba(59, 130, 246, 0.2)',
+                        color: '#60A5FA',
+                        fontFamily: "'JetBrains Mono', monospace"
+                      }}>
+                        {q.keyMetric}
+                      </span>
+                    </div>
+
+                    <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#F6FDFF', margin: '0 0 0.75rem', lineHeight: 1.4 }}>
+                      {q.question}
+                    </h3>
+
+                    <p style={{ color: 'rgba(246, 253, 255, 0.9)', fontSize: '0.92rem', lineHeight: 1.6, margin: '0 0 1rem' }}>
+                      {q.shortAnswer}
+                    </p>
+
+                    <div style={{ padding: '0.85rem 1rem', borderRadius: '12px', background: 'rgba(13, 35, 77, 0.45)', border: '1px solid rgba(46, 155, 248, 0.15)', marginBottom: '0.5rem' }}>
+                      <div style={{ fontSize: '0.72rem', color: 'rgba(246, 253, 255, 0.55)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.25rem' }}>
+                        Primary Driver
+                      </div>
+                      <div style={{ fontSize: '0.85rem', color: '#6AE7F7', fontWeight: 600 }}>
+                        {(q.primaryDrivers || []).join('; ')}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style={{ borderTop: '1px solid rgba(46, 155, 248, 0.15)', paddingTop: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div style={{ fontSize: '0.78rem', color: 'rgba(246, 253, 255, 0.65)' }}>
+                      <strong>Action:</strong> {q.recommendedAction}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* TAB 3: HEATMAPS & CONCENTRATION */}
         {activeTab === 'heatmaps' && (
           <div className="glass-card" style={{ padding: '2.5rem', background: 'rgba(7, 17, 46, 0.92)', border: '1px solid rgba(46, 155, 248, 0.25)', borderRadius: '24px' }}>
             <h2 style={{ fontSize: '1.5rem', fontWeight: 900, color: '#F6FDFF', margin: '0 0 0.5rem' }}>
               Cross-Departmental Risk Concentration Heatmap
             </h2>
             <p style={{ color: 'rgba(246, 253, 255, 0.75)', fontSize: '0.92rem', margin: '0 0 2rem' }}>
-              Intensity matrix measuring multidimensional operational friction and systemic dependency between divisions.
+              Dynamic matrix measuring multidimensional operational risk, compliance posture, budget utilization, and incidents across divisions.
             </p>
 
             <div style={{ overflowX: 'auto' }}>
@@ -189,41 +279,86 @@ export const AnalyticsWorkspace = () => {
                 <thead>
                   <tr>
                     <th style={{ padding: '0.8rem', textAlign: 'left', color: 'rgba(246, 253, 255, 0.65)', fontSize: '0.8rem', textTransform: 'uppercase' }}>Division</th>
-                    <th style={{ padding: '0.8rem', color: '#6AE7F7', fontSize: '0.8rem', textTransform: 'uppercase' }}>Operational</th>
-                    <th style={{ padding: '0.8rem', color: '#2E9BF8', fontSize: '0.8rem', textTransform: 'uppercase' }}>Compliance</th>
-                    <th style={{ padding: '0.8rem', color: '#8671F9', fontSize: '0.8rem', textTransform: 'uppercase' }}>Financial</th>
-                    <th style={{ padding: '0.8rem', color: '#EF4444', fontSize: '0.8rem', textTransform: 'uppercase' }}>Cyber Risk</th>
+                    <th style={{ padding: '0.8rem', color: '#6AE7F7', fontSize: '0.8rem', textTransform: 'uppercase' }}>Operational Risk</th>
+                    <th style={{ padding: '0.8rem', color: '#2E9BF8', fontSize: '0.8rem', textTransform: 'uppercase' }}>Compliance %</th>
+                    <th style={{ padding: '0.8rem', color: '#8671F9', fontSize: '0.8rem', textTransform: 'uppercase' }}>Budget Used %</th>
+                    <th style={{ padding: '0.8rem', color: '#EF4444', fontSize: '0.8rem', textTransform: 'uppercase' }}>Active Incidents</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {currentOrg.departments.map((dept, i) => (
-                    <tr key={i}>
-                      <td style={{ padding: '1rem', textAlign: 'left', fontWeight: 700, color: '#F6FDFF', background: 'rgba(13, 35, 77, 0.4)', borderRadius: '10px' }}>
-                        {dept}
-                      </td>
-                      {[
-                        { val: 12 + (i * 7) % 35, color: '#6AE7F7' },
-                        { val: 18 + (i * 11) % 40, color: '#2E9BF8' },
-                        { val: 10 + (i * 5) % 25, color: '#8671F9' },
-                        { val: 8 + (i * 9) % 30, color: '#EF4444' }
-                      ].map((cell, cIdx) => (
+                  {(orgData.analytics?.departmentComparisons?.length || 0) > 0 ? (
+                    orgData.analytics.departmentComparisons.map((dept, i) => (
+                      <tr key={i}>
+                        <td style={{ padding: '1rem', textAlign: 'left', fontWeight: 700, color: '#F6FDFF', background: 'rgba(13, 35, 77, 0.4)', borderRadius: '10px' }}>
+                          {dept.department}
+                        </td>
                         <td
-                          key={cIdx}
                           style={{
                             padding: '1rem',
-                            background: `rgba(${cell.color === '#6AE7F7' ? '106, 231, 247' : cell.color === '#2E9BF8' ? '46, 155, 248' : cell.color === '#8671F9' ? '134, 113, 249' : '239, 68, 68'}, ${0.1 + cell.val / 80})`,
-                            border: `1px solid ${cell.color}35`,
+                            background: `rgba(106, 231, 247, ${0.1 + dept.riskScore / 120})`,
+                            border: '1px solid #6AE7F735',
                             borderRadius: '10px',
                             fontWeight: 800,
                             color: '#F6FDFF',
                             fontFamily: "'JetBrains Mono', monospace"
                           }}
                         >
-                          {cell.val}%
+                          {dept.riskScore}%
                         </td>
-                      ))}
-                    </tr>
-                  ))}
+                        <td
+                          style={{
+                            padding: '1rem',
+                            background: `rgba(46, 155, 248, ${0.1 + dept.compliancePct / 130})`,
+                            border: '1px solid #2E9BF835',
+                            borderRadius: '10px',
+                            fontWeight: 800,
+                            color: '#F6FDFF',
+                            fontFamily: "'JetBrains Mono', monospace"
+                          }}
+                        >
+                          {dept.compliancePct}%
+                        </td>
+                        <td
+                          style={{
+                            padding: '1rem',
+                            background: `rgba(134, 113, 249, ${0.1 + dept.budgetUtilizationPct / 130})`,
+                            border: '1px solid #8671F935',
+                            borderRadius: '10px',
+                            fontWeight: 800,
+                            color: '#F6FDFF',
+                            fontFamily: "'JetBrains Mono', monospace"
+                          }}
+                        >
+                          {dept.budgetUtilizationPct}%
+                        </td>
+                        <td
+                          style={{
+                            padding: '1rem',
+                            background: dept.incidentCount > 0 ? 'rgba(239, 68, 68, 0.3)' : 'rgba(16, 185, 129, 0.15)',
+                            border: dept.incidentCount > 0 ? '1px solid #EF444450' : '1px solid #10B98135',
+                            borderRadius: '10px',
+                            fontWeight: 800,
+                            color: dept.incidentCount > 0 ? '#EF4444' : '#10B981',
+                            fontFamily: "'JetBrains Mono', monospace"
+                          }}
+                        >
+                          {dept.incidentCount}
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    currentOrg.departments.map((dept, i) => (
+                      <tr key={i}>
+                        <td style={{ padding: '1rem', textAlign: 'left', fontWeight: 700, color: '#F6FDFF', background: 'rgba(13, 35, 77, 0.4)', borderRadius: '10px' }}>
+                          {dept}
+                        </td>
+                        <td style={{ padding: '1rem', background: 'rgba(106, 231, 247, 0.2)', borderRadius: '10px', color: '#F6FDFF' }}>25%</td>
+                        <td style={{ padding: '1rem', background: 'rgba(46, 155, 248, 0.2)', borderRadius: '10px', color: '#F6FDFF' }}>92%</td>
+                        <td style={{ padding: '1rem', background: 'rgba(134, 113, 249, 0.2)', borderRadius: '10px', color: '#F6FDFF' }}>78%</td>
+                        <td style={{ padding: '1rem', background: 'rgba(16, 185, 129, 0.2)', borderRadius: '10px', color: '#10B981' }}>0</td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>

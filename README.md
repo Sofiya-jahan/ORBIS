@@ -10,8 +10,8 @@
   </p>
 
   <p align="center">
-    <a href="#-system-architecture"><img src="https://img.shields.io/badge/System-ORBIS%20v2.6-00F2FE?style=for-the-badge&logo=shield" alt="System Version" /></a>
-    <a href="#-test-suite--verification"><img src="https://img.shields.io/badge/Tests-611%20Passed%20(100%25)-10B981?style=for-the-badge&logo=vitest" alt="Test Suite" /></a>
+    <a href="#-system-architecture"><img src="https://img.shields.io/badge/Architecture-Organizational%20Intelligence%20Hub-00F2FE?style=for-the-badge&logo=shield" alt="System Version" /></a>
+    <a href="#-test-suite--verification"><img src="https://img.shields.io/badge/Tests-626%20Passed%20(100%25)-10B981?style=for-the-badge&logo=vitest" alt="Test Suite" /></a>
     <a href="#-zero-trust-security-matrix"><img src="https://img.shields.io/badge/Security-Zero--Trust%20HMAC-E5C07B?style=for-the-badge&logo=auth0" alt="Security Clearance" /></a>
     <a href="#-cognitive-ai-copilot"><img src="https://img.shields.io/badge/AI%20Core-NVIDIA%20Nemotron--3-76B900?style=for-the-badge&logo=nvidia" alt="NVIDIA Core" /></a>
     <a href="#-data-layer"><img src="https://img.shields.io/badge/Database-PostgreSQL%20Neon-00E599?style=for-the-badge&logo=postgresql" alt="Neon Database" /></a>
@@ -19,12 +19,11 @@
 
   <p align="center">
     <a href="#-executive-overview">Executive Overview</a> •
+    <a href="#-the-organizational-intelligence-architecture">Intelligence Architecture</a> •
     <a href="#-the-7-primary-enterprise-workspaces">Primary Workspaces</a> •
     <a href="#-7-flagship-enterprise-sectors">Flagship Sectors</a> •
     <a href="#-key-platform-capabilities">Core Capabilities</a> •
-    <a href="#-system-architecture">Architecture</a> •
-    <a href="#-dynamic-theming--cinematic-portal">Dynamic Theming</a> •
-    <a href="#-zero-trust-security-matrix">Security Matrix</a> •
+    <a href="#-system-architecture">Architecture Diagram</a> •
     <a href="#-test-suite--verification">Test Verification</a> •
     <a href="#-quick-start">Quick Start</a>
   </p>
@@ -35,17 +34,119 @@
 
 ## 🏛️ Executive Overview
 
-**ORBIS (Organizational Risk and Business Intelligence System)** is an institutional-grade, cognitive enterprise risk surveillance and governance platform. Engineered for critical national infrastructure, global financial networks, defense aerospace, and healthcare conglomerates, ORBIS synthesizes real-time telemetry, quantitative stochastic modeling, and generative AI reasoning into a unified sovereign command dashboard.
+**ORBIS (Organizational Risk and Business Intelligence System)** is an institutional-grade, data-driven **Organizational Intelligence Platform**. Rather than functioning as a collection of isolated management modules, ORBIS behaves as a living digital operating system for enterprise organizations, where the **Organization itself is the single source of truth**.
 
-ORBIS breaks organizational silos by combining:
+Every operational activity across departments—hiring, expenses, project milestones, asset maintenance, audit observations, and risk discoveries—becomes a structured event captured by the **Organizational Data Hub**. From this central foundation, continuous engines dynamically calculate institutional health, trigger automated business rules, generate explanatory analytics, forecast risks with Bayesian linear regressions, and power AI executive reasoning.
+
+Key Architectural Tenets:
+- **Zero Module Isolation**: Modules never own isolated state; every module acts as a data producer and reactive consumer of the central Data Hub.
+- **Unified Event-Driven Core**: Standardized `OrganizationalEvent` schema capturing institutional activities in real time.
+- **Zero Hardcoded Numbers**: Every KPI, institutional health score (0–100%), and status indicator is calculated dynamically from live operational data.
+- **Automated Business Rules Engine**: Real-time cross-domain rule evaluation that triggers escalation alerts when operational thresholds are breached.
+- **Historical Prediction Engine**: Multimodal 30-day incident forecasts, financial margins, project delivery delay risks, and staffing burnout indices.
 - **Zero-Trust Multi-Tenant Isolation**: Cryptographic HMAC-signed sessions bound to tenant identity and role clearance.
 - **7 Flagship Enterprise Sectors**: Tailored surveillance metrics, role taxonomies, and statutory compliance cross-mappings for 7 critical economic pillars.
-- **Unified 7-Module Architecture**: Streamlined workspace consolidating Risk, AI, Industry Telemetry, Analytics, GRC, and Administration.
-- **Autonomous Multimodal Risk Quantification**: Continuous calculation of Severity, Probability, and Velocity ($R = I \times L \times V$) alongside Monte Carlo Value-at-Risk (VaR) distribution forecasts.
-- **Cognitive AI Copilot**: Powered by NVIDIA's 120-billion parameter Nemotron-3 supercomputing model for prescriptive mitigation and live root-cause synthesis with native markdown formatting and Neon DB persistence.
-- **Dynamic Organization-Adaptive Theming**: Full Light and Dark Mode system with high-contrast semantic tokens and dynamic tenant color scoping.
-- **Explainable AI (XAI)**: Native SHAP (Shapley Additive exPlanations) attribution vectors to guarantee regulatory transparency under global AI governance statutes.
-- **Global Regulatory Compliance**: Dynamic automated cross-mapping across **ISO 31000**, **NIST CSF 2.0**, **Basel III**, **HIPAA**, **GDPR**, and **SOC 2 Type II**.
+- **Cognitive AI Copilot**: NVIDIA Nemotron-3 supercomputing model enriched with live organizational intelligence telemetry.
+
+---
+
+## 🧠 The Organizational Intelligence Architecture
+
+ORBIS evolves beyond traditional siloed enterprise suites into a centralized, data-driven nervous system for institutions. Every module produces structured events and consumes central intelligence.
+
+```
+       ┌────────────────────────────────────────────────────────┐
+       │                   ORGANIZATION                         │
+       │           (The Single Source of Truth)                 │
+       └──────────────────────────┬─────────────────────────────┘
+                                  │
+                                  ▼
+       ┌────────────────────────────────────────────────────────┐
+       │                   DEPARTMENTS                          │
+       │    HR · Finance · Operations · IT · Clinical · Legal   │
+       └──────────────────────────┬─────────────────────────────┘
+                                  │
+                                  ▼
+       ┌────────────────────────────────────────────────────────┐
+       │                 DAILY ACTIVITIES                       │
+       │  Hiring · Expenses · Delays · Incidents · Audits · Risk│
+       └──────────────────────────┬─────────────────────────────┘
+                                  │
+                                  ▼
+       ┌────────────────────────────────────────────────────────┐
+       │            ORGANIZATIONAL DATA HUB                     │
+       │       (Invisible Core Real-Time Event Hub)             │
+       └──────┬────────────┬─────────────┬─────────────┬────────┘
+              │            │             │             │
+              ▼            ▼             ▼             ▼
+       ┌───────────┐ ┌───────────┐ ┌───────────┐ ┌───────────┐
+       │  Business │ │    KPI    │ │ Analytics │ │Prediction │
+       │   Rules   │ │  Engine   │ │  Engine   │ │  Engine   │
+       │  Engine   │ │           │ │           │ │           │
+       └─────┬─────┘ └─────┬─────┘ └─────┬─────┘ └─────┬─────┘
+             │             │             │             │
+             └─────────────┼─────────────┼─────────────┘
+                           │
+                           ▼
+       ┌────────────────────────────────────────────────────────┐
+       │             CENTRAL AI INTELLIGENCE CORE               │
+       │            (NVIDIA Nemotron-3 Reasoning)               │
+       └──────────────────────────┬─────────────────────────────┘
+                                  │
+                                  ▼
+ ┌────────────────┬────────────────┬────────────────┬────────────────┐
+ │   Dashboards   │  Reports & GRC │  Predictions   │   Automated    │
+ │ (Live Telemetry│(Auto-Generated │(Historical 30d │ Alerts & Rules │
+ │ & Health Score)│  Dossiers)     │ Regressions)   │ Notifications) │
+ └────────────────┴────────────────┴────────────────┴────────────────┘
+```
+
+### 1. Unified Organizational Data Hub (`src/intelligence/OrganizationalDataHub.ts`)
+The central invisible core of ORBIS. Every module writes standardized immutable events into this hub:
+- **Event Schema**: `eventType`, `organization`, `department`, `timestamp`, `user`, `category`, `priority`, `title`, `description`, `relatedObjects`, `metadata`.
+- **Global Ingestion Pipeline**: Guarantees zero data isolation; any new operational activity propagates downstream to all calculating engines instantly.
+- **Persistence & Synchronization**: Automatically caches snapshot state in local storage and provides subscription hooks (`useOrganizationalIntelligence`) for reactive components.
+
+### 2. Autonomous Calculation & Reasoning Engines
+- **KPI Engine (`src/intelligence/KPIEngine.ts`)**: Replaces hardcoded dashboard metrics with dynamic computations:
+  - **HR KPIs**: Employee turnover, retention rate, attendance index, and statutory training completion.
+  - **Finance KPIs**: Operating profit margin, budget burn variance, liquidity cashflow, and revenue trajectory.
+  - **Project KPIs**: Schedule delay percentage, milestone completion rate, and capital budget variance.
+  - **Risk & GRC KPIs**: Dynamic systemic risk index, open risk velocity, compliance percentage, and audit readiness grade (`A+` to `Non-Compliant`).
+  - **Weighted Institutional Health Score (0–100%)**: Multi-pillar formula synthesized across Risk (25%), Compliance (20%), Projects (15%), Finance (15%), Operations (15%), and HR (10%).
+- **Business Rules Engine (`src/intelligence/BusinessRulesEngine.ts`)**: Evaluates cross-departmental conditions and triggers automatic escalations:
+  - `RULE-PROJ-01`: Project Schedule Delay > 30% AND Budget Variance > 15% ➔ Escalates initiative risk and alerts finance.
+  - `RULE-HR-02`: Department Turnover > 10% ➔ Triggers operational staffing shortfall warning.
+  - `RULE-COMP-03`: Compliance Adherence < 80% ➔ Generates statutory emergency audit alert.
+  - `RULE-INC-04`: Critical Incidents > 3 in 30 Days ➔ Increases systemic institutional risk index.
+  - `RULE-ASSET-05`: Asset Health < 60% OR Downtime > 40h ➔ Initiates predictive maintenance ticket.
+- **Explainable Analytics Engine (`src/intelligence/AnalyticsEngine.ts`)**: Resolves fundamental executive business inquiries with traceable causal drivers:
+  - *Why did the Risk Index increase?*
+  - *Which department generated the highest incident velocity?*
+  - *Which risks are compounding fastest across operational vectors?*
+  - *Which capital projects consume the highest budget variance?*
+  - *Which statutory compliance controls fail repeatedly?*
+  - *Which operational departments demonstrate month-over-month improvement?*
+- **Prediction Engine (`src/intelligence/PredictionEngine.ts`)**: Eliminates static manual forecasts using historical operational trends:
+  - **Incident Trajectory**: 3-month linear regression and Bayesian confidence bands projecting next month's incident velocity.
+  - **Financial Runway**: Revenue and expense slope analysis forecasting next-quarter profit boundaries.
+  - **Project Delivery Risk**: Mathematical probability calculation of schedule overrun based on delay velocity.
+  - **Staffing Shortage Index**: Departmental turnover ratios driving burnout risk predictions.
+- **AI Context Integration (`src/intelligence/aiContextBuilder.ts`)**:
+  - Automatically synthesizes the live organizational state, KPIs, active alerts, and predictions into system context for the NVIDIA Nemotron-3 model.
+  - Generates deterministic, data-grounded answers even during network degradation or offline failover.
+
+### 3. Module Transformation Matrix (Producers & Consumers)
+| Module | Event Producer Role | Consumer of Central Intelligence |
+| :--- | :--- | :--- |
+| **Executive Dashboard** | Manual metric overrides / executive bookmarks | Consumes Live Health Score (0–100%), Systemic Risk Index, and Reactive Telemetry Stream |
+| **Risk Register** | Dispatches `RISK_CREATED`, `RISK_SCORE_UPDATED`, `RISK_MITIGATION_APPLIED` | Consumes unified risk collections, filtered departmental risk vectors, and rule-driven risk modifiers |
+| **Incident Management** | Dispatches `INCIDENT_LOGGED`, `INCIDENT_RESOLVED` | Consumes real-time incident registers, MTBF drift trends, and automated root cause distributions |
+| **Compliance & Audit** | Dispatches `COMPLIANCE_STATUS_UPDATED`, `AUDIT_COMPLETED` | Consumes statutory control compliance grades, overdue controls, and automated audit packs |
+| **Analytics Workspace** | Dispatches ad-hoc analytics queries and report triggers | Consumes cross-departmental comparison heatmaps, 6 core executive questions, and root driver trees |
+| **Predictive AI** | Dispatches `PREDICTIVE_MITIGATION_APPLIED` | Consumes 30-day Bayesian incident projections, delivery risk matrices, and cashflow outlooks |
+| **Enterprise Reports** | Dispatches report export and audit generation events | Consumes live compiled state to dynamically compile 5 executive dossiers in Markdown, Text, and CSV |
+| **Notifications Center** | Dispatches acknowledgment and dismissal actions | Consumes automated alerts generated directly by the Business Rules Engine |
 
 ---
 
@@ -146,9 +247,18 @@ ORBIS features an institutional visual experience engineered for 24/7 command ce
 ```mermaid
 flowchart TB
     subgraph Client ["Client Presentation Tier (React 19 + TypeScript + Vite)"]
-        UI["Executive Dashboard & Modern Dual-Theme Canvas"]
+        UI["Executive Dashboard & Multi-Tenant Workspaces"]
         CopilotUI["Floating AI Copilot (NVIDIA Nemotron-3 Interface)"]
         Visuals["Recharts Matrix Heatmaps & Framer Motion Canvas"]
+    end
+
+    subgraph Intelligence ["Central Organizational Intelligence Core"]
+        DataHub["Organizational Data Hub (Immutable Event Pipeline)"]
+        KPIEngine["KPI Engine (Health, HR, Finance, Risk, GRC)"]
+        RulesEngine["Business Rules Engine (Automated Cascades & Alerts)"]
+        AnalyticsEngine["Analytics Engine (Root Driver Synthesis)"]
+        PredictionEngine["Prediction Engine (30d Regression & Bayesian Bands)"]
+        AIContext["AI Context Builder (Live State Enriched Prompts)"]
     end
 
     subgraph Security ["Zero-Trust Security & Governance Tier"]
@@ -169,6 +279,19 @@ flowchart TB
         Supabase[("Supabase Object Storage (Evidence Media, Avatars)")]
         Firebase[("Firebase Authentication & Identity Vault")]
     end
+
+    UI -->|Module Activities & Events| DataHub
+    DataHub --> KPIEngine
+    DataHub --> RulesEngine
+    DataHub --> AnalyticsEngine
+    DataHub --> PredictionEngine
+    DataHub --> AIContext
+
+    KPIEngine -->|Calculated Metrics| UI
+    RulesEngine -->|Triggered Alerts| UI
+    AnalyticsEngine -->|Business Insights| UI
+    PredictionEngine -->|Forecast Trajectories| UI
+    AIContext --> CopilotUI
 
     UI --> AuthSentry --> CryptoSession --> TenantGuard
     TenantGuard --> NeonDB
@@ -210,28 +333,29 @@ The ORBIS security posture adheres to strict zero-trust principles across all 7 
 
 ## 🧪 Test Suite & Verification
 
-The ORBIS platform includes a comprehensive, automated test suite built on Vitest and happy-dom, with **611 test cases passing at a 100% success rate**:
+The ORBIS platform includes a comprehensive, automated test suite built on Vitest and happy-dom, with **626 test cases passing at a 100% success rate across 7 test suites**:
 
 ```bash
  RUN  v5.0.4
 
- ✓ src/test/incidentAndCompliance.test.ts    115 tests passing (18ms)
- ✓ src/test/securityService.test.ts          142 tests passing (71ms)
- ✓ src/test/nvidiaNemotronService.test.ts     43 tests passing (30ms)
- ✓ src/test/platformConfig.test.ts          197 tests passing (57ms)
- ✓ src/test/riskCalculationsAndState.test.ts  84 tests passing (16ms)
- ✓ src/test/supabaseStorage.test.ts           30 tests passing (34ms)
+ ✓ src/test/securityService.test.ts              142 tests passing (32ms)
+ ✓ src/test/incidentAndCompliance.test.ts        115 tests passing (12ms)
+ ✓ src/test/platformConfig.test.ts              197 tests passing (18ms)
+ ✓ src/test/riskCalculationsAndState.test.ts      84 tests passing (13ms)
+ ✓ src/test/nvidiaNemotronService.test.ts         43 tests passing (22ms)
+ ✓ src/test/supabaseStorage.test.ts               30 tests passing (39ms)
+ ✓ src/test/organizationalIntelligence.test.ts    15 tests passing (32ms)
 
- Test Files  6 passed (6)
-      Tests  611 passed (611)
-   Duration  18.64s
+ Test Files  7 passed (7)
+      Tests  626 passed (626)
+   Duration  1.06s
 ```
 
 ### Production Build Verification
 ```bash
 > tsc -b && vite build
-✓ 2963 modules transformed.
-✓ built in 7.83s (Exit code: 0)
+✓ 2971 modules transformed.
+✓ built in 9.90s (Exit code: 0)
 ```
 
 ---

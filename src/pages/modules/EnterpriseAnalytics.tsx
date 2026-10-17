@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuthStore } from '../../store/useAuthStore';
 import { ORGANIZATIONS } from '../../config/platformConfig';
+import { useOrganizationalIntelligence } from '../../intelligence/useOrganizationalIntelligence';
 import { 
   BarChart2, Layers, TrendingUp, Activity, 
   Download, Calendar, Filter, Sparkles 
@@ -14,22 +15,24 @@ import {
 export const EnterpriseAnalytics = () => {
   const { organization } = useAuthStore();
   const currentOrg = organization && ORGANIZATIONS[organization] ? ORGANIZATIONS[organization] : ORGANIZATIONS.hospital;
+  const { data: orgData } = useOrganizationalIntelligence();
 
-  const departmentData = currentOrg.departments.map((dept, i) => ({
-    name: dept,
-    riskScore: 12 + (i * 9) % 35,
-    efficiency: 85 + (i * 4) % 15,
-    compliance: 92 + (i * 3) % 8,
-    incidents: 1 + (i % 4)
+  const departmentData = (orgData?.analytics?.departmentComparisons || []).map(dept => ({
+    name: dept.department,
+    riskScore: dept.riskScore,
+    efficiency: Math.max(65, Math.min(100, Math.round(100 - (dept.riskScore * 1.2)))),
+    compliance: dept.compliancePct,
+    incidents: dept.incidentCount
   }));
 
+  const comp = orgData?.kpis?.health?.componentScores;
   const radarData = [
-    { metric: 'Cyber Security Posture', value: 96, fullMark: 100 },
-    { metric: 'Operational Resilience', value: 92, fullMark: 100 },
-    { metric: 'Regulatory Compliance', value: 99, fullMark: 100 },
-    { metric: 'Supply Continuity', value: 88, fullMark: 100 },
-    { metric: 'Workforce Wellness', value: 91, fullMark: 100 },
-    { metric: 'Financial Risk Buffer', value: 94, fullMark: 100 },
+    { metric: 'Cyber & Risk Control', value: comp?.riskScore ?? 92, fullMark: 100 },
+    { metric: 'Operational Resilience', value: comp?.operationsScore ?? 94, fullMark: 100 },
+    { metric: 'Regulatory Compliance', value: comp?.complianceScore ?? 99, fullMark: 100 },
+    { metric: 'Strategic Projects', value: comp?.projectsScore ?? 88, fullMark: 100 },
+    { metric: 'Workforce & HR', value: comp?.hrScore ?? 91, fullMark: 100 },
+    { metric: 'Financial Health', value: comp?.financeScore ?? 95, fullMark: 100 },
   ];
 
   return (

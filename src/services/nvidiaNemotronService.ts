@@ -5,6 +5,8 @@
  */
 
 import type { OrganizationConfig } from '../config/platformConfig';
+import { OrganizationalDataHub } from '../intelligence/OrganizationalDataHub';
+import { buildLiveOrganizationalContextPrompt, generateHeuristicOrganizationalResponse } from '../intelligence/aiContextBuilder';
 
 export interface NemotronResponse {
   text: string;
@@ -53,6 +55,10 @@ export function buildNemotronSystemPrompt(context?: NemotronContext): string {
   const aiRiskScore = context?.aiRiskScore ?? context?.organization?.aiRiskScore ?? 12;
   const modules = context?.activeModules?.join(', ') || context?.organization?.industryModules?.map(m => m.name).join(', ') || 'Predictive AI, Risk Register, Compliance Matrix';
 
+  const orgId = context?.organization?.id || 'hospital';
+  const orgState = OrganizationalDataHub.getState(orgId);
+  const liveContextPrompt = buildLiveOrganizationalContextPrompt(orgState);
+
   return `You are "ORBIS Enterprise Sentinel", the authoritative autonomous Cognitive AI Risk Copilot for the Organizational Risk and Business Intelligence System (ORBIS).
 You are powered by NVIDIA's Nemotron-3 Super 120B reasoning model ("nvidia/nemotron-3-super-120b-a12b"). Never state "powered by" or mention underlying database names in user-facing conversational outputs. Be direct, authoritative, and concise.
 
@@ -63,6 +69,8 @@ You are powered by NVIDIA's Nemotron-3 Super 120B reasoning model ("nvidia/nemot
 - System Health Score: ${healthScore} / 100
 - AI Risk Exposure Score: ${aiRiskScore}%
 - Active Enterprise Modules: ${modules}
+
+${liveContextPrompt}
 
 ### YOUR MISSION & CORE RESPONSIBILITIES:
 1. REAL-TIME MULTIMODAL RISK SURVEILLANCE:
@@ -227,14 +235,15 @@ function cleanReasoningToContent(reasoning: string): string {
  * High-fidelity fallback in case of internet outage or upstream timeout
  */
 function getFallbackResponse(userQuery: string, context?: NemotronContext): NemotronResponse {
-  const orgName = context?.organization?.name || 'Enterprise System';
-  const roleTitle = context?.roleTitle || 'Risk Specialist';
+  const orgId = context?.organization?.id || 'hospital';
+  const orgState = OrganizationalDataHub.getState(orgId);
+  const heuristic = generateHeuristicOrganizationalResponse(userQuery, orgState);
 
   return {
-    text: `**Sentinel Diagnostic [Local Neural Fallback]:**\n\nYour query *"${userQuery.slice(0, 60)}..."* has been processed for **${orgName}**.\n\n- **Current Health Metric:** ${context?.healthScore || 94}/100 (**Nominal**)\n- **Active Sentinel Core:** Neural anomaly filters report zero unhandled state excursions.\n- **Mitigation Directive:** Maintain active telemetry observation on primary ingress nodes.`,
-    actionCard: {
+    text: `**Sentinel Diagnostic [Local Neural Fallback]:**\n\n${heuristic.text}`,
+    actionCard: heuristic.actionCard || {
       title: 'Local Cache Verified',
-      description: `Telemetry validated for ${roleTitle} clearance.`,
+      description: `Telemetry validated for ${context?.roleTitle || 'Risk Specialist'} clearance.`,
       metric: 'Latency: 1.2ms',
       status: 'optimal'
     },

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuthStore } from '../../store/useAuthStore';
 import { ORGANIZATIONS } from '../../config/platformConfig';
+import { useOrganizationalIntelligence } from '../../intelligence/useOrganizationalIntelligence';
 import { 
   AlertOctagon, Plus, Search, Filter, CheckCircle2, 
   Clock, ShieldAlert, FileText, Upload, ChevronRight,
@@ -13,6 +14,7 @@ import { validateFileUpload, sanitizeInput } from '../../services/securityServic
 export const IncidentManagement = () => {
   const { organization, user } = useAuthStore();
   const currentOrg = organization && ORGANIZATIONS[organization] ? ORGANIZATIONS[organization] : ORGANIZATIONS.hospital;
+  const { data: orgData, logIncident, resolveIncident } = useOrganizationalIntelligence();
   
   const [activeTab, setActiveTab] = useState<'register' | 'report' | 'investigation'>('register');
   const [incidents, setIncidents] = useState<any[]>([
@@ -178,6 +180,17 @@ export const IncidentManagement = () => {
       evidence_urls: newInc.evidenceUrls,
       organization: currentOrg.id
     }).catch(err => console.error('Failed to save incident to Neon DB:', err));
+
+    // Publish to Central Organizational Data Hub
+    logIncident({
+      title: sanitizedTitle,
+      department: sanitizedDept,
+      severity: newSeverity as any,
+      rootCause: sanitizedDesc || 'Pending root-cause analysis.',
+      evidenceCount: evidenceUrls.length,
+      evidenceUrls: evidenceUrls,
+      userName: user?.name
+    });
 
     setIncidents(prev => [newInc, ...prev]);
     setIsSubmitting(false);
