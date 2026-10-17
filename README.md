@@ -11,7 +11,7 @@
 
   <p align="center">
     <a href="#-system-architecture"><img src="https://img.shields.io/badge/System-ORBIS%20v2.6-00F2FE?style=for-the-badge&logo=shield" alt="System Version" /></a>
-    <a href="#-test-suite--verification"><img src="https://img.shields.io/badge/Tests-678%20Passed%20(100%25)-10B981?style=for-the-badge&logo=vitest" alt="Test Suite" /></a>
+    <a href="#-test-suite--verification"><img src="https://img.shields.io/badge/Tests-611%20Passed%20(100%25)-10B981?style=for-the-badge&logo=vitest" alt="Test Suite" /></a>
     <a href="#-zero-trust-security-matrix"><img src="https://img.shields.io/badge/Security-Zero--Trust%20HMAC-E5C07B?style=for-the-badge&logo=auth0" alt="Security Clearance" /></a>
     <a href="#-cognitive-ai-copilot"><img src="https://img.shields.io/badge/AI%20Core-NVIDIA%20Nemotron--3-76B900?style=for-the-badge&logo=nvidia" alt="NVIDIA Core" /></a>
     <a href="#-data-layer"><img src="https://img.shields.io/badge/Database-PostgreSQL%20Neon-00E599?style=for-the-badge&logo=postgresql" alt="Neon Database" /></a>
@@ -19,9 +19,11 @@
 
   <p align="center">
     <a href="#-executive-overview">Executive Overview</a> •
+    <a href="#-the-7-primary-enterprise-workspaces">Primary Workspaces</a> •
+    <a href="#-7-flagship-enterprise-sectors">Flagship Sectors</a> •
     <a href="#-key-platform-capabilities">Core Capabilities</a> •
     <a href="#-system-architecture">Architecture</a> •
-    <a href="#-13-enterprise-industry-sectors">Industry Sectors</a> •
+    <a href="#-dynamic-theming--cinematic-portal">Dynamic Theming</a> •
     <a href="#-zero-trust-security-matrix">Security Matrix</a> •
     <a href="#-test-suite--verification">Test Verification</a> •
     <a href="#-quick-start">Quick Start</a>
@@ -37,10 +39,45 @@
 
 ORBIS breaks organizational silos by combining:
 - **Zero-Trust Multi-Tenant Isolation**: Cryptographic HMAC-signed sessions bound to tenant identity and role clearance.
+- **7 Flagship Enterprise Sectors**: Tailored surveillance metrics, role taxonomies, and statutory compliance cross-mappings for 7 critical economic pillars.
+- **Unified 7-Module Architecture**: Streamlined workspace consolidating Risk, AI, Industry Telemetry, Analytics, GRC, and Administration.
 - **Autonomous Multimodal Risk Quantification**: Continuous calculation of Severity, Probability, and Velocity ($R = I \times L \times V$) alongside Monte Carlo Value-at-Risk (VaR) distribution forecasts.
-- **Cognitive AI Copilot**: Powered by NVIDIA's 120-billion parameter Nemotron-3 supercomputing model for prescriptive mitigation and live root-cause synthesis.
+- **Cognitive AI Copilot**: Powered by NVIDIA's 120-billion parameter Nemotron-3 supercomputing model for prescriptive mitigation and live root-cause synthesis with native markdown formatting and Neon DB persistence.
+- **Dynamic Organization-Adaptive Theming**: Full Light and Dark Mode system with high-contrast semantic tokens and dynamic tenant color scoping.
 - **Explainable AI (XAI)**: Native SHAP (Shapley Additive exPlanations) attribution vectors to guarantee regulatory transparency under global AI governance statutes.
 - **Global Regulatory Compliance**: Dynamic automated cross-mapping across **ISO 31000**, **NIST CSF 2.0**, **Basel III**, **HIPAA**, **GDPR**, and **SOC 2 Type II**.
+
+---
+
+## 🧭 The 7 Primary Enterprise Workspaces
+
+The authenticated experience in ORBIS is organized into **7 permanent primary workspaces**, accessible via the persistent master navigation bar:
+
+| Workspace | Route | Focus & Core Functionalities |
+| :--- | :--- | :--- |
+| **Executive Dashboard** | `/dashboard` | Sovereign KPI pulse, active alert feeds, risk score gauges, and quick action cards. |
+| **Risk Center** | `/dashboard/risk-center` | Unified risk register, interactive 5x5 heatmap matrix, quantitative assessment calculator, mitigation action workflows, and chronological incident timeline. |
+| **AI Intelligence Core** | `/dashboard/ai-intelligence` | Monte Carlo failure projections, predictive drift horizons, SHAP explainability attribution, and embedded ORBIS Risk Intelligence Copilot. |
+| **Organization Workspace** | `/dashboard/organization` | Live SCADA & IoT telemetry streams, sector-specific operational modules, and departmental monitoring. |
+| **Analytics Workspace** | `/dashboard/analytics` | Cross-departmental correlation heatmaps, MTBF drift detection, comparative metric trendlines, and risk velocity distributions. |
+| **Governance Workspace (GRC)** | `/dashboard/governance` | Statutory regulatory compliance matrix (ISO/NIST/Basel/HIPAA), board-ready audit pack exports, and multi-tier signoff workflows. |
+| **Administration Workspace** | `/dashboard/administration` | Granular Level 1–5 RBAC user provisioning, tamper-evident cryptographic security audit ledger, and tenant configuration. |
+
+---
+
+## 🏢 7 Flagship Enterprise Sectors
+
+ORBIS provides bespoke telemetry pipelines, risk thresholds, role taxonomies, and compliance mappings tailored to 7 flagship economic sectors:
+
+| Sector | ID | Color | Roles | Standards | Core Telemetry & Surveillance Metrics |
+| :--- | :---: | :---: | :---: | :--- | :--- |
+| **Healthcare & Hospital System** | `hospital` | `#0B6EFD` | 10 Roles | HIPAA, ISO 13485, Joint Commission | Clinical error rate, ICU ventilator telemetry, sepsis early detection, medication interaction matrix. |
+| **Industrial Manufacturing & Plants** | `manufacturing` | `#FF6B00` | 7 Roles | ISO 9001, OSHA, Six Sigma | Predictive machine bearing wear, assembly line downtime, OEE efficiency, robotic drift. |
+| **Technology, Cloud & Software Enterprise** | `it` | `#7B61FF` | 6 Roles | SOC 2 Type II, ISO 27001, FedRAMP | Microservice P99 latency, container escape risk, API anomaly velocity, zero-day threat telemetry. |
+| **Banking & Financial Institution** | `bank` | `#0A2342` | 6 Roles | Basel III, FINRA, SOX, Dodd-Frank | Tier-1 capital adequacy, liquidity coverage ratio (LCR), algorithmic spoofing, fraud anomaly velocity. |
+| **University & Research Institute** | `university` | `#059669` | 5 Roles | FERPA, Title IX, NSF Guidelines | Campus safety incidents, grant compliance integrity, hazardous lab containment, academic tenure data. |
+| **Sovereign Government & Public Sector** | `government` | `#1E293B` | 5 Roles | FISMA, FedRAMP High, NIST 800-53 | Citizen privacy breach exposure, critical public service uptime, inter-agency classified clearance. |
+| **Energy, Grid & Utilities** | `energy` | `#15803D` | 3 Roles | NERC CIP, IEC 62443, FERC | SCADA grid frequency balance, transformer harmonic drift, interconnect stability, blackout resilience. |
 
 ---
 
@@ -61,7 +98,8 @@ ORBIS breaks organizational silos by combining:
       <h3>🧠 Cognitive AI Copilot (NVIDIA Nemotron-3)</h3>
       <ul>
         <li><b>120B Parameter Reasoning</b>: Enterprise Sentinel reasoning over unstructured incident logs and SCADA telemetry.</li>
-        <li><b>Prescriptive Action Cards</b>: Automated mitigation work orders ranked by operational efficacy and latency.</li>
+        <li><b>Universal Role-Aware Greetings</b>: Streamlined greetings personalized to operator name, organization, and clearance role.</li>
+        <li><b>Rich Markdown Engine</b>: Clean bold formatting (<code>**bold**</code>) without raw syntax asterisks or vendor leakage.</li>
         <li><b>Resilient Offline Fallback</b>: Dual-channel endpoint cascade with instantaneous heuristic failover cache.</li>
         <li><b>Persistent Serverless Sync</b>: Real-time contextual thread synchronization with PostgreSQL Neon.</li>
       </ul>
@@ -91,12 +129,24 @@ ORBIS breaks organizational silos by combining:
 
 ---
 
+## 🎨 Dynamic Theming & Architectural Corridor Portal
+
+ORBIS features an institutional visual experience engineered for 24/7 command center operations:
+
+- **Dynamic Tenant Theme Scoping (`data-org`)**: The entire UI dynamically re-tints its primary, secondary, and accent palettes based on the active enterprise sector (e.g., Azure for Healthcare, Amber for Manufacturing, Cyber Violet for IT, Navy for Banking).
+- **Comprehensive Dual Themes (`data-theme="light"` / `data-theme="dark"`)**:
+  - **Sovereign Dark**: Deep obsidian glassmorphism, glowing micro-accents, and low-eye-strain command telemetry.
+  - **Executive Light**: Crisp high-contrast surfaces, harmonized borders, and clean readability without contrast clashes.
+- **Photorealistic Architectural Corridor Portal**: 3D geometric corridor backdrop on the login and verification portals, blending real-time organization lighting and depth perspective.
+
+---
+
 ## 🏗️ System Architecture
 
 ```mermaid
 flowchart TB
     subgraph Client ["Client Presentation Tier (React 19 + TypeScript + Vite)"]
-        UI["Executive Dashboard & Modern Dark Theme Canvas"]
+        UI["Executive Dashboard & Modern Dual-Theme Canvas"]
         CopilotUI["Floating AI Copilot (NVIDIA Nemotron-3 Interface)"]
         Visuals["Recharts Matrix Heatmaps & Framer Motion Canvas"]
     end
@@ -130,28 +180,6 @@ flowchart TB
 
 ---
 
-## 🏢 13 Enterprise Industry Sectors
-
-ORBIS provides bespoke telemetry pipelines, risk thresholds, role taxonomies, and compliance mappings tailored to 13 distinct global sectors:
-
-| Sector | Code | Anchor Standards | Core Surveillance Metrics |
-| :--- | :---: | :--- | :--- |
-| **Healthcare & Life Sciences** | `hospital` | HIPAA, ISO 13485, Joint Commission | Clinical error rate, ICU telemetry drift, sepsis prediction |
-| **Banking & Capital Markets** | `bank` | Basel III, FINRA, SOX | Tier-1 capital ratio, liquidity coverage, FX spoofing |
-| **Critical Infrastructure & Energy** | `energy` | NERC CIP, IEC 62443, FERC | SCADA harmonic drift, interconnect stability, MTBF |
-| **Defense & Aerospace** | `defense` | MIL-STD-882E, ITAR, DO-178C | Avionics packet timing, telemetry jitter, guidance drift |
-| **Advanced Manufacturing** | `manufacturing` | ISO 9001, OSHA, Six Sigma | Assembly line downtime, robotic drift, defect density |
-| **Cloud & Enterprise IT** | `it` | SOC 2 Type II, ISO 27001 | Microservice P99 latency, container escape risk, DDoS |
-| **Insurance & Actuarial** | `insurance` | Solvency II, NAIC | Loss ratio, catastrophic climate exposure, claims anomaly |
-| **Global Logistics & Supply Chain** | `logistics` | C-TPAT, ISO 28000 | Port bottleneck latency, container tamper, fuel variance |
-| **Civil Infrastructure & Construction**| `construction`| OSHA 1926, ISO 45001 | Structural load tolerance, site safety violations |
-| **Public Sector & Sovereign Government**| `government` | FedRAMP High, FISMA, NIST 800-53 | Citizen privacy breach, public service uptime |
-| **Higher Education & Research** | `university` | FERPA, Title IX | Campus safety incidents, grant compliance, lab hazard |
-| **Corporate Legal & Jurisprudence** | `lawfirm` | ABA Model Rules, GDPR | Regulatory compliance delta, contract breach exposure |
-| **Global Omnichannel Retail** | `retail` | PCI-DSS v4.0, CCPA | Point-of-Sale tamper, inventory shrinkage, gateway fraud |
-
----
-
 ## 🔒 Zero-Trust Security Matrix
 
 The ORBIS security posture adheres to strict zero-trust principles across all 7 stages of user interaction:
@@ -160,50 +188,50 @@ The ORBIS security posture adheres to strict zero-trust principles across all 7 
 [1. Cinematic Sovereign Gate]
              │
              ▼
-[2. Tenant Selection (13 Sectors)] ──► Clears mismatched foreign session credentials
+[2. Tenant Selection (7 Flagship Sectors)] ──► Clears mismatched foreign session credentials
              │
              ▼
-[3. Role Clearance Level (1–5)]   ──► Re-signs cryptographic session with sanitized role
+[3. Role Clearance Level (1–5)]            ──► Re-signs cryptographic session with sanitized role
              │
              ▼
-[4. Authentication (Email / SSO)] ──► Enforces 5-attempt sliding brute-force rate limiter
+[4. Authentication (Email / SSO)]          ──► Enforces 5-attempt sliding brute-force rate limiter
              │
              ▼
-[5. Quantum Biometric Handshake]  ──► Validates capacitive ridge & neural behavioral seed
+[5. Quantum Biometric Handshake]           ──► Validates capacitive ridge & neural behavioral seed
              │
              ▼
-[6. Institutional Key (PIN)]      ──► Issues tamper-evident 8-hour HMAC signed session
+[6. Institutional Key (PIN)]               ──► Issues tamper-evident 8-hour HMAC signed session
              │
              ▼
-[7. Protected Master Workspace]   ──► Strict route guards & tenant data partition checks
+[7. Protected Master Workspace]            ──► Strict route guards & tenant data partition checks
 ```
 
 ---
 
 ## 🧪 Test Suite & Verification
 
-The ORBIS platform includes a comprehensive, automated test suite built on Vitest and happy-dom, with **678 test cases passing at a 100% success rate**:
+The ORBIS platform includes a comprehensive, automated test suite built on Vitest and happy-dom, with **611 test cases passing at a 100% success rate**:
 
 ```bash
  RUN  v5.0.4
 
- ✓ src/test/securityService.test.ts          142 tests passing (51ms)
- ✓ src/test/platformConfig.test.ts          252 tests passing (32ms)
- ✓ src/test/incidentAndCompliance.test.ts   115 tests passing (13ms)
- ✓ src/test/riskCalculationsAndState.test.ts 90 tests passing (10ms)
- ✓ src/test/nvidiaNemotronService.test.ts    49 tests passing (20ms)
- ✓ src/test/supabaseStorage.test.ts          30 tests passing (49ms)
+ ✓ src/test/incidentAndCompliance.test.ts    115 tests passing (18ms)
+ ✓ src/test/securityService.test.ts          142 tests passing (71ms)
+ ✓ src/test/nvidiaNemotronService.test.ts     43 tests passing (30ms)
+ ✓ src/test/platformConfig.test.ts          197 tests passing (57ms)
+ ✓ src/test/riskCalculationsAndState.test.ts  84 tests passing (16ms)
+ ✓ src/test/supabaseStorage.test.ts           30 tests passing (34ms)
 
  Test Files  6 passed (6)
-      Tests  678 passed (678)
-   Duration  926ms
+      Tests  611 passed (611)
+   Duration  18.64s
 ```
 
 ### Production Build Verification
 ```bash
 > tsc -b && vite build
-✓ 3498 modules transformed.
-✓ built in 13.50s (Exit code: 0)
+✓ 2963 modules transformed.
+✓ built in 7.83s (Exit code: 0)
 ```
 
 ---
