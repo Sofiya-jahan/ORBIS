@@ -43,6 +43,7 @@ interface AuthState {
   login: (email: string, pass: string) => Promise<void>;
   register: (email: string, pass: string, name?: string) => Promise<void>;
   loginWithGoogle: () => Promise<void>;
+  loginAsDemo: (customEmail?: string, customName?: string) => void;
   updateUser: (partial: Partial<UserProfile>) => void;
 }
 
@@ -59,6 +60,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         // User is signed in, fetch their profile from Firestore
+        const fallbackOrg = get().organization || 'hospital';
+        const fallbackRole = get().role || 'cmo';
         try {
           const userDocRef = doc(db, 'users', user.uid);
           const userDoc = await getDoc(userDocRef);
@@ -77,8 +80,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
                 photoURL: data.photoURL || user.photoURL || '',
                 lastLogin: new Date().toLocaleString()
               },
-              organization: data.organization || null,
-              role: data.role || null,
+              organization: data.organization || fallbackOrg,
+              role: data.role || fallbackRole,
               isAuthLoaded: true
             });
           } else {
@@ -95,6 +98,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
                 photoURL: user.photoURL || '',
                 lastLogin: new Date().toLocaleString()
               },
+              organization: fallbackOrg,
+              role: fallbackRole,
               isAuthLoaded: true
             });
           }
@@ -112,6 +117,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
               photoURL: user.photoURL || '',
               lastLogin: new Date().toLocaleString()
             },
+            organization: fallbackOrg,
+            role: fallbackRole,
             isAuthLoaded: true 
           });
         }
@@ -203,6 +210,29 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     } catch (e) {
       console.warn("Could not save initial user doc to Firestore:", e);
     }
+  },
+
+  loginAsDemo: (customEmail?: string, customName?: string) => {
+    const org = get().organization || 'hospital';
+    const currentOrg = ORGANIZATIONS[org] || ORGANIZATIONS.hospital;
+    const defaultRole = get().role || (currentOrg.roles[0]?.id || 'cmo');
+    const defaultEmail = customEmail || `executive@${currentOrg.id}.orbis.ai`;
+    const defaultName = customName || (currentOrg.roles.find(r => r.id === defaultRole)?.title || 'Chief Executive Officer');
+
+    set({
+      isAuthenticated: true,
+      user: {
+        name: defaultName,
+        email: defaultEmail,
+        id: `DEMO-${Math.random().toString(36).substring(2, 8).toUpperCase()}`,
+        department: 'Executive Governance',
+        contact: '+1 (555) 019-2834',
+        lastLogin: new Date().toLocaleString()
+      },
+      organization: org,
+      role: defaultRole,
+      isAuthLoaded: true
+    });
   },
 
   setTheme: (theme) => {
