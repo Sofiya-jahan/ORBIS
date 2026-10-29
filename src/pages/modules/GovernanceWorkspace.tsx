@@ -11,9 +11,11 @@ import {
 import ComplianceAudit from './ComplianceAudit';
 import WorkflowTasks from './WorkflowTasks';
 import EnterpriseReports from './EnterpriseReports';
+import { OrganizationalPortalBackdrop } from '../../components/OrganizationalPortalBackdrop';
 
 export const GovernanceWorkspace = () => {
-  const { organization } = useAuthStore();
+  const { organization, theme } = useAuthStore();
+  const isLight = theme === 'light';
   const currentOrg = organization && ORGANIZATIONS[organization] ? ORGANIZATIONS[organization] : ORGANIZATIONS.hospital;
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -34,79 +36,83 @@ export const GovernanceWorkspace = () => {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       
       {/* Page Header */}
-      <div className="glass-card" style={{
-        padding: '2rem 2.5rem',
-        background: 'rgba(7, 17, 46, 0.92)',
-        border: '1px solid rgba(46, 155, 248, 0.25)',
-        borderRadius: '24px',
-        boxShadow: '0 20px 50px rgba(0, 0, 0, 0.5)',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flexWrap: 'wrap',
-        gap: '1.5rem'
-      }}>
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: '#6AE7F7', fontWeight: 700, fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '0.4rem' }}>
-            <Scale size={16} /> Governance, Risk & Compliance (GRC) &bull; {currentOrg.name}
+      <OrganizationalPortalBackdrop
+        themeColor={currentOrg.themeColor}
+        secondaryColor={currentOrg.secondaryColor}
+        accentColor={currentOrg.accentColor}
+        nodeBadgeText="GOVERNANCE & COMPLIANCE • SOC2 / HIPAA / ISO-27001 GATEWAY"
+        variant="banner"
+      >
+        <div style={{
+          padding: '2rem 2.5rem',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '1.5rem'
+        }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: currentOrg.accentColor, fontWeight: 700, fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '0.4rem' }}>
+              <Scale size={16} /> Governance, Risk & Compliance (GRC) &bull; {currentOrg.name}
+            </div>
+            <h1 style={{ fontSize: '2.2rem', fontWeight: 900, color: 'var(--text-primary)', margin: 0, letterSpacing: '-0.5px' }}>
+              Centralized Governance Workspace
+            </h1>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', margin: '0.4rem 0 0', maxWidth: '720px' }}>
+              Unified command for continuous regulatory compliance, internal and external audits, automated workflow approval queues, and board-ready reporting.
+            </p>
           </div>
-          <h1 style={{ fontSize: '2.2rem', fontWeight: 900, color: '#F6FDFF', margin: 0, letterSpacing: '-0.5px' }}>
-            Centralized Governance Workspace
-          </h1>
-          <p style={{ color: 'rgba(246, 253, 255, 0.75)', fontSize: '0.95rem', margin: '0.4rem 0 0', maxWidth: '720px' }}>
-            Unified command for continuous regulatory compliance, internal and external audits, automated workflow approval queues, and board-ready reporting.
-          </p>
-        </div>
 
-        {/* Global Actions */}
-        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-          <button 
-            onClick={() => setTab('reports')}
-            className="btn btn-primary"
-            style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '0.8rem 1.4rem', fontSize: '0.88rem' }}
-          >
-            <Download size={16} /> Generate Audit Report
-          </button>
-          <button 
-            onClick={() => setTab('approvals')}
-            className="btn btn-secondary"
-            style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '0.8rem 1.25rem', fontSize: '0.88rem' }}
-          >
-            <Clock size={16} /> View Task Queue
-          </button>
+          {/* Global Actions */}
+          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+            <button 
+              onClick={() => setTab('reports')}
+              className="btn btn-primary"
+              style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '0.8rem 1.4rem', fontSize: '0.88rem' }}
+            >
+              <Download size={16} /> Generate Audit Report
+            </button>
+            <button 
+              onClick={() => setTab('approvals')}
+              className="btn btn-secondary"
+              style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '0.8rem 1.25rem', fontSize: '0.88rem' }}
+            >
+              <Clock size={16} /> View Task Queue
+            </button>
+          </div>
         </div>
-      </div>
+      </OrganizationalPortalBackdrop>
 
       {/* Primary KPIs Row */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem' }}>
-        <div className="glass-card" style={{ padding: '1.5rem', background: 'rgba(7, 17, 46, 0.88)', border: '1px solid rgba(106, 231, 247, 0.25)', borderRadius: '18px' }}>
-          <div style={{ color: 'rgba(246, 253, 255, 0.55)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Compliance Adherence</div>
-          <div style={{ fontSize: '2.1rem', fontWeight: 900, color: '#6AE7F7', fontFamily: "'JetBrains Mono', monospace" }}>98.6%</div>
-          <div style={{ fontSize: '0.8rem', color: 'rgba(246, 253, 255, 0.75)', marginTop: '0.25rem' }}>
+        <div className="glass-card" style={{ padding: '1.5rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '18px' }}>
+          <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Compliance Adherence</div>
+          <div style={{ fontSize: '2.1rem', fontWeight: 900, color: currentOrg.accentColor, fontFamily: "'JetBrains Mono', monospace" }}>98.6%</div>
+          <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
             Across SOC2, HIPAA & ISO-27001
           </div>
         </div>
 
-        <div className="glass-card" style={{ padding: '1.5rem', background: 'rgba(7, 17, 46, 0.88)', border: '1px solid rgba(46, 155, 248, 0.2)', borderRadius: '18px' }}>
-          <div style={{ color: 'rgba(246, 253, 255, 0.55)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Verified Controls</div>
-          <div style={{ fontSize: '2.1rem', fontWeight: 900, color: '#2E9BF8', fontFamily: "'JetBrains Mono', monospace" }}>47 / 48</div>
-          <div style={{ fontSize: '0.8rem', color: 'rgba(246, 253, 255, 0.75)', marginTop: '0.25rem' }}>
+        <div className="glass-card" style={{ padding: '1.5rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '18px' }}>
+          <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Verified Controls</div>
+          <div style={{ fontSize: '2.1rem', fontWeight: 900, color: currentOrg.secondaryColor, fontFamily: "'JetBrains Mono', monospace" }}>47 / 48</div>
+          <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
             1 control pending final sign-off
           </div>
         </div>
 
-        <div className="glass-card" style={{ padding: '1.5rem', background: 'rgba(7, 17, 46, 0.88)', border: '1px solid rgba(46, 155, 248, 0.2)', borderRadius: '18px' }}>
-          <div style={{ color: 'rgba(246, 253, 255, 0.55)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Pending Approvals</div>
-          <div style={{ fontSize: '2.1rem', fontWeight: 900, color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>3 Tasks</div>
-          <div style={{ fontSize: '0.8rem', color: '#6AE7F7', marginTop: '0.25rem' }}>
+        <div className="glass-card" style={{ padding: '1.5rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '18px' }}>
+          <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Pending Approvals</div>
+          <div style={{ fontSize: '2.1rem', fontWeight: 900, color: 'var(--text-primary)', fontFamily: "'JetBrains Mono', monospace" }}>3 Tasks</div>
+          <div style={{ fontSize: '0.8rem', color: currentOrg.accentColor, marginTop: '0.25rem' }}>
             Within 24-hr response SLA
           </div>
         </div>
 
-        <div className="glass-card" style={{ padding: '1.5rem', background: 'rgba(7, 17, 46, 0.88)', border: '1px solid rgba(46, 155, 248, 0.2)', borderRadius: '18px' }}>
-          <div style={{ color: 'rgba(246, 253, 255, 0.55)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Next External Audit</div>
-          <div style={{ fontSize: '2.1rem', fontWeight: 900, color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>34 Days</div>
-          <div style={{ fontSize: '0.8rem', color: 'rgba(246, 253, 255, 0.75)', marginTop: '0.25rem' }}>
+        <div className="glass-card" style={{ padding: '1.5rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '18px' }}>
+          <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Next External Audit</div>
+          <div style={{ fontSize: '2.1rem', fontWeight: 900, color: 'var(--text-primary)', fontFamily: "'JetBrains Mono', monospace" }}>34 Days</div>
+          <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
             Automated evidence pre-compiled
           </div>
         </div>
@@ -117,8 +123,8 @@ export const GovernanceWorkspace = () => {
         display: 'flex',
         gap: '0.5rem',
         padding: '0.35rem',
-        background: 'rgba(7, 17, 46, 0.95)',
-        border: '1px solid rgba(46, 155, 248, 0.22)',
+        background: isLight ? 'var(--bg-secondary)' : 'rgba(7, 17, 46, 0.95)',
+        border: '1px solid var(--border-color)',
         borderRadius: '16px',
         overflowX: 'auto'
       }}>
@@ -137,15 +143,15 @@ export const GovernanceWorkspace = () => {
                 borderRadius: '12px',
                 border: 'none',
                 background: isActive 
-                  ? 'linear-gradient(135deg, #1554E8 0%, #2E9BF8 100%)' 
+                  ? `linear-gradient(135deg, ${currentOrg.themeColor} 0%, ${currentOrg.secondaryColor} 100%)` 
                   : 'transparent',
-                color: isActive ? '#F6FDFF' : 'rgba(246, 253, 255, 0.7)',
+                color: isActive ? '#FFFFFF' : 'var(--text-secondary)',
                 fontWeight: isActive ? 800 : 600,
                 fontSize: '0.88rem',
                 cursor: 'pointer',
                 whiteSpace: 'nowrap',
                 transition: 'all 0.2s',
-                boxShadow: isActive ? '0 4px 15px rgba(21, 84, 232, 0.4)' : 'none'
+                boxShadow: isActive ? `0 4px 15px ${currentOrg.themeColor}66` : 'none'
               }}
             >
               <Icon size={16} />
@@ -167,11 +173,11 @@ export const GovernanceWorkspace = () => {
 
         {/* TAB 2: AUDITS */}
         {activeTab === 'audits' && (
-          <div className="glass-card" style={{ padding: '2.5rem', background: 'rgba(7, 17, 46, 0.92)', border: '1px solid rgba(46, 155, 248, 0.25)', borderRadius: '24px' }}>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 900, color: '#F6FDFF', margin: '0 0 0.5rem' }}>
+          <div className="glass-card" style={{ padding: '2.5rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '24px' }}>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 900, color: 'var(--text-primary)', margin: '0 0 0.5rem' }}>
               Institutional Audit Records & Continuous Verification
             </h2>
-            <p style={{ color: 'rgba(246, 253, 255, 0.75)', fontSize: '0.92rem', margin: '0 0 2rem' }}>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', margin: '0 0 2rem' }}>
               Comprehensive historical records of completed third-party audits, continuous automated checks, and auditor findings.
             </p>
 
@@ -184,8 +190,8 @@ export const GovernanceWorkspace = () => {
                 <div key={i} style={{
                   padding: '1.5rem',
                   borderRadius: '16px',
-                  background: 'rgba(13, 35, 77, 0.45)',
-                  border: '1px solid rgba(46, 155, 248, 0.2)',
+                  background: isLight ? 'var(--bg-secondary)' : 'rgba(13, 35, 77, 0.45)',
+                  border: '1px solid var(--border-color)',
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
@@ -193,20 +199,20 @@ export const GovernanceWorkspace = () => {
                   gap: '1rem'
                 }}>
                   <div>
-                    <div style={{ fontSize: '0.8rem', color: '#6AE7F7', fontWeight: 700, marginBottom: '0.25rem' }}>
+                    <div style={{ fontSize: '0.8rem', color: currentOrg.accentColor, fontWeight: 700, marginBottom: '0.25rem' }}>
                       {audit.date} &bull; Auditor: {audit.auditor}
                     </div>
-                    <div style={{ fontSize: '1.05rem', fontWeight: 800, color: '#F6FDFF' }}>
+                    <div style={{ fontSize: '1.05rem', fontWeight: 800, color: 'var(--text-primary)' }}>
                       {audit.name}
                     </div>
                   </div>
 
                   <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
                     <div style={{ textAlign: 'right' }}>
-                      <div style={{ fontSize: '0.75rem', color: 'rgba(246, 253, 255, 0.65)' }}>Score</div>
-                      <div style={{ fontSize: '1.2rem', fontWeight: 900, color: '#6AE7F7', fontFamily: "'JetBrains Mono', monospace" }}>{audit.score}</div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Score</div>
+                      <div style={{ fontSize: '1.2rem', fontWeight: 900, color: currentOrg.accentColor, fontFamily: "'JetBrains Mono', monospace" }}>{audit.score}</div>
                     </div>
-                    <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#6AE7F7', background: 'rgba(106, 231, 247, 0.15)', padding: '0.4rem 0.9rem', borderRadius: '8px' }}>
+                    <span style={{ fontSize: '0.82rem', fontWeight: 800, color: currentOrg.accentColor, background: `${currentOrg.accentColor}20`, padding: '0.4rem 0.9rem', borderRadius: '8px' }}>
                       {audit.status}
                     </span>
                   </div>
@@ -232,11 +238,11 @@ export const GovernanceWorkspace = () => {
 
         {/* TAB 5: POLICY REPOSITORY */}
         {activeTab === 'policies' && (
-          <div className="glass-card" style={{ padding: '2.5rem', background: 'rgba(7, 17, 46, 0.92)', border: '1px solid rgba(46, 155, 248, 0.25)', borderRadius: '24px' }}>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 900, color: '#F6FDFF', margin: '0 0 0.5rem' }}>
+          <div className="glass-card" style={{ padding: '2.5rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '24px' }}>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 900, color: 'var(--text-primary)', margin: '0 0 0.5rem' }}>
               Enterprise Governance Policy Library
             </h2>
-            <p style={{ color: 'rgba(246, 253, 255, 0.75)', fontSize: '0.92rem', margin: '0 0 2rem' }}>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', margin: '0 0 2rem' }}>
               Master repository of institutional risk governance policies, operating bylaws, and versioned compliance standards.
             </p>
 
@@ -247,19 +253,19 @@ export const GovernanceWorkspace = () => {
                 { title: 'POL-03: Incident Escalation & Mandatory Disclosure Protocol', version: 'v5.0', updated: '2 months ago', status: 'Active & Enforced' },
                 { title: 'POL-04: Third-Party Vendor Risk Assessment Framework', version: 'v2.8', updated: '3 weeks ago', status: 'Active & Enforced' }
               ].map((pol, i) => (
-                <div key={i} style={{ padding: '1.5rem', borderRadius: '16px', background: 'rgba(13, 35, 77, 0.45)', border: '1px solid rgba(46, 155, 248, 0.2)', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                <div key={i} style={{ padding: '1.5rem', borderRadius: '16px', background: isLight ? 'var(--bg-secondary)' : 'rgba(13, 35, 77, 0.45)', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#2E9BF8', background: 'rgba(46, 155, 248, 0.15)', padding: '2px 8px', borderRadius: '6px' }}>
+                    <span style={{ fontSize: '0.75rem', fontWeight: 800, color: currentOrg.secondaryColor, background: `${currentOrg.secondaryColor}20`, padding: '2px 8px', borderRadius: '6px' }}>
                       {pol.version}
                     </span>
-                    <span style={{ fontSize: '0.75rem', color: 'rgba(246, 253, 255, 0.55)' }}>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                       Updated {pol.updated}
                     </span>
                   </div>
-                  <div style={{ fontSize: '1.05rem', fontWeight: 800, color: '#F6FDFF' }}>
+                  <div style={{ fontSize: '1.05rem', fontWeight: 800, color: 'var(--text-primary)' }}>
                     {pol.title}
                   </div>
-                  <div style={{ fontSize: '0.8rem', color: '#6AE7F7', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <div style={{ fontSize: '0.8rem', color: currentOrg.accentColor, fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <CheckCircle2 size={14} /> {pol.status}
                   </div>
                 </div>

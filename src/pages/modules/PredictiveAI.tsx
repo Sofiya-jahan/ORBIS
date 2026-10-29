@@ -13,7 +13,8 @@ import {
 } from 'recharts';
 
 export const PredictiveAI = () => {
-  const { organization } = useAuthStore();
+  const { organization, theme } = useAuthStore();
+  const isLight = theme === 'light';
   const currentOrg = organization && ORGANIZATIONS[organization] ? ORGANIZATIONS[organization] : ORGANIZATIONS.hospital;
   const orgData = useOrganizationalIntelligence();
   
@@ -92,7 +93,7 @@ export const PredictiveAI = () => {
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: currentOrg.themeColor, fontWeight: '700', fontSize: '0.8rem', textTransform: 'uppercase', marginBottom: '0.4rem' }}>
             <Cpu size={16} /> Neural Predictive Engine &bull; {currentOrg.name}
           </div>
-          <h1 style={{ fontSize: '2.2rem', fontWeight: '800', marginBottom: '0.4rem' }}>
+          <h1 style={{ fontSize: '2.2rem', fontWeight: '800', marginBottom: '0.4rem', color: 'var(--text-primary)' }}>
             AI Risk Forecasting & Autonomous Defense
           </h1>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>
@@ -116,42 +117,42 @@ export const PredictiveAI = () => {
 
       {/* Primary Predictive Summary Banner */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem' }}>
-        <div className="glass-card" style={{ padding: '1.5rem', background: 'rgba(7, 17, 46, 0.88)', border: '1px solid rgba(46, 155, 248, 0.2)', borderRadius: '18px' }}>
-          <div style={{ color: 'rgba(246, 253, 255, 0.55)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Projected Incidents (Next Mo)</div>
-          <div style={{ fontSize: '2.1rem', fontWeight: 900, color: '#6AE7F7', fontFamily: "'JetBrains Mono', monospace" }}>
+        <div className="glass-card" style={{ padding: '1.5rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '18px' }}>
+          <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Projected Incidents (Next Mo)</div>
+          <div style={{ fontSize: '2.1rem', fontWeight: 900, color: currentOrg.accentColor, fontFamily: "'JetBrains Mono', monospace" }}>
             {orgData.predictions?.incidentForecast?.projectionNextMonth || 8}
           </div>
-          <div style={{ fontSize: '0.8rem', color: 'rgba(246, 253, 255, 0.75)', marginTop: '0.25rem' }}>
+          <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
             Slope: {orgData.predictions?.incidentForecast?.trendSlope !== undefined && orgData.predictions.incidentForecast.trendSlope >= 0 ? '+' : ''}{orgData.predictions?.incidentForecast?.trendSlope || 0}/mo ({orgData.predictions?.incidentForecast?.confidenceLevelPct || 94}% CI)
           </div>
         </div>
 
-        <div className="glass-card" style={{ padding: '1.5rem', background: 'rgba(7, 17, 46, 0.88)', border: '1px solid rgba(46, 155, 248, 0.2)', borderRadius: '18px' }}>
-          <div style={{ color: 'rgba(246, 253, 255, 0.55)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Delivery Delay Risk</div>
-          <div style={{ fontSize: '2.1rem', fontWeight: 900, color: '#2E9BF8', fontFamily: "'JetBrains Mono', monospace" }}>
+        <div className="glass-card" style={{ padding: '1.5rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '18px' }}>
+          <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Delivery Delay Risk</div>
+          <div style={{ fontSize: '2.1rem', fontWeight: 900, color: currentOrg.secondaryColor, fontFamily: "'JetBrains Mono', monospace" }}>
             {orgData.predictions?.deliveryRiskForecast?.overallDelayRiskPct || 18}%
           </div>
-          <div style={{ fontSize: '0.8rem', color: 'rgba(246, 253, 255, 0.75)', marginTop: '0.25rem' }}>
+          <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
             {orgData.predictions?.deliveryRiskForecast?.atRiskProjectsCount || 0} projects flagged &bull; High confidence
           </div>
         </div>
 
-        <div className="glass-card" style={{ padding: '1.5rem', background: 'rgba(7, 17, 46, 0.88)', border: '1px solid rgba(46, 155, 248, 0.2)', borderRadius: '18px' }}>
-          <div style={{ color: 'rgba(246, 253, 255, 0.55)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Next Qtr Profit Outlook</div>
-          <div style={{ fontSize: '2.1rem', fontWeight: 900, color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>
+        <div className="glass-card" style={{ padding: '1.5rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '18px' }}>
+          <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Next Qtr Profit Outlook</div>
+          <div style={{ fontSize: '2.1rem', fontWeight: 900, color: 'var(--text-primary)', fontFamily: "'JetBrains Mono', monospace" }}>
             ${((orgData.predictions?.financialForecast?.projectedNextQuarterProfit || 250000) / 1000).toFixed(0)}k
           </div>
-          <div style={{ fontSize: '0.8rem', color: '#6AE7F7', marginTop: '0.25rem' }}>
+          <div style={{ fontSize: '0.8rem', color: currentOrg.accentColor, marginTop: '0.25rem' }}>
             Revenue growth: +{orgData.predictions?.financialForecast?.revenueGrowthForecastPct || 5.2}%
           </div>
         </div>
 
-        <div className="glass-card" style={{ padding: '1.5rem', background: 'rgba(7, 17, 46, 0.88)', border: '1px solid rgba(46, 155, 248, 0.2)', borderRadius: '18px' }}>
-          <div style={{ color: 'rgba(246, 253, 255, 0.55)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Staff Burnout Index</div>
+        <div className="glass-card" style={{ padding: '1.5rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '18px' }}>
+          <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Staff Burnout Index</div>
           <div style={{ fontSize: '2.1rem', fontWeight: 900, color: '#8671F9', fontFamily: "'JetBrains Mono', monospace" }}>
             {orgData.predictions?.staffingShortageForecast?.burnoutProbabilityPct || 35}%
           </div>
-          <div style={{ fontSize: '0.8rem', color: 'rgba(246, 253, 255, 0.75)', marginTop: '0.25rem' }}>
+          <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
             Forecast attrition: {orgData.predictions?.staffingShortageForecast?.projectedAttritionNextQuarter || 1} personnel
           </div>
         </div>
@@ -220,123 +221,123 @@ export const PredictiveAI = () => {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '1.5rem' }}>
           
           {/* Historical Incident Regression Card */}
-          <div className="glass-card" style={{ padding: '2rem', background: 'rgba(7, 17, 46, 0.9)', border: '1px solid rgba(46, 155, 248, 0.22)', borderRadius: '20px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: '#6AE7F7', fontWeight: 700, fontSize: '0.8rem', textTransform: 'uppercase', marginBottom: '0.4rem' }}>
+          <div className="glass-card" style={{ padding: '2rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '20px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: currentOrg.accentColor, fontWeight: 700, fontSize: '0.8rem', textTransform: 'uppercase', marginBottom: '0.4rem' }}>
               <Clock size={16} /> Historical Sequence Regression
             </div>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#F6FDFF', margin: '0 0 0.5rem' }}>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-primary)', margin: '0 0 0.5rem' }}>
               3-Month Historical Incidents &rarr; Next Month
             </h3>
-            <p style={{ color: 'rgba(246, 253, 255, 0.75)', fontSize: '0.88rem', margin: '0 0 1.25rem' }}>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', margin: '0 0 1.25rem' }}>
               Linear regression calculates exact trajectory from verified historical event records:
             </p>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.75rem', marginBottom: '1.25rem' }}>
               {(orgData.predictions?.incidentForecast?.historical || []).map((m: { month: string; count: number }, idx: number) => (
-                <div key={idx} style={{ padding: '0.75rem', borderRadius: '12px', background: 'rgba(13, 35, 77, 0.5)', textAlign: 'center' }}>
-                  <div style={{ fontSize: '0.72rem', color: 'rgba(246, 253, 255, 0.6)' }}>{m.month}</div>
-                  <div style={{ fontSize: '1.3rem', fontWeight: 900, color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>{m.count}</div>
-                  <div style={{ fontSize: '0.68rem', color: '#6AE7F7' }}>Observed</div>
+                <div key={idx} style={{ padding: '0.75rem', borderRadius: '12px', background: isLight ? 'var(--bg-secondary)' : 'rgba(13, 35, 77, 0.5)', textAlign: 'center', border: '1px solid var(--border-color)' }}>
+                  <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>{m.month}</div>
+                  <div style={{ fontSize: '1.3rem', fontWeight: 900, color: 'var(--text-primary)', fontFamily: "'JetBrains Mono', monospace" }}>{m.count}</div>
+                  <div style={{ fontSize: '0.68rem', color: currentOrg.accentColor }}>Observed</div>
                 </div>
               ))}
-              <div style={{ padding: '0.75rem', borderRadius: '12px', background: 'rgba(21, 84, 232, 0.35)', border: '1px solid #2E9BF8', textAlign: 'center' }}>
-                <div style={{ fontSize: '0.72rem', color: '#6AE7F7', fontWeight: 700 }}>Next Month</div>
-                <div style={{ fontSize: '1.3rem', fontWeight: 900, color: '#6AE7F7', fontFamily: "'JetBrains Mono', monospace" }}>
+              <div style={{ padding: '0.75rem', borderRadius: '12px', background: isLight ? `${currentOrg.themeColor}15` : 'rgba(21, 84, 232, 0.35)', border: `1px solid ${currentOrg.secondaryColor}`, textAlign: 'center' }}>
+                <div style={{ fontSize: '0.72rem', color: currentOrg.accentColor, fontWeight: 700 }}>Next Month</div>
+                <div style={{ fontSize: '1.3rem', fontWeight: 900, color: currentOrg.accentColor, fontFamily: "'JetBrains Mono', monospace" }}>
                   {orgData.predictions?.incidentForecast?.projectionNextMonth || 8}
                 </div>
-                <div style={{ fontSize: '0.68rem', color: '#2E9BF8', fontWeight: 700 }}>Predicted</div>
+                <div style={{ fontSize: '0.68rem', color: currentOrg.secondaryColor, fontWeight: 700 }}>Predicted</div>
               </div>
             </div>
-            <div style={{ fontSize: '0.8rem', color: 'rgba(246, 253, 255, 0.65)' }}>
+            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
               Confidence: <strong>{orgData.predictions?.incidentForecast?.confidenceLevelPct || 94.6}%</strong> &bull; Calculated using ordinary least squares (OLS) regression over historical events.
             </div>
           </div>
 
           {/* Financial Forecast */}
-          <div className="glass-card" style={{ padding: '2rem', background: 'rgba(7, 17, 46, 0.9)', border: '1px solid rgba(46, 155, 248, 0.22)', borderRadius: '20px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: '#2E9BF8', fontWeight: 700, fontSize: '0.8rem', textTransform: 'uppercase', marginBottom: '0.4rem' }}>
+          <div className="glass-card" style={{ padding: '2rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '20px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: currentOrg.secondaryColor, fontWeight: 700, fontSize: '0.8rem', textTransform: 'uppercase', marginBottom: '0.4rem' }}>
               <DollarSign size={16} /> Quarterly Financial Forecast
             </div>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#F6FDFF', margin: '0 0 0.5rem' }}>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-primary)', margin: '0 0 0.5rem' }}>
               Revenue, Expense &amp; Margin Outlook
             </h3>
-            <p style={{ color: 'rgba(246, 253, 255, 0.75)', fontSize: '0.88rem', margin: '0 0 1.25rem' }}>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', margin: '0 0 1.25rem' }}>
               Synthesized from active departmental budget utilization and variance ledgers:
             </p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1.25rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 1rem', borderRadius: '10px', background: 'rgba(13, 35, 77, 0.45)' }}>
-                <span style={{ color: 'rgba(246, 253, 255, 0.7)', fontSize: '0.88rem' }}>Projected Next Qtr Profit</span>
-                <span style={{ fontWeight: 800, color: '#6AE7F7', fontFamily: "'JetBrains Mono', monospace" }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 1rem', borderRadius: '10px', background: isLight ? 'var(--bg-secondary)' : 'rgba(13, 35, 77, 0.45)', border: '1px solid var(--border-color)' }}>
+                <span style={{ color: 'var(--text-secondary)', fontSize: '0.88rem' }}>Projected Next Qtr Profit</span>
+                <span style={{ fontWeight: 800, color: currentOrg.accentColor, fontFamily: "'JetBrains Mono', monospace" }}>
                   ${((orgData.predictions?.financialForecast?.projectedNextQuarterProfit || 250000) / 1000).toFixed(0)}k
                 </span>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 1rem', borderRadius: '10px', background: 'rgba(13, 35, 77, 0.45)' }}>
-                <span style={{ color: 'rgba(246, 253, 255, 0.7)', fontSize: '0.88rem' }}>Revenue Growth Rate</span>
+              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 1rem', borderRadius: '10px', background: isLight ? 'var(--bg-secondary)' : 'rgba(13, 35, 77, 0.45)', border: '1px solid var(--border-color)' }}>
+                <span style={{ color: 'var(--text-secondary)', fontSize: '0.88rem' }}>Revenue Growth Rate</span>
                 <span style={{ fontWeight: 800, color: '#10B981', fontFamily: "'JetBrains Mono', monospace" }}>
                   +{orgData.predictions?.financialForecast?.revenueGrowthForecastPct || 5.2}%
                 </span>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 1rem', borderRadius: '10px', background: 'rgba(21, 84, 232, 0.25)', border: '1px solid rgba(46, 155, 248, 0.3)' }}>
-                <span style={{ color: '#F6FDFF', fontSize: '0.88rem', fontWeight: 700 }}>Capital Status</span>
+              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 1rem', borderRadius: '10px', background: isLight ? `${currentOrg.themeColor}12` : 'rgba(21, 84, 232, 0.25)', border: `1px solid ${currentOrg.secondaryColor}40` }}>
+                <span style={{ color: 'var(--text-primary)', fontSize: '0.88rem', fontWeight: 700 }}>Capital Status</span>
                 <span style={{ fontWeight: 900, color: orgData.predictions?.financialForecast?.burnRateWarning ? '#EF4444' : '#10B981', fontFamily: "'JetBrains Mono', monospace" }}>
                   {orgData.predictions?.financialForecast?.burnRateWarning ? 'Elevated Burn' : 'Healthy Buffer'}
                 </span>
               </div>
             </div>
-            <div style={{ fontSize: '0.8rem', color: 'rgba(246, 253, 255, 0.65)' }}>
+            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
               Analysis: {orgData.predictions?.financialForecast?.explanation || 'Projections remain within nominal quarterly bounds.'}
             </div>
           </div>
 
           {/* Delivery & Project Risk */}
-          <div className="glass-card" style={{ padding: '2rem', background: 'rgba(7, 17, 46, 0.9)', border: '1px solid rgba(46, 155, 248, 0.22)', borderRadius: '20px' }}>
+          <div className="glass-card" style={{ padding: '2rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: '#F59E0B', fontWeight: 700, fontSize: '0.8rem', textTransform: 'uppercase', marginBottom: '0.4rem' }}>
               <Briefcase size={16} /> Delivery Schedule Risk
             </div>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#F6FDFF', margin: '0 0 0.5rem' }}>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-primary)', margin: '0 0 0.5rem' }}>
               Milestone &amp; Schedule Variance
             </h3>
-            <p style={{ color: 'rgba(246, 253, 255, 0.75)', fontSize: '0.88rem', margin: '0 0 1.25rem' }}>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', margin: '0 0 1.25rem' }}>
               Key risk drivers detected across active institutional initiatives:
             </p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1.25rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: 'rgba(246, 253, 255, 0.85)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
                 <AlertTriangle size={14} color="#F59E0B" />
                 <span>Overall Project Delay Probability: <strong>{orgData.predictions?.deliveryRiskForecast?.overallDelayRiskPct || 18}%</strong></span>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: 'rgba(246, 253, 255, 0.85)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
                 <AlertTriangle size={14} color="#F59E0B" />
                 <span>Projects on Critical Path: <strong>{orgData.predictions?.deliveryRiskForecast?.atRiskProjectsCount || 0}</strong></span>
               </div>
             </div>
-            <div style={{ fontSize: '0.8rem', color: 'rgba(246, 253, 255, 0.65)' }}>
+            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
               {orgData.predictions?.deliveryRiskForecast?.criticalPathWarning || 'Milestones on track.'}
             </div>
           </div>
 
           {/* Staffing Shortage & Burnout */}
-          <div className="glass-card" style={{ padding: '2rem', background: 'rgba(7, 17, 46, 0.9)', border: '1px solid rgba(46, 155, 248, 0.22)', borderRadius: '20px' }}>
+          <div className="glass-card" style={{ padding: '2rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: '#8671F9', fontWeight: 700, fontSize: '0.8rem', textTransform: 'uppercase', marginBottom: '0.4rem' }}>
               <Users size={16} /> Human Capital &amp; Burnout
             </div>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#F6FDFF', margin: '0 0 0.5rem' }}>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-primary)', margin: '0 0 0.5rem' }}>
               Staffing Shortage &amp; Turnover Forecast
             </h3>
-            <p style={{ color: 'rgba(246, 253, 255, 0.75)', fontSize: '0.88rem', margin: '0 0 1.25rem' }}>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', margin: '0 0 1.25rem' }}>
               Correlating resignation notices, training completion, and workload:
             </p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1.25rem' }}>
-              <div style={{ fontSize: '0.85rem', color: 'rgba(246, 253, 255, 0.85)' }}>
+              <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
                 <strong>Impacted Divisions:</strong> {(orgData.predictions?.staffingShortageForecast?.impactedDepartments || ['Operations']).join(', ')}
               </div>
               <div style={{ fontSize: '0.85rem', color: '#8671F9' }}>
                 <strong>Projected Attrition Next Qtr:</strong> ~{orgData.predictions?.staffingShortageForecast?.projectedAttritionNextQuarter || 1} personnel
               </div>
             </div>
-            <div style={{ fontSize: '0.8rem', color: 'rgba(246, 253, 255, 0.65)' }}>
+            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
               Burnout Probability Index: <strong>{orgData.predictions?.staffingShortageForecast?.burnoutProbabilityPct || 30}%</strong>
             </div>
           </div>

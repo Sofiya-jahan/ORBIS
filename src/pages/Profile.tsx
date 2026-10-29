@@ -4,14 +4,14 @@ import { ORGANIZATIONS } from '../config/platformConfig';
 import { 
   User, Mail, Building2, Briefcase, Hash, Phone, Clock, 
   ShieldCheck, Upload, Loader2, Lock, CheckCircle2, Shield, Camera,
-  Sun, Moon, Palette, Check
+  Sun, Moon, Monitor, Palette, Check
 } from 'lucide-react';
 import { uploadProfileAvatar } from '../services/supabaseStorage';
 import { validateFileUpload, sanitizeInput } from '../services/securityService';
 import { formatUserName } from '../utils/userUtils';
 
 export const Profile = () => {
-  const { user, organization, role, updateUser, theme, setTheme } = useAuthStore();
+  const { user, organization, role, updateUser, theme, themeMode, setTheme } = useAuthStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
   
   const currentOrg = organization && ORGANIZATIONS[organization] ? ORGANIZATIONS[organization] : ORGANIZATIONS.hospital;
@@ -291,8 +291,8 @@ export const Profile = () => {
           </div>
         </div>
 
-        {/* 2 Interactive Mode Cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.25rem' }}>
+        {/* 3 Interactive Mode Cards */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem' }}>
           
           {/* Dark Mode Card */}
           <div 
@@ -301,9 +301,9 @@ export const Profile = () => {
               padding: '1.5rem',
               borderRadius: '16px',
               cursor: 'pointer',
-              background: theme === 'dark' ? 'var(--hover-bg)' : 'var(--bg-tertiary)',
-              border: theme === 'dark' ? '2px solid var(--primary)' : '1px solid var(--border-color)',
-              boxShadow: theme === 'dark' ? 'var(--shadow-glow, 0 0 25px rgba(0, 0, 0, 0.4))' : 'none',
+              background: themeMode === 'dark' ? 'var(--hover-bg)' : 'var(--bg-tertiary)',
+              border: themeMode === 'dark' ? '2px solid var(--primary)' : '1px solid var(--border-color)',
+              boxShadow: themeMode === 'dark' ? 'var(--shadow-glow, 0 0 25px rgba(0, 0, 0, 0.4))' : 'none',
               transition: 'all 0.25s ease',
               display: 'flex',
               flexDirection: 'column',
@@ -311,7 +311,7 @@ export const Profile = () => {
               position: 'relative'
             }}
           >
-            {theme === 'dark' && (
+            {themeMode === 'dark' && (
               <span style={{
                 position: 'absolute', top: '1rem', right: '1rem',
                 display: 'flex', alignItems: 'center', gap: '4px',
@@ -355,9 +355,9 @@ export const Profile = () => {
               padding: '1.5rem',
               borderRadius: '16px',
               cursor: 'pointer',
-              background: theme === 'light' ? 'var(--hover-bg)' : 'var(--bg-tertiary)',
-              border: theme === 'light' ? '2px solid var(--primary)' : '1px solid var(--border-color)',
-              boxShadow: theme === 'light' ? 'var(--shadow-glow, 0 0 25px rgba(0, 0, 0, 0.15))' : 'none',
+              background: themeMode === 'light' ? 'var(--hover-bg)' : 'var(--bg-tertiary)',
+              border: themeMode === 'light' ? '2px solid var(--primary)' : '1px solid var(--border-color)',
+              boxShadow: themeMode === 'light' ? 'var(--shadow-glow, 0 0 25px rgba(0, 0, 0, 0.15))' : 'none',
               transition: 'all 0.25s ease',
               display: 'flex',
               flexDirection: 'column',
@@ -365,7 +365,7 @@ export const Profile = () => {
               position: 'relative'
             }}
           >
-            {theme === 'light' && (
+            {themeMode === 'light' && (
               <span style={{
                 position: 'absolute', top: '1rem', right: '1rem',
                 display: 'flex', alignItems: 'center', gap: '4px',
@@ -381,7 +381,7 @@ export const Profile = () => {
               <div style={{
                 width: '40px', height: '40px', borderRadius: '12px',
                 background: '#FFFFFF', color: '#1554E8',
-                border: '1px solid #CBD5E1',
+                border: '1px solid #DCE5F2',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)'
               }}>
@@ -392,13 +392,67 @@ export const Profile = () => {
                   Executive Light
                 </div>
                 <div style={{ fontSize: '0.76rem', color: 'var(--text-muted)' }}>
-                  Crisp White, Clean Contrast & Subtle Borders
+                  Soft Pastels, Crisp Contrast & Warm Elevation
                 </div>
               </div>
             </div>
 
             <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: 1.5, margin: 0 }}>
-              High-contrast, paper-clean presentation tailored for boardroom presentations, daylight auditing, and compliance reviews.
+              Calm, executive presentation tailored for boardroom presentations, daylight auditing, and enterprise operations.
+            </p>
+          </div>
+
+          {/* Follow System Card */}
+          <div 
+            onClick={() => setTheme('system')}
+            style={{
+              padding: '1.5rem',
+              borderRadius: '16px',
+              cursor: 'pointer',
+              background: themeMode === 'system' ? 'var(--hover-bg)' : 'var(--bg-tertiary)',
+              border: themeMode === 'system' ? '2px solid var(--primary)' : '1px solid var(--border-color)',
+              boxShadow: themeMode === 'system' ? 'var(--shadow-glow, 0 0 25px rgba(0, 0, 0, 0.2))' : 'none',
+              transition: 'all 0.25s ease',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '1rem',
+              position: 'relative'
+            }}
+          >
+            {themeMode === 'system' && (
+              <span style={{
+                position: 'absolute', top: '1rem', right: '1rem',
+                display: 'flex', alignItems: 'center', gap: '4px',
+                padding: '0.2rem 0.6rem', borderRadius: '100px',
+                background: 'var(--primary-gradient)', color: '#FFFFFF',
+                fontSize: '0.72rem', fontWeight: 800
+              }}>
+                <Check size={12} /> Active
+              </span>
+            )}
+            
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <div style={{
+                width: '40px', height: '40px', borderRadius: '12px',
+                background: 'var(--bg-primary)', color: 'var(--accent)',
+                border: '1px solid var(--border-color)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.12)'
+              }}>
+                <Monitor size={20} />
+              </div>
+              <div>
+                <div style={{ fontWeight: '800', fontSize: '1rem', color: 'var(--text-primary)' }}>
+                  Follow System
+                </div>
+                <div style={{ fontSize: '0.76rem', color: 'var(--text-muted)' }}>
+                  Auto Dynamic Sync with OS Appearance
+                </div>
+              </div>
+            </div>
+
+            <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: 1.5, margin: 0 }}>
+              Seamlessly matches your workstation's OS dark/light mode schedule, listening to dynamic operating system theme updates.
             </p>
           </div>
 

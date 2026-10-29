@@ -4,17 +4,18 @@ import { ORGANIZATIONS } from '../../config/platformConfig';
 import { Grid, ShieldAlert, AlertTriangle, CheckCircle2, Info } from 'lucide-react';
 
 export const RiskMatrix = () => {
-  const { organization } = useAuthStore();
+  const { organization, theme } = useAuthStore();
+  const isLight = theme === 'light';
   const currentOrg = organization && ORGANIZATIONS[organization] ? ORGANIZATIONS[organization] : ORGANIZATIONS.hospital;
   const [hoveredCell, setHoveredCell] = useState<{ p: number; i: number } | null>(null);
 
   // 5x5 Matrix cells (Probability 5 down to 1, Impact 1 up to 5)
   // Scores = P * I
   const getCellSeverity = (score: number) => {
-    if (score >= 15) return { bg: 'rgba(239, 68, 68, 0.2)', border: '#EF4444', text: '#F87171', label: 'Critical' };
-    if (score >= 10) return { bg: 'rgba(245, 158, 11, 0.2)', border: '#F59E0B', text: '#FCD34D', label: 'High' };
-    if (score >= 5) return { bg: 'rgba(21, 84, 232, 0.22)', border: '#2E9BF8', text: '#2E9BF8', label: 'Medium' };
-    return { bg: 'rgba(106, 231, 247, 0.12)', border: '#6AE7F7', text: '#6AE7F7', label: 'Low' };
+    if (score >= 15) return { bg: isLight ? 'rgba(239, 68, 68, 0.12)' : 'rgba(239, 68, 68, 0.2)', border: '#EF4444', text: '#DC2626', label: 'Critical' };
+    if (score >= 10) return { bg: isLight ? 'rgba(245, 158, 11, 0.14)' : 'rgba(245, 158, 11, 0.2)', border: '#F59E0B', text: '#D97706', label: 'High' };
+    if (score >= 5) return { bg: isLight ? 'rgba(46, 155, 248, 0.14)' : 'rgba(21, 84, 232, 0.22)', border: '#2E9BF8', text: '#2563EB', label: 'Medium' };
+    return { bg: isLight ? 'rgba(106, 231, 247, 0.15)' : 'rgba(106, 231, 247, 0.12)', border: '#06B6D4', text: '#0891B2', label: 'Low' };
   };
 
   const matrixCounts: Record<string, number> = {
@@ -32,19 +33,19 @@ export const RiskMatrix = () => {
         display: 'flex', 
         justifyContent: 'space-between', 
         alignItems: 'center', 
-        background: 'rgba(7, 17, 46, 0.92)',
-        border: '1px solid rgba(46, 155, 248, 0.25)',
+        background: 'var(--card-bg)',
+        border: '1px solid var(--border-color)',
         borderRadius: '20px',
-        boxShadow: '0 20px 50px rgba(7, 17, 46, 0.9)'
+        boxShadow: isLight ? 'var(--shadow-sm)' : '0 20px 50px rgba(7, 17, 46, 0.9)'
       }}>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#6AE7F7', fontWeight: '700', fontSize: '0.8rem', textTransform: 'uppercase', marginBottom: '0.4rem', fontFamily: "'JetBrains Mono', monospace" }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: currentOrg.accentColor, fontWeight: '700', fontSize: '0.8rem', textTransform: 'uppercase', marginBottom: '0.4rem', fontFamily: "'JetBrains Mono', monospace" }}>
             <Grid size={16} /> Risk Analysis Matrix
           </div>
-          <h1 style={{ fontSize: '2.2rem', fontWeight: '800', marginBottom: '0.4rem', color: '#F6FDFF', fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)" }}>
+          <h1 style={{ fontSize: '2.2rem', fontWeight: '800', marginBottom: '0.4rem', color: 'var(--text-primary)', fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)" }}>
             5x5 Risk Heatmap & Probability Matrix
           </h1>
-          <p style={{ color: 'rgba(246, 253, 255, 0.75)', fontSize: '0.95rem' }}>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>
             Two-dimensional probability vs. impact distribution across all active institutional hazards.
           </p>
         </div>
@@ -58,8 +59,8 @@ export const RiskMatrix = () => {
           display: 'flex', 
           flexDirection: 'column', 
           alignItems: 'center',
-          background: 'rgba(7, 17, 46, 0.92)',
-          border: '1px solid rgba(46, 155, 248, 0.25)',
+          background: 'var(--card-bg)',
+          border: '1px solid var(--border-color)',
           borderRadius: '20px'
         }}>
           
@@ -102,7 +103,7 @@ export const RiskMatrix = () => {
                             position: 'relative'
                           }}
                         >
-                          <span style={{ fontSize: '1rem', fontWeight: '900', color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>
+                          <span style={{ fontSize: '1rem', fontWeight: '900', color: isLight ? '#0F172A' : '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>
                             {count > 0 ? `${count} Risks` : '-'}
                           </span>
                           <span style={{ fontSize: '0.68rem', color: sev.text, fontWeight: 700, fontFamily: "'JetBrains Mono', monospace" }}>
@@ -119,13 +120,13 @@ export const RiskMatrix = () => {
             {/* Impact Labels along bottom */}
             <div style={{ display: 'flex', marginLeft: '108px', gap: '8px', marginTop: '0.5rem' }}>
               {[1, 2, 3, 4, 5].map((imp) => (
-                <div key={imp} style={{ flex: 1, textAlign: 'center', fontSize: '0.8rem', fontWeight: 700, color: 'rgba(246, 253, 255, 0.6)', fontFamily: "'JetBrains Mono', monospace" }}>
+                <div key={imp} style={{ flex: 1, textAlign: 'center', fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-muted)', fontFamily: "'JetBrains Mono', monospace" }}>
                   Level {imp}
                 </div>
               ))}
             </div>
 
-            <div style={{ textAlign: 'center', marginTop: '0.75rem', fontSize: '0.8rem', fontWeight: 800, color: 'rgba(246, 253, 255, 0.6)', letterSpacing: '1px', fontFamily: "'JetBrains Mono', monospace" }}>
+            <div style={{ textAlign: 'center', marginTop: '0.75rem', fontSize: '0.8rem', fontWeight: 800, color: 'var(--text-muted)', letterSpacing: '1px', fontFamily: "'JetBrains Mono', monospace" }}>
               SEVERITY &bull; IMPACT LEVEL (1 TO 5)
             </div>
 
@@ -139,13 +140,13 @@ export const RiskMatrix = () => {
           display: 'flex', 
           flexDirection: 'column', 
           justifyContent: 'space-between',
-          background: 'rgba(7, 17, 46, 0.92)',
-          border: '1px solid rgba(46, 155, 248, 0.25)',
+          background: 'var(--card-bg)',
+          border: '1px solid var(--border-color)',
           borderRadius: '20px'
         }}>
           <div>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: '800', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#F6FDFF', fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)" }}>
-              <Info size={18} color="#6AE7F7" /> Severity Thresholds
+            <h3 style={{ fontSize: '1.2rem', fontWeight: '800', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-primary)', fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)" }}>
+              <Info size={18} color={currentOrg.accentColor} /> Severity Thresholds
             </h3>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -153,13 +154,13 @@ export const RiskMatrix = () => {
                 { label: 'Critical Risk (15 - 25)', desc: 'Immediate executive intervention required. Autonomous mitigation triggered.', color: '#EF4444' },
                 { label: 'High Risk (10 - 14)', desc: 'Mitigation plan assigned with 24-hour review SLA.', color: '#F59E0B' },
                 { label: 'Medium Risk (5 - 9)', desc: 'Routine department monitoring and automated alert checks.', color: '#2E9BF8' },
-                { label: 'Low Risk (1 - 4)', desc: 'Acceptable operational baseline tolerances.', color: '#6AE7F7' },
+                { label: 'Low Risk (1 - 4)', desc: 'Acceptable operational baseline tolerances.', color: '#06B6D4' },
               ].map(tier => (
-                <div key={tier.label} style={{ padding: '1rem', borderRadius: '12px', background: 'rgba(13, 35, 77, 0.55)', borderLeft: `4px solid ${tier.color}`, border: '1px solid rgba(46, 155, 248, 0.15)' }}>
+                <div key={tier.label} style={{ padding: '1rem', borderRadius: '12px', background: isLight ? 'var(--bg-secondary)' : 'rgba(13, 35, 77, 0.55)', borderLeft: `4px solid ${tier.color}`, border: '1px solid var(--border-color)' }}>
                   <div style={{ fontWeight: '700', fontSize: '0.88rem', color: tier.color, marginBottom: '0.25rem' }}>
                     {tier.label}
                   </div>
-                  <div style={{ fontSize: '0.8rem', color: 'rgba(246, 253, 255, 0.75)', lineHeight: 1.4 }}>
+                  <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', lineHeight: 1.4 }}>
                     {tier.desc}
                   </div>
                 </div>
@@ -167,7 +168,7 @@ export const RiskMatrix = () => {
             </div>
           </div>
 
-          <div style={{ marginTop: '1.5rem', padding: '1rem', borderRadius: '12px', background: 'rgba(21, 84, 232, 0.15)', border: '1px solid rgba(106, 231, 247, 0.3)', color: '#6AE7F7', fontSize: '0.82rem', fontWeight: 600 }}>
+          <div style={{ marginTop: '1.5rem', padding: '1rem', borderRadius: '12px', background: isLight ? `${currentOrg.themeColor}15` : 'rgba(21, 84, 232, 0.15)', border: `1px solid ${currentOrg.accentColor}40`, color: currentOrg.accentColor, fontSize: '0.82rem', fontWeight: 600 }}>
             {currentOrg.name} has 48 total active risk vectors cataloged.
           </div>
         </div>

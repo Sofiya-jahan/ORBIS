@@ -123,36 +123,36 @@ export const AdminSecurity = () => {
           
           {/* Security Posture Defense Grid */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.25rem' }}>
-            <div className="neo-card" style={{ padding: '1.5rem', borderLeft: '4px solid #6AE7F7', background: 'rgba(7, 17, 46, 0.92)', border: '1px solid rgba(46, 155, 248, 0.22)', borderRadius: '16px' }}>
+            <div className="neo-card" style={{ padding: '1.5rem', borderLeft: '4px solid #6AE7F7', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '16px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#6AE7F7', fontWeight: 800, marginBottom: '0.5rem', fontFamily: "'JetBrains Mono', monospace" }}>
                 <ShieldCheck size={20} /> Lattice AES-256 HMAC
               </div>
-              <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#F6FDFF', marginBottom: '0.25rem' }}>Active & Signed</div>
-              <div style={{ fontSize: '0.8rem', color: 'rgba(246, 253, 255, 0.75)' }}>Tamper-evident 8-hour cryptographic session token validation.</div>
+              <div style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.25rem' }}>Active & Signed</div>
+              <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Tamper-evident 8-hour cryptographic session token validation.</div>
             </div>
 
-            <div className="neo-card" style={{ padding: '1.5rem', borderLeft: '4px solid #2E9BF8', background: 'rgba(7, 17, 46, 0.92)', border: '1px solid rgba(46, 155, 248, 0.22)', borderRadius: '16px' }}>
+            <div className="neo-card" style={{ padding: '1.5rem', borderLeft: '4px solid #2E9BF8', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '16px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#2E9BF8', fontWeight: 800, marginBottom: '0.5rem', fontFamily: "'JetBrains Mono', monospace" }}>
                 <Clock size={20} /> Adaptive Rate Limiter
               </div>
-              <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#F6FDFF', marginBottom: '0.25rem' }}>5 Attempts / 45s</div>
-              <div style={{ fontSize: '0.8rem', color: 'rgba(246, 253, 255, 0.75)' }}>Automated brute-force lockdown active on key entry gates.</div>
+              <div style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.25rem' }}>5 Attempts / 45s</div>
+              <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Automated brute-force lockdown active on key entry gates.</div>
             </div>
 
-            <div className="neo-card" style={{ padding: '1.5rem', borderLeft: '4px solid #6AE7F7', background: 'rgba(7, 17, 46, 0.92)', border: '1px solid rgba(106, 231, 247, 0.22)', borderRadius: '16px' }}>
+            <div className="neo-card" style={{ padding: '1.5rem', borderLeft: '4px solid #6AE7F7', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '16px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#6AE7F7', fontWeight: 800, marginBottom: '0.5rem', fontFamily: "'JetBrains Mono', monospace" }}>
                 <Shield size={20} /> Safe Evidence Sieve
               </div>
-              <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#F6FDFF', marginBottom: '0.25rem' }}>MIME & 10MB Bound</div>
-              <div style={{ fontSize: '0.8rem', color: 'rgba(246, 253, 255, 0.75)' }}>Blocks executable attachments (.exe, .sh, scripts) with filename sanitization.</div>
+              <div style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.25rem' }}>MIME & 10MB Bound</div>
+              <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Blocks executable attachments (.exe, .sh, scripts) with filename sanitization.</div>
             </div>
 
-            <div className="neo-card" style={{ padding: '1.5rem', borderLeft: '4px solid #8671F9', background: 'rgba(7, 17, 46, 0.92)', border: '1px solid rgba(134, 113, 249, 0.22)', borderRadius: '16px' }}>
+            <div className="neo-card" style={{ padding: '1.5rem', borderLeft: '4px solid #8671F9', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '16px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#8671F9', fontWeight: 800, marginBottom: '0.5rem', fontFamily: "'JetBrains Mono', monospace" }}>
                 <Lock size={20} /> Strict RBAC Isolation
               </div>
-              <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#F6FDFF', marginBottom: '0.25rem' }}>Zero-Trust Routes</div>
-              <div style={{ fontSize: '0.8rem', color: 'rgba(246, 253, 255, 0.75)' }}>Sub-tier clearance gates enforced across all institutional modules.</div>
+              <div style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.25rem' }}>Zero-Trust Routes</div>
+              <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Sub-tier clearance gates enforced across all institutional modules.</div>
             </div>
           </div>
 
@@ -160,7 +160,7 @@ export const AdminSecurity = () => {
           <div className="neo-card" style={{ padding: '1.5rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', flexWrap: 'wrap', gap: '1rem' }}>
               <div>
-                <h2 style={{ fontSize: '1.3rem', fontWeight: 800, marginBottom: '0.2rem' }}>
+                <h2 style={{ fontSize: '1.3rem', fontWeight: 800, marginBottom: '0.2rem', color: 'var(--text-primary)' }}>
                   Real-time Security Event Audit Trail
                 </h2>
                 <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
@@ -247,13 +247,13 @@ export const AdminSecurity = () => {
                               {log.severity}
                             </span>
                           </td>
-                          <td style={{ padding: '0.85rem 1rem', fontSize: '0.82rem', fontWeight: 700, color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>
+                          <td style={{ padding: '0.85rem 1rem', fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-primary)', fontFamily: "'JetBrains Mono', monospace" }}>
                             {log.eventType}
                           </td>
                           <td style={{ padding: '0.85rem 1rem', fontSize: '0.82rem', color: currentOrg.themeColor }}>
                             {log.actor}
                           </td>
-                          <td style={{ padding: '0.85rem 1rem', fontSize: '0.82rem', color: '#E2E8F0', maxWidth: '350px' }}>
+                          <td style={{ padding: '0.85rem 1rem', fontSize: '0.82rem', color: 'var(--text-secondary)', maxWidth: '350px' }}>
                             {log.details}
                           </td>
                         </tr>
@@ -269,16 +269,16 @@ export const AdminSecurity = () => {
 
       {/* Tab 2: Security Keys */}
       {activeTab === 'keys' && (
-        <div className="glass-card" style={{ padding: '2.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem', background: 'rgba(7, 17, 46, 0.92)', border: '1px solid rgba(46, 155, 248, 0.25)', borderRadius: '24px' }}>
-          <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#F6FDFF', fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)" }}>Institutional Encryption Tokens & Tenant Keys</h2>
-          <p style={{ color: 'rgba(246, 253, 255, 0.75)', fontSize: '0.9rem', lineHeight: 1.5 }}>
+        <div className="glass-card" style={{ padding: '2.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '24px' }}>
+          <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--text-primary)', fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)" }}>Institutional Encryption Tokens & Tenant Keys</h2>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.5 }}>
             Zero-knowledge authorization keys used to verify operator sessions and protect sensitive telemetry for {currentOrg.name}.
           </p>
 
-          <div style={{ padding: '1.75rem', borderRadius: '14px', background: 'rgba(13, 35, 77, 0.65)', border: '1px solid rgba(46, 155, 248, 0.25)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+          <div style={{ padding: '1.75rem', borderRadius: '14px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
             <div>
-              <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'rgba(246, 253, 255, 0.6)', textTransform: 'uppercase', fontFamily: "'JetBrains Mono', monospace" }}>Active Tenant Authorization Key</div>
-              <div style={{ fontSize: '1.5rem', fontWeight: 800, color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace", letterSpacing: '2px', marginTop: '4px' }}>
+              <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', fontFamily: "'JetBrains Mono', monospace" }}>Active Tenant Authorization Key</div>
+              <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-primary)', fontFamily: "'JetBrains Mono', monospace", letterSpacing: '2px', marginTop: '4px' }}>
                 {tenantPin}
               </div>
               <div style={{ fontSize: '0.78rem', color: '#6AE7F7', marginTop: '4px' }}>
@@ -305,10 +305,10 @@ export const AdminSecurity = () => {
           </div>
 
           <div style={{ padding: '1.5rem', borderRadius: '14px', background: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.25)' }}>
-            <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#FFFFFF', marginBottom: '0.4rem' }}>
+            <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.4rem' }}>
               HMAC Lattice Key Derivation
             </h3>
-            <p style={{ fontSize: '0.85rem', color: '#CBD5E1', lineHeight: 1.5 }}>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
               Each key generation event dynamically creates a new client-side cryptographic salt. Sessions created with outdated or revoked keys are automatically rejected upon next route navigation.
             </p>
           </div>
@@ -319,7 +319,7 @@ export const AdminSecurity = () => {
       {activeTab === 'users' && (
         <div className="neo-card" style={{ overflow: 'hidden' }}>
           <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <h2 style={{ fontSize: '1.2rem', fontWeight: 800 }}>Provisioned Institutional Personnel</h2>
+            <h2 style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-primary)' }}>Provisioned Institutional Personnel</h2>
             <button 
               onClick={() => alert('New User Provisioning Modal opened.')}
               className="btn btn-primary"
@@ -342,7 +342,7 @@ export const AdminSecurity = () => {
               {mockUsers.map((u, i) => (
                 <tr key={i} style={{ borderBottom: '1px solid var(--border-color)' }}>
                   <td style={{ padding: '1.1rem 1.25rem' }}>
-                    <div style={{ fontWeight: '700', fontSize: '0.92rem', color: '#FFFFFF' }}>{u.name}</div>
+                    <div style={{ fontWeight: '700', fontSize: '0.92rem', color: 'var(--text-primary)' }}>{u.name}</div>
                     <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{u.email}</div>
                   </td>
                   <td style={{ padding: '1.1rem 1.25rem', fontSize: '0.85rem', color: currentOrg.themeColor, fontWeight: 700 }}>

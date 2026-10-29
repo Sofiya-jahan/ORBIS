@@ -470,14 +470,14 @@ a:hover {
   color: var(--text-primary);
 }
 
-/* Headings in Light Mode (scoped without destructive !important) */
-[data-theme="light"] h1,
-[data-theme="light"] h2,
-[data-theme="light"] h3,
-[data-theme="light"] h4,
-[data-theme="light"] h5,
-[data-theme="light"] h6 {
-  color: var(--text-primary);
+/* Headings in Light Mode */
+[data-theme="light"] h1:not(.btn *):not([data-theme-ignore]),
+[data-theme="light"] h2:not(.btn *):not([data-theme-ignore]),
+[data-theme="light"] h3:not(.btn *):not([data-theme-ignore]),
+[data-theme="light"] h4:not(.btn *):not([data-theme-ignore]),
+[data-theme="light"] h5:not(.btn *):not([data-theme-ignore]),
+[data-theme="light"] h6:not(.btn *):not([data-theme-ignore]) {
+  color: var(--text-primary) !important;
 }
 
 /* Base Cards in Light Mode */
@@ -490,28 +490,28 @@ a:hover {
   color: var(--text-primary);
 }
 
-[data-theme="light"] .glass-card p,
-[data-theme="light"] .neo-card p,
-[data-theme="light"] .card p {
+[data-theme="light"] .glass-card p:not(.btn *):not([data-theme-ignore]),
+[data-theme="light"] .neo-card p:not(.btn *):not([data-theme-ignore]),
+[data-theme="light"] .card p:not(.btn *):not([data-theme-ignore]) {
   color: var(--text-secondary);
 }
 
-/* Fail-safe protection: ensure elements with inline white text are never invisible on light card surfaces */
-[data-theme="light"] .glass-card [style*="#F6FDFF"]:not(.btn-primary *):not(.btn-ai *):not([data-theme-ignore]),
-[data-theme="light"] .neo-card [style*="#F6FDFF"]:not(.btn-primary *):not(.btn-ai *):not([data-theme-ignore]),
-[data-theme="light"] .card [style*="#F6FDFF"]:not(.btn-primary *):not(.btn-ai *):not([data-theme-ignore]),
-[data-theme="light"] .glass-card [style*="#f6fdff"]:not(.btn-primary *):not(.btn-ai *):not([data-theme-ignore]),
-[data-theme="light"] .neo-card [style*="#f6fdff"]:not(.btn-primary *):not(.btn-ai *):not([data-theme-ignore]),
-[data-theme="light"] .card [style*="#f6fdff"]:not(.btn-primary *):not(.btn-ai *):not([data-theme-ignore]) {
+/* Universal Fail-safe: ensure elements with inline white text are NEVER invisible on light surfaces */
+[data-theme="light"] [style*="#F6FDFF"]:not(.btn-primary *):not(.btn-ai *):not([data-theme-ignore]),
+[data-theme="light"] [style*="#f6fdff"]:not(.btn-primary *):not(.btn-ai *):not([data-theme-ignore]),
+[data-theme="light"] [style*="rgb(246, 253, 255)"]:not(.btn-primary *):not(.btn-ai *):not([data-theme-ignore]),
+[data-theme="light"] [style*="rgb(246,253,255)"]:not(.btn-primary *):not(.btn-ai *):not([data-theme-ignore]),
+[data-theme="light"] [style*="color: #FFFFFF"]:not(.btn-primary *):not(.btn-ai *):not([data-theme-ignore]),
+[data-theme="light"] [style*="color: #ffffff"]:not(.btn-primary *):not(.btn-ai *):not([data-theme-ignore]),
+[data-theme="light"] [style*="color:#FFFFFF"]:not(.btn-primary *):not(.btn-ai *):not([data-theme-ignore]),
+[data-theme="light"] [style*="color:#ffffff"]:not(.btn-primary *):not(.btn-ai *):not([data-theme-ignore]),
+[data-theme="light"] [style*="color: rgb(255, 255, 255)"]:not(.btn-primary *):not(.btn-ai *):not([data-theme-ignore]),
+[data-theme="light"] [style*="color:rgb(255,255,255)"]:not(.btn-primary *):not(.btn-ai *):not([data-theme-ignore]) {
   color: var(--text-primary) !important;
 }
 
-[data-theme="light"] .glass-card [style*="rgba(246, 253, 255"]:not(.btn-primary *):not(.btn-ai *):not([data-theme-ignore]),
-[data-theme="light"] .neo-card [style*="rgba(246, 253, 255"]:not(.btn-primary *):not(.btn-ai *):not([data-theme-ignore]),
-[data-theme="light"] .card [style*="rgba(246, 253, 255"]:not(.btn-primary *):not(.btn-ai *):not([data-theme-ignore]),
-[data-theme="light"] .glass-card [style*="rgba(246,253,255"]:not(.btn-primary *):not(.btn-ai *):not([data-theme-ignore]),
-[data-theme="light"] .neo-card [style*="rgba(246,253,255"]:not(.btn-primary *):not(.btn-ai *):not([data-theme-ignore]),
-[data-theme="light"] .card [style*="rgba(246,253,255"]:not(.btn-primary *):not(.btn-ai *):not([data-theme-ignore]) {
+[data-theme="light"] [style*="rgba(246, 253, 255"]:not(.btn-primary *):not(.btn-ai *):not([data-theme-ignore]),
+[data-theme="light"] [style*="rgba(246,253,255"]:not(.btn-primary *):not(.btn-ai *):not([data-theme-ignore]) {
   color: var(--text-secondary) !important;
 }
 

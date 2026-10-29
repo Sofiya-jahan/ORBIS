@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
 import { ORGANIZATIONS } from '../config/platformConfig';
+import { ThemeToggle } from '../components/ThemeToggle';
 import { 
   Activity, Landmark, GraduationCap, Factory, Cpu, Building2, 
   ShieldCheck, ShoppingBag, HardHat, Zap, Truck, Scale, Flame,
-  Search, ArrowRight, TrendingUp, ShieldAlert, Sparkles, Sun, Moon, ChevronLeft
+  Search, ArrowRight, TrendingUp, ShieldAlert, Sparkles, ChevronLeft
 } from 'lucide-react';
 
 const iconMap: Record<string, React.ComponentType<{ size?: number; color?: string; className?: string }>> = {
@@ -14,7 +15,7 @@ const iconMap: Record<string, React.ComponentType<{ size?: number; color?: strin
 };
 
 export const OrgSelect = () => {
-  const { theme, setTheme, setOrganization } = useAuthStore();
+  const { theme, setOrganization } = useAuthStore();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -59,11 +60,11 @@ export const OrgSelect = () => {
   return (
     <div style={{ 
       minHeight: '100vh', 
-      backgroundColor: isLight ? '#F8FAFC' : '#07112E', 
+      backgroundColor: isLight ? '#F7F9FC' : '#07112E', 
       backgroundImage: isLight 
         ? 'radial-gradient(circle at 50% 15%, rgba(21, 84, 232, 0.05) 0%, transparent 65%), radial-gradient(circle at 10% 90%, rgba(46, 155, 248, 0.04) 0%, transparent 55%)'
         : 'radial-gradient(circle at 50% 15%, rgba(13, 35, 77, 0.8) 0%, transparent 65%), radial-gradient(circle at 10% 90%, rgba(21, 84, 232, 0.15) 0%, transparent 55%)',
-      color: isLight ? '#0F172A' : '#F6FDFF',
+      color: isLight ? '#172033' : '#F6FDFF',
       padding: '2.5rem 2rem 5rem 2rem',
       position: 'relative',
       overflow: 'hidden',
@@ -102,7 +103,7 @@ export const OrgSelect = () => {
               alignItems: 'center',
               gap: '0.5rem',
               background: isLight ? '#FFFFFF' : 'rgba(13, 35, 77, 0.75)',
-              border: isLight ? '1px solid #CBD5E1' : '1px solid rgba(46, 155, 248, 0.3)',
+              border: isLight ? '1px solid #DCE5F2' : '1px solid rgba(46, 155, 248, 0.3)',
               borderRadius: '12px',
               padding: '0.6rem 1.2rem',
               color: isLight ? '#1554E8' : '#6AE7F7',
@@ -111,43 +112,21 @@ export const OrgSelect = () => {
               fontWeight: 700,
               transition: 'all 0.2s ease',
               fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)",
-              boxShadow: isLight ? '0 2px 6px rgba(0,0,0,0.05)' : '0 4px 15px rgba(0,0,0,0.5)'
+              boxShadow: isLight ? '0 2px 6px rgba(15, 23, 42, 0.04)' : '0 4px 15px rgba(0,0,0,0.5)'
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.borderColor = isLight ? '#1554E8' : '#2E9BF8';
               e.currentTarget.style.transform = 'translateX(-2px)';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = isLight ? '#CBD5E1' : 'rgba(46, 155, 248, 0.3)';
+              e.currentTarget.style.borderColor = isLight ? '#DCE5F2' : 'rgba(46, 155, 248, 0.3)';
               e.currentTarget.style.transform = 'translateX(0)';
             }}
           >
             <ChevronLeft size={16} /> Home
           </button>
 
-          <button
-            onClick={() => setTheme(isLight ? 'dark' : 'light')}
-            aria-label="Toggle Theme"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.6rem',
-              background: isLight ? '#FFFFFF' : 'rgba(13, 35, 77, 0.75)',
-              border: isLight ? '1px solid #CBD5E1' : '1px solid rgba(46, 155, 248, 0.3)',
-              borderRadius: '12px',
-              padding: '0.6rem 1.15rem',
-              color: isLight ? '#0F172A' : '#F6FDFF',
-              cursor: 'pointer',
-              fontSize: '0.82rem',
-              fontWeight: 700,
-              fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)",
-              boxShadow: isLight ? '0 2px 6px rgba(0,0,0,0.05)' : '0 4px 15px rgba(0,0,0,0.5)',
-              transition: 'all 0.2s ease'
-            }}
-          >
-            {isLight ? <Moon size={15} color="#1554E8" /> : <Sun size={15} color="#F59E0B" />}
-            <span>{isLight ? 'Dark Mode' : 'Light Mode'}</span>
-          </button>
+          <ThemeToggle variant="compact" />
         </div>
 
         {/* Header Title Section */}

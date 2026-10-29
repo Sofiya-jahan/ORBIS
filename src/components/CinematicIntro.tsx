@@ -4,6 +4,8 @@ import {
   ArrowRight, Lock, Unlock, ShieldCheck, Activity, 
   Sparkles, SkipForward, ChevronDown, Radio, Compass
 } from 'lucide-react';
+import { useAuthStore } from '../store/useAuthStore';
+import { ThemeToggle } from './ThemeToggle';
 
 interface IntroProps {
   onComplete: () => void;
@@ -20,6 +22,8 @@ export const CinematicIntro: React.FC<IntroProps> = ({ onComplete }) => {
   const targetFrameRef = useRef(0);
   const animatedFrameRef = useRef(0);
   const rafId = useRef<number | null>(null);
+  const { theme } = useAuthStore();
+  const isLight = theme === 'light';
 
   // Smooth scroll scrubbing handler
   useEffect(() => {
@@ -120,11 +124,17 @@ export const CinematicIntro: React.FC<IntroProps> = ({ onComplete }) => {
     ctx.scale(zoom, zoom);
     ctx.translate(-cx, -cy);
 
-    // 1. BASE BACKGROUND: Layered Dark Navy (#07112E -> #0D234D)
+    // 1. BASE BACKGROUND: Layered Executive Wash in Light Mode / Dark Navy in Dark Mode
     const bgGrad = ctx.createRadialGradient(cx, cy, 30, cx, cy, width * 0.8);
-    bgGrad.addColorStop(0, p > 0.4 ? '#0D234D' : '#07112E');
-    bgGrad.addColorStop(0.6, '#07112E');
-    bgGrad.addColorStop(1, '#040A1C');
+    if (isLight) {
+      bgGrad.addColorStop(0, p > 0.4 ? '#EEF3F9' : '#F7F9FC');
+      bgGrad.addColorStop(0.6, '#F7F9FC');
+      bgGrad.addColorStop(1, '#E2E8F0');
+    } else {
+      bgGrad.addColorStop(0, p > 0.4 ? '#0D234D' : '#07112E');
+      bgGrad.addColorStop(0.6, '#07112E');
+      bgGrad.addColorStop(1, '#040A1C');
+    }
     ctx.fillStyle = bgGrad;
     ctx.fillRect(0, 0, width, height);
 
@@ -138,9 +148,15 @@ export const CinematicIntro: React.FC<IntroProps> = ({ onComplete }) => {
       const endX = cx + i * (width * 0.9);
       
       const gridGrad = ctx.createLinearGradient(startX, floorY, endX, height);
-      gridGrad.addColorStop(0, 'rgba(106, 231, 247, 0.45)');
-      gridGrad.addColorStop(0.7, p > 0.3 ? 'rgba(46, 155, 248, 0.3)' : 'rgba(21, 84, 232, 0.22)');
-      gridGrad.addColorStop(1, 'transparent');
+      if (isLight) {
+        gridGrad.addColorStop(0, 'rgba(37, 99, 235, 0.35)');
+        gridGrad.addColorStop(0.7, p > 0.3 ? 'rgba(37, 99, 235, 0.2)' : 'rgba(21, 84, 232, 0.12)');
+        gridGrad.addColorStop(1, 'transparent');
+      } else {
+        gridGrad.addColorStop(0, 'rgba(106, 231, 247, 0.45)');
+        gridGrad.addColorStop(0.7, p > 0.3 ? 'rgba(46, 155, 248, 0.3)' : 'rgba(21, 84, 232, 0.22)');
+        gridGrad.addColorStop(1, 'transparent');
+      }
 
       ctx.strokeStyle = gridGrad;
       ctx.beginPath();
@@ -155,7 +171,9 @@ export const CinematicIntro: React.FC<IntroProps> = ({ onComplete }) => {
       const tNorm = Math.pow(j / horizCount, 2.2);
       const hy = floorY + tNorm * (height - floorY);
       
-      ctx.strokeStyle = `rgba(106, 231, 247, ${0.35 * (1 - tNorm * 0.7)})`;
+      ctx.strokeStyle = isLight
+        ? `rgba(37, 99, 235, ${0.18 * (1 - tNorm * 0.7)})`
+        : `rgba(106, 231, 247, ${0.35 * (1 - tNorm * 0.7)})`;
       ctx.beginPath();
       ctx.moveTo(0, hy);
       ctx.lineTo(width, hy);
@@ -363,7 +381,7 @@ export const CinematicIntro: React.FC<IntroProps> = ({ onComplete }) => {
     }
 
     ctx.restore();
-  }, []);
+  }, [currentFrame, isLight]);
 
   // Compute textual milestone indicator
   const getPhaseDescription = (frame: number) => {
@@ -383,9 +401,10 @@ export const CinematicIntro: React.FC<IntroProps> = ({ onComplete }) => {
       style={{
         height: '420vh', // Extended scroll track for 300 deliberate, cinematic frames
         position: 'relative',
-        background: '#07112E',
+        background: isLight ? '#F7F9FC' : '#07112E',
         fontFamily: "'Inter', sans-serif",
-        color: '#F6FDFF'
+        color: isLight ? '#172033' : '#F6FDFF',
+        transition: 'background-color 0.3s ease, color 0.3s ease'
       }}
     >
       
@@ -437,53 +456,58 @@ export const CinematicIntro: React.FC<IntroProps> = ({ onComplete }) => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 0 20px rgba(59, 130, 246, 0.45)',
-              border: '1px solid rgba(59, 130, 246, 0.4)'
+              boxShadow: isLight ? '0 2px 10px rgba(37, 99, 235, 0.2)' : '0 0 20px rgba(59, 130, 246, 0.45)',
+              border: isLight ? '1px solid #DCE5F2' : '1px solid rgba(59, 130, 246, 0.4)',
+              background: isLight ? '#FFFFFF' : '#07112E'
             }}>
               <img src="/orbis-logo.png" alt="ORBIS Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
             <div>
-              <div style={{ fontSize: '1.4rem', fontWeight: 900, letterSpacing: '1px', color: '#F6FDFF', lineHeight: 1.1 }}>
-                ORBIS <span style={{ color: '#2E9BF8', fontSize: '0.85rem', fontStyle: 'italic' }}>// SOVEREIGN GATE</span>
+              <div style={{ fontSize: '1.4rem', fontWeight: 900, letterSpacing: '1px', color: isLight ? '#172033' : '#F6FDFF', lineHeight: 1.1 }}>
+                ORBIS <span style={{ color: isLight ? '#2563EB' : '#2E9BF8', fontSize: '0.85rem', fontStyle: 'italic' }}>// SOVEREIGN GATE</span>
               </div>
-              <div style={{ fontSize: '0.65rem', color: '#6AE7F7', letterSpacing: '1.5px', fontFamily: "'Space Mono', monospace", fontWeight: 700 }}>
+              <div style={{ fontSize: '0.65rem', color: isLight ? '#2563EB' : '#6AE7F7', letterSpacing: '1.5px', fontFamily: "'Space Mono', monospace", fontWeight: 700 }}>
                 SCROLL REVEAL ENGINE • 300 FRAMES @ 30 FPS
               </div>
             </div>
           </div>
 
-          {/* Direct Skip Action */}
-          <button
-            onClick={() => onComplete()}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              padding: '0.65rem 1.3rem',
-              background: 'rgba(7, 17, 46, 0.85)',
-              border: '1px solid rgba(46, 155, 248, 0.35)',
-              borderRadius: '12px',
-              color: '#F6FDFF',
-              fontSize: '0.82rem',
-              fontWeight: 700,
-              fontFamily: "'Inter', sans-serif",
-              cursor: 'pointer',
-              backdropFilter: 'blur(15px)',
-              transition: 'all 0.2s',
-              boxShadow: '0 4px 15px rgba(0,0,0,0.5)'
-            }}
-            onMouseOver={e => {
-              e.currentTarget.style.borderColor = '#6AE7F7';
-              e.currentTarget.style.boxShadow = '0 0 20px rgba(106, 231, 247, 0.4)';
-            }}
-            onMouseOut={e => {
-              e.currentTarget.style.borderColor = 'rgba(46, 155, 248, 0.35)';
-              e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.5)';
-            }}
-          >
-            <span>Skip to Application</span>
-            <SkipForward size={14} color="#6AE7F7" />
-          </button>
+          {/* Right Header Actions: Theme Switcher & Direct Skip */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <ThemeToggle variant="compact" />
+
+            <button
+              onClick={() => onComplete()}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                padding: '0.65rem 1.3rem',
+                background: isLight ? 'rgba(255, 255, 255, 0.95)' : 'rgba(7, 17, 46, 0.85)',
+                border: isLight ? '1px solid #DCE5F2' : '1px solid rgba(46, 155, 248, 0.35)',
+                borderRadius: '12px',
+                color: isLight ? '#172033' : '#F6FDFF',
+                fontSize: '0.82rem',
+                fontWeight: 700,
+                fontFamily: "'Inter', sans-serif",
+                cursor: 'pointer',
+                backdropFilter: 'blur(15px)',
+                transition: 'all 0.2s',
+                boxShadow: isLight ? '0 2px 10px rgba(15, 23, 42, 0.05)' : '0 4px 15px rgba(0,0,0,0.5)'
+              }}
+              onMouseOver={e => {
+                e.currentTarget.style.borderColor = isLight ? '#2563EB' : '#6AE7F7';
+                e.currentTarget.style.boxShadow = isLight ? '0 4px 14px rgba(37, 99, 235, 0.15)' : '0 0 20px rgba(106, 231, 247, 0.4)';
+              }}
+              onMouseOut={e => {
+                e.currentTarget.style.borderColor = isLight ? '#DCE5F2' : 'rgba(46, 155, 248, 0.35)';
+                e.currentTarget.style.boxShadow = isLight ? '0 2px 10px rgba(15, 23, 42, 0.05)' : '0 4px 15px rgba(0,0,0,0.5)';
+              }}
+            >
+              <span>Skip to Application</span>
+              <SkipForward size={14} color={isLight ? '#2563EB' : '#6AE7F7'} />
+            </button>
+          </div>
         </header>
 
         {/* CENTER PROMPT (During early scroll frames) */}
@@ -506,18 +530,18 @@ export const CinematicIntro: React.FC<IntroProps> = ({ onComplete }) => {
             }}
           >
             <div style={{
-              background: 'rgba(7, 17, 46, 0.88)',
-              border: '1px solid rgba(106, 231, 247, 0.4)',
+              background: isLight ? 'rgba(255, 255, 255, 0.96)' : 'rgba(7, 17, 46, 0.88)',
+              border: isLight ? '1px solid #DCE5F2' : '1px solid rgba(106, 231, 247, 0.4)',
               borderRadius: '999px',
               padding: '0.55rem 1.4rem',
               backdropFilter: 'blur(15px)',
               display: 'flex',
               alignItems: 'center',
               gap: '0.6rem',
-              boxShadow: '0 0 25px rgba(21, 84, 232, 0.35)'
+              boxShadow: isLight ? '0 4px 16px rgba(15, 23, 42, 0.08)' : '0 0 25px rgba(21, 84, 232, 0.35)'
             }}>
-              <Compass size={14} color="#6AE7F7" className="animate-spin" />
-              <span style={{ fontSize: '0.75rem', fontFamily: "'Space Mono', monospace", fontWeight: 700, color: '#F6FDFF', letterSpacing: '1px' }}>
+              <Compass size={14} color={isLight ? '#2563EB' : '#6AE7F7'} className="animate-spin" />
+              <span style={{ fontSize: '0.75rem', fontFamily: "'Space Mono', monospace", fontWeight: 700, color: isLight ? '#172033' : '#F6FDFF', letterSpacing: '1px' }}>
                 SCROLL TO UNSEAL PORTAL
               </span>
             </div>
@@ -525,7 +549,7 @@ export const CinematicIntro: React.FC<IntroProps> = ({ onComplete }) => {
               animate={{ y: [0, 6, 0] }}
               transition={{ repeat: Infinity, duration: 1.4 }}
             >
-              <ChevronDown size={20} color="#6AE7F7" />
+              <ChevronDown size={20} color={isLight ? '#2563EB' : '#6AE7F7'} />
             </motion.div>
           </motion.div>
         )}
@@ -546,10 +570,10 @@ export const CinematicIntro: React.FC<IntroProps> = ({ onComplete }) => {
         }}>
           {/* Left Milestone Status */}
           <div style={{ maxWidth: '400px' }}>
-            <div style={{ fontSize: '0.68rem', color: '#6AE7F7', fontFamily: "'Space Mono', monospace", fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '0.2rem' }}>
+            <div style={{ fontSize: '0.68rem', color: isLight ? '#2563EB' : '#6AE7F7', fontFamily: "'Space Mono', monospace", fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '0.2rem' }}>
               {phase.progress} // {phase.title}
             </div>
-            <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#F6FDFF', fontFamily: "'Inter', sans-serif" }}>
+            <div style={{ fontSize: '1.25rem', fontWeight: 800, color: isLight ? '#172033' : '#F6FDFF', fontFamily: "'Inter', sans-serif" }}>
               {phase.sub}
             </div>
           </div>
@@ -557,13 +581,13 @@ export const CinematicIntro: React.FC<IntroProps> = ({ onComplete }) => {
           {/* Right Frame Counter & Scrub Progress */}
           <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.4rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <div style={{ fontSize: '0.72rem', color: 'rgba(246, 253, 255, 0.65)', fontFamily: "'Space Mono', monospace" }}>
+              <div style={{ fontSize: '0.72rem', color: isLight ? '#52637A' : 'rgba(246, 253, 255, 0.65)', fontFamily: "'Space Mono', monospace" }}>
                 TC: 00:{String(Math.floor(currentFrame / FPS)).padStart(2, '0')}:{String(currentFrame % FPS).padStart(2, '0')}
               </div>
               <div style={{
                 fontSize: '1.35rem',
                 fontWeight: 900,
-                color: currentFrame >= 270 ? '#6AE7F7' : '#F6FDFF',
+                color: currentFrame >= 270 ? (isLight ? '#2563EB' : '#6AE7F7') : (isLight ? '#172033' : '#F6FDFF'),
                 fontFamily: "'Space Mono', monospace",
                 letterSpacing: '1px'
               }}>
@@ -575,21 +599,23 @@ export const CinematicIntro: React.FC<IntroProps> = ({ onComplete }) => {
             <div style={{
               width: '260px',
               height: '5px',
-              background: 'rgba(246, 253, 255, 0.1)',
+              background: isLight ? '#E2E8F0' : 'rgba(246, 253, 255, 0.1)',
               borderRadius: '3px',
               overflow: 'hidden',
-              border: '1px solid rgba(46, 155, 248, 0.25)'
+              border: isLight ? '1px solid #DCE5F2' : '1px solid rgba(46, 155, 248, 0.25)'
             }}>
               <div style={{
                 width: `${(currentFrame / TOTAL_FRAMES) * 100}%`,
                 height: '100%',
-                background: 'linear-gradient(90deg, #1554E8 0%, #2E9BF8 50%, #6AE7F7 100%)',
-                boxShadow: '0 0 10px #2E9BF8',
+                background: isLight
+                  ? 'linear-gradient(90deg, #1554E8 0%, #2563EB 50%, #0284C7 100%)'
+                  : 'linear-gradient(90deg, #1554E8 0%, #2E9BF8 50%, #6AE7F7 100%)',
+                boxShadow: isLight ? '0 0 8px rgba(37, 99, 235, 0.5)' : '0 0 10px #2E9BF8',
                 transition: 'width 0.05s ease-out'
               }} />
             </div>
 
-            <div style={{ fontSize: '0.65rem', color: '#6AE7F7', fontFamily: "'Space Mono', monospace" }}>
+            <div style={{ fontSize: '0.65rem', color: isLight ? '#2563EB' : '#6AE7F7', fontFamily: "'Space Mono', monospace" }}>
               {Math.round((currentFrame / TOTAL_FRAMES) * 100)}% UNSEALED • 30 FPS SCRUB
             </div>
           </div>

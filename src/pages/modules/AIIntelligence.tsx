@@ -15,9 +15,11 @@ import {
 // Reuse existing AI components
 import PredictiveAI from './PredictiveAI';
 import ExplainableAI from './ExplainableAI';
+import { OrganizationalPortalBackdrop } from '../../components/OrganizationalPortalBackdrop';
 
 export const AIIntelligence = () => {
-  const { organization, role, user } = useAuthStore();
+  const { organization, role, user, theme } = useAuthStore();
+  const isLight = theme === 'light';
   const currentOrg = organization && ORGANIZATIONS[organization] ? ORGANIZATIONS[organization] : ORGANIZATIONS.hospital;
   const currentRole = currentOrg?.roles.find(r => r.id === role) || currentOrg?.roles[0];
   const cleanDisplayName = formatUserName(user?.name, user?.email);
@@ -134,78 +136,82 @@ export const AIIntelligence = () => {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       
       {/* Page Header */}
-      <div className="glass-card" style={{
-        padding: '2rem 2.5rem',
-        background: 'rgba(7, 17, 46, 0.92)',
-        border: '1px solid rgba(122, 72, 255, 0.28)',
-        borderRadius: '24px',
-        boxShadow: '0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(122, 72, 255, 0.15)',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flexWrap: 'wrap',
-        gap: '1.5rem'
-      }}>
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: '#8671F9', fontWeight: 700, fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '0.4rem' }}>
-            <Sparkles size={16} /> Autonomous Intelligence Core &bull; {currentOrg.name}
+      <OrganizationalPortalBackdrop
+        themeColor={currentOrg.themeColor}
+        secondaryColor={currentOrg.secondaryColor}
+        accentColor={currentOrg.accentColor}
+        nodeBadgeText="NEMOTRON REASONING ENGINE &bull; BAYESIAN INFERENCE CORE"
+        variant="banner"
+      >
+        <div style={{
+          padding: '2rem 2.5rem',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '1.5rem'
+        }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: '#8671F9', fontWeight: 700, fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '0.4rem' }}>
+              <Sparkles size={16} /> Autonomous Intelligence Core &bull; {currentOrg.name}
+            </div>
+            <h1 style={{ fontSize: '2.2rem', fontWeight: 900, color: 'var(--text-primary)', margin: 0, letterSpacing: '-0.5px' }}>
+              AI Intelligence & Reasoning Workspace
+            </h1>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', margin: '0.4rem 0 0', maxWidth: '720px' }}>
+              Unified cognitive environment housing predictive risk forecasting, SHAP explainable attribution, conversational Copilot inference, and stress-testing simulators.
+            </p>
           </div>
-          <h1 style={{ fontSize: '2.2rem', fontWeight: 900, color: '#F6FDFF', margin: 0, letterSpacing: '-0.5px' }}>
-            AI Intelligence & Reasoning Workspace
-          </h1>
-          <p style={{ color: 'rgba(246, 253, 255, 0.75)', fontSize: '0.95rem', margin: '0.4rem 0 0', maxWidth: '720px' }}>
-            Unified cognitive environment housing predictive risk forecasting, SHAP explainable attribution, conversational Copilot inference, and stress-testing simulators.
-          </p>
-        </div>
 
-        {/* Global Actions */}
-        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-          <button 
-            onClick={() => setTab('copilot')}
-            className="btn btn-ai"
-            style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '0.8rem 1.4rem', fontSize: '0.88rem' }}
-          >
-            <Bot size={16} /> Launch Copilot Chat
-          </button>
-          <button 
-            onClick={() => setTab('simulator')}
-            className="btn btn-secondary"
-            style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '0.8rem 1.25rem', fontSize: '0.88rem' }}
-          >
-            <Sliders size={16} /> Run Stress Test
-          </button>
+          {/* Global Actions */}
+          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+            <button 
+              onClick={() => setTab('copilot')}
+              className="btn btn-ai"
+              style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '0.8rem 1.4rem', fontSize: '0.88rem' }}
+            >
+              <Bot size={16} /> Launch Copilot Chat
+            </button>
+            <button 
+              onClick={() => setTab('simulator')}
+              className="btn btn-secondary"
+              style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '0.8rem 1.25rem', fontSize: '0.88rem' }}
+            >
+              <Sliders size={16} /> Run Stress Test
+            </button>
+          </div>
         </div>
-      </div>
+      </OrganizationalPortalBackdrop>
 
       {/* Primary AI Metrics */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem' }}>
-        <div className="glass-card" style={{ padding: '1.5rem', background: 'rgba(7, 17, 46, 0.88)', border: '1px solid rgba(134, 113, 249, 0.25)', borderRadius: '18px' }}>
-          <div style={{ color: 'rgba(246, 253, 255, 0.55)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Neural Model Trust</div>
+        <div className="glass-card" style={{ padding: '1.5rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '18px' }}>
+          <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Neural Model Trust</div>
           <div style={{ fontSize: '2.1rem', fontWeight: 900, color: '#8671F9', fontFamily: "'JetBrains Mono', monospace" }}>94.8%</div>
           <div style={{ fontSize: '0.8rem', color: '#6AE7F7', display: 'flex', alignItems: 'center', gap: '4px', marginTop: '0.25rem' }}>
             <ShieldCheck size={14} /> FIPS & NIST Calibrated
           </div>
         </div>
 
-        <div className="glass-card" style={{ padding: '1.5rem', background: 'rgba(7, 17, 46, 0.88)', border: '1px solid rgba(46, 155, 248, 0.2)', borderRadius: '18px' }}>
-          <div style={{ color: 'rgba(246, 253, 255, 0.55)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Inference Latency</div>
+        <div className="glass-card" style={{ padding: '1.5rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '18px' }}>
+          <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Inference Latency</div>
           <div style={{ fontSize: '2.1rem', fontWeight: 900, color: '#2E9BF8', fontFamily: "'JetBrains Mono', monospace" }}>142ms</div>
-          <div style={{ fontSize: '0.8rem', color: 'rgba(246, 253, 255, 0.75)', marginTop: '0.25rem' }}>
+          <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
             NVIDIA Nemotron-3 acceleration
           </div>
         </div>
 
-        <div className="glass-card" style={{ padding: '1.5rem', background: 'rgba(7, 17, 46, 0.88)', border: '1px solid rgba(106, 231, 247, 0.25)', borderRadius: '18px' }}>
-          <div style={{ color: 'rgba(246, 253, 255, 0.55)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Bayesian Confidence</div>
+        <div className="glass-card" style={{ padding: '1.5rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '18px' }}>
+          <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Bayesian Confidence</div>
           <div style={{ fontSize: '2.1rem', fontWeight: 900, color: '#6AE7F7', fontFamily: "'JetBrains Mono', monospace" }}>98.4%</div>
-          <div style={{ fontSize: '0.8rem', color: 'rgba(246, 253, 255, 0.75)', marginTop: '0.25rem' }}>
+          <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
             Across 1,280 feature nodes
           </div>
         </div>
 
-        <div className="glass-card" style={{ padding: '1.5rem', background: 'rgba(7, 17, 46, 0.88)', border: '1px solid rgba(46, 155, 248, 0.2)', borderRadius: '18px' }}>
-          <div style={{ color: 'rgba(246, 253, 255, 0.55)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Automated Mitigations</div>
-          <div style={{ fontSize: '2.1rem', fontWeight: 900, color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>12 Active</div>
+        <div className="glass-card" style={{ padding: '1.5rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '18px' }}>
+          <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Automated Mitigations</div>
+          <div style={{ fontSize: '2.1rem', fontWeight: 900, color: 'var(--text-primary)', fontFamily: "'JetBrains Mono', monospace" }}>12 Active</div>
           <div style={{ fontSize: '0.8rem', color: '#6AE7F7', marginTop: '0.25rem' }}>
             0 human-intervention overrides
           </div>
@@ -217,8 +223,8 @@ export const AIIntelligence = () => {
         display: 'flex',
         gap: '0.5rem',
         padding: '0.35rem',
-        background: 'rgba(7, 17, 46, 0.95)',
-        border: '1px solid rgba(122, 72, 255, 0.25)',
+        background: 'var(--bg-secondary)',
+        border: '1px solid var(--border-color)',
         borderRadius: '16px',
         overflowX: 'auto'
       }}>
@@ -239,7 +245,7 @@ export const AIIntelligence = () => {
                 background: isActive 
                   ? 'linear-gradient(135deg, #4148F1 0%, #7A48FF 100%)' 
                   : 'transparent',
-                color: isActive ? '#F6FDFF' : 'rgba(246, 253, 255, 0.7)',
+                color: isActive ? '#FFFFFF' : 'var(--text-secondary)',
                 fontWeight: isActive ? 800 : 600,
                 fontSize: '0.88rem',
                 cursor: 'pointer',
@@ -264,32 +270,32 @@ export const AIIntelligence = () => {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '1.5rem' }}>
               
               {/* Telemetry Stream Digest */}
-              <div className="glass-card" style={{ padding: '2rem', background: 'rgba(7, 17, 46, 0.9)', border: '1px solid rgba(46, 155, 248, 0.22)', borderRadius: '20px' }}>
+              <div className="glass-card" style={{ padding: '2rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '20px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
-                  <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#F6FDFF', margin: 0 }}>
+                  <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>
                     Real-Time Inference Streams
                   </h3>
-                  <span style={{ fontSize: '0.72rem', color: '#6AE7F7', fontWeight: 700, background: 'rgba(106, 231, 247, 0.15)', padding: '2px 8px', borderRadius: '6px' }}>
+                  <span style={{ fontSize: '0.72rem', color: currentOrg.accentColor, fontWeight: 700, background: `${currentOrg.accentColor}20`, padding: '2px 8px', borderRadius: '6px' }}>
                     1.8B EVENTS / DAY
                   </span>
                 </div>
 
-                <p style={{ color: 'rgba(246, 253, 255, 0.75)', fontSize: '0.88rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
                   ORBIS continuous neural listener ingests real-time telemetry across infrastructure logs, financial ledgers, patient queues, and access tokens to calibrate risk probabilities every 60 seconds.
                 </p>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 1rem', background: 'rgba(13, 35, 77, 0.5)', borderRadius: '12px', fontSize: '0.85rem' }}>
-                    <span style={{ color: 'rgba(246, 253, 255, 0.75)' }}>Model Architecture</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 1rem', background: isLight ? 'var(--bg-secondary)' : 'rgba(13, 35, 77, 0.5)', borderRadius: '12px', fontSize: '0.85rem', border: '1px solid var(--border-color)' }}>
+                    <span style={{ color: 'var(--text-secondary)' }}>Model Architecture</span>
                     <span style={{ color: '#8671F9', fontWeight: 800 }}>Nemotron-3 Deep Reasoning</span>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 1rem', background: 'rgba(13, 35, 77, 0.5)', borderRadius: '12px', fontSize: '0.85rem' }}>
-                    <span style={{ color: 'rgba(246, 253, 255, 0.75)' }}>Quantization Precision</span>
-                    <span style={{ color: '#6AE7F7', fontWeight: 800 }}>FP16 Tensor Core</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 1rem', background: isLight ? 'var(--bg-secondary)' : 'rgba(13, 35, 77, 0.5)', borderRadius: '12px', fontSize: '0.85rem', border: '1px solid var(--border-color)' }}>
+                    <span style={{ color: 'var(--text-secondary)' }}>Quantization Precision</span>
+                    <span style={{ color: currentOrg.accentColor, fontWeight: 800 }}>FP16 Tensor Core</span>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 1rem', background: 'rgba(13, 35, 77, 0.5)', borderRadius: '12px', fontSize: '0.85rem' }}>
-                    <span style={{ color: 'rgba(246, 253, 255, 0.75)' }}>Active Context Window</span>
-                    <span style={{ color: '#2E9BF8', fontWeight: 800 }}>128,000 Tokens</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 1rem', background: isLight ? 'var(--bg-secondary)' : 'rgba(13, 35, 77, 0.5)', borderRadius: '12px', fontSize: '0.85rem', border: '1px solid var(--border-color)' }}>
+                    <span style={{ color: 'var(--text-secondary)' }}>Active Context Window</span>
+                    <span style={{ color: currentOrg.secondaryColor, fontWeight: 800 }}>128,000 Tokens</span>
                   </div>
                 </div>
 
@@ -303,11 +309,11 @@ export const AIIntelligence = () => {
               </div>
 
               {/* Stress Test Quick Trigger */}
-              <div className="glass-card" style={{ padding: '2rem', background: 'rgba(7, 17, 46, 0.9)', border: '1px solid rgba(134, 113, 249, 0.25)', borderRadius: '20px' }}>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#F6FDFF', margin: '0 0 0.5rem' }}>
+              <div className="glass-card" style={{ padding: '2rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '20px' }}>
+                <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-primary)', margin: '0 0 0.5rem' }}>
                   Scenario Stress-Testing Engine
                 </h3>
-                <p style={{ color: 'rgba(246, 253, 255, 0.75)', fontSize: '0.88rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
                   Simulate macroeconomic shocks, ransomware lockouts, and regulatory audit failure to observe how risk scores propagate through {currentOrg.name}.
                 </p>
 
@@ -324,13 +330,13 @@ export const AIIntelligence = () => {
                       style={{
                         padding: '1rem',
                         borderRadius: '12px',
-                        background: 'rgba(13, 35, 77, 0.6)',
-                        border: '1px solid rgba(46, 155, 248, 0.2)',
+                        background: isLight ? 'var(--bg-secondary)' : 'rgba(13, 35, 77, 0.6)',
+                        border: '1px solid var(--border-color)',
                         cursor: 'pointer',
                         transition: 'all 0.2s'
                       }}
                     >
-                      <div style={{ fontSize: '0.82rem', fontWeight: 800, color: '#F6FDFF' }}>{sc.name}</div>
+                      <div style={{ fontSize: '0.82rem', fontWeight: 800, color: 'var(--text-primary)' }}>{sc.name}</div>
                       <div style={{ fontSize: '0.75rem', color: '#EF4444', fontWeight: 700, marginTop: '2px' }}>{sc.delta}</div>
                     </div>
                   ))}
@@ -362,26 +368,26 @@ export const AIIntelligence = () => {
         {activeTab === 'copilot' && (
           <div className="glass-card" style={{
             padding: '2rem',
-            background: 'rgba(7, 17, 46, 0.94)',
-            border: '1px solid rgba(122, 72, 255, 0.3)',
+            background: 'var(--card-bg)',
+            border: '1px solid var(--border-color)',
             borderRadius: '24px',
             display: 'flex',
             flexDirection: 'column',
             height: '700px',
-            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.6)'
+            boxShadow: isLight ? 'var(--shadow-md)' : '0 20px 60px rgba(0, 0, 0, 0.6)'
           }}>
             {/* Header */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '1.25rem', borderBottom: '1px solid rgba(46, 155, 248, 0.2)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '1.25rem', borderBottom: '1px solid var(--border-color)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'linear-gradient(135deg, #4148F1 0%, #7A48FF 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 20px rgba(122, 72, 255, 0.4)' }}>
-                  <Bot size={22} color="#F6FDFF" />
+                  <Bot size={22} color="#FFFFFF" />
                 </div>
                 <div>
-                  <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#F6FDFF', margin: 0 }}>
+                  <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>
                     ORBIS Risk Intelligence Copilot
                   </h3>
-                  <div style={{ fontSize: '0.78rem', color: '#6AE7F7', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#6AE7F7', boxShadow: '0 0 8px #6AE7F7' }} />
+                  <div style={{ fontSize: '0.78rem', color: currentOrg.accentColor, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span style={{ width: 6, height: 6, borderRadius: '50%', background: currentOrg.accentColor, boxShadow: `0 0 8px ${currentOrg.accentColor}` }} />
                     Active Enterprise Context &bull; {currentOrg.name} &bull; {resolvedRoleTitle}
                   </div>
                 </div>
@@ -424,8 +430,8 @@ export const AIIntelligence = () => {
                   }}
                 >
                   {msg.sender === 'assistant' && (
-                    <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'linear-gradient(135deg, #1554E8 0%, #2E9BF8 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                      <Sparkles size={16} color="#F6FDFF" />
+                    <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: `linear-gradient(135deg, ${currentOrg.themeColor} 0%, ${currentOrg.secondaryColor} 100%)`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <Sparkles size={16} color="#FFFFFF" />
                     </div>
                   )}
 
@@ -434,16 +440,16 @@ export const AIIntelligence = () => {
                     padding: '1rem 1.35rem',
                     borderRadius: msg.sender === 'user' ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
                     background: msg.sender === 'user'
-                      ? 'linear-gradient(135deg, #1554E8 0%, #2E9BF8 100%)'
-                      : 'rgba(13, 35, 77, 0.75)',
-                    border: msg.sender === 'user' ? 'none' : '1px solid rgba(46, 155, 248, 0.25)',
-                    color: '#F6FDFF',
+                      ? `linear-gradient(135deg, ${currentOrg.themeColor} 0%, ${currentOrg.secondaryColor} 100%)`
+                      : (isLight ? 'var(--bg-secondary)' : 'rgba(13, 35, 77, 0.75)'),
+                    border: msg.sender === 'user' ? 'none' : '1px solid var(--border-color)',
+                    color: msg.sender === 'user' ? '#FFFFFF' : 'var(--text-primary)',
                     fontSize: '0.92rem',
                     lineHeight: 1.6,
-                    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.3)'
+                    boxShadow: isLight ? 'var(--shadow-sm)' : '0 8px 24px rgba(0, 0, 0, 0.3)'
                   }}>
                     {renderFormattedMessage(msg.text, msg.sender === 'user')}
-                    <div style={{ fontSize: '0.68rem', color: 'rgba(246, 253, 255, 0.55)', marginTop: '6px', textAlign: 'right' }}>
+                    <div style={{ fontSize: '0.68rem', color: msg.sender === 'user' ? 'rgba(255,255,255,0.7)' : 'var(--text-muted)', marginTop: '6px', textAlign: 'right' }}>
                       {msg.time}
                     </div>
                   </div>
@@ -472,11 +478,11 @@ export const AIIntelligence = () => {
                   key={i}
                   onClick={() => setInputMessage(prompt)}
                   style={{
-                    background: 'rgba(13, 35, 77, 0.6)',
-                    border: '1px solid rgba(46, 155, 248, 0.25)',
+                    background: isLight ? 'var(--bg-secondary)' : 'rgba(13, 35, 77, 0.6)',
+                    border: '1px solid var(--border-color)',
                     borderRadius: '999px',
                     padding: '0.4rem 0.9rem',
-                    color: '#6AE7F7',
+                    color: currentOrg.accentColor,
                     fontSize: '0.75rem',
                     fontWeight: 700,
                     cursor: 'pointer',
@@ -499,9 +505,9 @@ export const AIIntelligence = () => {
                   flex: 1,
                   padding: '0.9rem 1.25rem',
                   borderRadius: '14px',
-                  background: 'rgba(7, 17, 46, 0.9)',
-                  border: '1px solid rgba(46, 155, 248, 0.35)',
-                  color: '#F6FDFF',
+                  background: 'var(--input-bg)',
+                  border: '1px solid var(--border-color)',
+                  color: 'var(--text-primary)',
                   fontSize: '0.92rem',
                   outline: 'none'
                 }}
@@ -528,11 +534,11 @@ export const AIIntelligence = () => {
 
         {/* TAB 5: RECOMMENDATIONS */}
         {activeTab === 'recommendations' && (
-          <div className="glass-card" style={{ padding: '2.5rem', background: 'rgba(7, 17, 46, 0.92)', border: '1px solid rgba(122, 72, 255, 0.28)', borderRadius: '24px' }}>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 900, color: '#F6FDFF', margin: '0 0 0.5rem' }}>
+          <div className="glass-card" style={{ padding: '2.5rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '24px' }}>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 900, color: 'var(--text-primary)', margin: '0 0 0.5rem' }}>
               Autonomous Neural Mitigations & Policy Directives
             </h2>
-            <p style={{ color: 'rgba(246, 253, 255, 0.75)', fontSize: '0.92rem', margin: '0 0 2rem' }}>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', margin: '0 0 2rem' }}>
               AI-generated operational recommendations with automated single-click execution, compliance sign-offs, and estimated risk reductions.
             </p>
 

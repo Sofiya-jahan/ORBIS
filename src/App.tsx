@@ -25,81 +25,94 @@ const GovernanceWorkspace = React.lazy(() => import('./pages/modules/GovernanceW
 const AdministrationWorkspace = React.lazy(() => import('./pages/modules/AdministrationWorkspace'));
 const NotificationsPage = React.lazy(() => import('./pages/modules/NotificationsPage'));
 
-const FullScreenLoader = () => (
-  <div style={{ 
-    display: 'flex', 
-    flexDirection: 'column',
-    height: '100vh', 
-    alignItems: 'center', 
-    justifyContent: 'center', 
-    background: 'radial-gradient(ellipse at 50% -20%, #0D234D 0%, #07112E 75%)',
-    position: 'relative',
-    overflow: 'hidden'
-  }}>
-    {/* Ambient glowing radial lights */}
-    <div style={{
-      position: 'absolute',
-      width: '320px',
-      height: '320px',
-      borderRadius: '50%',
-      background: 'radial-gradient(circle, rgba(21, 84, 232, 0.25) 0%, transparent 70%)',
-      filter: 'blur(40px)',
-      pointerEvents: 'none'
-    }} />
+const FullScreenLoader = () => {
+  const theme = useAuthStore(state => state.theme);
+  const isLight = theme === 'light';
 
-    <div style={{
+  return (
+    <div style={{ 
+      display: 'flex', 
+      flexDirection: 'column', 
+      height: '100vh', 
+      alignItems: 'center', 
+      justifyContent: 'center', 
+      background: isLight 
+        ? 'radial-gradient(ellipse at 50% -20%, #EEF3F9 0%, #F7F9FC 75%)'
+        : 'radial-gradient(ellipse at 50% -20%, #0D234D 0%, #07112E 75%)',
       position: 'relative',
-      zIndex: 1,
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      padding: '2.5rem 3rem',
-      borderRadius: '24px',
-      background: 'linear-gradient(180deg, rgba(13, 35, 77, 0.7) 0%, rgba(7, 17, 46, 0.85) 100%)',
-      border: '1px solid rgba(46, 155, 248, 0.25)',
-      backdropFilter: 'blur(24px)',
-      boxShadow: '0 20px 50px rgba(0, 0, 0, 0.6), 0 0 35px rgba(21, 84, 232, 0.3)'
+      overflow: 'hidden'
     }}>
+      {/* Ambient glowing radial lights */}
       <div style={{
-        width: '64px',
-        height: '64px',
-        borderRadius: '16px',
-        overflow: 'hidden',
-        boxShadow: '0 0 35px rgba(46, 155, 248, 0.55)',
-        border: '1px solid rgba(106, 231, 247, 0.35)',
-        marginBottom: '1.25rem',
-        animation: 'floatGentle 4s ease-in-out infinite'
-      }}>
-        <img src="/orbis-logo.png" alt="ORBIS" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-      </div>
+        position: 'absolute',
+        width: '320px',
+        height: '320px',
+        borderRadius: '50%',
+        background: isLight 
+          ? 'radial-gradient(circle, rgba(21, 84, 232, 0.08) 0%, transparent 70%)'
+          : 'radial-gradient(circle, rgba(21, 84, 232, 0.25) 0%, transparent 70%)',
+        filter: 'blur(40px)',
+        pointerEvents: 'none'
+      }} />
 
       <div style={{
+        position: 'relative',
+        zIndex: 1,
         display: 'flex',
+        flexDirection: 'column',
         alignItems: 'center',
-        gap: '0.6rem',
-        color: '#6AE7F7',
-        fontSize: '0.82rem',
-        fontFamily: "'Space Grotesk', sans-serif",
-        fontWeight: 700,
-        letterSpacing: '1.5px',
-        textTransform: 'uppercase'
+        padding: '2.5rem 3rem',
+        borderRadius: '24px',
+        background: isLight 
+          ? 'rgba(255, 255, 255, 0.95)'
+          : 'linear-gradient(180deg, rgba(13, 35, 77, 0.7) 0%, rgba(7, 17, 46, 0.85) 100%)',
+        border: isLight ? '1px solid #DCE5F2' : '1px solid rgba(46, 155, 248, 0.25)',
+        backdropFilter: 'blur(24px)',
+        boxShadow: isLight 
+          ? '0 20px 50px rgba(23, 32, 51, 0.08), 0 0 25px rgba(21, 84, 232, 0.08)'
+          : '0 20px 50px rgba(0, 0, 0, 0.6), 0 0 35px rgba(21, 84, 232, 0.3)'
       }}>
-        <Loader2 size={16} className="animate-spin" color="#6AE7F7" />
-        <span>INITIALIZING ORBIS CORE...</span>
-      </div>
-    </div>
+        <div style={{
+          width: '64px',
+          height: '64px',
+          borderRadius: '16px',
+          overflow: 'hidden',
+          boxShadow: isLight ? '0 4px 20px rgba(21, 84, 232, 0.2)' : '0 0 35px rgba(46, 155, 248, 0.55)',
+          border: isLight ? '1px solid #DCE5F2' : '1px solid rgba(106, 231, 247, 0.35)',
+          marginBottom: '1.25rem',
+          animation: 'floatGentle 4s ease-in-out infinite'
+        }}>
+          <img src="/orbis-logo.png" alt="ORBIS" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        </div>
 
-    <style>{`
-      @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-      .animate-spin { animation: spin 1s linear infinite; }
-      @keyframes floatGentle {
-        0% { transform: translateY(0px); }
-        50% { transform: translateY(-6px); }
-        100% { transform: translateY(0px); }
-      }
-    `}</style>
-  </div>
-);
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.6rem',
+          color: isLight ? '#1554E8' : '#6AE7F7',
+          fontSize: '0.82rem',
+          fontFamily: "'Space Grotesk', sans-serif",
+          fontWeight: 700,
+          letterSpacing: '1.5px',
+          textTransform: 'uppercase'
+        }}>
+          <Loader2 size={16} className="animate-spin" color={isLight ? '#1554E8' : '#6AE7F7'} />
+          <span>INITIALIZING ORBIS CORE...</span>
+        </div>
+      </div>
+
+      <style>{`
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .animate-spin { animation: spin 1s linear infinite; }
+        @keyframes floatGentle {
+          0% { transform: translateY(0px); }
+          50% { transform: translateY(-6px); }
+          100% { transform: translateY(0px); }
+        }
+      `}</style>
+    </div>
+  );
+};
 
 // Strictly Protected Routes for Master Dashboard
 const RequireAuth = ({ children }: { children: React.ReactNode }) => {
@@ -151,18 +164,8 @@ export const App = () => {
   }, [initAuthListener]);
 
   useEffect(() => {
-    // Public showcase and authentication portals maintain the signature sovereign dark command aesthetic
-    const isPublicAuthPage = location.pathname === '/' || 
-                             location.pathname === '/intro' || 
-                             location.pathname === '/landing' || 
-                             location.pathname === '/login' || 
-                             location.pathname === '/register' || 
-                             location.pathname === '/auth-verification' ||
-                             location.pathname === '/security-key' ||
-                             location.pathname === '/verification';
-
-    const activeTheme = isPublicAuthPage ? 'dark' : theme;
-    document.documentElement.setAttribute('data-theme', activeTheme);
+    // Universal theme synchronization across all public and authenticated portals
+    document.documentElement.setAttribute('data-theme', theme);
     
     // Enterprise color palette is active across the entire application
     const isDashboard = location.pathname.startsWith('/dashboard');

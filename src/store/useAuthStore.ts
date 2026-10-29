@@ -24,10 +24,41 @@ interface UserProfile {
   photoURL?: string;
 }
 
+export type ThemeMode = 'light' | 'dark' | 'system';
+export type ResolvedTheme = 'light' | 'dark';
+
+export const getSystemTheme = (): ResolvedTheme => {
+  if (typeof window !== 'undefined' && window.matchMedia) {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  return 'dark';
+};
+
+export const getInitialThemeMode = (): ThemeMode => {
+  if (typeof window === 'undefined') return 'dark';
+  const saved = localStorage.getItem('orbis_theme_mode') || localStorage.getItem('orbis_theme');
+  if (saved === 'light' || saved === 'dark' || saved === 'system') {
+    return saved;
+  }
+  return 'dark';
+};
+
+export const resolveTheme = (mode: ThemeMode): ResolvedTheme => {
+  if (mode === 'system') return getSystemTheme();
+  return mode;
+};
+
+const initialMode = getInitialThemeMode();
+const initialResolved = resolveTheme(initialMode);
+if (typeof window !== 'undefined') {
+  document.documentElement.setAttribute('data-theme', initialResolved);
+}
+
 interface AuthState {
   isAuthenticated: boolean;
   isAuthLoaded: boolean;
-  theme: 'light' | 'dark';
+  theme: ResolvedTheme;
+  themeMode: ThemeMode;
   organization: string | null;
   role: string | null;
   user: UserProfile | null;
@@ -36,7 +67,7 @@ interface AuthState {
   // Actions
   initAuthListener: () => void;
   logout: () => Promise<void>;
-  setTheme: (theme: 'light' | 'dark') => void;
+  setTheme: (theme: ThemeMode) => void;
   setOrganization: (org: string) => void;
   setRole: (role: string) => void;
   verifyPIN: (pin: string) => Promise<boolean>;
@@ -50,13 +81,33 @@ interface AuthState {
 export const useAuthStore = create<AuthState>((set, get) => ({
   isAuthenticated: false,
   isAuthLoaded: false,
-  theme: (typeof window !== 'undefined' && (localStorage.getItem('orbis_theme') as 'light' | 'dark')) || 'dark',
+  theme: initialResolved,
+  themeMode: initialMode,
   organization: null,
   role: null,
   user: null,
   firebaseUser: null,
 
   initAuthListener: () => {
+    // Dynamic system color scheme listener for 'system' theme preference
+    if (typeof window !== 'undefined' && window.matchMedia) {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      const handleSystemChange = (e: MediaQueryListEvent | MediaQueryList) => {
+        if (get().themeMode === 'system') {
+          const newResolved: ResolvedTheme = e.matches ? 'dark' : 'light';
+          document.documentElement.setAttribute('data-theme', newResolved);
+          set({ theme: newResolved });
+        }
+      };
+
+      try {
+        mediaQuery.addEventListener('change', handleSystemChange);
+      } catch {
+        // Fallback for older browsers
+        mediaQuery.addListener(handleSystemChange);
+      }
+    }
+
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         // User is signed in, fetch their profile from Firestore
@@ -235,12 +286,16 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     });
   },
 
-  setTheme: (theme) => {
+  setTheme: (mode: ThemeMode) => {
+    const validMode: ThemeMode = (mode === 'light' || mode === 'dark' || mode === 'system') ? mode : 'dark';
+    const resolved = resolveTheme(validMode);
+
     if (typeof window !== 'undefined') {
-      localStorage.setItem('orbis_theme', theme);
+      localStorage.setItem('orbis_theme_mode', validMode);
+      localStorage.setItem('orbis_theme', resolved);
+      document.documentElement.setAttribute('data-theme', resolved);
     }
-    document.documentElement.setAttribute('data-theme', theme);
-    set({ theme });
+    set({ theme: resolved, themeMode: validMode });
   },
 
   setOrganization: (org: string) => {

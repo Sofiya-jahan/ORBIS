@@ -16,6 +16,7 @@ import {
   resetRateLimit
 } from '../services/securityService';
 import { OrganizationalPortalBackdrop } from '../components/OrganizationalPortalBackdrop';
+import { ThemeToggle } from '../components/ThemeToggle';
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -36,7 +37,8 @@ export const Login = () => {
   const [lockoutSec, setLockoutSec] = useState(0);
   const [remainingAttempts, setRemainingAttempts] = useState(5);
 
-  const { login, register, loginWithGoogle, loginAsDemo, isAuthenticated, organization, role } = useAuthStore();
+  const { login, register, loginWithGoogle, loginAsDemo, isAuthenticated, organization, role, theme } = useAuthStore();
+  const isLight = theme === 'light';
 
   const currentOrg = organization && ORGANIZATIONS[organization] ? ORGANIZATIONS[organization] : ORGANIZATIONS.hospital;
   const currentRole = currentOrg.roles.find(r => r.id === role) || currentOrg.roles[0];
@@ -278,9 +280,9 @@ export const Login = () => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: `0 0 20px ${themeAlpha(0.45)}`,
-              border: `1px solid ${secondaryAlpha(0.4)}`,
-              background: '#07112E'
+              boxShadow: isLight ? '0 2px 10px rgba(0,0,0,0.06)' : `0 0 20px ${themeAlpha(0.45)}`,
+              border: isLight ? '1px solid #DCE5F2' : `1px solid ${secondaryAlpha(0.4)}`,
+              background: isLight ? '#FFFFFF' : '#07112E'
             }}>
               <img src="/orbis-logo.png" alt="ORBIS Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
@@ -290,7 +292,7 @@ export const Login = () => {
                 fontWeight: 900,
                 letterSpacing: '1.2px',
                 fontFamily: 'var(--font-heading)',
-                color: '#F6FDFF',
+                color: isLight ? '#172033' : '#F6FDFF',
                 lineHeight: 1.1
               }}>
                 ORBIS
@@ -314,60 +316,65 @@ export const Login = () => {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '0.3rem',
-                background: 'rgba(13, 35, 77, 0.65)',
-                border: `1px solid ${secondaryAlpha(0.25)}`,
+                background: isLight ? '#FFFFFF' : 'rgba(13, 35, 77, 0.65)',
+                border: isLight ? '1px solid #DCE5F2' : `1px solid ${secondaryAlpha(0.25)}`,
                 borderRadius: '8px',
                 padding: '0.35rem 0.75rem',
-                color: 'rgba(246, 253, 255, 0.75)',
+                color: isLight ? '#52637A' : 'rgba(246, 253, 255, 0.75)',
                 cursor: 'pointer',
                 fontSize: '0.72rem',
                 fontWeight: 600,
                 fontFamily: 'var(--font-family)',
+                boxShadow: isLight ? '0 2px 8px rgba(0,0,0,0.04)' : 'none',
                 transition: 'all 0.2s'
               }}
               onMouseOver={(e) => {
-                e.currentTarget.style.color = '#F6FDFF';
+                e.currentTarget.style.color = isLight ? '#172033' : '#F6FDFF';
                 e.currentTarget.style.borderColor = currentOrg.secondaryColor;
-                e.currentTarget.style.background = themeAlpha(0.2);
+                e.currentTarget.style.background = isLight ? 'rgba(21, 84, 232, 0.08)' : themeAlpha(0.2);
               }}
               onMouseOut={(e) => {
-                e.currentTarget.style.color = 'rgba(246, 253, 255, 0.75)';
-                e.currentTarget.style.borderColor = secondaryAlpha(0.25);
-                e.currentTarget.style.background = 'rgba(13, 35, 77, 0.65)';
+                e.currentTarget.style.color = isLight ? '#52637A' : 'rgba(246, 253, 255, 0.75)';
+                e.currentTarget.style.borderColor = isLight ? '#DCE5F2' : secondaryAlpha(0.25);
+                e.currentTarget.style.background = isLight ? '#FFFFFF' : 'rgba(13, 35, 77, 0.65)';
               }}
             >
               <ChevronLeft size={13} /> Change Sector
             </button>
           </div>
 
-          {/* Top-Right Badge: Secure Institutional Access */}
-          <div style={{
-            background: 'rgba(13, 35, 77, 0.85)',
-            border: `1px solid ${secondaryAlpha(0.35)}`,
-            borderRadius: '999px',
-            padding: '0.45rem 1rem',
-            backdropFilter: 'blur(15px)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            boxShadow: `0 0 18px ${themeAlpha(0.2)}`
-          }}>
+          {/* Top-Right Controls: Theme Toggle & Badge */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+            <ThemeToggle variant="compact" />
+
             <div style={{
-              width: 7,
-              height: 7,
-              borderRadius: '50%',
-              backgroundColor: currentOrg.accentColor,
-              boxShadow: `0 0 8px ${currentOrg.accentColor}`
-            }} />
-            <span style={{
-              fontSize: '0.72rem',
-              color: '#F6FDFF',
-              fontFamily: "'JetBrains Mono', monospace",
-              fontWeight: 600,
-              letterSpacing: '0.5px'
+              background: isLight ? '#FFFFFF' : 'rgba(13, 35, 77, 0.85)',
+              border: isLight ? '1px solid #DCE5F2' : `1px solid ${secondaryAlpha(0.35)}`,
+              borderRadius: '999px',
+              padding: '0.45rem 1rem',
+              backdropFilter: 'blur(15px)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              boxShadow: isLight ? '0 2px 8px rgba(0,0,0,0.04)' : `0 0 18px ${themeAlpha(0.2)}`
             }}>
-              Secure Institutional Access
-            </span>
+              <div style={{
+                width: 7,
+                height: 7,
+                borderRadius: '50%',
+                backgroundColor: currentOrg.accentColor,
+                boxShadow: `0 0 8px ${currentOrg.accentColor}`
+              }} />
+              <span style={{
+                fontSize: '0.72rem',
+                color: isLight ? '#172033' : '#F6FDFF',
+                fontFamily: "'JetBrains Mono', monospace",
+                fontWeight: 600,
+                letterSpacing: '0.5px'
+              }}>
+                Secure Institutional Access
+              </span>
+            </div>
           </div>
         </header>
 
@@ -408,7 +415,7 @@ export const Login = () => {
               fontWeight: 700
             }}>
               <span>GLOBAL SOVEREIGN & CAPITAL DEFENSE</span>
-              <div style={{ width: '32px', height: '1px', background: secondaryAlpha(0.4) }} />
+              <div style={{ width: '32px', height: '1px', background: isLight ? '#DCE5F2' : secondaryAlpha(0.4) }} />
             </div>
 
             {/* Majestic Hero Headline */}
@@ -417,13 +424,13 @@ export const Login = () => {
               fontWeight: 800,
               lineHeight: 1.05,
               letterSpacing: '-0.5px',
-              color: '#F6FDFF',
+              color: isLight ? '#172033' : '#F6FDFF',
               margin: '0 0 0.8rem 0',
               fontFamily: 'var(--font-heading)'
             }}>
               Autonomous<br />
               <span style={{
-                background: `linear-gradient(135deg, #F6FDFF 0%, ${currentOrg.accentColor} 50%, ${currentOrg.secondaryColor} 100%)`,
+                background: `linear-gradient(135deg, ${isLight ? '#172033' : '#F6FDFF'} 0%, ${currentOrg.accentColor} 50%, ${currentOrg.secondaryColor} 100%)`,
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 display: 'inline-block'
@@ -435,7 +442,7 @@ export const Login = () => {
 
             {/* Subtitle Description */}
             <p style={{
-              color: 'rgba(246, 253, 255, 0.75)',
+              color: isLight ? '#52637A' : 'rgba(246, 253, 255, 0.75)',
               fontSize: '0.88rem',
               lineHeight: 1.55,
               maxWidth: '480px',
@@ -459,21 +466,22 @@ export const Login = () => {
                   gap: '0.75rem',
                   padding: '0.65rem',
                   borderRadius: '12px',
-                  background: 'rgba(13, 35, 77, 0.55)',
-                  border: `1px solid ${secondaryAlpha(0.18)}`
+                  background: isLight ? '#FFFFFF' : 'rgba(13, 35, 77, 0.55)',
+                  border: isLight ? '1px solid #DCE5F2' : `1px solid ${secondaryAlpha(0.18)}`,
+                  boxShadow: isLight ? '0 4px 16px rgba(17, 32, 51, 0.05)' : 'none'
                 }}>
                   <div style={{
                     width: 36,
                     height: 36,
                     borderRadius: '10px',
-                    background: themeAlpha(0.2),
-                    border: `1px solid ${secondaryAlpha(0.35)}`,
+                    background: isLight ? `${currentOrg.themeColor}12` : themeAlpha(0.2),
+                    border: isLight ? `1px solid ${currentOrg.secondaryColor}33` : `1px solid ${secondaryAlpha(0.35)}`,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     color: currentOrg.accentColor,
                     flexShrink: 0,
-                    boxShadow: `0 0 14px ${themeAlpha(0.25)}`
+                    boxShadow: isLight ? 'none' : `0 0 14px ${themeAlpha(0.25)}`
                   }}>
                     <feat.icon size={17} strokeWidth={2.2} />
                   </div>
@@ -481,7 +489,7 @@ export const Login = () => {
                     <div style={{
                       fontSize: '0.88rem',
                       fontWeight: 700,
-                      color: '#F6FDFF',
+                      color: isLight ? '#172033' : '#F6FDFF',
                       marginBottom: '0.15rem',
                       fontFamily: 'var(--font-heading)'
                     }}>
@@ -489,7 +497,7 @@ export const Login = () => {
                     </div>
                     <div style={{
                       fontSize: '0.72rem',
-                      color: 'rgba(246, 253, 255, 0.65)',
+                      color: isLight ? '#52637A' : 'rgba(246, 253, 255, 0.65)',
                       lineHeight: 1.32
                     }}>
                       {feat.desc}
@@ -507,25 +515,25 @@ export const Login = () => {
               paddingTop: '0.4rem'
             }}>
               <div>
-                <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>
+                <div style={{ fontSize: '1.3rem', fontWeight: 800, color: isLight ? '#172033' : '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>
                   180+
                 </div>
                 <div style={{ fontSize: '0.62rem', color: currentOrg.accentColor, letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: "'JetBrains Mono', monospace", fontWeight: 700 }}>
                   INSTITUTIONS
                 </div>
               </div>
-              <div style={{ width: '1px', height: '22px', background: secondaryAlpha(0.25) }} />
+              <div style={{ width: '1px', height: '22px', background: isLight ? '#DCE5F2' : secondaryAlpha(0.25) }} />
               <div>
-                <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>
+                <div style={{ fontSize: '1.3rem', fontWeight: 800, color: isLight ? '#172033' : '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>
                   24/7
                 </div>
                 <div style={{ fontSize: '0.62rem', color: currentOrg.accentColor, letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: "'JetBrains Mono', monospace", fontWeight: 700 }}>
                   SURVEILLANCE
                 </div>
               </div>
-              <div style={{ width: '1px', height: '22px', background: secondaryAlpha(0.25) }} />
+              <div style={{ width: '1px', height: '22px', background: isLight ? '#DCE5F2' : secondaryAlpha(0.25) }} />
               <div>
-                <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>
+                <div style={{ fontSize: '1.3rem', fontWeight: 800, color: isLight ? '#172033' : '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>
                   99.9%
                 </div>
                 <div style={{ fontSize: '0.62rem', color: currentOrg.accentColor, letterSpacing: '1.2px', textTransform: 'uppercase', fontFamily: "'JetBrains Mono', monospace", fontWeight: 700 }}>
@@ -550,7 +558,7 @@ export const Login = () => {
             fontFamily: "'JetBrains Mono', monospace",
             fontSize: '0.68rem',
             letterSpacing: '3px',
-            color: 'rgba(246, 253, 255, 0.45)',
+            color: isLight ? 'rgba(82, 99, 122, 0.4)' : 'rgba(246, 253, 255, 0.45)',
             textTransform: 'uppercase',
             lineHeight: 1.45,
             zIndex: 3
@@ -560,7 +568,7 @@ export const Login = () => {
             <div>SYSTEMS</div>
             <div>SAFER</div>
             <div>TOGETHER</div>
-            <div style={{ width: '18px', height: '1px', background: secondaryAlpha(0.35), marginTop: '0.3rem' }} />
+            <div style={{ width: '18px', height: '1px', background: isLight ? '#DCE5F2' : secondaryAlpha(0.35), marginTop: '0.3rem' }} />
           </div>
 
           {/* RIGHT COLUMN: ULTRA-PREMIUM GLASSMORPHIC LOGIN CARD */}
@@ -568,12 +576,12 @@ export const Login = () => {
             flex: '0 0 410px',
             width: '410px',
             zIndex: 10,
-            background: 'rgba(13, 35, 77, 0.78)',
+            background: isLight ? 'rgba(255, 255, 255, 0.94)' : 'rgba(13, 35, 77, 0.78)',
             backdropFilter: 'blur(32px)',
             WebkitBackdropFilter: 'blur(32px)',
-            border: `1px solid ${secondaryAlpha(0.28)}`,
+            border: isLight ? '1px solid #DCE5F2' : `1px solid ${secondaryAlpha(0.28)}`,
             borderRadius: '24px',
-            boxShadow: `0 25px 60px rgba(0, 0, 0, 0.8), 0 0 35px ${themeAlpha(0.2)}`,
+            boxShadow: isLight ? '0 25px 60px rgba(17, 32, 51, 0.1), 0 0 25px rgba(21, 84, 232, 0.04)' : `0 25px 60px rgba(0, 0, 0, 0.8), 0 0 35px ${themeAlpha(0.2)}`,
             padding: '1.75rem 2rem',
             boxSizing: 'border-box'
           }}>
@@ -591,11 +599,11 @@ export const Login = () => {
                 Welcome to
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', marginTop: '0.2rem' }}>
-                <img src="/orbis-logo.png" alt="ORBIS Logo" style={{ width: '42px', height: '42px', borderRadius: '12px', boxShadow: `0 0 20px ${themeAlpha(0.45)}`, border: `1px solid ${secondaryAlpha(0.3)}` }} />
+                <img src="/orbis-logo.png" alt="ORBIS Logo" style={{ width: '42px', height: '42px', borderRadius: '12px', boxShadow: isLight ? '0 2px 10px rgba(0,0,0,0.06)' : `0 0 20px ${themeAlpha(0.45)}`, border: isLight ? '1px solid #DCE5F2' : `1px solid ${secondaryAlpha(0.3)}` }} />
                 <h2 style={{
                   fontSize: '2.1rem',
                   fontWeight: 900,
-                  color: '#F6FDFF',
+                  color: isLight ? '#172033' : '#F6FDFF',
                   lineHeight: 1.1,
                   letterSpacing: '1px',
                   margin: 0,
@@ -606,7 +614,7 @@ export const Login = () => {
               </div>
               <div style={{
                 fontSize: '0.74rem',
-                color: 'rgba(246, 253, 255, 0.75)',
+                color: isLight ? '#52637A' : 'rgba(246, 253, 255, 0.75)',
                 letterSpacing: '0.8px',
                 fontFamily: "'JetBrains Mono', monospace",
                 marginTop: '0.2rem'
@@ -618,10 +626,10 @@ export const Login = () => {
             {/* Mode Switcher: Sign In vs Create Account */}
             <div style={{
               display: 'flex',
-              background: 'rgba(7, 17, 46, 0.75)',
+              background: isLight ? '#EEF3F9' : 'rgba(7, 17, 46, 0.75)',
               padding: '4px',
               borderRadius: '12px',
-              border: `1px solid ${secondaryAlpha(0.2)}`,
+              border: isLight ? '1px solid #DCE5F2' : `1px solid ${secondaryAlpha(0.2)}`,
               marginBottom: '0.95rem'
             }}>
               <button
@@ -633,7 +641,7 @@ export const Login = () => {
                   borderRadius: '8px',
                   border: 'none',
                   background: !isSignUp ? `linear-gradient(135deg, ${currentOrg.themeColor} 0%, ${currentOrg.secondaryColor} 100%)` : 'transparent',
-                  color: !isSignUp ? '#F6FDFF' : 'rgba(246, 253, 255, 0.65)',
+                  color: !isSignUp ? '#F6FDFF' : (isLight ? '#52637A' : 'rgba(246, 253, 255, 0.65)'),
                   fontWeight: 700,
                   fontSize: '0.8rem',
                   cursor: 'pointer',
@@ -653,7 +661,7 @@ export const Login = () => {
                   borderRadius: '8px',
                   border: 'none',
                   background: isSignUp ? `linear-gradient(135deg, ${currentOrg.themeColor} 0%, ${currentOrg.secondaryColor} 100%)` : 'transparent',
-                  color: isSignUp ? '#F6FDFF' : 'rgba(246, 253, 255, 0.65)',
+                  color: isSignUp ? '#F6FDFF' : (isLight ? '#52637A' : 'rgba(246, 253, 255, 0.65)'),
                   fontWeight: 700,
                   fontSize: '0.8rem',
                   cursor: 'pointer',
@@ -674,7 +682,7 @@ export const Login = () => {
                 style={{
                   backgroundColor: 'rgba(255, 92, 92, 0.14)',
                   border: '1px solid rgba(255, 92, 92, 0.45)',
-                  color: '#FF8F8F',
+                  color: isLight ? '#B91C1C' : '#FF8F8F',
                   padding: '0.65rem 0.85rem',
                   borderRadius: '11px',
                   marginBottom: '0.85rem',
@@ -687,7 +695,7 @@ export const Login = () => {
               >
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem', marginBottom: '0.45rem' }}>
                   <ShieldAlert size={15} color="#FF6B6B" style={{ flexShrink: 0, marginTop: '2px' }} />
-                  <span style={{ color: '#FFD2D2', fontWeight: 600 }}>{error}</span>
+                  <span style={{ color: isLight ? '#991B1B' : '#FFD2D2', fontWeight: 600 }}>{error}</span>
                 </div>
 
                 <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem', flexWrap: 'wrap' }}>
@@ -724,10 +732,10 @@ export const Login = () => {
                       setError('');
                     }}
                     style={{
-                      background: 'rgba(255, 255, 255, 0.08)',
-                      border: '1px solid rgba(255, 255, 255, 0.2)',
+                      background: isLight ? '#EEF3F9' : 'rgba(255, 255, 255, 0.08)',
+                      border: isLight ? '1px solid #DCE5F2' : '1px solid rgba(255, 255, 255, 0.2)',
                       borderRadius: '7px',
-                      color: 'rgba(246, 253, 255, 0.9)',
+                      color: isLight ? '#172033' : 'rgba(246, 253, 255, 0.9)',
                       padding: '0.35rem 0.65rem',
                       fontSize: '0.7rem',
                       fontWeight: 600,
@@ -754,8 +762,9 @@ export const Login = () => {
                   gap: '0.75rem',
                   padding: '0.62rem 0.9rem',
                   borderRadius: '11px',
-                  background: 'rgba(7, 17, 46, 0.75)',
-                  border: `1px solid ${secondaryAlpha(0.25)}`,
+                  background: isLight ? '#FFFFFF' : 'rgba(7, 17, 46, 0.75)',
+                  border: isLight ? '1px solid #DCE5F2' : `1px solid ${secondaryAlpha(0.25)}`,
+                  boxShadow: isLight ? '0 1px 4px rgba(0,0,0,0.02)' : 'none',
                   marginBottom: '0.65rem'
                 }}>
                   <User size={16} color={currentOrg.accentColor} />
@@ -768,7 +777,7 @@ export const Login = () => {
                       width: '100%',
                       background: 'transparent',
                       border: 'none',
-                      color: '#F6FDFF',
+                      color: isLight ? '#172033' : '#F6FDFF',
                       fontSize: '0.85rem',
                       outline: 'none',
                       fontFamily: 'var(--font-family)'
@@ -784,8 +793,9 @@ export const Login = () => {
                 gap: '0.75rem',
                 padding: '0.62rem 0.9rem',
                 borderRadius: '11px',
-                background: 'rgba(7, 17, 46, 0.75)',
-                border: `1px solid ${secondaryAlpha(0.25)}`,
+                background: isLight ? '#FFFFFF' : 'rgba(7, 17, 46, 0.75)',
+                border: isLight ? '1px solid #DCE5F2' : `1px solid ${secondaryAlpha(0.25)}`,
+                boxShadow: isLight ? '0 1px 4px rgba(0,0,0,0.02)' : 'none',
                 marginBottom: '0.65rem'
               }}>
                 <Mail size={16} color={currentOrg.accentColor} />
@@ -799,7 +809,7 @@ export const Login = () => {
                     width: '100%',
                     background: 'transparent',
                     border: 'none',
-                    color: '#F6FDFF',
+                    color: isLight ? '#172033' : '#F6FDFF',
                     fontSize: '0.85rem',
                     outline: 'none',
                     fontFamily: 'var(--font-family)'
@@ -814,8 +824,9 @@ export const Login = () => {
                 gap: '0.75rem',
                 padding: '0.62rem 0.9rem',
                 borderRadius: '11px',
-                background: 'rgba(7, 17, 46, 0.75)',
-                border: `1px solid ${secondaryAlpha(0.25)}`,
+                background: isLight ? '#FFFFFF' : 'rgba(7, 17, 46, 0.75)',
+                border: isLight ? '1px solid #DCE5F2' : `1px solid ${secondaryAlpha(0.25)}`,
+                boxShadow: isLight ? '0 1px 4px rgba(0,0,0,0.02)' : 'none',
                 marginBottom: isSignUp ? '0.65rem' : '0.75rem'
               }}>
                 <Lock size={16} color={currentOrg.accentColor} />
@@ -830,7 +841,7 @@ export const Login = () => {
                     width: '100%',
                     background: 'transparent',
                     border: 'none',
-                    color: '#F6FDFF',
+                    color: isLight ? '#172033' : '#F6FDFF',
                     fontSize: '0.85rem',
                     outline: 'none',
                     fontFamily: 'var(--font-family)'
@@ -839,7 +850,7 @@ export const Login = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(246, 253, 255, 0.55)', padding: 0, display: 'flex' }}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: isLight ? '#7F8DA5' : 'rgba(246, 253, 255, 0.55)', padding: 0, display: 'flex' }}
                 >
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
@@ -853,8 +864,9 @@ export const Login = () => {
                   gap: '0.75rem',
                   padding: '0.62rem 0.9rem',
                   borderRadius: '11px',
-                  background: 'rgba(7, 17, 46, 0.75)',
-                  border: `1px solid ${secondaryAlpha(0.25)}`,
+                  background: isLight ? '#FFFFFF' : 'rgba(7, 17, 46, 0.75)',
+                  border: isLight ? '1px solid #DCE5F2' : `1px solid ${secondaryAlpha(0.25)}`,
+                  boxShadow: isLight ? '0 1px 4px rgba(0,0,0,0.02)' : 'none',
                   marginBottom: '0.75rem'
                 }}>
                   <Lock size={16} color={currentOrg.accentColor} />
@@ -869,7 +881,7 @@ export const Login = () => {
                       width: '100%',
                       background: 'transparent',
                       border: 'none',
-                      color: '#F6FDFF',
+                      color: isLight ? '#172033' : '#F6FDFF',
                       fontSize: '0.85rem',
                       outline: 'none',
                       fontFamily: 'var(--font-family)'
@@ -886,7 +898,7 @@ export const Login = () => {
                 marginBottom: '0.85rem',
                 fontSize: '0.78rem'
               }}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', cursor: 'pointer', color: 'rgba(246, 253, 255, 0.75)' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', cursor: 'pointer', color: isLight ? '#52637A' : 'rgba(246, 253, 255, 0.75)' }}>
                   <input
                     type="checkbox"
                     checked={rememberDevice}
@@ -916,7 +928,7 @@ export const Login = () => {
                     <Sparkles size={11} color={currentOrg.accentColor} /> Autofill demo?
                   </button>
                 ) : (
-                  <span style={{ color: 'rgba(246, 253, 255, 0.55)', fontSize: '0.72rem' }}>Encrypted AES-256</span>
+                  <span style={{ color: isLight ? '#7F8DA5' : 'rgba(246, 253, 255, 0.55)', fontSize: '0.72rem' }}>Encrypted AES-256</span>
                 )}
               </div>
 
@@ -943,7 +955,7 @@ export const Login = () => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '0.5rem',
-                  boxShadow: lockoutSec > 0 ? 'none' : `0 8px 25px ${themeAlpha(0.45)}`,
+                  boxShadow: lockoutSec > 0 ? 'none' : (isLight ? '0 4px 16px rgba(21, 84, 232, 0.35)' : `0 8px 25px ${themeAlpha(0.45)}`),
                   marginBottom: '0.85rem'
                 }}
               >
@@ -970,18 +982,18 @@ export const Login = () => {
               gap: '0.75rem',
               marginBottom: '0.85rem'
             }}>
-              <div style={{ flex: 1, height: '1px', background: secondaryAlpha(0.18) }} />
-              <span style={{ fontSize: '0.68rem', color: 'rgba(246, 253, 255, 0.45)', fontFamily: "'JetBrains Mono', monospace" }}>
+              <div style={{ flex: 1, height: '1px', background: isLight ? '#DCE5F2' : secondaryAlpha(0.18) }} />
+              <span style={{ fontSize: '0.68rem', color: isLight ? '#7F8DA5' : 'rgba(246, 253, 255, 0.45)', fontFamily: "'JetBrains Mono', monospace" }}>
                 or continue with
               </span>
-              <div style={{ flex: 1, height: '1px', background: secondaryAlpha(0.18) }} />
+              <div style={{ flex: 1, height: '1px', background: isLight ? '#DCE5F2' : secondaryAlpha(0.18) }} />
             </div>
 
             {/* Social Sign In: ONLY Google */}
             <motion.button
               whileHover={{
                 scale: 1.01,
-                backgroundColor: themeAlpha(0.15),
+                backgroundColor: isLight ? '#F9FBFD' : themeAlpha(0.15),
                 borderColor: currentOrg.secondaryColor
               }}
               whileTap={{ scale: 0.99 }}
@@ -992,9 +1004,9 @@ export const Login = () => {
                 width: '100%',
                 padding: '0.65rem',
                 borderRadius: '11px',
-                background: 'rgba(7, 17, 46, 0.8)',
-                border: `1px solid ${secondaryAlpha(0.25)}`,
-                color: '#F6FDFF',
+                background: isLight ? '#FFFFFF' : 'rgba(7, 17, 46, 0.8)',
+                border: isLight ? '1px solid #DCE5F2' : `1px solid ${secondaryAlpha(0.25)}`,
+                color: isLight ? '#172033' : '#F6FDFF',
                 fontSize: '0.86rem',
                 fontWeight: 600,
                 fontFamily: 'var(--font-family)',
@@ -1004,6 +1016,7 @@ export const Login = () => {
                 justifyContent: 'center',
                 gap: '0.65rem',
                 marginBottom: '0.95rem',
+                boxShadow: isLight ? '0 2px 8px rgba(0, 0, 0, 0.04)' : 'none',
                 transition: 'all 0.2s'
               }}
             >
@@ -1027,7 +1040,7 @@ export const Login = () => {
               justifyContent: 'center',
               gap: '0.45rem',
               fontSize: '0.66rem',
-              color: 'rgba(246, 253, 255, 0.45)',
+              color: isLight ? '#7F8DA5' : 'rgba(246, 253, 255, 0.45)',
               fontFamily: "'JetBrains Mono', monospace",
               letterSpacing: '0.4px'
             }}>

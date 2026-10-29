@@ -9,7 +9,8 @@ import {
 } from 'lucide-react';
 
 export const EnterpriseReports = () => {
-  const { organization, role, user } = useAuthStore();
+  const { organization, role, user, theme } = useAuthStore();
+  const isLight = theme === 'light';
   const currentOrg = organization && ORGANIZATIONS[organization] ? ORGANIZATIONS[organization] : ORGANIZATIONS.hospital;
   const orgData = useOrganizationalIntelligence();
   
@@ -227,7 +228,7 @@ ${(orgData.analytics?.departmentComparisons || []).map((d: any) => `• Division
                   </span>
                 </div>
 
-                <h3 style={{ fontSize: '1.3rem', fontWeight: '800', marginBottom: '0.4rem', color: '#FFFFFF' }}>
+                <h3 style={{ fontSize: '1.3rem', fontWeight: '800', marginBottom: '0.4rem', color: 'var(--text-primary)' }}>
                   {rep.title}
                 </h3>
 
@@ -244,9 +245,9 @@ ${(orgData.analytics?.departmentComparisons || []).map((d: any) => `• Division
                 style={{
                   padding: '0.65rem 1rem',
                   borderRadius: '10px',
-                  background: 'rgba(21, 84, 232, 0.2)',
-                  border: '1px solid rgba(46, 155, 248, 0.35)',
-                  color: '#6AE7F7',
+                  background: isLight ? `${currentOrg.themeColor}15` : 'rgba(21, 84, 232, 0.2)',
+                  border: `1px solid ${currentOrg.themeColor}40`,
+                  color: currentOrg.accentColor,
                   fontSize: '0.82rem',
                   fontWeight: 700,
                   cursor: 'pointer',
@@ -317,22 +318,22 @@ ${(orgData.analytics?.departmentComparisons || []).map((d: any) => `• Division
             maxHeight: '85vh',
             display: 'flex',
             flexDirection: 'column',
-            background: 'rgba(7, 17, 46, 0.98)',
-            border: '1px solid rgba(46, 155, 248, 0.4)',
+            background: 'var(--card-bg)',
+            border: '1px solid var(--border-color)',
             borderRadius: '24px',
             overflow: 'hidden',
-            boxShadow: '0 25px 60px rgba(0, 0, 0, 0.8)'
+            boxShadow: isLight ? 'var(--shadow-lg)' : '0 25px 60px rgba(0, 0, 0, 0.8)'
           }}>
             <div style={{
               padding: '1.5rem 2rem',
-              borderBottom: '1px solid rgba(46, 155, 248, 0.2)',
+              borderBottom: '1px solid var(--border-color)',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center'
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <FileText size={20} color="#6AE7F7" />
-                <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#F6FDFF', margin: 0 }}>
+                <FileText size={20} color={currentOrg.accentColor} />
+                <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>
                   {activePreviewReport.title}
                 </h3>
               </div>
@@ -341,7 +342,7 @@ ${(orgData.analytics?.departmentComparisons || []).map((d: any) => `• Division
                 style={{
                   background: 'transparent',
                   border: 'none',
-                  color: 'rgba(246, 253, 255, 0.7)',
+                  color: 'var(--text-secondary)',
                   cursor: 'pointer',
                   padding: '4px'
                 }}
@@ -356,17 +357,17 @@ ${(orgData.analytics?.departmentComparisons || []).map((d: any) => `• Division
               padding: '1.5rem 2rem',
               fontFamily: "'JetBrains Mono', monospace",
               fontSize: '0.85rem',
-              color: 'rgba(246, 253, 255, 0.9)',
+              color: 'var(--text-primary)',
               lineHeight: 1.6,
               whiteSpace: 'pre-wrap',
-              background: 'rgba(3, 9, 28, 0.9)'
+              background: isLight ? 'var(--bg-secondary)' : 'rgba(3, 9, 28, 0.9)'
             }}>
               {activePreviewReport.content}
             </div>
 
             <div style={{
               padding: '1.25rem 2rem',
-              borderTop: '1px solid rgba(46, 155, 248, 0.2)',
+              borderTop: '1px solid var(--border-color)',
               display: 'flex',
               justifyContent: 'flex-end',
               gap: '1rem'

@@ -14,6 +14,7 @@ import { OrganizationalPortalBackdrop } from '../../components/OrganizationalPor
 
 export const AdministrationWorkspace = () => {
   const { organization, role, user, theme, setTheme } = useAuthStore();
+  const isLight = theme === 'light';
   const currentOrg = organization && ORGANIZATIONS[organization] ? ORGANIZATIONS[organization] : ORGANIZATIONS.hospital;
   const currentRole = currentOrg.roles.find(r => r.id === role) || currentOrg.roles[0];
   const [searchParams, setSearchParams] = useSearchParams();
@@ -54,10 +55,10 @@ export const AdministrationWorkspace = () => {
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: '#6AE7F7', fontWeight: 700, fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '0.4rem' }}>
               <Settings size={16} /> Enterprise Administration &bull; {currentOrg.name}
             </div>
-            <h1 style={{ fontSize: '2.2rem', fontWeight: 900, color: '#F6FDFF', margin: 0, letterSpacing: '-0.5px' }}>
+            <h1 style={{ fontSize: '2.2rem', fontWeight: 900, color: 'var(--text-primary)', margin: 0, letterSpacing: '-0.5px' }}>
               Platform Administration
             </h1>
-            <p style={{ color: 'rgba(246, 253, 255, 0.75)', fontSize: '0.95rem', margin: '0.4rem 0 0', maxWidth: '720px' }}>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', margin: '0.4rem 0 0', maxWidth: '720px' }}>
               Centralized platform configuration, cryptographic zero-trust posture, institutional user roles, and tamper-evident audit logging.
             </p>
           </div>
@@ -77,34 +78,34 @@ export const AdministrationWorkspace = () => {
 
       {/* Primary KPIs Row */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem' }}>
-        <div className="glass-card" style={{ padding: '1.5rem', background: 'rgba(7, 17, 46, 0.88)', border: '1px solid rgba(106, 231, 247, 0.25)', borderRadius: '18px' }}>
-          <div style={{ color: 'rgba(246, 253, 255, 0.55)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Cryptographic Posture</div>
+        <div className="glass-card" style={{ padding: '1.5rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '18px' }}>
+          <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Cryptographic Posture</div>
           <div style={{ fontSize: '2.1rem', fontWeight: 900, color: '#6AE7F7', fontFamily: "'JetBrains Mono', monospace" }}>AES-256</div>
-          <div style={{ fontSize: '0.8rem', color: 'rgba(246, 253, 255, 0.75)', marginTop: '0.25rem' }}>
+          <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
             HMAC session signature active
           </div>
         </div>
 
-        <div className="glass-card" style={{ padding: '1.5rem', background: 'rgba(7, 17, 46, 0.88)', border: '1px solid rgba(46, 155, 248, 0.2)', borderRadius: '18px' }}>
-          <div style={{ color: 'rgba(246, 253, 255, 0.55)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Adaptive Rate Limiter</div>
+        <div className="glass-card" style={{ padding: '1.5rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '18px' }}>
+          <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Adaptive Rate Limiter</div>
           <div style={{ fontSize: '2.1rem', fontWeight: 900, color: '#2E9BF8', fontFamily: "'JetBrains Mono', monospace" }}>5 / 45s</div>
-          <div style={{ fontSize: '0.8rem', color: 'rgba(246, 253, 255, 0.75)', marginTop: '0.25rem' }}>
+          <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
             Brute-force lockout armed
           </div>
         </div>
 
-        <div className="glass-card" style={{ padding: '1.5rem', background: 'rgba(7, 17, 46, 0.88)', border: '1px solid rgba(46, 155, 248, 0.2)', borderRadius: '18px' }}>
-          <div style={{ color: 'rgba(246, 253, 255, 0.55)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Configured Roles</div>
-          <div style={{ fontSize: '2.1rem', fontWeight: 900, color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>{currentOrg.roles.length} Tiers</div>
+        <div className="glass-card" style={{ padding: '1.5rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '18px' }}>
+          <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Configured Roles</div>
+          <div style={{ fontSize: '2.1rem', fontWeight: 900, color: 'var(--text-primary)', fontFamily: "'JetBrains Mono', monospace" }}>{currentOrg.roles.length} Tiers</div>
           <div style={{ fontSize: '0.8rem', color: '#6AE7F7', marginTop: '0.25rem' }}>
             RBAC zero-trust isolated
           </div>
         </div>
 
-        <div className="glass-card" style={{ padding: '1.5rem', background: 'rgba(7, 17, 46, 0.88)', border: '1px solid rgba(46, 155, 248, 0.2)', borderRadius: '18px' }}>
-          <div style={{ color: 'rgba(246, 253, 255, 0.55)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Session Lifetime</div>
-          <div style={{ fontSize: '2.1rem', fontWeight: 900, color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>8.0 Hours</div>
-          <div style={{ fontSize: '0.8rem', color: 'rgba(246, 253, 255, 0.75)', marginTop: '0.25rem' }}>
+        <div className="glass-card" style={{ padding: '1.5rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '18px' }}>
+          <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Session Lifetime</div>
+          <div style={{ fontSize: '2.1rem', fontWeight: 900, color: 'var(--text-primary)', fontFamily: "'JetBrains Mono', monospace" }}>8.0 Hours</div>
+          <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
             Tamper-evident verification
           </div>
         </div>
@@ -115,8 +116,8 @@ export const AdministrationWorkspace = () => {
         display: 'flex',
         gap: '0.5rem',
         padding: '0.35rem',
-        background: 'rgba(7, 17, 46, 0.95)',
-        border: '1px solid rgba(46, 155, 248, 0.22)',
+        background: 'var(--bg-secondary)',
+        border: '1px solid var(--border-color)',
         borderRadius: '16px',
         overflowX: 'auto'
       }}>
@@ -137,7 +138,7 @@ export const AdministrationWorkspace = () => {
                 background: isActive 
                   ? 'linear-gradient(135deg, #1554E8 0%, #2E9BF8 100%)' 
                   : 'transparent',
-                color: isActive ? '#F6FDFF' : 'rgba(246, 253, 255, 0.7)',
+                color: isActive ? '#FFFFFF' : 'var(--text-secondary)',
                 fontWeight: isActive ? 800 : 600,
                 fontSize: '0.88rem',
                 cursor: 'pointer',
@@ -165,19 +166,19 @@ export const AdministrationWorkspace = () => {
 
         {/* TAB 2: USERS & ROLES */}
         {activeTab === 'users' && (
-          <div className="glass-card" style={{ padding: '2.5rem', background: 'rgba(7, 17, 46, 0.92)', border: '1px solid rgba(46, 155, 248, 0.25)', borderRadius: '24px' }}>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 900, color: '#F6FDFF', margin: '0 0 0.5rem' }}>
+          <div className="glass-card" style={{ padding: '2.5rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '24px' }}>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 900, color: 'var(--text-primary)', margin: '0 0 0.5rem' }}>
               Institutional RBAC Clearance Matrix
             </h2>
-            <p style={{ color: 'rgba(246, 253, 255, 0.75)', fontSize: '0.92rem', margin: '0 0 2rem' }}>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', margin: '0 0 2rem' }}>
               Role definitions, clearance levels, and granular module permissions mapped for {currentOrg.name}.
             </p>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
               {currentOrg.roles.map(r => (
-                <div key={r.id} style={{ padding: '1.75rem', borderRadius: '18px', background: 'rgba(13, 35, 77, 0.45)', border: '1px solid rgba(46, 155, 248, 0.2)', display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+                <div key={r.id} style={{ padding: '1.75rem', borderRadius: '18px', background: isLight ? 'var(--bg-secondary)' : 'rgba(13, 35, 77, 0.45)', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '1.15rem', fontWeight: 800, color: '#F6FDFF' }}>{r.title}</span>
+                    <span style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-primary)' }}>{r.title}</span>
                     <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#6AE7F7', background: 'rgba(106, 231, 247, 0.15)', padding: '2px 8px', borderRadius: '6px' }}>
                       Level {r.levelNumber}
                     </span>
@@ -187,11 +188,11 @@ export const AdministrationWorkspace = () => {
                     Clearance: {r.accessLevel}
                   </div>
 
-                  <div style={{ fontSize: '0.8rem', color: 'rgba(246, 253, 255, 0.75)' }}>
+                  <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
                     Permissions:
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '6px' }}>
                       {r.permissions.map((p, pIdx) => (
-                        <span key={pIdx} style={{ fontSize: '0.72rem', background: 'rgba(21, 84, 232, 0.2)', border: '1px solid rgba(46, 155, 248, 0.25)', padding: '2px 6px', borderRadius: '4px', color: '#F6FDFF' }}>
+                        <span key={pIdx} style={{ fontSize: '0.72rem', background: isLight ? 'rgba(30, 58, 138, 0.08)' : 'rgba(21, 84, 232, 0.2)', border: '1px solid var(--border-color)', padding: '2px 6px', borderRadius: '4px', color: 'var(--text-primary)' }}>
                           {p}
                         </span>
                       ))}
@@ -219,20 +220,20 @@ export const AdministrationWorkspace = () => {
 
         {/* TAB 5: SYSTEM CONFIGURATION */}
         {activeTab === 'settings' && (
-          <div className="glass-card" style={{ padding: '2.5rem', background: 'rgba(7, 17, 46, 0.92)', border: '1px solid rgba(46, 155, 248, 0.25)', borderRadius: '24px' }}>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 900, color: '#F6FDFF', margin: '0 0 0.5rem' }}>
+          <div className="glass-card" style={{ padding: '2.5rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '24px' }}>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 900, color: 'var(--text-primary)', margin: '0 0 0.5rem' }}>
               System Configuration & Tenant Defaults
             </h2>
-            <p style={{ color: 'rgba(246, 253, 255, 0.75)', fontSize: '0.92rem', margin: '0 0 2rem' }}>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', margin: '0 0 2rem' }}>
               Institutional branding, visual theme, telemetry intervals, and API key management.
             </p>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
-              <div style={{ padding: '1.75rem', borderRadius: '18px', background: 'rgba(13, 35, 77, 0.45)', border: '1px solid rgba(46, 155, 248, 0.2)' }}>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#F6FDFF', marginBottom: '0.75rem' }}>
+              <div style={{ padding: '1.75rem', borderRadius: '18px', background: isLight ? 'var(--bg-secondary)' : 'rgba(13, 35, 77, 0.45)', border: '1px solid var(--border-color)' }}>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.75rem' }}>
                   Platform Interface Theme
                 </h3>
-                <p style={{ fontSize: '0.82rem', color: 'rgba(246, 253, 255, 0.7)', marginBottom: '1.25rem' }}>
+                <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginBottom: '1.25rem' }}>
                   Enterprise dark navy design system active across all authenticated modules.
                 </p>
                 <div style={{ display: 'flex', gap: '0.75rem' }}>
@@ -253,14 +254,14 @@ export const AdministrationWorkspace = () => {
                 </div>
               </div>
 
-              <div style={{ padding: '1.75rem', borderRadius: '18px', background: 'rgba(13, 35, 77, 0.45)', border: '1px solid rgba(46, 155, 248, 0.2)' }}>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#F6FDFF', marginBottom: '0.75rem' }}>
+              <div style={{ padding: '1.75rem', borderRadius: '18px', background: isLight ? 'var(--bg-secondary)' : 'rgba(13, 35, 77, 0.45)', border: '1px solid var(--border-color)' }}>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.75rem' }}>
                   Telemetry Ingestion Rate
                 </h3>
-                <p style={{ fontSize: '0.82rem', color: 'rgba(246, 253, 255, 0.7)', marginBottom: '1.25rem' }}>
+                <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginBottom: '1.25rem' }}>
                   Automated background health polling and Bayesian risk recalculation interval.
                 </p>
-                <div style={{ padding: '0.75rem 1rem', background: 'rgba(7, 17, 46, 0.8)', borderRadius: '10px', color: '#6AE7F7', fontWeight: 800, fontFamily: "'JetBrains Mono', monospace" }}>
+                <div style={{ padding: '0.75rem 1rem', background: isLight ? 'rgba(30, 58, 138, 0.08)' : 'rgba(7, 17, 46, 0.8)', borderRadius: '10px', color: '#6AE7F7', fontWeight: 800, fontFamily: "'JetBrains Mono', monospace" }}>
                   Every 60 Seconds &bull; High Reliability Mode
                 </div>
               </div>

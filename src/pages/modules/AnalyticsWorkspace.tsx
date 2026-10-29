@@ -17,9 +17,11 @@ import {
 
 // Reuse existing EnterpriseAnalytics
 import EnterpriseAnalytics from './EnterpriseAnalytics';
+import { OrganizationalPortalBackdrop } from '../../components/OrganizationalPortalBackdrop';
 
 export const AnalyticsWorkspace = () => {
-  const { organization } = useAuthStore();
+  const { organization, theme } = useAuthStore();
+  const isLight = theme === 'light';
   const currentOrg = organization && ORGANIZATIONS[organization] ? ORGANIZATIONS[organization] : ORGANIZATIONS.hospital;
   const orgData = useOrganizationalIntelligence();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -60,63 +62,67 @@ export const AnalyticsWorkspace = () => {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       
       {/* Page Header */}
-      <div className="glass-card" style={{
-        padding: '2rem 2.5rem',
-        background: 'rgba(7, 17, 46, 0.92)',
-        border: '1px solid rgba(46, 155, 248, 0.25)',
-        borderRadius: '24px',
-        boxShadow: '0 20px 50px rgba(0, 0, 0, 0.5)',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flexWrap: 'wrap',
-        gap: '1.5rem'
-      }}>
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: '#6AE7F7', fontWeight: 700, fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '0.4rem' }}>
-            <BarChart2 size={16} /> Advanced Quantitative Analytics &bull; {currentOrg.name}
+      <OrganizationalPortalBackdrop
+        themeColor={currentOrg.themeColor}
+        secondaryColor={currentOrg.secondaryColor}
+        accentColor={currentOrg.accentColor}
+        nodeBadgeText="MULTI-PILLAR STATISTICAL RADAR &bull; PREDICTIVE MODELING"
+        variant="banner"
+      >
+        <div style={{
+          padding: '2rem 2.5rem',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '1.5rem'
+        }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: '#6AE7F7', fontWeight: 700, fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '0.4rem' }}>
+              <BarChart2 size={16} /> Advanced Quantitative Analytics &bull; {currentOrg.name}
+            </div>
+            <h1 style={{ fontSize: '2.2rem', fontWeight: 900, color: 'var(--text-primary)', margin: 0, letterSpacing: '-0.5px' }}>
+              Enterprise Analytics Workspace
+            </h1>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', margin: '0.4rem 0 0', maxWidth: '720px' }}>
+              Consolidated analytical intelligence: multi-pillar resilience radars, cross-departmental correlation heatmaps, and longitudinal predictive modeling.
+            </p>
           </div>
-          <h1 style={{ fontSize: '2.2rem', fontWeight: 900, color: '#F6FDFF', margin: 0, letterSpacing: '-0.5px' }}>
-            Enterprise Analytics Workspace
-          </h1>
-          <p style={{ color: 'rgba(246, 253, 255, 0.75)', fontSize: '0.95rem', margin: '0.4rem 0 0', maxWidth: '720px' }}>
-            Consolidated analytical intelligence: multi-pillar resilience radars, cross-departmental correlation heatmaps, and longitudinal predictive modeling.
-          </p>
-        </div>
 
-        {/* Global Actions */}
-        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-          <button 
-            onClick={() => setTab('forecasts')}
-            className="btn btn-primary"
-            style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '0.8rem 1.4rem', fontSize: '0.88rem' }}
-          >
-            <TrendingUp size={16} /> View Forecast Projections
-          </button>
+          {/* Global Actions */}
+          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+            <button 
+              onClick={() => setTab('forecasts')}
+              className="btn btn-primary"
+              style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '0.8rem 1.4rem', fontSize: '0.88rem' }}
+            >
+              <TrendingUp size={16} /> View Forecast Projections
+            </button>
+          </div>
         </div>
-      </div>
+      </OrganizationalPortalBackdrop>
 
       {/* Primary KPIs Row */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem' }}>
-        <div className="glass-card" style={{ padding: '1.5rem', background: 'rgba(7, 17, 46, 0.88)', border: '1px solid rgba(46, 155, 248, 0.2)', borderRadius: '18px' }}>
-          <div style={{ color: 'rgba(246, 253, 255, 0.55)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Organization Health</div>
+        <div className="glass-card" style={{ padding: '1.5rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '18px' }}>
+          <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Organization Health</div>
           <div style={{ fontSize: '2.1rem', fontWeight: 900, color: '#6AE7F7', fontFamily: "'JetBrains Mono', monospace" }}>{orgData.kpis?.health?.overallScore || 90}%</div>
-          <div style={{ fontSize: '0.8rem', color: 'rgba(246, 253, 255, 0.75)', marginTop: '0.25rem' }}>
+          <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
             Weighted multi-pillar &bull; {orgData.kpis?.health?.status || 'Nominal'}
           </div>
         </div>
 
-        <div className="glass-card" style={{ padding: '1.5rem', background: 'rgba(7, 17, 46, 0.88)', border: '1px solid rgba(46, 155, 248, 0.2)', borderRadius: '18px' }}>
-          <div style={{ color: 'rgba(246, 253, 255, 0.55)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Average Risk Score</div>
+        <div className="glass-card" style={{ padding: '1.5rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '18px' }}>
+          <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Average Risk Score</div>
           <div style={{ fontSize: '2.1rem', fontWeight: 900, color: '#2E9BF8', fontFamily: "'JetBrains Mono', monospace" }}>{orgData.kpis?.risk?.averageRiskScore || 14.5}</div>
-          <div style={{ fontSize: '0.8rem', color: 'rgba(246, 253, 255, 0.75)', marginTop: '0.25rem' }}>
+          <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
             {orgData.kpis?.risk?.totalOpenRisks || 0} open ({orgData.kpis?.risk?.criticalRisksCount || 0} critical)
           </div>
         </div>
 
-        <div className="glass-card" style={{ padding: '1.5rem', background: 'rgba(7, 17, 46, 0.88)', border: '1px solid rgba(46, 155, 248, 0.2)', borderRadius: '18px' }}>
-          <div style={{ color: 'rgba(246, 253, 255, 0.55)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Next Month Forecast</div>
-          <div style={{ fontSize: '2.1rem', fontWeight: 900, color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace" }}>
+        <div className="glass-card" style={{ padding: '1.5rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '18px' }}>
+          <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Next Month Forecast</div>
+          <div style={{ fontSize: '2.1rem', fontWeight: 900, color: 'var(--text-primary)', fontFamily: "'JetBrains Mono', monospace" }}>
             {orgData.predictions?.incidentForecast?.projectionNextMonth || 8} Incidents
           </div>
           <div style={{ fontSize: '0.8rem', color: '#6AE7F7', marginTop: '0.25rem' }}>
@@ -124,10 +130,10 @@ export const AnalyticsWorkspace = () => {
           </div>
         </div>
 
-        <div className="glass-card" style={{ padding: '1.5rem', background: 'rgba(7, 17, 46, 0.88)', border: '1px solid rgba(46, 155, 248, 0.2)', borderRadius: '18px' }}>
-          <div style={{ color: 'rgba(246, 253, 255, 0.55)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Compliance Adherence</div>
+        <div className="glass-card" style={{ padding: '1.5rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '18px' }}>
+          <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.35rem' }}>Compliance Adherence</div>
           <div style={{ fontSize: '2.1rem', fontWeight: 900, color: '#6AE7F7', fontFamily: "'JetBrains Mono', monospace" }}>{orgData.kpis?.compliance?.overallCompliancePct || 95}%</div>
-          <div style={{ fontSize: '0.8rem', color: 'rgba(246, 253, 255, 0.75)', marginTop: '0.25rem' }}>
+          <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
             Grade {orgData.kpis?.compliance?.auditReadinessGrade || 'A'} &bull; {orgData.kpis?.compliance?.overdueControlsCount || 0} overdue controls
           </div>
         </div>
@@ -138,8 +144,8 @@ export const AnalyticsWorkspace = () => {
         display: 'flex',
         gap: '0.5rem',
         padding: '0.35rem',
-        background: 'rgba(7, 17, 46, 0.95)',
-        border: '1px solid rgba(46, 155, 248, 0.22)',
+        background: 'var(--bg-secondary)',
+        border: '1px solid var(--border-color)',
         borderRadius: '16px',
         overflowX: 'auto'
       }}>
@@ -160,7 +166,7 @@ export const AnalyticsWorkspace = () => {
                 background: isActive 
                   ? 'linear-gradient(135deg, #1554E8 0%, #2E9BF8 100%)' 
                   : 'transparent',
-                color: isActive ? '#F6FDFF' : 'rgba(246, 253, 255, 0.7)',
+                color: isActive ? '#FFFFFF' : 'var(--text-secondary)',
                 fontWeight: isActive ? 800 : 600,
                 fontSize: '0.88rem',
                 cursor: 'pointer',

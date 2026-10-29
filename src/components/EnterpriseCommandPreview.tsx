@@ -5,6 +5,7 @@ import {
   CheckCircle2, Lock, Zap, Layers, RefreshCw, 
   Radio, Play, ShieldAlert, Sparkles, Terminal, ChevronRight
 } from 'lucide-react';
+import { useAuthStore } from '../store/useAuthStore';
 
 export interface SectorSimulationConfig {
   id: string;
@@ -66,6 +67,9 @@ export const EnterpriseCommandPreview: React.FC<EnterpriseCommandPreviewProps> =
   activeSector,
   onTriggerSimulation 
 }) => {
+  const { theme } = useAuthStore();
+  const isLight = theme === 'light';
+
   const [activeTab, setActiveTab] = useState<'live' | 'matrix' | 'reasoning'>('live');
   const [healthScore, setHealthScore] = useState(99.4);
   const [pulseCount, setPulseCount] = useState(1842);
@@ -163,6 +167,8 @@ export const EnterpriseCommandPreview: React.FC<EnterpriseCommandPreviewProps> =
         inset: '-20px',
         background: isSimulating 
           ? 'radial-gradient(circle at 50% 50%, rgba(239, 68, 68, 0.25) 0%, rgba(21, 84, 232, 0.2) 50%, transparent 75%)'
+          : isLight
+          ? 'radial-gradient(circle at 60% 40%, rgba(21, 84, 232, 0.12) 0%, rgba(106, 231, 247, 0.08) 50%, transparent 75%)'
           : 'radial-gradient(circle at 60% 40%, rgba(21, 84, 232, 0.28) 0%, rgba(106, 231, 247, 0.15) 50%, transparent 75%)',
         filter: 'blur(50px)',
         zIndex: 0,
@@ -174,13 +180,17 @@ export const EnterpriseCommandPreview: React.FC<EnterpriseCommandPreviewProps> =
       <div style={{
         position: 'relative',
         zIndex: 1,
-        background: 'rgba(7, 17, 46, 0.92)',
+        background: isLight ? '#FFFFFF' : 'rgba(7, 17, 46, 0.92)',
         backdropFilter: 'blur(32px)',
-        border: isSimulating ? '1px solid rgba(239, 68, 68, 0.5)' : '1px solid rgba(46, 155, 248, 0.25)',
+        border: isSimulating 
+          ? '1px solid rgba(239, 68, 68, 0.5)' 
+          : isLight 
+          ? '1px solid #DCE5F2' 
+          : '1px solid rgba(46, 155, 248, 0.25)',
         borderRadius: '24px',
         boxShadow: isSimulating 
-          ? '0 30px 80px rgba(7, 17, 46, 0.95), 0 0 50px rgba(239, 68, 68, 0.25)'
-          : '0 30px 80px rgba(7, 17, 46, 0.9), 0 0 45px rgba(21, 84, 232, 0.2)',
+          ? (isLight ? '0 20px 60px rgba(239, 68, 68, 0.18)' : '0 30px 80px rgba(7, 17, 46, 0.95), 0 0 50px rgba(239, 68, 68, 0.25)')
+          : (isLight ? '0 20px 60px rgba(17, 32, 51, 0.08), 0 0 30px rgba(21, 84, 232, 0.05)' : '0 30px 80px rgba(7, 17, 46, 0.9), 0 0 45px rgba(21, 84, 232, 0.2)'),
         overflow: 'hidden',
         transition: 'all 0.4s ease'
       }}>
@@ -191,8 +201,8 @@ export const EnterpriseCommandPreview: React.FC<EnterpriseCommandPreviewProps> =
           alignItems: 'center',
           justifyContent: 'space-between',
           padding: '1rem 1.5rem',
-          background: 'rgba(13, 35, 77, 0.85)',
-          borderBottom: '1px solid rgba(46, 155, 248, 0.18)',
+          background: isLight ? '#F9FBFD' : 'rgba(13, 35, 77, 0.85)',
+          borderBottom: isLight ? '1px solid #DCE5F2' : '1px solid rgba(46, 155, 248, 0.18)',
           boxSizing: 'border-box'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
@@ -200,15 +210,15 @@ export const EnterpriseCommandPreview: React.FC<EnterpriseCommandPreviewProps> =
               width: 10,
               height: 10,
               borderRadius: '50%',
-              backgroundColor: isSimulating ? '#EF4444' : '#6AE7F7',
-              boxShadow: isSimulating ? '0 0 12px #EF4444' : '0 0 12px #6AE7F7',
+              backgroundColor: isSimulating ? '#EF4444' : (isLight ? '#1554E8' : '#6AE7F7'),
+              boxShadow: isSimulating ? '0 0 12px #EF4444' : (isLight ? '0 0 8px rgba(21, 84, 232, 0.4)' : '0 0 12px #6AE7F7'),
               transition: 'all 0.3s'
             }} />
             <div>
               <div style={{
                 fontSize: '0.88rem',
                 fontWeight: 800,
-                color: '#F6FDFF',
+                color: isLight ? '#172033' : '#F6FDFF',
                 letterSpacing: '0.5px',
                 fontFamily: "'Space Grotesk', -apple-system, sans-serif"
               }}>
@@ -216,7 +226,7 @@ export const EnterpriseCommandPreview: React.FC<EnterpriseCommandPreviewProps> =
               </div>
               <div style={{
                 fontSize: '0.65rem',
-                color: isSimulating ? '#F87171' : '#6AE7F7',
+                color: isSimulating ? '#DC2626' : (isLight ? '#1554E8' : '#6AE7F7'),
                 fontFamily: "'JetBrains Mono', monospace",
                 letterSpacing: '0.5px'
               }}>
@@ -236,7 +246,7 @@ export const EnterpriseCommandPreview: React.FC<EnterpriseCommandPreviewProps> =
                 background: isSimulating 
                   ? 'rgba(239, 68, 68, 0.2)' 
                   : 'linear-gradient(135deg, #1554E8 0%, #2E9BF8 100%)',
-                border: isSimulating ? '1px solid rgba(239, 68, 68, 0.5)' : '1px solid rgba(106, 231, 247, 0.4)',
+                border: isSimulating ? '1px solid rgba(239, 68, 68, 0.5)' : (isLight ? '1px solid #1554E8' : '1px solid rgba(106, 231, 247, 0.4)'),
                 color: '#F6FDFF',
                 fontSize: '0.7rem',
                 fontWeight: 700,
@@ -246,7 +256,7 @@ export const EnterpriseCommandPreview: React.FC<EnterpriseCommandPreviewProps> =
                 alignItems: 'center',
                 gap: '5px',
                 transition: 'all 0.2s',
-                boxShadow: isSimulating ? '0 0 12px rgba(239, 68, 68, 0.3)' : '0 0 16px rgba(21, 84, 232, 0.4)'
+                boxShadow: isSimulating ? '0 0 12px rgba(239, 68, 68, 0.3)' : '0 0 16px rgba(21, 84, 232, 0.3)'
               }}
               title="Trigger real-time chaotic anomaly simulation"
             >
@@ -258,13 +268,13 @@ export const EnterpriseCommandPreview: React.FC<EnterpriseCommandPreviewProps> =
               display: 'flex',
               alignItems: 'center',
               gap: '0.4rem',
-              background: 'rgba(21, 84, 232, 0.15)',
-              border: '1px solid rgba(46, 155, 248, 0.3)',
+              background: isLight ? '#EEF3F9' : 'rgba(21, 84, 232, 0.15)',
+              border: isLight ? '1px solid #DCE5F2' : '1px solid rgba(46, 155, 248, 0.3)',
               borderRadius: '20px',
               padding: '0.3rem 0.75rem'
             }}>
-              <Radio size={11} color="#6AE7F7" />
-              <span style={{ fontSize: '0.68rem', color: '#F6FDFF', fontFamily: "'JetBrains Mono', monospace", fontWeight: 700 }}>
+              <Radio size={11} color={isLight ? '#1554E8' : '#6AE7F7'} />
+              <span style={{ fontSize: '0.68rem', color: isLight ? '#172033' : '#F6FDFF', fontFamily: "'JetBrains Mono', monospace", fontWeight: 700 }}>
                 {pulseCount.toLocaleString()} OPS/S
               </span>
             </div>
@@ -276,49 +286,49 @@ export const EnterpriseCommandPreview: React.FC<EnterpriseCommandPreviewProps> =
           display: 'grid',
           gridTemplateColumns: 'repeat(3, 1fr)',
           gap: '1px',
-          background: 'rgba(46, 155, 248, 0.15)',
-          borderBottom: '1px solid rgba(46, 155, 248, 0.18)'
+          background: isLight ? '#DCE5F2' : 'rgba(46, 155, 248, 0.15)',
+          borderBottom: isLight ? '1px solid #DCE5F2' : '1px solid rgba(46, 155, 248, 0.18)'
         }}>
-          <div style={{ padding: '0.9rem 1.25rem', background: 'rgba(7, 17, 46, 0.95)' }}>
-            <div style={{ fontSize: '0.62rem', color: 'rgba(246, 253, 255, 0.65)', fontFamily: "'JetBrains Mono', monospace", textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+          <div style={{ padding: '0.9rem 1.25rem', background: isLight ? '#FFFFFF' : 'rgba(7, 17, 46, 0.95)' }}>
+            <div style={{ fontSize: '0.62rem', color: isLight ? '#52637A' : 'rgba(246, 253, 255, 0.65)', fontFamily: "'JetBrains Mono', monospace", textTransform: 'uppercase', letterSpacing: '0.5px' }}>
               System Health
             </div>
             <div style={{
               fontSize: '1.45rem',
               fontWeight: 800,
-              color: isSimulating ? '#F87171' : '#6AE7F7',
+              color: isSimulating ? '#DC2626' : (isLight ? '#1554E8' : '#6AE7F7'),
               fontFamily: "'JetBrains Mono', monospace",
               marginTop: '2px',
               transition: 'color 0.3s'
             }}>
               {healthScore}%
             </div>
-            <div style={{ fontSize: '0.65rem', color: isSimulating ? '#F87171' : '#2E9BF8', display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}>
+            <div style={{ fontSize: '0.65rem', color: isSimulating ? '#DC2626' : (isLight ? '#1554E8' : '#2E9BF8'), display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}>
               {isSimulating ? <AlertTriangle size={10} /> : <CheckCircle2 size={10} />}
               {isSimulating ? 'Mitigating Surge' : 'Nominal Lattice'}
             </div>
           </div>
 
-          <div style={{ padding: '0.9rem 1.25rem', background: 'rgba(7, 17, 46, 0.95)' }}>
-            <div style={{ fontSize: '0.62rem', color: 'rgba(246, 253, 255, 0.65)', fontFamily: "'JetBrains Mono', monospace", textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+          <div style={{ padding: '0.9rem 1.25rem', background: isLight ? '#FFFFFF' : 'rgba(7, 17, 46, 0.95)' }}>
+            <div style={{ fontSize: '0.62rem', color: isLight ? '#52637A' : 'rgba(246, 253, 255, 0.65)', fontFamily: "'JetBrains Mono', monospace", textTransform: 'uppercase', letterSpacing: '0.5px' }}>
               Containment Latency
             </div>
-            <div style={{ fontSize: '1.45rem', fontWeight: 800, color: '#D9FBFF', fontFamily: "'JetBrains Mono', monospace", marginTop: '2px' }}>
+            <div style={{ fontSize: '1.45rem', fontWeight: 800, color: isLight ? '#172033' : '#D9FBFF', fontFamily: "'JetBrains Mono', monospace", marginTop: '2px' }}>
               {activeSector?.latency || '4.6 ms'}
             </div>
-            <div style={{ fontSize: '0.65rem', color: '#6AE7F7', display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}>
+            <div style={{ fontSize: '0.65rem', color: isLight ? '#1554E8' : '#6AE7F7', display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}>
               <Zap size={10} /> Zero-Lag Intercept
             </div>
           </div>
 
-          <div style={{ padding: '0.9rem 1.25rem', background: 'rgba(7, 17, 46, 0.95)' }}>
-            <div style={{ fontSize: '0.62rem', color: 'rgba(246, 253, 255, 0.65)', fontFamily: "'JetBrains Mono', monospace", textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+          <div style={{ padding: '0.9rem 1.25rem', background: isLight ? '#FFFFFF' : 'rgba(7, 17, 46, 0.95)' }}>
+            <div style={{ fontSize: '0.62rem', color: isLight ? '#52637A' : 'rgba(246, 253, 255, 0.65)', fontFamily: "'JetBrains Mono', monospace", textTransform: 'uppercase', letterSpacing: '0.5px' }}>
               AI Model Engine
             </div>
-            <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#F6FDFF', fontFamily: "'Space Grotesk', sans-serif", marginTop: '4px' }}>
+            <div style={{ fontSize: '1.2rem', fontWeight: 800, color: isLight ? '#172033' : '#F6FDFF', fontFamily: "'Space Grotesk', sans-serif", marginTop: '4px' }}>
               ORBIS Neural
             </div>
-            <div style={{ fontSize: '0.65rem', color: 'rgba(246, 253, 255, 0.55)', fontFamily: "'JetBrains Mono', monospace", marginTop: '2px' }}>
+            <div style={{ fontSize: '0.65rem', color: isLight ? '#7F8DA5' : 'rgba(246, 253, 255, 0.55)', fontFamily: "'JetBrains Mono', monospace", marginTop: '2px' }}>
               Deep Cognitive Core
             </div>
           </div>
@@ -332,26 +342,26 @@ export const EnterpriseCommandPreview: React.FC<EnterpriseCommandPreviewProps> =
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               style={{
-                background: 'rgba(239, 68, 68, 0.12)',
-                borderBottom: '1px solid rgba(239, 68, 68, 0.3)',
+                background: isLight ? 'rgba(239, 68, 68, 0.1)' : 'rgba(239, 68, 68, 0.12)',
+                borderBottom: isLight ? '1px solid rgba(239, 68, 68, 0.25)' : '1px solid rgba(239, 68, 68, 0.3)',
                 padding: '0.5rem 1.4rem',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 fontSize: '0.72rem',
                 fontFamily: "'JetBrains Mono', monospace",
-                color: '#FECACA'
+                color: isLight ? '#B91C1C' : '#FECACA'
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <RefreshCw size={12} className="animate-spin text-red-400" />
+                <RefreshCw size={12} className="animate-spin text-red-500" />
                 <span>
                   {simulationStep === 1 && 'STAGE 1/3: Simulated Anomaly Surge Injected (+12.4% Delta)'}
                   {simulationStep === 2 && 'STAGE 2/3: ORBIS Cognitive Model Synthesizing Latent Vectors...'}
                   {simulationStep === 3 && 'STAGE 3/3: Autonomous Circuit Breaker Executed. Lattice Restored!'}
                 </span>
               </div>
-              <span style={{ color: '#6AE7F7', fontWeight: 700 }}>
+              <span style={{ color: isLight ? '#1554E8' : '#6AE7F7', fontWeight: 700 }}>
                 {simulationStep === 3 ? '100% CONTAINED' : 'PROCESSING'}
               </span>
             </motion.div>
@@ -361,10 +371,10 @@ export const EnterpriseCommandPreview: React.FC<EnterpriseCommandPreviewProps> =
         {/* Tab Navigator */}
         <div style={{
           display: 'flex',
-          borderBottom: '1px solid rgba(46, 155, 248, 0.18)',
+          borderBottom: isLight ? '1px solid #DCE5F2' : '1px solid rgba(46, 155, 248, 0.18)',
           padding: '0.4rem 1.25rem 0 1.25rem',
           gap: '0.75rem',
-          background: 'rgba(13, 35, 77, 0.65)'
+          background: isLight ? '#F9FBFD' : 'rgba(13, 35, 77, 0.65)'
         }}>
           {[
             { id: 'live', label: 'Live Threat Feed', icon: Activity },
@@ -381,19 +391,19 @@ export const EnterpriseCommandPreview: React.FC<EnterpriseCommandPreviewProps> =
                   padding: '0.55rem 0.5rem',
                   border: 'none',
                   background: 'none',
-                  color: isActive ? '#F6FDFF' : 'rgba(246, 253, 255, 0.55)',
+                  color: isActive ? (isLight ? '#1554E8' : '#F6FDFF') : (isLight ? '#52637A' : 'rgba(246, 253, 255, 0.55)'),
                   fontSize: '0.78rem',
                   fontWeight: 700,
                   fontFamily: "'Space Grotesk', -apple-system, sans-serif",
                   cursor: 'pointer',
-                  borderBottom: isActive ? '2px solid #2E9BF8' : '2px solid transparent',
+                  borderBottom: isActive ? '2px solid #1554E8' : '2px solid transparent',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '6px',
                   transition: 'all 0.2s'
                 }}
               >
-                <Icon size={14} color={isActive ? '#6AE7F7' : 'rgba(246, 253, 255, 0.55)'} />
+                <Icon size={14} color={isActive ? (isLight ? '#1554E8' : '#6AE7F7') : (isLight ? '#7F8DA5' : 'rgba(246, 253, 255, 0.55)')} />
                 {tab.label}
               </button>
             );
@@ -401,7 +411,7 @@ export const EnterpriseCommandPreview: React.FC<EnterpriseCommandPreviewProps> =
         </div>
 
         {/* Tab Contents */}
-        <div style={{ padding: '1.25rem', minHeight: '250px' }}>
+        <div style={{ padding: '1.25rem', minHeight: '250px', background: isLight ? '#FFFFFF' : 'transparent' }}>
           {activeTab === 'live' && (
             <div>
               <div style={{
@@ -411,12 +421,12 @@ export const EnterpriseCommandPreview: React.FC<EnterpriseCommandPreviewProps> =
                 marginBottom: '0.75rem',
                 fontSize: '0.66rem',
                 fontFamily: "'JetBrains Mono', monospace",
-                color: 'rgba(246, 253, 255, 0.55)',
+                color: isLight ? '#52637A' : 'rgba(246, 253, 255, 0.55)',
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px'
               }}>
                 <span>Real-Time Intercept Log // Tenant: {activeSector?.name || 'All Sectors'}</span>
-                <span style={{ color: '#6AE7F7', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <span style={{ color: isLight ? '#1554E8' : '#6AE7F7', display: 'flex', alignItems: 'center', gap: '4px' }}>
                   <RefreshCw size={10} className="animate-spin" /> Stream Active
                 </span>
               </div>
@@ -430,8 +440,10 @@ export const EnterpriseCommandPreview: React.FC<EnterpriseCommandPreviewProps> =
                       alignItems: 'center',
                       justifyContent: 'space-between',
                       padding: '0.65rem 0.9rem',
-                      background: 'rgba(13, 35, 77, 0.55)',
-                      border: item.severity === 'critical' ? '1px solid rgba(239, 68, 68, 0.4)' : '1px solid rgba(46, 155, 248, 0.2)',
+                      background: isLight ? '#F9FBFD' : 'rgba(13, 35, 77, 0.55)',
+                      border: item.severity === 'critical' 
+                        ? (isLight ? '1px solid rgba(239, 68, 68, 0.3)' : '1px solid rgba(239, 68, 68, 0.4)') 
+                        : (isLight ? '1px solid #DCE5F2' : '1px solid rgba(46, 155, 248, 0.2)'),
                       borderRadius: '10px',
                       transition: 'all 0.2s'
                     }}
@@ -441,22 +453,22 @@ export const EnterpriseCommandPreview: React.FC<EnterpriseCommandPreviewProps> =
                         width: 30,
                         height: 30,
                         borderRadius: '7px',
-                        background: item.severity === 'critical' ? 'rgba(239, 68, 68, 0.15)' : 'rgba(21, 84, 232, 0.2)',
-                        border: `1px solid ${item.severity === 'critical' ? 'rgba(239, 68, 68, 0.4)' : 'rgba(46, 155, 248, 0.35)'}`,
+                        background: item.severity === 'critical' ? 'rgba(239, 68, 68, 0.15)' : (isLight ? 'rgba(21, 84, 232, 0.1)' : 'rgba(21, 84, 232, 0.2)'),
+                        border: `1px solid ${item.severity === 'critical' ? 'rgba(239, 68, 68, 0.4)' : (isLight ? '#DCE5F2' : 'rgba(46, 155, 248, 0.35)')}`,
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        color: item.severity === 'critical' ? '#F87171' : '#6AE7F7',
+                        color: item.severity === 'critical' ? '#EF4444' : (isLight ? '#1554E8' : '#6AE7F7'),
                         flexShrink: 0
                       }}>
                         {item.severity === 'critical' ? <AlertTriangle size={14} /> : <ShieldCheck size={14} />}
                       </div>
                       <div>
-                        <div style={{ fontSize: '0.84rem', fontWeight: 700, color: '#F6FDFF' }}>
+                        <div style={{ fontSize: '0.84rem', fontWeight: 700, color: isLight ? '#172033' : '#F6FDFF' }}>
                           {item.type}
                         </div>
-                        <div style={{ fontSize: '0.65rem', color: 'rgba(246, 253, 255, 0.55)', fontFamily: "'JetBrains Mono', monospace" }}>
-                          {item.sector} • <span style={{ color: '#6AE7F7' }}>{item.id}</span> • {item.time} ({item.latency})
+                        <div style={{ fontSize: '0.65rem', color: isLight ? '#52637A' : 'rgba(246, 253, 255, 0.55)', fontFamily: "'JetBrains Mono', monospace" }}>
+                          {item.sector} • <span style={{ color: isLight ? '#1554E8' : '#6AE7F7' }}>{item.id}</span> • {item.time} ({item.latency})
                         </div>
                       </div>
                     </div>
@@ -465,12 +477,12 @@ export const EnterpriseCommandPreview: React.FC<EnterpriseCommandPreviewProps> =
                       padding: '0.25rem 0.55rem',
                       borderRadius: '6px',
                       background: item.status === 'Analyzing' 
-                        ? 'rgba(239, 68, 68, 0.2)' 
-                        : 'rgba(21, 84, 232, 0.25)',
+                        ? 'rgba(239, 68, 68, 0.15)' 
+                        : (isLight ? 'rgba(21, 84, 232, 0.1)' : 'rgba(21, 84, 232, 0.25)'),
                       border: item.status === 'Analyzing' 
-                        ? '1px solid rgba(239, 68, 68, 0.4)' 
-                        : '1px solid rgba(46, 155, 248, 0.35)',
-                      color: item.status === 'Analyzing' ? '#F87171' : '#6AE7F7',
+                        ? '1px solid rgba(239, 68, 68, 0.35)' 
+                        : (isLight ? '1px solid rgba(21, 84, 232, 0.25)' : '1px solid rgba(46, 155, 248, 0.35)'),
+                      color: item.status === 'Analyzing' ? '#DC2626' : (isLight ? '#1554E8' : '#6AE7F7'),
                       fontSize: '0.68rem',
                       fontWeight: 700,
                       fontFamily: "'JetBrains Mono', monospace"
@@ -485,14 +497,14 @@ export const EnterpriseCommandPreview: React.FC<EnterpriseCommandPreviewProps> =
 
           {activeTab === 'matrix' && (
             <div>
-              <div style={{ fontSize: '0.66rem', color: 'rgba(246, 253, 255, 0.55)', fontFamily: "'JetBrains Mono', monospace", marginBottom: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+              <div style={{ fontSize: '0.66rem', color: isLight ? '#52637A' : 'rgba(246, 253, 255, 0.55)', fontFamily: "'JetBrains Mono', monospace", marginBottom: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                 Multi-Sector Risk Variance Distribution (Real-Time Ingestion)
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                 {[
-                  { id: 'banking', sector: 'Central Banking & Sovereign Capital', risk: 14, color: '#6AE7F7', status: 'Secured' },
+                  { id: 'banking', sector: 'Central Banking & Sovereign Capital', risk: 14, color: isLight ? '#1554E8' : '#6AE7F7', status: 'Secured' },
                   { id: 'energy', sector: 'Power Grid SCADA Telemetry', risk: 22, color: '#2E9BF8', status: 'Optimal' },
-                  { id: 'healthcare', sector: 'Metropolitan Healthcare Systems', risk: 8, color: '#6AE7F7', status: 'Optimal' },
+                  { id: 'healthcare', sector: 'Metropolitan Healthcare Systems', risk: 8, color: isLight ? '#1554E8' : '#6AE7F7', status: 'Optimal' },
                   { id: 'aerospace', sector: 'Aerospace & Defense Coordinates', risk: 4, color: '#8671F9', status: 'Hardened' },
                   { id: 'supply', sector: 'Maritime Logistics & Supply Transit', risk: 36, color: '#2E9BF8', status: 'Mitigating' },
                 ].map((sec) => {
@@ -503,19 +515,19 @@ export const EnterpriseCommandPreview: React.FC<EnterpriseCommandPreviewProps> =
                       style={{
                         padding: '0.4rem 0.6rem',
                         borderRadius: '8px',
-                        background: isCurrent ? 'rgba(21, 84, 232, 0.18)' : 'transparent',
-                        border: isCurrent ? '1px solid rgba(46, 155, 248, 0.4)' : '1px solid transparent'
+                        background: isCurrent ? (isLight ? 'rgba(21, 84, 232, 0.08)' : 'rgba(21, 84, 232, 0.18)') : 'transparent',
+                        border: isCurrent ? (isLight ? '1px solid rgba(21, 84, 232, 0.3)' : '1px solid rgba(46, 155, 248, 0.4)') : '1px solid transparent'
                       }}
                     >
                       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', marginBottom: '0.25rem' }}>
-                        <span style={{ color: isCurrent ? '#F6FDFF' : 'rgba(246, 253, 255, 0.75)', fontWeight: isCurrent ? 800 : 600 }}>
+                        <span style={{ color: isCurrent ? (isLight ? '#172033' : '#F6FDFF') : (isLight ? '#52637A' : 'rgba(246, 253, 255, 0.75)'), fontWeight: isCurrent ? 800 : 600 }}>
                           {sec.sector} {isCurrent && '★'}
                         </span>
                         <span style={{ color: sec.color, fontFamily: "'JetBrains Mono', monospace", fontWeight: 700 }}>
                           {sec.risk}% Exposure ({sec.status})
                         </span>
                       </div>
-                      <div style={{ width: '100%', height: '5px', background: 'rgba(255, 255, 255, 0.08)', borderRadius: '3px', overflow: 'hidden' }}>
+                      <div style={{ width: '100%', height: '5px', background: isLight ? '#EEF3F9' : 'rgba(255, 255, 255, 0.08)', borderRadius: '3px', overflow: 'hidden' }}>
                         <div style={{
                           width: `${sec.risk}%`,
                           height: '100%',
@@ -532,30 +544,30 @@ export const EnterpriseCommandPreview: React.FC<EnterpriseCommandPreviewProps> =
 
           {activeTab === 'reasoning' && (
             <div>
-              <div style={{ fontSize: '0.66rem', color: 'rgba(246, 253, 255, 0.55)', fontFamily: "'JetBrains Mono', monospace", marginBottom: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+              <div style={{ fontSize: '0.66rem', color: isLight ? '#52637A' : 'rgba(246, 253, 255, 0.55)', fontFamily: "'JetBrains Mono', monospace", marginBottom: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                 ORBIS Deep Neural Reasoning Trace // Active Sector: {activeSector?.name || 'Central Banking'}
               </div>
               <div style={{
-                background: 'rgba(13, 35, 77, 0.65)',
-                border: '1px solid rgba(46, 155, 248, 0.25)',
+                background: isLight ? '#F9FBFD' : 'rgba(13, 35, 77, 0.65)',
+                border: isLight ? '1px solid #DCE5F2' : '1px solid rgba(46, 155, 248, 0.25)',
                 borderRadius: '10px',
                 padding: '0.9rem',
                 fontSize: '0.78rem',
                 lineHeight: 1.55,
-                color: 'rgba(246, 253, 255, 0.85)',
+                color: isLight ? '#172033' : 'rgba(246, 253, 255, 0.85)',
                 fontFamily: "'JetBrains Mono', monospace"
               }}>
-                <div style={{ color: '#6AE7F7', marginBottom: '0.35rem', fontWeight: 700 }}>
+                <div style={{ color: isLight ? '#1554E8' : '#6AE7F7', marginBottom: '0.35rem', fontWeight: 700 }}>
                   &gt; REASONING_KERNEL: Intercept Analysis Completed (Confidence: 99.87%)
                 </div>
-                <div style={{ color: 'rgba(246, 253, 255, 0.65)' }}>
+                <div style={{ color: isLight ? '#52637A' : 'rgba(246, 253, 255, 0.65)' }}>
                   {activeSector 
                     ? `Sector context "${activeSector.name}" (${activeSector.code}) evaluated. Anomaly candidate "${currentTemplate.type}" isolated. ${currentTemplate.desc}. Autonomous circuit breaker deployed.`
                     : 'Cross-sector correlation evaluated across 14 sovereign data streams. Anomaly isolated to offshore clearing vector TR-9021. Autonomous counter-measure dispatched.'
                   }
                 </div>
-                <div style={{ display: 'flex', gap: '0.85rem', marginTop: '0.7rem', paddingTop: '0.7rem', borderTop: '1px solid rgba(255, 255, 255, 0.1)', fontSize: '0.7rem' }}>
-                  <span style={{ color: '#6AE7F7' }}>✔ SHAP Weight: {currentTemplate.shap}</span>
+                <div style={{ display: 'flex', gap: '0.85rem', marginTop: '0.7rem', paddingTop: '0.7rem', borderTop: isLight ? '1px solid #DCE5F2' : '1px solid rgba(255, 255, 255, 0.1)', fontSize: '0.7rem' }}>
+                  <span style={{ color: isLight ? '#1554E8' : '#6AE7F7' }}>✔ SHAP Weight: {currentTemplate.shap}</span>
                   <span style={{ color: '#2E9BF8' }}>✔ Audit Immutable</span>
                   <span style={{ color: '#8671F9' }}>✔ Latency: {activeSector?.latency || '4.2 ms'}</span>
                 </div>
@@ -570,17 +582,17 @@ export const EnterpriseCommandPreview: React.FC<EnterpriseCommandPreviewProps> =
           alignItems: 'center',
           justifyContent: 'space-between',
           padding: '0.75rem 1.4rem',
-          background: 'rgba(13, 35, 77, 0.85)',
-          borderTop: '1px solid rgba(46, 155, 248, 0.18)',
+          background: isLight ? '#F9FBFD' : 'rgba(13, 35, 77, 0.85)',
+          borderTop: isLight ? '1px solid #DCE5F2' : '1px solid rgba(46, 155, 248, 0.18)',
           fontSize: '0.66rem',
-          color: 'rgba(246, 253, 255, 0.55)',
+          color: isLight ? '#7F8DA5' : 'rgba(246, 253, 255, 0.55)',
           fontFamily: "'JetBrains Mono', monospace"
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <Lock size={11} color="#6AE7F7" />
+            <Lock size={11} color={isLight ? '#1554E8' : '#6AE7F7'} />
             <span>FIPS 140-3 LEVEL 4 QUANTUM HARDENED</span>
           </div>
-          <span style={{ color: '#6AE7F7' }}>ORBIS SOVEREIGN MATRIX</span>
+          <span style={{ color: isLight ? '#1554E8' : '#6AE7F7' }}>ORBIS SOVEREIGN MATRIX</span>
         </div>
 
       </div>

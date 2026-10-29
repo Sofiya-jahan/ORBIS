@@ -13,10 +13,12 @@ import {
   resetRateLimit, 
   logSecurityEvent 
 } from '../services/securityService';
+import { ThemeToggle } from '../components/ThemeToggle';
 
 export const Verification = () => {
   const navigate = useNavigate();
-  const { organization, role, user, verifyPIN, setOrganization, setRole } = useAuthStore();
+  const { organization, role, user, verifyPIN, setOrganization, setRole, theme } = useAuthStore();
+  const isLight = theme === 'light';
   
   const [pin, setPin] = useState(['', '', '', '', '', '']);
   const [error, setError] = useState('');
@@ -158,23 +160,29 @@ export const Verification = () => {
       alignItems: 'center', 
       justifyContent: 'center', 
       padding: '2rem',
-      backgroundColor: '#07112E',
-      color: '#F6FDFF',
+      backgroundColor: isLight ? '#F7F9FC' : '#07112E',
+      color: isLight ? '#172033' : '#F6FDFF',
       position: 'relative',
       overflow: 'hidden',
-      fontFamily: "var(--font-family, 'Inter', sans-serif)"
+      fontFamily: "var(--font-family, 'Inter', sans-serif)",
+      transition: 'background-color 0.3s ease, color 0.3s ease'
     }}>
       
+      {/* Top-Right Theme Switcher */}
+      <div style={{ position: 'absolute', top: '1.5rem', right: '2rem', zIndex: 30 }}>
+        <ThemeToggle variant="compact" />
+      </div>
+
       {/* Realistic Architectural Vault Corridor Background */}
       <div style={{
         position: 'absolute',
         inset: 0,
-        backgroundImage: "url('/corridor-portal.png')",
+        backgroundImage: `url(${isLight ? '/corridor-portal-light.png' : '/corridor-portal.png'})`,
         backgroundSize: 'cover',
-        backgroundPosition: 'center 40%',
+        backgroundPosition: isLight ? 'center 50%' : 'center 40%',
         backgroundRepeat: 'no-repeat',
-        filter: 'contrast(1.1) brightness(0.72) saturate(1.15)',
-        opacity: 0.55,
+        filter: isLight ? 'contrast(1.02) brightness(1.02) saturate(1.05)' : 'contrast(1.1) brightness(0.72) saturate(1.15)',
+        opacity: isLight ? 0.65 : 0.55,
         zIndex: 0,
         pointerEvents: 'none'
       }} />
@@ -183,9 +191,11 @@ export const Verification = () => {
       <div style={{
         position: 'absolute',
         inset: 0,
-        background: `radial-gradient(circle at 50% 50%, ${currentOrg.themeColor}33 0%, ${currentOrg.accentColor}1A 50%, rgba(7, 17, 46, 0.95) 90%)`,
-        mixBlendMode: 'color-dodge',
-        opacity: 0.65,
+        background: isLight
+          ? `radial-gradient(circle at 50% 50%, ${currentOrg.themeColor}18 0%, ${currentOrg.accentColor}10 50%, rgba(247, 249, 252, 0.88) 90%)`
+          : `radial-gradient(circle at 50% 50%, ${currentOrg.themeColor}33 0%, ${currentOrg.accentColor}1A 50%, rgba(7, 17, 46, 0.95) 90%)`,
+        mixBlendMode: isLight ? 'multiply' : 'color-dodge',
+        opacity: isLight ? 0.60 : 0.65,
         zIndex: 0,
         pointerEvents: 'none'
       }} />
@@ -207,18 +217,20 @@ export const Verification = () => {
           : error
           ? '0 0 35px 8px rgba(239, 68, 68, 0.7)'
           : `0 0 25px 6px ${currentOrg.accentColor}66`,
-        opacity: 0.75,
+        opacity: isLight ? 0.45 : 0.75,
         borderRadius: '4px',
         zIndex: 0,
         pointerEvents: 'none',
         transition: 'all 0.5s ease'
       }} />
 
-      {/* Platform Dark Navy Vignette to smoothly melt into #07112E */}
+      {/* Background Vignette */}
       <div style={{
         position: 'absolute',
         inset: 0,
-        background: 'radial-gradient(circle at 50% 50%, rgba(7, 17, 46, 0.65) 0%, rgba(7, 17, 46, 0.92) 70%, #07112E 100%)',
+        background: isLight
+          ? 'radial-gradient(circle at 50% 50%, rgba(247, 249, 252, 0.6) 0%, rgba(238, 243, 249, 0.85) 70%, #F7F9FC 100%)'
+          : 'radial-gradient(circle at 50% 50%, rgba(7, 17, 46, 0.65) 0%, rgba(7, 17, 46, 0.92) 70%, #07112E 100%)',
         zIndex: 0,
         pointerEvents: 'none'
       }} />
@@ -228,10 +240,10 @@ export const Verification = () => {
         position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
         width: '60vw', height: '60vw', borderRadius: '50%',
         background: error 
-          ? 'radial-gradient(circle, rgba(239,68,68,0.15) 0%, transparent 70%)' 
+          ? 'radial-gradient(circle, rgba(239,68,68,0.12) 0%, transparent 70%)' 
           : success 
-          ? 'radial-gradient(circle, rgba(106, 231, 247, 0.25) 0%, transparent 70%)'
-          : 'radial-gradient(circle, rgba(21, 84, 232, 0.22) 0%, rgba(106, 231, 247, 0.1) 40%, transparent 70%)',
+          ? (isLight ? 'radial-gradient(circle, rgba(21, 84, 232, 0.12) 0%, transparent 70%)' : 'radial-gradient(circle, rgba(106, 231, 247, 0.25) 0%, transparent 70%)')
+          : (isLight ? 'radial-gradient(circle, rgba(21, 84, 232, 0.08) 0%, rgba(46, 155, 248, 0.04) 40%, transparent 70%)' : 'radial-gradient(circle, rgba(21, 84, 232, 0.22) 0%, rgba(106, 231, 247, 0.1) 40%, transparent 70%)'),
         zIndex: 0, pointerEvents: 'none', transition: 'all 0.5s ease'
       }} />
 
@@ -241,12 +253,12 @@ export const Verification = () => {
         padding: '3rem 2.5rem', 
         position: 'relative', 
         zIndex: 1, 
-        background: 'rgba(7, 17, 46, 0.92)',
+        background: isLight ? '#FFFFFF' : 'rgba(7, 17, 46, 0.92)',
         backdropFilter: 'blur(32px)',
         borderRadius: '24px',
-        border: '1px solid rgba(46, 155, 248, 0.25)',
-        borderTop: `4px solid ${error ? '#EF4444' : success ? '#6AE7F7' : '#2E9BF8'}`,
-        boxShadow: '0 30px 70px rgba(7, 17, 46, 0.95), 0 0 45px rgba(21, 84, 232, 0.2)'
+        border: isLight ? '1px solid #DCE5F2' : '1px solid rgba(46, 155, 248, 0.25)',
+        borderTop: `4px solid ${error ? '#EF4444' : success ? (isLight ? '#1554E8' : '#6AE7F7') : '#2E9BF8'}`,
+        boxShadow: isLight ? '0 25px 60px rgba(17, 32, 51, 0.08), 0 0 30px rgba(21, 84, 232, 0.04)' : '0 30px 70px rgba(7, 17, 46, 0.95), 0 0 45px rgba(21, 84, 232, 0.2)'
       }}>
         
         {/* Back Link */}
@@ -258,7 +270,7 @@ export const Verification = () => {
             gap: '0.4rem',
             background: 'none',
             border: 'none',
-            color: '#6AE7F7',
+            color: isLight ? '#1554E8' : '#6AE7F7',
             cursor: 'pointer',
             fontSize: '0.85rem',
             fontWeight: 700,
@@ -276,19 +288,19 @@ export const Verification = () => {
           <div style={{ 
             width: '84px', height: '84px', borderRadius: '24px', 
             background: error 
-              ? 'rgba(239, 68, 68, 0.15)' 
+              ? 'rgba(239, 68, 68, 0.12)' 
               : success 
-              ? 'rgba(106, 231, 247, 0.2)' 
-              : 'rgba(21, 84, 232, 0.2)', 
-            color: error ? '#EF4444' : success ? '#6AE7F7' : '#2E9BF8',
+              ? (isLight ? 'rgba(21, 84, 232, 0.1)' : 'rgba(106, 231, 247, 0.2)') 
+              : (isLight ? 'rgba(21, 84, 232, 0.08)' : 'rgba(21, 84, 232, 0.2)'), 
+            color: error ? '#EF4444' : success ? (isLight ? '#1554E8' : '#6AE7F7') : (isLight ? '#1554E8' : '#2E9BF8'),
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             marginBottom: '1.5rem',
             boxShadow: error 
               ? '0 0 25px rgba(239, 68, 68, 0.35)' 
               : success 
-              ? '0 0 35px rgba(106, 231, 247, 0.45)' 
-              : '0 0 30px rgba(46, 155, 248, 0.35)',
-            border: `1px solid ${error ? '#EF4444' : success ? '#6AE7F7' : 'rgba(46, 155, 248, 0.4)'}`
+              ? (isLight ? '0 4px 20px rgba(21, 84, 232, 0.25)' : '0 0 35px rgba(106, 231, 247, 0.45)') 
+              : (isLight ? '0 4px 18px rgba(21, 84, 232, 0.15)' : '0 0 30px rgba(46, 155, 248, 0.35)'),
+            border: `1px solid ${error ? '#EF4444' : success ? (isLight ? '#1554E8' : '#6AE7F7') : (isLight ? 'rgba(21, 84, 232, 0.3)' : 'rgba(46, 155, 248, 0.4)')}`
           }}>
             {error ? <ShieldAlert size={42} /> : success ? <ShieldCheck size={42} /> : <KeyRound size={42} />}
           </div>
@@ -298,17 +310,17 @@ export const Verification = () => {
             fontWeight: '800',
             letterSpacing: '2px',
             textTransform: 'uppercase',
-            color: '#6AE7F7',
+            color: isLight ? '#1554E8' : '#6AE7F7',
             marginBottom: '0.4rem',
             fontFamily: "'JetBrains Mono', monospace"
           }}>
             PHASE 3: INSTITUTIONAL SECURITY KEY
           </div>
 
-          <h2 style={{ fontSize: '2.1rem', fontWeight: '800', marginBottom: '0.5rem', textAlign: 'center', color: '#F6FDFF', fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)" }}>
+          <h2 style={{ fontSize: '2.1rem', fontWeight: '800', marginBottom: '0.5rem', textAlign: 'center', color: isLight ? '#172033' : '#F6FDFF', fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)" }}>
             {success ? 'Security Verification Complete' : 'Enter Institution Key'}
           </h2>
-          <p style={{ color: 'rgba(246, 253, 255, 0.75)', textAlign: 'center', fontSize: '0.96rem', lineHeight: 1.5, fontFamily: "var(--font-family, 'Inter', sans-serif)" }}>
+          <p style={{ color: isLight ? '#52637A' : 'rgba(246, 253, 255, 0.75)', textAlign: 'center', fontSize: '0.96rem', lineHeight: 1.5, fontFamily: "var(--font-family, 'Inter', sans-serif)" }}>
             {success ? 'Cryptographic session verified. Launching sovereign workspace...' : 'Enter your 6-character organizational security key. If not provided, default key 123456 is applied.'}
           </p>
         </div>
@@ -320,25 +332,26 @@ export const Verification = () => {
             <div style={{ 
               display: 'flex', alignItems: 'center', gap: '0.75rem', 
               padding: '0.85rem 1.25rem', borderRadius: '14px', 
-              backgroundColor: 'rgba(13, 35, 77, 0.65)', border: '1px solid rgba(46, 155, 248, 0.25)',
+              backgroundColor: isLight ? '#EEF3F9' : 'rgba(13, 35, 77, 0.65)', 
+              border: isLight ? '1px solid #DCE5F2' : '1px solid rgba(46, 155, 248, 0.25)',
               width: '100%',
               boxSizing: 'border-box'
             }}>
               <div style={{
                 width: '36px', height: '36px', borderRadius: '10px',
-                background: 'rgba(21, 84, 232, 0.25)',
-                color: '#6AE7F7',
+                background: isLight ? 'rgba(21, 84, 232, 0.1)' : 'rgba(21, 84, 232, 0.25)',
+                color: isLight ? '#1554E8' : '#6AE7F7',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 flexShrink: 0
               }}>
                 <Lock size={18} />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <span style={{ fontSize: '0.72rem', color: 'rgba(246, 253, 255, 0.6)', textTransform: 'uppercase', letterSpacing: '0.8px', fontFamily: "'JetBrains Mono', monospace" }}>
+                <span style={{ fontSize: '0.72rem', color: isLight ? '#7F8DA5' : 'rgba(246, 253, 255, 0.6)', textTransform: 'uppercase', letterSpacing: '0.8px', fontFamily: "'JetBrains Mono', monospace" }}>
                   Selected Institution & Role
                 </span>
-                <span style={{ fontWeight: '700', fontSize: '0.95rem', color: '#F6FDFF', fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)" }}>
-                  {currentOrg.name} &bull; <span style={{ color: '#6AE7F7' }}>{currentRole.title}</span>
+                <span style={{ fontWeight: '700', fontSize: '0.95rem', color: isLight ? '#172033' : '#F6FDFF', fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)" }}>
+                  {currentOrg.name} &bull; <span style={{ color: isLight ? '#1554E8' : '#6AE7F7' }}>{currentRole.title}</span>
                 </span>
               </div>
             </div>
@@ -348,32 +361,33 @@ export const Verification = () => {
               width: '100%',
               padding: '0.75rem 1rem',
               borderRadius: '12px',
-              background: 'rgba(21, 84, 232, 0.15)',
-              border: '1px solid rgba(46, 155, 248, 0.3)',
+              background: isLight ? '#F0F5FF' : 'rgba(21, 84, 232, 0.15)',
+              border: isLight ? '1px solid rgba(21, 84, 232, 0.25)' : '1px solid rgba(46, 155, 248, 0.3)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
               boxSizing: 'border-box'
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Sparkles size={16} color="#6AE7F7" />
-                <span style={{ fontSize: '0.8rem', color: 'rgba(246, 253, 255, 0.8)', fontFamily: "var(--font-family, 'Inter', sans-serif)" }}>
-                  Institutional Key: <strong style={{ color: '#6AE7F7', fontFamily: "'JetBrains Mono', monospace" }}>123456</strong>
+                <Sparkles size={16} color={isLight ? '#1554E8' : '#6AE7F7'} />
+                <span style={{ fontSize: '0.8rem', color: isLight ? '#1554E8' : 'rgba(246, 253, 255, 0.8)', fontFamily: "var(--font-family, 'Inter', sans-serif)" }}>
+                  Institutional Key: <strong style={{ color: isLight ? '#1554E8' : '#6AE7F7', fontFamily: "'JetBrains Mono', monospace" }}>123456</strong>
                 </span>
               </div>
               <button
                 type="button"
                 onClick={handleAutofillDefault}
                 style={{
-                  background: 'rgba(21, 84, 232, 0.3)',
-                  border: '1px solid rgba(106, 231, 247, 0.4)',
-                  color: '#6AE7F7',
+                  background: isLight ? '#FFFFFF' : 'rgba(21, 84, 232, 0.3)',
+                  border: isLight ? '1px solid rgba(21, 84, 232, 0.35)' : '1px solid rgba(106, 231, 247, 0.4)',
+                  color: isLight ? '#1554E8' : '#6AE7F7',
                   padding: '3px 10px',
                   borderRadius: '6px',
                   fontSize: '0.72rem',
                   fontWeight: 700,
                   cursor: 'pointer',
                   fontFamily: "var(--font-heading, 'Space Grotesk', sans-serif)",
+                  boxShadow: isLight ? '0 2px 6px rgba(0,0,0,0.04)' : 'none',
                   transition: 'all 0.2s ease'
                 }}
               >
@@ -387,9 +401,9 @@ export const Verification = () => {
                 width: '100%',
                 padding: '0.9rem 1.1rem',
                 borderRadius: '12px',
-                background: 'rgba(239, 68, 68, 0.12)',
-                border: '1px solid rgba(239, 68, 68, 0.4)',
-                color: '#F87171',
+                background: isLight ? 'rgba(239, 68, 68, 0.1)' : 'rgba(239, 68, 68, 0.12)',
+                border: isLight ? '1px solid rgba(239, 68, 68, 0.3)' : '1px solid rgba(239, 68, 68, 0.4)',
+                color: isLight ? '#B91C1C' : '#F87171',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.85rem',
@@ -421,22 +435,32 @@ export const Verification = () => {
                       width: '52px', height: '62px',
                       fontSize: '1.75rem', textAlign: 'center', fontWeight: '800', fontFamily: "'JetBrains Mono', monospace",
                       borderRadius: '14px', border: '1px solid',
-                      borderColor: lockoutSec > 0 ? 'rgba(239, 68, 68, 0.4)' : error ? '#EF4444' : digit ? '#2E9BF8' : 'rgba(46, 155, 248, 0.3)',
-                      backgroundColor: lockoutSec > 0 ? 'rgba(20, 10, 10, 0.7)' : 'rgba(13, 35, 77, 0.75)', 
-                      color: lockoutSec > 0 ? '#9CA3AF' : '#F6FDFF',
-                      boxShadow: digit && !error && lockoutSec === 0 ? '0 0 15px rgba(46, 155, 248, 0.35)' : 'none',
+                      borderColor: lockoutSec > 0 
+                        ? 'rgba(239, 68, 68, 0.4)' 
+                        : error 
+                        ? '#EF4444' 
+                        : digit 
+                        ? (isLight ? '#1554E8' : '#2E9BF8') 
+                        : (isLight ? '#DCE5F2' : 'rgba(46, 155, 248, 0.3)'),
+                      backgroundColor: lockoutSec > 0 
+                        ? (isLight ? '#F1F5F9' : 'rgba(20, 10, 10, 0.7)') 
+                        : (isLight ? '#FFFFFF' : 'rgba(13, 35, 77, 0.75)'), 
+                      color: lockoutSec > 0 ? '#9CA3AF' : (isLight ? '#172033' : '#F6FDFF'),
+                      boxShadow: isLight 
+                        ? (digit && !error ? '0 2px 8px rgba(21, 84, 232, 0.15)' : 'none') 
+                        : (digit && !error && lockoutSec === 0 ? '0 0 15px rgba(46, 155, 248, 0.35)' : 'none'),
                       transition: 'all 0.2s', outline: 'none',
                       cursor: lockoutSec > 0 ? 'not-allowed' : 'text'
                     }}
                     onFocus={e => {
                       if (lockoutSec === 0) {
-                        e.target.style.borderColor = '#2E9BF8';
-                        e.target.style.boxShadow = '0 0 15px rgba(46, 155, 248, 0.45)';
+                        e.target.style.borderColor = isLight ? '#1554E8' : '#2E9BF8';
+                        e.target.style.boxShadow = isLight ? '0 4px 12px rgba(21, 84, 232, 0.2)' : '0 0 15px rgba(46, 155, 248, 0.45)';
                       }
                     }}
                     onBlur={e => {
-                      e.target.style.borderColor = error ? '#EF4444' : digit ? '#2E9BF8' : 'rgba(46, 155, 248, 0.3)';
-                      e.target.style.boxShadow = digit && !error ? '0 0 15px rgba(46, 155, 248, 0.35)' : 'none';
+                      e.target.style.borderColor = error ? '#EF4444' : digit ? (isLight ? '#1554E8' : '#2E9BF8') : (isLight ? '#DCE5F2' : 'rgba(46, 155, 248, 0.3)');
+                      e.target.style.boxShadow = digit && !error ? (isLight ? '0 2px 8px rgba(21, 84, 232, 0.15)' : '0 0 15px rgba(46, 155, 248, 0.35)') : 'none';
                     }}
                   />
                 ))}
@@ -444,12 +468,12 @@ export const Verification = () => {
             </div>
 
             {/* Defense Status Footer */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', fontSize: '0.72rem', color: 'rgba(246, 253, 255, 0.65)', fontFamily: "'JetBrains Mono', monospace" }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', fontSize: '0.72rem', color: isLight ? '#7F8DA5' : 'rgba(246, 253, 255, 0.65)', fontFamily: "'JetBrains Mono', monospace" }}>
               <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <Shield size={12} color="#6AE7F7" /> Lattice HMAC-256
+                <Shield size={12} color={isLight ? '#1554E8' : '#6AE7F7'} /> Lattice HMAC-256
               </span>
               <span>
-                Attempts: <strong style={{ color: remainingAttempts <= 2 ? '#EF4444' : '#6AE7F7' }}>{remainingAttempts}/5</strong>
+                Attempts: <strong style={{ color: remainingAttempts <= 2 ? '#EF4444' : (isLight ? '#1554E8' : '#6AE7F7') }}>{remainingAttempts}/5</strong>
               </span>
             </div>
 

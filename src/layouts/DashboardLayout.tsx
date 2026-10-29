@@ -3,6 +3,7 @@ import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
 import { ORGANIZATIONS, hasPermission } from '../config/platformConfig';
 import { AICopilot } from '../components/AICopilot';
+import { ThemeToggle } from '../components/ThemeToggle';
 import { formatUserName } from '../utils/userUtils';
 import { 
   LayoutDashboard, Building2, User, Bell, Search, 
@@ -575,20 +576,9 @@ export const DashboardLayout = () => {
               </select>
             </div>
 
-            {/* Notification & Theme Icons */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-              <button 
-                onClick={toggleTheme} 
-                title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
-                style={{ 
-                  width: '38px', height: '38px', borderRadius: '10px', 
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', 
-                  background: 'var(--card-bg)', border: '1px solid var(--border-color)', 
-                  color: 'var(--text-secondary)', cursor: 'pointer', transition: 'all 0.2s' 
-                }}
-              >
-                {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
-              </button>
+            {/* Notification & Theme Switcher */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+              <ThemeToggle variant="compact" />
 
               <button 
                 onClick={() => navigate('/dashboard/notifications')}

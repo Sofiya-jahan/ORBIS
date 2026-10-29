@@ -1,4 +1,5 @@
 import React from 'react';
+import { useAuthStore } from '../store/useAuthStore';
 
 export interface OrganizationalPortalBackdropProps {
   /** Organization primary theme color (e.g. #0B6EFD, #0D9488, etc.) */
@@ -26,16 +27,9 @@ export interface OrganizationalPortalBackdropProps {
 /**
  * OrganizationalPortalBackdrop
  * 
- * Renders the realistic dark enterprise architectural corridor/gateway image,
- * meticulously blended with ORBIS platform dark navy (#07112E) and the
- * active organization's multi-hue color palette (themeColor, secondaryColor, accentColor).
- * 
- * Multi-Zone Harmony:
- * - Left wing & acoustic glass: illuminated with secondaryColor
- * - Central doorway core: radiant interplay of accentColor, golden amber warmth, and themeColor
- * - Right wing & acoustic partition: illuminated with themeColor
- * - Floor reflection: multi-stop reflection mirroring the organization's full palette
- * - Vignette veil: WCAG-compliant contrast veil ensuring foreground readability
+ * Renders the realistic dark or light enterprise architectural corridor/gateway image,
+ * meticulously blended with ORBIS platform theme (#07112E for Dark, #F7F9FC for Light)
+ * and the active organization's multi-hue color palette (themeColor, secondaryColor, accentColor).
  */
 export const OrganizationalPortalBackdrop: React.FC<OrganizationalPortalBackdropProps> = ({
   themeColor = '#1554E8',
@@ -49,6 +43,9 @@ export const OrganizationalPortalBackdrop: React.FC<OrganizationalPortalBackdrop
   style,
   className = ''
 }) => {
+  const { theme } = useAuthStore();
+  const isLight = theme === 'light';
+
   // Convert hex color to rgba helper
   const hexToRgba = (hex: string, alpha: number) => {
     const cleanHex = hex.replace('#', '');
@@ -65,6 +62,7 @@ export const OrganizationalPortalBackdrop: React.FC<OrganizationalPortalBackdrop
   return (
     <div
       className={`orbis-portal-frame ${className}`}
+      data-portal-theme={isLight ? 'light' : 'dark'}
       style={{
         position: 'relative',
         width: '100%',
@@ -72,10 +70,14 @@ export const OrganizationalPortalBackdrop: React.FC<OrganizationalPortalBackdrop
         minHeight: minHeight,
         borderRadius: variant === 'fullscreen' ? 0 : '24px',
         overflow: 'hidden',
-        backgroundColor: '#07112E',
-        border: variant === 'fullscreen' ? 'none' : '1px solid rgba(46, 155, 248, 0.22)',
+        backgroundColor: isLight ? '#F7F9FC' : '#07112E',
+        border: variant === 'fullscreen' 
+          ? 'none' 
+          : (isLight ? '1px solid #DCE5F2' : '1px solid rgba(46, 155, 248, 0.22)'),
         boxShadow: variant === 'fullscreen' 
           ? 'none' 
+          : isLight
+          ? `0 20px 50px rgba(23, 32, 51, 0.08), 0 0 40px ${primaryAlpha(0.08)}`
           : `0 20px 50px rgba(7, 17, 46, 0.9), 0 0 40px ${primaryAlpha(0.2)}`,
         ...style
       }}
@@ -85,11 +87,13 @@ export const OrganizationalPortalBackdrop: React.FC<OrganizationalPortalBackdrop
         style={{
           position: 'absolute',
           inset: 0,
-          backgroundImage: "url('/corridor-portal.png')",
+          backgroundImage: `url(${isLight ? '/corridor-portal-light.png' : '/corridor-portal.png'})`,
           backgroundSize: 'cover',
-          backgroundPosition: 'center 42%',
+          backgroundPosition: isLight ? 'center 50%' : 'center 42%',
           backgroundRepeat: 'no-repeat',
-          filter: 'contrast(1.1) brightness(0.94) saturate(1.15)',
+          filter: isLight 
+            ? 'contrast(1.04) brightness(1.02) saturate(1.06)' 
+            : 'contrast(1.1) brightness(0.94) saturate(1.15)',
           transform: 'scale(1.02)',
           zIndex: 0,
           transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
@@ -101,8 +105,10 @@ export const OrganizationalPortalBackdrop: React.FC<OrganizationalPortalBackdrop
         style={{
           position: 'absolute',
           inset: 0,
-          background: `linear-gradient(105deg, ${secondaryAlpha(0.32)} 0%, ${secondaryAlpha(0.14)} 35%, ${accentAlpha(0.22)} 58%, ${primaryAlpha(0.34)} 90%)`,
-          mixBlendMode: 'soft-light',
+          background: isLight
+            ? `linear-gradient(105deg, ${secondaryAlpha(0.10)} 0%, ${secondaryAlpha(0.04)} 35%, ${accentAlpha(0.08)} 58%, ${primaryAlpha(0.12)} 90%)`
+            : `linear-gradient(105deg, ${secondaryAlpha(0.32)} 0%, ${secondaryAlpha(0.14)} 35%, ${accentAlpha(0.22)} 58%, ${primaryAlpha(0.34)} 90%)`,
+          mixBlendMode: isLight ? 'multiply' : 'soft-light',
           zIndex: 1,
           pointerEvents: 'none'
         }}
@@ -114,8 +120,10 @@ export const OrganizationalPortalBackdrop: React.FC<OrganizationalPortalBackdrop
         style={{
           position: 'absolute',
           inset: 0,
-          background: `radial-gradient(ellipse at 16% 48%, ${secondaryAlpha(0.4)} 0%, ${secondaryAlpha(0.18)} 35%, transparent 65%)`,
-          mixBlendMode: 'color-dodge',
+          background: isLight
+            ? `radial-gradient(ellipse at 14% 48%, ${secondaryAlpha(0.22)} 0%, ${secondaryAlpha(0.07)} 40%, transparent 68%)`
+            : `radial-gradient(ellipse at 16% 48%, ${secondaryAlpha(0.4)} 0%, ${secondaryAlpha(0.18)} 35%, transparent 65%)`,
+          mixBlendMode: isLight ? 'multiply' : 'color-dodge',
           zIndex: 1,
           pointerEvents: 'none'
         }}
@@ -126,8 +134,10 @@ export const OrganizationalPortalBackdrop: React.FC<OrganizationalPortalBackdrop
         style={{
           position: 'absolute',
           inset: 0,
-          background: `radial-gradient(ellipse at 58% 46%, ${accentAlpha(0.5)} 0%, ${primaryAlpha(0.3)} 38%, transparent 70%)`,
-          mixBlendMode: 'color-dodge',
+          background: isLight
+            ? `radial-gradient(ellipse at 58.5% 46%, ${accentAlpha(0.28)} 0%, rgba(251, 191, 36, 0.16) 28%, ${primaryAlpha(0.10)} 48%, transparent 72%)`
+            : `radial-gradient(ellipse at 58% 46%, ${accentAlpha(0.5)} 0%, ${primaryAlpha(0.3)} 38%, transparent 70%)`,
+          mixBlendMode: isLight ? 'color-dodge' : 'color-dodge',
           zIndex: 1,
           pointerEvents: 'none'
         }}
@@ -138,8 +148,10 @@ export const OrganizationalPortalBackdrop: React.FC<OrganizationalPortalBackdrop
         style={{
           position: 'absolute',
           inset: 0,
-          background: `radial-gradient(ellipse at 88% 52%, ${primaryAlpha(0.45)} 0%, ${primaryAlpha(0.2)} 36%, transparent 68%)`,
-          mixBlendMode: 'color-dodge',
+          background: isLight
+            ? `radial-gradient(ellipse at 88% 50%, ${primaryAlpha(0.22)} 0%, ${primaryAlpha(0.08)} 40%, transparent 68%)`
+            : `radial-gradient(ellipse at 88% 52%, ${primaryAlpha(0.45)} 0%, ${primaryAlpha(0.2)} 36%, transparent 68%)`,
+          mixBlendMode: isLight ? 'multiply' : 'color-dodge',
           zIndex: 1,
           pointerEvents: 'none'
         }}
@@ -153,10 +165,12 @@ export const OrganizationalPortalBackdrop: React.FC<OrganizationalPortalBackdrop
           right: 0,
           bottom: 0,
           height: '45%',
-          background: `linear-gradient(90deg, ${secondaryAlpha(0.25)} 0%, ${secondaryAlpha(0.15)} 25%, ${accentAlpha(0.32)} 56%, ${primaryAlpha(0.3)} 80%, ${primaryAlpha(0.2)} 100%)`,
-          mixBlendMode: 'screen',
-          filter: 'blur(28px)',
-          opacity: 0.85,
+          background: isLight
+            ? `linear-gradient(90deg, ${secondaryAlpha(0.12)} 0%, ${secondaryAlpha(0.05)} 30%, ${accentAlpha(0.24)} 57%, ${accentAlpha(0.28)} 59%, ${primaryAlpha(0.18)} 68%, ${primaryAlpha(0.08)} 100%)`
+            : `linear-gradient(90deg, ${secondaryAlpha(0.25)} 0%, ${secondaryAlpha(0.15)} 25%, ${accentAlpha(0.32)} 56%, ${primaryAlpha(0.3)} 80%, ${primaryAlpha(0.2)} 100%)`,
+          mixBlendMode: isLight ? 'multiply' : 'screen',
+          filter: isLight ? 'blur(20px)' : 'blur(28px)',
+          opacity: isLight ? 0.75 : 0.85,
           zIndex: 2,
           pointerEvents: 'none'
         }}
@@ -166,13 +180,15 @@ export const OrganizationalPortalBackdrop: React.FC<OrganizationalPortalBackdrop
       <div
         style={{
           position: 'absolute',
-          top: '7%',
+          top: isLight ? '3%' : '7%',
           left: '58.4%',
-          width: '6px',
-          height: '63%',
+          width: isLight ? '4px' : '6px',
+          height: isLight ? '68%' : '63%',
           background: `linear-gradient(180deg, ${accentColor} 0%, #F59E0B 40%, #FFB84D 65%, ${themeColor} 100%)`,
-          boxShadow: `0 0 25px 6px ${accentAlpha(0.55)}, 0 0 50px 18px ${primaryAlpha(0.35)}`,
-          opacity: 0.72,
+          boxShadow: isLight
+            ? `0 0 12px 2px ${accentAlpha(0.4)}, 0 0 24px 6px rgba(251, 191, 36, 0.25)`
+            : `0 0 25px 6px ${accentAlpha(0.55)}, 0 0 50px 18px ${primaryAlpha(0.35)}`,
+          opacity: isLight ? 0.75 : 0.72,
           borderRadius: '4px',
           zIndex: 3,
           pointerEvents: 'none',
@@ -188,7 +204,10 @@ export const OrganizationalPortalBackdrop: React.FC<OrganizationalPortalBackdrop
           bottom: '8%',
           width: '200px',
           height: '260px',
-          background: `radial-gradient(ellipse at 25% 75%, ${accentAlpha(0.22)} 0%, ${secondaryAlpha(0.18)} 45%, transparent 75%)`,
+          background: isLight
+            ? `radial-gradient(ellipse at 25% 75%, ${accentAlpha(0.16)} 0%, ${secondaryAlpha(0.10)} 45%, transparent 75%)`
+            : `radial-gradient(ellipse at 25% 75%, ${accentAlpha(0.22)} 0%, ${secondaryAlpha(0.18)} 45%, transparent 75%)`,
+          mixBlendMode: isLight ? 'multiply' : 'normal',
           filter: 'blur(22px)',
           zIndex: 3,
           pointerEvents: 'none'
@@ -201,22 +220,28 @@ export const OrganizationalPortalBackdrop: React.FC<OrganizationalPortalBackdrop
           bottom: '10%',
           width: '210px',
           height: '270px',
-          background: `radial-gradient(ellipse at 75% 75%, ${primaryAlpha(0.25)} 0%, ${accentAlpha(0.15)} 45%, transparent 75%)`,
+          background: isLight
+            ? `radial-gradient(ellipse at 75% 75%, ${primaryAlpha(0.18)} 0%, ${accentAlpha(0.10)} 45%, transparent 75%)`
+            : `radial-gradient(ellipse at 75% 75%, ${primaryAlpha(0.25)} 0%, ${accentAlpha(0.15)} 45%, transparent 75%)`,
+          mixBlendMode: isLight ? 'multiply' : 'normal',
           filter: 'blur(22px)',
           zIndex: 3,
           pointerEvents: 'none'
         }}
       />
 
-      {/* LAYER 6: Platform Dark Navy Depth Fog & Readability Scrim */}
-      {/* Carefully balanced to preserve corridor perspective while making foreground text & forms 100% legible */}
+      {/* LAYER 6: Platform Depth Fog & Readability Scrim (Dark Navy in dark mode, Executive Warm Light in light mode) */}
       <div
         style={{
           position: 'absolute',
           inset: 0,
-          background: variant === 'fullscreen'
-            ? 'linear-gradient(90deg, rgba(7, 17, 46, 0.94) 0%, rgba(7, 17, 46, 0.88) 28%, rgba(7, 17, 46, 0.62) 44%, rgba(7, 17, 46, 0.22) 58%, rgba(7, 17, 46, 0.52) 74%, rgba(7, 17, 46, 0.85) 90%, rgba(7, 17, 46, 0.94) 100%), linear-gradient(180deg, rgba(7, 17, 46, 0.8) 0%, transparent 16%, transparent 80%, rgba(7, 17, 46, 0.92) 100%)'
-            : 'linear-gradient(90deg, rgba(7, 17, 46, 0.95) 0%, rgba(7, 17, 46, 0.72) 32%, rgba(7, 17, 46, 0.38) 55%, rgba(7, 17, 46, 0.82) 80%, rgba(7, 17, 46, 0.98) 100%), linear-gradient(180deg, rgba(7, 17, 46, 0.2) 0%, rgba(7, 17, 46, 0.75) 70%, rgba(7, 17, 46, 0.96) 100%)',
+          background: isLight
+            ? (variant === 'fullscreen'
+              ? 'linear-gradient(90deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 255, 255, 0.82) 28%, rgba(255, 255, 255, 0.45) 48%, rgba(255, 255, 255, 0.22) 58%, rgba(255, 255, 255, 0.65) 75%, rgba(255, 255, 255, 0.90) 90%, rgba(255, 255, 255, 0.96) 100%), linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0%, transparent 20%, transparent 75%, rgba(255, 255, 255, 0.85) 100%)'
+              : 'linear-gradient(90deg, rgba(255, 255, 255, 0.93) 0%, rgba(255, 255, 255, 0.84) 30%, rgba(255, 255, 255, 0.40) 50%, rgba(255, 255, 255, 0.20) 58%, rgba(255, 255, 255, 0.68) 78%, rgba(255, 255, 255, 0.92) 92%, rgba(255, 255, 255, 0.96) 100%), linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0%, transparent 25%, transparent 75%, rgba(255, 255, 255, 0.88) 100%)')
+            : (variant === 'fullscreen'
+              ? 'linear-gradient(90deg, rgba(7, 17, 46, 0.94) 0%, rgba(7, 17, 46, 0.88) 28%, rgba(7, 17, 46, 0.62) 44%, rgba(7, 17, 46, 0.22) 58%, rgba(7, 17, 46, 0.52) 74%, rgba(7, 17, 46, 0.85) 90%, rgba(7, 17, 46, 0.94) 100%), linear-gradient(180deg, rgba(7, 17, 46, 0.8) 0%, transparent 16%, transparent 80%, rgba(7, 17, 46, 0.92) 100%)'
+              : 'linear-gradient(90deg, rgba(7, 17, 46, 0.95) 0%, rgba(7, 17, 46, 0.72) 32%, rgba(7, 17, 46, 0.38) 55%, rgba(7, 17, 46, 0.82) 80%, rgba(7, 17, 46, 0.98) 100%), linear-gradient(180deg, rgba(7, 17, 46, 0.2) 0%, rgba(7, 17, 46, 0.75) 70%, rgba(7, 17, 46, 0.96) 100%)'),
           zIndex: 4,
           pointerEvents: 'none'
         }}
@@ -235,8 +260,8 @@ export const OrganizationalPortalBackdrop: React.FC<OrganizationalPortalBackdrop
             gap: '0.5rem',
             padding: '0.4rem 0.9rem',
             borderRadius: '100px',
-            background: 'rgba(7, 17, 46, 0.85)',
-            border: `1px solid ${accentAlpha(0.35)}`,
+            background: isLight ? 'rgba(255, 255, 255, 0.92)' : 'rgba(7, 17, 46, 0.85)',
+            border: isLight ? `1px solid #DCE5F2` : `1px solid ${accentAlpha(0.35)}`,
             backdropFilter: 'blur(16px)',
             fontSize: '0.72rem',
             fontWeight: 800,
@@ -244,7 +269,7 @@ export const OrganizationalPortalBackdrop: React.FC<OrganizationalPortalBackdrop
             letterSpacing: '1px',
             textTransform: 'uppercase',
             fontFamily: "'JetBrains Mono', monospace",
-            boxShadow: `0 0 20px ${primaryAlpha(0.25)}`
+            boxShadow: isLight ? '0 2px 8px rgba(23, 32, 51, 0.06)' : `0 0 20px ${primaryAlpha(0.25)}`
           }}
         >
           <span
@@ -292,6 +317,15 @@ export const OrganizationalPortalBackdrop: React.FC<OrganizationalPortalBackdrop
         @keyframes portalPulseDot {
           0%, 100% { opacity: 1; transform: scale(1); }
           50% { opacity: 0.4; transform: scale(0.85); }
+        }
+        .orbis-portal-frame[data-portal-theme="light"] h1,
+        .orbis-portal-frame[data-portal-theme="light"] h2,
+        .orbis-portal-frame[data-portal-theme="light"] h3,
+        .orbis-portal-frame[data-portal-theme="light"] h4 {
+          color: #172033 !important;
+        }
+        .orbis-portal-frame[data-portal-theme="light"] p {
+          color: #52637A !important;
         }
       `}</style>
     </div>
